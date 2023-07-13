@@ -1,0 +1,18 @@
+# Overrides basic code style settings in various editors and IDEs.
+# See: https://editorconfig.org
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_size = 2
+indent_style = space
+insert_final_newline = false
+max_line_length = 120
+tab_width = 2
+trim_trailing_whitespace = true
+
+[*.md]
+# Sometimes inserting whitespace at the end of a line in Markdown files is the
+# intended intention and should not be trimmed.
+trim_trailing_whitespace = false
