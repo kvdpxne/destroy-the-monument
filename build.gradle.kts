@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
   alias(libraries.plugins.kotlin)
 }
@@ -39,6 +41,10 @@ tasks {
     }
   }
 
+  withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = "1.8"
+  }
+
   processResources {
     val properties = mapOf(
       "description" to rootProject.description,
@@ -55,5 +61,46 @@ tasks {
 
   test {
     useJUnitPlatform()
+  }
+
+  register("runMinecraftServer") {
+    group = "minecraft"
+
+    // Filename with the extension.
+    val fileName = "craftbukkit-1.7.10.jar"
+
+    val destinationDirectory = file("run")
+    val sourceFile = file("./libraries/$fileName")
+
+//    doLast {
+//      if (sourceFile.exists() && sourceFile.isFile) {
+//        destinationDirectory.mkdirs()
+//
+//        sourceFile.copyTo(destinationDirectory, overwrite = true)
+//      }
+//    }
+
+    doLast {
+      exec {
+        workingDir = destinationDirectory
+        executable = "java"
+        args("-jar", fileName)
+        standardInput = System.`in`
+      }
+    }
+  }
+
+  val fatJar = register<Jar>("fatJar") {
+    dependsOn.addAll(listOf("compileJava", "compileKotlin", "processResources")) // We need this for Gradle optimization to work
+    archiveClassifier.set("standalone") // Naming the jar
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    val sourcesMain = sourceSets.main.get()
+    val contents = configurations.runtimeClasspath.get()
+      .map { if (it.isDirectory) it else zipTree(it) } + sourcesMain.output
+    from(contents)
+  }
+
+  build {
+    dependsOn(fatJar)
   }
 }
