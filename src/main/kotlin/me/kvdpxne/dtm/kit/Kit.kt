@@ -1,5 +1,6 @@
 package me.kvdpxne.dtm.kit
 
+import me.kvdpxne.dtm.gui.SlotItem
 import org.bukkit.inventory.ItemStack
 import java.util.*
 

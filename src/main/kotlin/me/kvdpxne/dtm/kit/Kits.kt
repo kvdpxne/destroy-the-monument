@@ -1,5 +1,6 @@
 package me.kvdpxne.dtm.kit
 
+import me.kvdpxne.dtm.gui.slotItem
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.ItemStack

@@ -1,4 +1,4 @@
-package me.kvdpxne.dtm.kit
+package me.kvdpxne.dtm.gui
 
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack

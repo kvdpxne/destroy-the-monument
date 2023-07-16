@@ -1,6 +1,5 @@
 package me.kvdpxne.dtm.gui
 
-import me.kvdpxne.dtm.kit.SlotAlreadyTakenException
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
