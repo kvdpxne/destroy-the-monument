@@ -24,7 +24,7 @@ open class Kit(
         meta.color = teammate.teamColor.dyeColor.color
         item.itemMeta = meta
       }
-      teammate.player.inventory.setItem(it.index, it.item)
+      teammate.player.inventory.setItem(it.index, item)
     }
 
   }
