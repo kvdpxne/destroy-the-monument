@@ -17,6 +17,12 @@ repositories {
 
 dependencies {
   compileOnly(files("./libraries/craftbukkit-1.7.10.jar"))
+
+  implementation("org.xerial:sqlite-jdbc:3.42.0.0")
+
+  implementation("org.ktorm:ktorm-support-sqlite:3.6.0")
+
+
   testImplementation(kotlin("test"))
 }
 
