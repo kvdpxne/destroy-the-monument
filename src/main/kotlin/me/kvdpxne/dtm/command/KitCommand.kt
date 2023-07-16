@@ -1,8 +1,10 @@
 package me.kvdpxne.dtm.command
 
+import me.kvdpxne.dtm.game.DefaultTeamColor
+import me.kvdpxne.dtm.game.Teammate
 import me.kvdpxne.dtm.gui.builtin.KitGui
-import me.kvdpxne.dtm.kit.archer
-import me.kvdpxne.dtm.kit.scout
+import me.kvdpxne.dtm.profession.archer
+import me.kvdpxne.dtm.profession.scout
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -17,11 +19,13 @@ class KitCommand : Command("kit") {
     }
     val name = args[0]
     if ("archer".equals(name, true)) {
-      archer().items.forEach { item -> player.inventory.setItem(item.index, item.item) }
+      val archer = archer()
+      archer.kit.equip(Teammate(player, archer.kit, DefaultTeamColor.BLUE))
       return true
     }
     if ("scout".equals(name, true)) {
-      scout().items.forEach { item -> player.inventory.setItem(item.index, item.item) }
+      val scout = scout()
+      scout.kit.equip(Teammate(player, scout.kit, DefaultTeamColor.RED))
       return true
     }
     return true

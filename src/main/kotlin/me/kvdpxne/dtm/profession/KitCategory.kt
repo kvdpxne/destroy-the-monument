@@ -1,4 +1,4 @@
-package me.kvdpxne.dtm.kit
+package me.kvdpxne.dtm.profession
 
 enum class KitCategory {
 
