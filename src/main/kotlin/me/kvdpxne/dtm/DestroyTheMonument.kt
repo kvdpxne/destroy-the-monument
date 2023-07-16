@@ -4,6 +4,7 @@ import me.kvdpxne.dtm.command.KitCommand
 import me.kvdpxne.dtm.gui.GuiActionHandler
 import me.kvdpxne.dtm.listener.PlayerJoinListener
 import me.kvdpxne.dtm.listener.PlayerQuitListener
+import me.kvdpxne.dtm.listener.WeatherChangeListener
 import org.bukkit.craftbukkit.v1_7_R4.CraftServer
 import org.bukkit.event.Listener
 import org.bukkit.plugin.java.JavaPlugin
@@ -27,7 +28,8 @@ class DestroyTheMonument : JavaPlugin() {
       GuiActionHandler,
 
       PlayerJoinListener,
-      PlayerQuitListener
+      PlayerQuitListener,
+      WeatherChangeListener
     )
 
     // TODO reflection

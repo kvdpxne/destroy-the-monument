@@ -1,6 +1,8 @@
 package me.kvdpxne.dtm.game
 
-class Team(val color: TeamColor) {
+import me.kvdpxne.dtm.shared.IdentifiableByName
+
+class Team(val name: IdentifiableByName) {
 
   val teammates = mutableListOf<Teammate>()
 }

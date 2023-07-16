@@ -1,16 +1,12 @@
 package me.kvdpxne.dtm.game
 
-import me.kvdpxne.dtm.profession.Kit
-import org.bukkit.entity.Player
+import java.time.Instant
 
-class Game {
+class Game(val arena: Arena) {
 
-  private val teams = mapOf<TeamColor, Team>(
-    DefaultTeamColor.BLUE to Team(DefaultTeamColor.BLUE),
-    DefaultTeamColor.RED to Team(DefaultTeamColor.RED)
-  )
+  private val startInstant: Instant
 
-  fun joinTeam(player: Player, kit: Kit, teamColor: TeamColor) {
-    teams[teamColor]!!.teammates += Teammate(player, kit)
+  init {
+    startInstant = Instant.now()
   }
 }
