@@ -1,5 +1,7 @@
 package me.kvdpxne.dtm
 
+import me.kvdpxne.dtm.command.BaseCommand
+import me.kvdpxne.dtm.command.BukkitCommandMapAccessor
 import me.kvdpxne.dtm.command.KitCommand
 import me.kvdpxne.dtm.gui.GuiActionHandler
 import me.kvdpxne.dtm.listener.PlayerJoinListener
@@ -30,6 +32,10 @@ class DestroyTheMonument : JavaPlugin() {
       PlayerJoinListener,
       PlayerQuitListener,
       WeatherChangeListener
+    )
+
+    BukkitCommandMapAccessor.registerCommands(
+      BaseCommand
     )
 
     // TODO reflection
