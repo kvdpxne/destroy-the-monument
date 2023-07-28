@@ -1,6 +1,7 @@
 package me.kvdpxne.dtm.gui
 
 import org.bukkit.Bukkit
+import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
@@ -13,8 +14,21 @@ open class Gui(displayName: String, rows: Rows) {
     holder.inventory = this.inventory
   }
 
-  fun setItem(slot: Int, item: ItemStack) {
-    inventory.getItem(slot) ?: throw SlotAlreadyTakenException(slot)
+  private fun hasItem(slot: Int): Boolean {
+    val item = inventory.getItem(slot)
+    return null != item && Material.AIR != item.type
+  }
+
+  fun setItem(slot: Int, item: ItemStack, force: Boolean = false) {
+    if (!hasItem(slot)) {
+      inventory.setItem(slot, item)
+      return
+    }
+
+    if (!force) {
+      throw SlotAlreadyTakenException(slot)
+    }
+
     inventory.setItem(slot, item)
   }
 
