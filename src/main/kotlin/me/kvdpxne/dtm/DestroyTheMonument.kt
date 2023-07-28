@@ -9,6 +9,7 @@ import me.kvdpxne.dtm.listener.WeatherChangeListener
 import org.bukkit.event.Listener
 import org.bukkit.plugin.java.JavaPlugin
 
+@Suppress("unused")
 class DestroyTheMonument : JavaPlugin() {
 
   private fun registerListener(vararg listeners: Listener) {
