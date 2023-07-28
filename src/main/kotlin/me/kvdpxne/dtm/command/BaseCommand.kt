@@ -3,6 +3,7 @@ package me.kvdpxne.dtm.command
 import me.kvdpxne.dtm.command.overt.HelpCommand
 import me.kvdpxne.dtm.command.overt.KitCommand
 import me.kvdpxne.dtm.command.restricted.CreateCommand
+import me.kvdpxne.dtm.command.restricted.TeleportBackCommand
 import me.kvdpxne.dtm.command.restricted.TeleportCommand
 import me.kvdpxne.dtm.command.restricted.WandCommand
 
@@ -16,6 +17,7 @@ object BaseCommand : Command("dtm"), Executor<Performer> {
       this["kit"] = KitCommand
 
       this["create"] = CreateCommand
+      this["teleportback"] = TeleportBackCommand
       this["teleport"] = TeleportCommand
       this["wand"] = WandCommand
     }
