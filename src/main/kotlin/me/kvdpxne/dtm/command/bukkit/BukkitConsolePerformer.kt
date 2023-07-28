@@ -1,5 +1,6 @@
-package me.kvdpxne.dtm.command
+package me.kvdpxne.dtm.command.bukkit
 
+import me.kvdpxne.dtm.command.Performer
 import org.bukkit.Bukkit
 
 class BukkitConsolePerformer : Performer {

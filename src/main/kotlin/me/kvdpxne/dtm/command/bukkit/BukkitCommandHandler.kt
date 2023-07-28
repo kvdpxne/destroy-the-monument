@@ -1,5 +1,8 @@
-package me.kvdpxne.dtm.command
+package me.kvdpxne.dtm.command.bukkit
 
+import me.kvdpxne.dtm.command.BaseCommand
+import me.kvdpxne.dtm.command.ExecutionPlaceType
+import me.kvdpxne.dtm.command.Parameter
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender

@@ -1,5 +1,6 @@
-package me.kvdpxne.dtm.command
+package me.kvdpxne.dtm.command.bukkit
 
+import me.kvdpxne.dtm.command.Command
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandMap
 import java.lang.ref.Reference
@@ -32,7 +33,8 @@ object BukkitCommandMapAccessor {
         it.description,
         it.usage,
         it.aliases.toList()
-      ))
+      )
+      )
     }
   }
 }
