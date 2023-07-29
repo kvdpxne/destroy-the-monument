@@ -1,7 +1,10 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-  alias(libraries.plugins.kotlin)
+  libraries.plugins.run {
+    alias(kotlin)
+    alias(shadow)
+  }
 }
 
 description = "A simple game of destroying the monument of the opposing team."
@@ -10,13 +13,16 @@ version = "0.1.0"
 
 val targetJavaVersion = 8
 
+// Filename with the extension.
+val fileName = "craftbukkit-1.7.10.jar"
+
 repositories {
   mavenCentral()
   mavenLocal()
 }
 
 dependencies {
-  compileOnly(files("./libraries/craftbukkit-1.7.10.jar"))
+  compileOnly(files("libraries/$fileName"))
 
   implementation("org.xerial:sqlite-jdbc:3.42.0.0")
 
@@ -69,26 +75,30 @@ tasks {
     useJUnitPlatform()
   }
 
+  shadowJar {
+    archiveClassifier.set("bukkit")
+  }
+
   register("runMinecraftServer") {
     group = "minecraft"
+    description = "Starts the minecraft server."
 
-    // Filename with the extension.
-    val fileName = "craftbukkit-1.7.10.jar"
+    val outputDirectory = file("run")
+    val target = file("libraries/$fileName")
 
-    val destinationDirectory = file("run")
-    val sourceFile = file("./libraries/$fileName")
+    doLast {
+      outputDirectory.resolve(target.name).run {
+        if (exists()) {
+          return@doLast
+        }
 
-//    doLast {
-//      if (sourceFile.exists() && sourceFile.isFile) {
-//        destinationDirectory.mkdirs()
-//
-//        sourceFile.copyTo(destinationDirectory, overwrite = true)
-//      }
-//    }
+        target.copyTo(this, true)
+      }
+    }
 
     doLast {
       exec {
-        workingDir = destinationDirectory
+        workingDir = outputDirectory
         executable = "java"
         args("-jar", fileName)
         standardInput = System.`in`
@@ -96,17 +106,17 @@ tasks {
     }
   }
 
-  val fatJar = register<Jar>("fatJar") {
-    dependsOn.addAll(listOf("compileJava", "compileKotlin", "processResources")) // We need this for Gradle optimization to work
-    archiveClassifier.set("standalone") // Naming the jar
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    val sourcesMain = sourceSets.main.get()
-    val contents = configurations.runtimeClasspath.get()
-      .map { if (it.isDirectory) it else zipTree(it) } + sourcesMain.output
-    from(contents)
-  }
+  register("buildAndMoveToRunDirectory") {
+    group = "minecraft"
+    description = "Builds the jar archive with shadowJar and move the built archive to the executable directory."
 
-  build {
-    dependsOn(fatJar)
+    dependsOn(shadowJar)
+
+    val outputDirectory = file("run/plugins")
+    val target = shadowJar.get().archiveFile.get().asFile
+
+    doLast {
+      target.copyTo(outputDirectory.resolve(target.name), true)
+    }
   }
 }
