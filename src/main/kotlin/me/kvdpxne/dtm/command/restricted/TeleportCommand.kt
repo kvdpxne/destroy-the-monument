@@ -24,10 +24,8 @@ object TeleportCommand : Executor<UserPerformer> {
         return
       }
 
-      val spawnLocation = it.spawnLocation
-      TeleportBackCommand.previousLocation = spawnLocation
-
-      player.teleport(spawnLocation)
+      TeleportBackCommand.previousLocation = player.world.spawnLocation
+      player.teleport(it.spawnLocation)
     }
   }
 }
