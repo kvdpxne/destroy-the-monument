@@ -10,7 +10,8 @@ import java.util.*
 
 class UserPerformer(
   val identifier: UUID,
-  override val name: String
+  override val name: String,
+  val user: User
 ) : Performer {
 
   private var playerReference: Reference<Player>

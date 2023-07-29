@@ -1,35 +1,38 @@
 package me.kvdpxne.dtm.game
 
 import me.kvdpxne.dtm.shared.IdentifiableByName
-import me.kvdpxne.dtm.shared.Position
+import org.bukkit.Location
+import org.bukkit.World
 import java.util.*
 
-class Arena(val identifier: UUID, var name: String) {
+class Arena(
+  val identifier: UUID,
+  var name: String,
+  var worldName: String? = null
+) {
 
-  private val teamSpawnPositionMap: MutableMap<IdentifiableByName, Position>
-  private val teamMonumentPositionMap: MutableMap<IdentifiableByName, MutableSet<Position>>
+  private val teamSpawnPositionMap: MutableMap<IdentifiableByName, Location>
+  private val teamMonumentPositionMap: MutableMap<IdentifiableByName, MutableSet<Location>>
 
-  private var displayName: String?
-  private var spawnPosition: Position?
+  var world: World?
 
   init {
     teamSpawnPositionMap = linkedMapOf()
     teamMonumentPositionMap = linkedMapOf()
 
-    displayName = null
-    spawnPosition = null
+    world = null
   }
 
-  fun addSpawnPosition(name: IdentifiableByName, position: Position) {
+  fun addSpawnPosition(name: IdentifiableByName, position: Location) {
     teamSpawnPositionMap[name] = position
   }
 
-  fun addMonument(name: IdentifiableByName, position: Position) {
+  fun addMonument(name: IdentifiableByName, position: Location) {
     val monumentSet = teamMonumentPositionMap[name] ?: hashSetOf()
     monumentSet.add(position)
   }
 
-  fun removeMonument(name: IdentifiableByName, position: Position) {
+  fun removeMonument(name: IdentifiableByName, position: Location) {
     val monumentSet = teamMonumentPositionMap[name] ?: return
     monumentSet.remove(position)
   }

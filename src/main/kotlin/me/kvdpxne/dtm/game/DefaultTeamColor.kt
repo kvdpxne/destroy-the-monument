@@ -11,6 +11,11 @@ enum class DefaultTeamColor(
 ) : IdentifiableByName {
 
   BLUE("blue", ChatColor.BLUE, DyeColor.BLUE),
-  RED("red", ChatColor.DARK_RED, DyeColor.RED),
-  NONE("none", ChatColor.WHITE, DyeColor.WHITE)
+  RED("red", ChatColor.DARK_RED, DyeColor.RED);
+
+  companion object {
+    fun viaIdentity(identity: String): DefaultTeamColor? {
+      return entries.find { it.identifiableName == identity }
+    }
+  }
 }

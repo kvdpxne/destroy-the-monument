@@ -15,17 +15,17 @@ open class Kit(
   val icon: ItemStack
 ) {
 
-  fun equip(teammate: Teammate) {
-    teammate.kit = this
-    items.forEach {
-      val item = it.item
-      val meta = item.itemMeta
-      if (meta is LeatherArmorMeta) {
-        meta.color = teammate.teamColor.dyeColor.color
-        item.itemMeta = meta
-      }
-      teammate.player.inventory.setItem(it.index, item)
-    }
-
-  }
+//  fun equip(teammate: Teammate) {
+//    teammate.kit = this
+//    items.forEach {
+//      val item = it.item
+//      val meta = item.itemMeta
+//      if (meta is LeatherArmorMeta) {
+//        meta.color = teammate.teamColor.dyeColor.color
+//        item.itemMeta = meta
+//      }
+//      teammate.player.inventory.setItem(it.index, item)
+//    }
+//
+//  }
 }

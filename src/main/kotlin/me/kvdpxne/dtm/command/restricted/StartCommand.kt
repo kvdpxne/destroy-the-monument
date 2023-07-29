@@ -2,11 +2,10 @@ package me.kvdpxne.dtm.command.restricted
 
 import me.kvdpxne.dtm.command.Executor
 import me.kvdpxne.dtm.command.Parameter
-import me.kvdpxne.dtm.game.ArenaManager
+import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.user.UserPerformer
-import java.util.*
 
-object CreateCommand : Executor<UserPerformer> {
+object StartCommand : Executor<UserPerformer> {
 
   override fun execute(performer: UserPerformer, parameter: Parameter) {
     val player = performer.getPlayer() ?: return
@@ -17,10 +16,11 @@ object CreateCommand : Executor<UserPerformer> {
     }
 
     val name = parameter.asText()
-    ArenaManager.createArena(UUID.randomUUID(), name).let {
-      it.world = player.world
-      it.worldName = player.world.name
-      performer.sendMessage("Created")
+    val game = GameManager.findGameByArenaName(name)
+
+    if (null == game) {
+      performer.sendMessage("")
+      return
     }
   }
 }

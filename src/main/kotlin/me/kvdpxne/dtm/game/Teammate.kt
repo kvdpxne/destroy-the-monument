@@ -1,10 +1,8 @@
 package me.kvdpxne.dtm.game
 
-import me.kvdpxne.dtm.profession.Kit
-import org.bukkit.entity.Player
+import me.kvdpxne.dtm.user.User
 
 class Teammate(
-  val player: Player,
-  var kit: Kit,
-  var teamColor: DefaultTeamColor = DefaultTeamColor.NONE
+  val user: User,
+  var teamColor: DefaultTeamColor
 )

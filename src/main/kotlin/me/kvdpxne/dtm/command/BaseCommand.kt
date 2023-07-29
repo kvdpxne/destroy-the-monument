@@ -1,11 +1,9 @@
 package me.kvdpxne.dtm.command
 
 import me.kvdpxne.dtm.command.overt.HelpCommand
+import me.kvdpxne.dtm.command.overt.JoinCommand
 import me.kvdpxne.dtm.command.overt.KitCommand
-import me.kvdpxne.dtm.command.restricted.CreateCommand
-import me.kvdpxne.dtm.command.restricted.TeleportBackCommand
-import me.kvdpxne.dtm.command.restricted.TeleportCommand
-import me.kvdpxne.dtm.command.restricted.WandCommand
+import me.kvdpxne.dtm.command.restricted.*
 
 object BaseCommand : Command("dtm"), Executor<Performer> {
 
@@ -14,9 +12,11 @@ object BaseCommand : Command("dtm"), Executor<Performer> {
   init {
     nameSubCommandMap = buildMap {
       this["help"] = HelpCommand
+      this["join"] = JoinCommand
       this["kit"] = KitCommand
 
       this["create"] = CreateCommand
+      this["start"] = StartCommand
       this["teleportback"] = TeleportBackCommand
       this["teleport"] = TeleportCommand
       this["wand"] = WandCommand

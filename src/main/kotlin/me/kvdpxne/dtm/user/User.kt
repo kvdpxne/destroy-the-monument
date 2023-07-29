@@ -13,6 +13,6 @@ class User(
   val performer: Performer
 
   init {
-    performer = UserPerformer(identifier, name)
+    performer = UserPerformer(identifier, name, this)
   }
 }
