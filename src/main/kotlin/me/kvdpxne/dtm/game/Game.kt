@@ -1,11 +1,23 @@
 package me.kvdpxne.dtm.game
 
+import io.github.oshai.kotlinlogging.KLogger
+import io.github.oshai.kotlinlogging.KotlinLogging
 import me.kvdpxne.dtm.shared.IdentifiableByName
 import me.kvdpxne.dtm.user.User
 import java.time.Instant
-import java.util.UUID
+import java.util.*
 
 class Game(val identifier: UUID, var name: String) {
+
+  companion object {
+
+    private val logger: KLogger = KotlinLogging.logger { }
+  }
+
+  /**
+   * Map of users who have been signed up for this game.
+   */
+  val hostages: MutableMap<UUID, User>
 
   val teams: MutableCollection<Team>
 
@@ -22,10 +34,12 @@ class Game(val identifier: UUID, var name: String) {
   var state: GameState
 
   init {
+    hostages = mutableMapOf()
+    teams = mutableListOf()
+
     state = GameState.INITIALIZED
 
     arena = null
-    teams = mutableListOf()
     startInstant = Instant.now()
   }
 
@@ -37,5 +51,34 @@ class Game(val identifier: UUID, var name: String) {
     }
     val teammate = Teammate(user, DefaultTeamColor.viaIdentity(identity.identifiableName)!!)
     team.teammates += teammate
+  }
+
+  /**
+   * Checks if the given [user] is in the game.
+   */
+  fun isInGame(user: User): Boolean = null != hostages[user.identifier]
+
+  /**
+   * Checks if the given [user] is in any team.
+   */
+  fun isInTeam(user: User): Boolean = isInGame(user) && teams.any {
+    // Checks if the given user is in the given team.
+    it.isInTeam(user)
+  }
+
+  fun addUserToGame(user: User): User? = user.run {
+    hostages.put(identifier, this)
+  }.also {
+    logger.debug {
+      "Added user $user to $this game."
+    }
+  }
+
+  fun removeUserFromGame(user: User): User? = user.run {
+    hostages.remove(identifier)
+  }.also {
+    logger.debug {
+      "Removed user $user from $this game."
+    }
   }
 }

@@ -6,6 +6,10 @@ fun isTrue(condition: Boolean, message: String) {
   }
 }
 
+inline fun isTrue(condition: Boolean, message: () -> String) {
+  condition.takeUnless { it } ?: throw ValidationFailedException(message())
+}
+
 fun isFalse(condition: Boolean, message: String) {
   isTrue(!condition, message)
 }

@@ -28,6 +28,8 @@ dependencies {
 
   implementation("org.ktorm:ktorm-support-sqlite:3.6.0")
 
+  implementation("io.github.oshai:kotlin-logging-jvm:5.0.1")
+
 
   testImplementation(kotlin("test"))
 }

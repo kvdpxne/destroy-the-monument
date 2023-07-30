@@ -13,7 +13,7 @@ object JoinCommand : Executor<UserPerformer> {
     val player = performer.getPlayer() ?: return
 
     if (parameter.isEmpty()) {
-      TeamSelectionGui.open(player)
+//      TeamSelectionGui().open(player)
       return
     }
 

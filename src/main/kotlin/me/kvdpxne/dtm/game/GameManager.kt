@@ -4,7 +4,7 @@ import java.util.*
 
 object GameManager {
 
-  private val identifierGameMap: MutableMap<UUID, Game>
+  val identifierGameMap: MutableMap<UUID, Game>
 
   init {
     identifierGameMap = linkedMapOf()
