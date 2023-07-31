@@ -19,9 +19,15 @@ class Game(val identifier: UUID, var name: String) {
    */
   val hostages: MutableMap<UUID, User>
 
+  /**
+   *
+   */
   val teams: MutableCollection<Team>
 
-  val startInstant: Instant
+
+  val start: Instant
+
+  val end: Instant?
 
   /**
    * The current arena where the game will be, is or was played.
@@ -35,22 +41,45 @@ class Game(val identifier: UUID, var name: String) {
 
   init {
     hostages = mutableMapOf()
-    teams = mutableListOf()
+    teams = mutableSetOf()
 
     state = GameState.INITIALIZED
 
     arena = null
-    startInstant = Instant.now()
+
+    start = Instant.now()
+    end = null
   }
 
-  fun addTeammate(identity: IdentifiableByName, user: User) {
-    var team = teams.find { it.name == identity }
-    if (null == team) {
-      team = Team(identity)
-      (teams as MutableList<Team>) += team
+  fun findTeam(identity: IdentifiableByName): Team? = teams.find {
+    it.name == identity
+  }
+
+  /**
+   * @return True if the given [team] does not exist in the [teams] collection
+   * and has been successfully added to the [teams] collection, false if the
+   * given [team] already exists in the [teams] collection and has not been
+   * added to the [teams] collection.
+   */
+  fun addTeam(team: Team): Boolean = teams.add(team).also {
+    if (it) {
+      logger.debug {
+        "A new $team team has been added to the $this game."
+      }
     }
-    val teammate = Teammate(user, DefaultTeamColor.viaIdentity(identity.identifiableName)!!)
-    team.teammates += teammate
+  }
+
+  /**
+   * @return True if the given [team] was in the [teams] collection and was
+   * successfully removed, false if the given [team] was not in the [teams]
+   * collection and was not removed.
+   */
+  fun removeTeam(team: Team): Boolean = teams.remove(team).also {
+    if (it) {
+      logger.debug {
+        "Removed the $team team from the $this game."
+      }
+    }
   }
 
   /**
@@ -66,7 +95,19 @@ class Game(val identifier: UUID, var name: String) {
     it.isInTeam(user)
   }
 
-  fun addUserToGame(user: User): User? = user.run {
+  fun isInTeam(
+    identity: IdentifiableByName,
+    user: User
+  ): Boolean {
+    if (!isInGame(user)) {
+      return false
+    }
+
+    val team = teams.find { it.name == identity } ?: return false
+    return team.isInTeam(user)
+  }
+
+  fun addHostage(user: User): User? = user.run {
     hostages.put(identifier, this)
   }.also {
     logger.debug {
@@ -74,11 +115,21 @@ class Game(val identifier: UUID, var name: String) {
     }
   }
 
-  fun removeUserFromGame(user: User): User? = user.run {
+  fun removeHostage(user: User): User? = user.run {
     hostages.remove(identifier)
   }.also {
     logger.debug {
       "Removed user $user from $this game."
     }
+  }
+
+  fun addTeammate(identity: IdentifiableByName, user: User) {
+    var team = findTeam(identity)
+    if (null == team) {
+      team = Team(identity)
+      (teams as MutableList<Team>) += team
+    }
+    val teammate = Teammate(user, DefaultTeamColor.viaIdentity(identity.identifiableName)!!)
+    team.teammates += teammate
   }
 }
