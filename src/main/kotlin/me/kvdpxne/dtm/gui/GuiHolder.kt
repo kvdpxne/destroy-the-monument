@@ -17,7 +17,13 @@ class GuiHolder : InventoryHolder {
   }
 
   fun handleAction(event: InventoryClickEvent) {
-    actions[event.rawSlot] ?: { it.isCancelled = true }
+    //
+    val key = event.rawSlot
+    //
+    //
+    actions.getOrDefault(key) {
+      it.isCancelled = true
+    }.invoke(event)
   }
 
   override fun getInventory(): Inventory {

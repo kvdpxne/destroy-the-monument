@@ -5,24 +5,23 @@ import me.kvdpxne.dtm.gui.Gui
 import me.kvdpxne.dtm.gui.Rows
 import me.kvdpxne.dtm.user.User
 import org.bukkit.Material
+import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
-fun createGameSelectionGui(user: User): Gui {
-  val games = GameManager.identifierGameMap
-  return Gui(
-    "Wybierz Gre",
-    Rows.findRowBySize(games.size)
-  ).apply {
+fun createGameSelectionGui(user: User) = GameManager.games.let {
+  Gui("Wybierz Gre", Rows.findRowBySize(it.size)).apply {
     var next = 0
-    games.forEach { (key, value) ->
+    it.forEach { (key, game) ->
       setItem(next, ItemStack(Material.CLAY).apply {
         itemMeta = itemMeta.apply {
-          displayName = value.name
+          displayName = game.name
           lore = listOf(key.toString())
         }
-      }) {
-        user.run {
-          value.hostages[identifier] = this
+      }) { event ->
+        game.addHostage(user)
+        with(event.whoClicked as Player) {
+          closeInventory()
+          sendMessage("You have been added to the ${game.name} game.")
         }
       }
       next++

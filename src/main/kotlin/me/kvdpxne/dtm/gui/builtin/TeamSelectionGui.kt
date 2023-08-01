@@ -17,12 +17,12 @@ class TeamSelectionGui(name: String, user: User) : Gui("Wybór drużyny", Rows.O
 
     coloredWool.durability = 14
     setItem(0, coloredWool) {
-      game?.addTeammate(DefaultTeamColor.RED, user)
+      game?.addTeammate(DefaultTeamColor.RED) { user }
     }
 
     coloredWool.durability = 11
     setItem(8, coloredWool) {
-      game?.addTeammate(DefaultTeamColor.BLUE, user)
+      game?.addTeammate(DefaultTeamColor.BLUE) { user }
     }
   }
 }

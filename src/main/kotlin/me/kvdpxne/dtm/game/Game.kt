@@ -17,51 +17,102 @@ class Game(val identifier: UUID, var name: String) {
   /**
    * Map of users who have been signed up for this game.
    */
-  val hostages: MutableMap<UUID, User>
+  val hostages: MutableMap<UUID, User> = mutableMapOf()
 
   /**
    *
    */
-  val teams: MutableCollection<Team>
-
-
-  val start: Instant
-
-  val end: Instant?
+  val teams: MutableCollection<Team> = mutableSetOf()
 
   /**
    * The current arena where the game will be, is or was played.
    */
-  var arena: Arena?
+  var arena: Arena? = null
+
+  /**
+   *
+   */
+  val start: Instant = Instant.now()
+
+  /**
+   *
+   */
+  var end: Instant? = null
 
   /**
    * The current state of the game object.
    */
-  var state: GameState
+  var state: GameState = GameState.INITIALIZED
 
-  init {
-    hostages = mutableMapOf()
-    teams = mutableSetOf()
+  /**
+   *
+   */
+  var spectators: Int = 0
 
-    state = GameState.INITIALIZED
-
-    arena = null
-
-    start = Instant.now()
-    end = null
-  }
+  fun findHostage(identifier: UUID): User? = hostages[identifier]
 
   fun findTeam(identity: IdentifiableByName): Team? = teams.find {
     it.name == identity
   }
 
+  fun findTeam(user: User): Team? = teams.find {
+    it.hasTeammate(user)
+  }
+
   /**
+   * Checks if the given [user] is in the game.
+   */
+  fun isInGame(user: User): Boolean = hostages.contains(user.identifier)
+
+  /**
+   * Checks if the given [user] is in any team.
+   */
+  fun isInTeam(user: User): Boolean = teams.any {
+    it.hasTeammate(user)
+  }
+
+  /**
+   * Checks if the given [user] is currently present in given team specified by
+   * the [identity].
+   *
+   * @param identity
+   * @param user
+   */
+  fun isInTeam(
+    identity: IdentifiableByName,
+    user: () -> User
+  ): Boolean = teams.find {
+    it.name == identity
+  }?.hasTeammate(user()) ?: false
+
+  /**
+   *
+   */
+  fun addHostage(user: User): Boolean {
+    if (isInGame(user)) {
+      return false
+    }
+    hostages[user.identifier] = user
+    ++spectators
+    logger.debug {
+      "A new $user user has been added to the $this game."
+    }
+    return true
+  }
+
+  /**
+   * Tries to add the given [team] to the [teams] collection if the given
+   * [team] is currently not present in the [teams] collection.
+   *
+   * @param team The currently not present [team] in the [teams] collection to
+   * be added to the [teams] collection.
+   *
    * @return True if the given [team] does not exist in the [teams] collection
    * and has been successfully added to the [teams] collection, false if the
    * given [team] already exists in the [teams] collection and has not been
    * added to the [teams] collection.
    */
-  fun addTeam(team: Team): Boolean = teams.add(team).also {
+  fun addTeam(team: Team) = teams.add(team).also {
     if (it) {
       logger.debug {
         "A new $team team has been added to the $this game."
@@ -69,12 +120,48 @@ class Game(val identifier: UUID, var name: String) {
     }
   }
 
+  fun addTeammate(
+    identity: IdentifiableByName,
+    userProvider: () -> User
+  ): Boolean {
+    val team = findTeam(identity) ?: return false
+    val teammate = Teammate(userProvider(), DefaultTeamColor.viaIdentity(identity.identifiableName)!!)
+    team.teammates += teammate
+    --spectators
+    return true
+  }
+
   /**
+   *
+   */
+  fun removeHostage(user: User) = findHostage(user.identifier)?.run {
+    // If the user is in any team, he should be removed from that team before
+    // he is removed from the whole game.
+    val team = findTeam(this)?.run {
+      removeTeammate(user)
+    }
+    hostages -= identifier
+    logger.debug {
+      "Removed $this user from ${this@Game} game."
+    }
+    // If a player does not belong to any team during his tenure in this game
+    // then he has never stopped being a spectator.
+    team ?: --spectators
+    true
+  } ?: false
+
+  /**
+   * Tries to remove the given [team] from the [teams] collection if the given
+   * [team] is currently present in the [teams] collection.
+   *
+   * @param team The currently present [team] in the [teams] collection to be
+   * removed from the [teams] collection.
+   *
    * @return True if the given [team] was in the [teams] collection and was
    * successfully removed, false if the given [team] was not in the [teams]
    * collection and was not removed.
    */
-  fun removeTeam(team: Team): Boolean = teams.remove(team).also {
+  fun removeTeam(team: Team) = teams.remove(team).also {
     if (it) {
       logger.debug {
         "Removed the $team team from the $this game."
@@ -82,54 +169,11 @@ class Game(val identifier: UUID, var name: String) {
     }
   }
 
-  /**
-   * Checks if the given [user] is in the game.
-   */
-  fun isInGame(user: User): Boolean = null != hostages[user.identifier]
-
-  /**
-   * Checks if the given [user] is in any team.
-   */
-  fun isInTeam(user: User): Boolean = isInGame(user) && teams.any {
-    // Checks if the given user is in the given team.
-    it.isInTeam(user)
-  }
-
-  fun isInTeam(
+  fun removeTeammate(
     identity: IdentifiableByName,
-    user: User
+    userProvider: () -> User
   ): Boolean {
-    if (!isInGame(user)) {
-      return false
-    }
-
-    val team = teams.find { it.name == identity } ?: return false
-    return team.isInTeam(user)
-  }
-
-  fun addHostage(user: User): User? = user.run {
-    hostages.put(identifier, this)
-  }.also {
-    logger.debug {
-      "Added user $user to $this game."
-    }
-  }
-
-  fun removeHostage(user: User): User? = user.run {
-    hostages.remove(identifier)
-  }.also {
-    logger.debug {
-      "Removed user $user from $this game."
-    }
-  }
-
-  fun addTeammate(identity: IdentifiableByName, user: User) {
-    var team = findTeam(identity)
-    if (null == team) {
-      team = Team(identity)
-      (teams as MutableList<Team>) += team
-    }
-    val teammate = Teammate(user, DefaultTeamColor.viaIdentity(identity.identifiableName)!!)
-    team.teammates += teammate
+    val team = findTeam(identity) ?: return false
+    return true
   }
 }
