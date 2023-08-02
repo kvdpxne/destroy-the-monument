@@ -11,7 +11,10 @@ object GameManager {
 
     // TODO Delete in the future.
     UUID.fromString("4d966ed3-86b8-4acd-bb48-aed322cf14fe").let {
-      games[it] = Game(it, "test")
+      games[it] = Game(it, "test").apply {
+        addTeam(Team(DefaultTeamColor.BLUE))
+        addTeam(Team(DefaultTeamColor.RED))
+      }
     }
   }
 

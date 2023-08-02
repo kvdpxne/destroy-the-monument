@@ -3,6 +3,7 @@ package me.kvdpxne.dtm.command
 import me.kvdpxne.dtm.command.overt.HelpCommand
 import me.kvdpxne.dtm.command.overt.JoinCommand
 import me.kvdpxne.dtm.command.overt.KitCommand
+import me.kvdpxne.dtm.command.overt.LeaveCommand
 import me.kvdpxne.dtm.command.restricted.*
 
 object BaseCommand : Command("dtm"), Executor<Performer> {
@@ -14,6 +15,7 @@ object BaseCommand : Command("dtm"), Executor<Performer> {
       this["help"] = HelpCommand
       this["join"] = JoinCommand
       this["kit"] = KitCommand
+      this["leave"] = LeaveCommand
 
       this["create"] = CreateCommand
       this["start"] = StartCommand
