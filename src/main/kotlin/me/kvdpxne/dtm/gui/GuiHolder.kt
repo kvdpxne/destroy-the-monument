@@ -23,7 +23,7 @@ class GuiHolder : InventoryHolder {
     //
     actions.getOrDefault(key) {
       it.isCancelled = true
-    }.invoke(event)
+    }(event)
   }
 
   override fun getInventory(): Inventory {
