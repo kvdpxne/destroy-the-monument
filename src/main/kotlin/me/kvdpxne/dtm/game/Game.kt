@@ -7,12 +7,9 @@ import me.kvdpxne.dtm.user.User
 import java.time.Instant
 import java.util.*
 
+private val logger: KLogger = KotlinLogging.logger { }
+
 class Game(val identifier: UUID, var name: String) {
-
-  companion object {
-
-    private val logger: KLogger = KotlinLogging.logger { }
-  }
 
   /**
    * Map of users who have been signed up for this game.
@@ -30,12 +27,12 @@ class Game(val identifier: UUID, var name: String) {
   var arena: Arena? = null
 
   /**
-   *
+   * The start time of a phase of the game.
    */
-  val start: Instant = Instant.now()
+  var start: Instant = Instant.now()
 
   /**
-   *
+   * The end time of a phase of the game.
    */
   var end: Instant? = null
 
@@ -45,7 +42,7 @@ class Game(val identifier: UUID, var name: String) {
   var state: GameState = GameState.INITIALIZED
 
   /**
-   *
+   * Number of users present in the game but not currently playing.
    */
   var spectators: Int = 0
 
@@ -157,18 +154,16 @@ class Game(val identifier: UUID, var name: String) {
   fun removeHostage(user: User) = findHostage(user.identifier)?.run {
     // If the user is in any team, he should be removed from that team before
     // he is removed from the whole game.
-    val team = findTeam(this)?.run {
-      teammates.removeIf {
-        it.user == user
-      }
+    findTeam(this)?.run {
+      removeTeammate(user)
+      // If a player does not belong to any team during his tenure in this game
+      // then he has never stopped being a spectator.
+      --spectators
     }
     hostages -= identifier
     logger.debug {
       "Removed $this user from ${this@Game} game."
     }
-    // If a player does not belong to any team during his tenure in this game
-    // then he has never stopped being a spectator.
-    team ?: --spectators
     true
   } ?: false
 
@@ -207,6 +202,15 @@ class Game(val identifier: UUID, var name: String) {
       }
       ++spectators
     }
+  }
+
+  fun start() {
+    end = Instant.now()
+    state = GameState.STARTING
+
+//    logger.debug {
+//      "The game took off after the FSF time."
+//    }
   }
 
   override fun toString(): String {

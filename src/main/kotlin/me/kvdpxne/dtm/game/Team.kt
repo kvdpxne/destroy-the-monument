@@ -5,30 +5,38 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import me.kvdpxne.dtm.shared.Identity
 import me.kvdpxne.dtm.user.User
 
+private val logger: KLogger = KotlinLogging.logger { }
+
 class Team(val identity: Identity, val game: Game) {
 
-  val teammates = mutableSetOf<Teammate>()
+  /**
+   * Collection of teammates belonging to the team.
+   */
+  val teammates: MutableCollection<Teammate> = mutableSetOf()
 
-  companion object {
-
-    private val logger: KLogger = KotlinLogging.logger { }
-  }
-
-  fun hasTeammate(user: User) = null != teammates.find {
+  /**
+   *
+   */
+  fun findTeammate(user: User) = teammates.find {
     it.user == user
   }
 
   /**
    *
    */
+  fun hasTeammate(user: User) = null != findTeammate(user)
+
+  /**
+   * This method is transient and should not be used directly on this object.
+   * If you need to add a teammate to a team, use the [Game.addTeammate]
+   * method.
+   */
   fun addTeammate(user: User) = addTeammate(user.toTeammate(identity, this))
 
   /**
-   * Tries to add the given [teammate] to the [teammates] collection if the
-   * given [teammate] is not currently present in the [teammates] collection.
-   *
-   * @see Game.addTeam
-   * @see Game.addTeammate
+   * This method is transient and should not be used directly on this object.
+   * If you need to add a teammate to a team, use the [Game.addTeammate]
+   * method.
    */
   fun addTeammate(teammate: Teammate) = teammates.add(teammate).also {
     if (it) {
@@ -38,18 +46,19 @@ class Team(val identity: Identity, val game: Game) {
     }
   }
 
-  fun removeTeammate(user: User) = teammates.find {
-    it.user == user
-  }?.let {
-    //
+  /**
+   * This method is transient and should not be used directly on this object.
+   * If you need to remove a teammate from a team, use the
+   * [Game.removeTeammate] method.
+   */
+  fun removeTeammate(user: User) = findTeammate(user)?.let {
     removeTeammate(it)
   } ?: false
 
   /**
-   *
-   *
-   * @see Game.removeTeam
-   * @see Game.removeTeammate
+   * This method is transient and should not be used directly on this object.
+   * If you need to remove a teammate from a team, use the
+   * [Game.removeTeammate] method.
    */
   fun removeTeammate(teammate: Teammate) = teammates.remove(teammate).also {
     if (it) {
