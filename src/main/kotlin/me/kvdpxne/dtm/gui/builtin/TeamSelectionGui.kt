@@ -19,7 +19,7 @@ fun createTeamSelectionGui(game: Game, user: User) = Gui("Wybór drużyny", Rows
   setItem(4, ItemStack(Material.OBSIDIAN)) {
     val name = game.teams.minBy {
       it.teammates.size
-    }.name
+    }.identity
 
     game.addTeammate(name) { user }
   }

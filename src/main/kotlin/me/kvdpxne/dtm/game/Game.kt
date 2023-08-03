@@ -2,7 +2,7 @@ package me.kvdpxne.dtm.game
 
 import io.github.oshai.kotlinlogging.KLogger
 import io.github.oshai.kotlinlogging.KotlinLogging
-import me.kvdpxne.dtm.shared.IdentifiableByName
+import me.kvdpxne.dtm.shared.Identity
 import me.kvdpxne.dtm.user.User
 import java.time.Instant
 import java.util.*
@@ -51,8 +51,8 @@ class Game(val identifier: UUID, var name: String) {
 
   fun findHostage(identifier: UUID): User? = hostages[identifier]
 
-  fun findTeam(identity: IdentifiableByName): Team? = teams.find {
-    it.name == identity
+  fun findTeam(identity: Identity): Team? = teams.find {
+    it.identity == identity
   }
 
   fun findTeam(user: User): Team? = teams.find {
@@ -78,11 +78,8 @@ class Game(val identifier: UUID, var name: String) {
    * @param identity
    * @param user
    */
-  fun isInTeam(
-    identity: IdentifiableByName,
-    user: () -> User
-  ): Boolean = teams.find {
-    it.name == identity
+  fun isInTeam(identity: Identity, user: () -> User): Boolean = teams.find {
+    it.identity == identity
   }?.hasTeammate(user()) ?: false
 
   /**
@@ -120,15 +117,26 @@ class Game(val identifier: UUID, var name: String) {
     }
   }
 
-  fun addTeammate(
-    identity: IdentifiableByName,
-    userProvider: () -> User
-  ): Boolean {
-    val team = findTeam(identity) ?: return false
-    val teammate = Teammate(userProvider(), DefaultTeamColor.viaIdentity(identity.identifiableName)!!)
-    team.teammates += teammate
-    --spectators
-    return true
+  fun addTeammate(identity: Identity, user: () -> User): Boolean {
+    // Team identity with which the team to which the given user is to be added
+    // is identified.
+    val teamIdentity = DefaultTeamColor.findByIdentity(identity) ?: return false
+    val team = findTeam(teamIdentity) ?: return false
+    val teammate = user()
+    //
+    //
+    return team.addTeammate(teammate).also {
+      if (!it) {
+        return@also
+      }
+      logger.debug {
+        "A new $teammate teammate has been added to the $team team in the " +
+          "$this game."
+      }
+      // If the user has successfully joined the team, the number of users
+      // (spectators) who are currently not playing should decrease.
+      --spectators
+    }
   }
 
   /**
@@ -138,7 +146,9 @@ class Game(val identifier: UUID, var name: String) {
     // If the user is in any team, he should be removed from that team before
     // he is removed from the whole game.
     val team = findTeam(this)?.run {
-      removeTeammate(user)
+      teammates.removeIf {
+        it.user == user
+      }
     }
     hostages -= identifier
     logger.debug {
@@ -170,10 +180,24 @@ class Game(val identifier: UUID, var name: String) {
   }
 
   fun removeTeammate(
-    identity: IdentifiableByName,
-    userProvider: () -> User
+    identity: Identity,
+    user: () -> User
   ): Boolean {
-    val team = findTeam(identity) ?: return false
-    return true
+    val teamIdentity = DefaultTeamColor.findByIdentity(identity) ?: return false
+    val team = findTeam(teamIdentity) ?: return false
+    val teammate = user()
+    return team.removeTeammate(teammate).also {
+      if (!it) {
+        return@also
+      }
+      logger.debug {
+
+      }
+      ++spectators
+    }
+  }
+
+  override fun toString(): String {
+    return "Game(identifier='$identifier', name='$name')"
   }
 }

@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.shared
 
-interface IdentifiableByName {
+interface Identity {
 
   val identifiableName: String
 }
