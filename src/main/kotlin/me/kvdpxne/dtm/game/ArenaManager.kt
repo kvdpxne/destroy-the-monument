@@ -28,7 +28,7 @@ object ArenaManager {
     return identifierArenaMap[identifier]
   }
 
-  fun getArenaByName(name: String, ignoreCase: Boolean): Arena? {
+  fun getArenaByName(name: String, ignoreCase: Boolean = true): Arena? {
     return identifierArenaMap.values.find {
       it.name.equals(name, ignoreCase)
     }

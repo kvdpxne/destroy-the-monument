@@ -17,6 +17,8 @@ object CreateCommand : Executor<UserPerformer> {
     }
 
     val name = parameter.asText()
+    println(name)
+
     ArenaManager.createArena(UUID.randomUUID(), name).let {
       it.world = player.world
       it.worldName = player.world.name

@@ -18,5 +18,9 @@ enum class DefaultTeamColor(
     fun findByIdentity(identity: Identity) = entries.find {
       it.identifiableName == identity.identifiableName
     }
+
+    fun findByIdentityKey(key: String) = entries.find {
+      it.identifiableName.equals(key, true)
+    }
   }
 }

@@ -18,6 +18,7 @@ object BaseCommand : Command("dtm"), Executor<Performer> {
       this["leave"] = LeaveCommand
 
       this["create"] = CreateCommand
+      this["set"] = SetCommand
       this["start"] = StartCommand
       this["teleportback"] = TeleportBackCommand
       this["teleport"] = TeleportCommand
