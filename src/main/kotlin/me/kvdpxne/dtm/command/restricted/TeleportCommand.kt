@@ -2,8 +2,9 @@ package me.kvdpxne.dtm.command.restricted
 
 import me.kvdpxne.dtm.command.Executor
 import me.kvdpxne.dtm.command.Parameter
+import me.kvdpxne.dtm.shared.TeleportationHistoryStorage
+import me.kvdpxne.dtm.shared.WorldLoaderHelper
 import me.kvdpxne.dtm.user.UserPerformer
-import org.bukkit.Bukkit
 
 object TeleportCommand : Executor<UserPerformer> {
 
@@ -18,13 +19,13 @@ object TeleportCommand : Executor<UserPerformer> {
     // The name of the world registered as an arena.
     val name = parameter.asText()
 
-    Bukkit.getWorld(name).let {
+    WorldLoaderHelper.getWorld(name).let {
       if (null == it) {
         performer.sendMessage("World named \"$name\" does not exist.")
         return
       }
 
-      TeleportBackCommand.previousLocation = player.world.spawnLocation
+      TeleportationHistoryStorage.history.push(player.location)
       player.teleport(it.spawnLocation)
     }
   }
