@@ -123,6 +123,18 @@ class Game(val identifier: UUID, var name: String) {
     val teamIdentity = DefaultTeamColor.findByIdentity(identity) ?: return false
     val team = findTeam(teamIdentity) ?: return false
     val teammate = user()
+
+    if (team.hasTeammate(teammate)) {
+      return false
+    }
+
+    teams.forEach {
+      // Checking if the user is present in the team is not necessary because
+      // the method to remove the user from the team filters the collections
+      // of current users in the team to find the given user.
+      it.removeTeammate(teammate)
+    }
+
     //
     //
     return team.addTeammate(teammate).also {
@@ -198,6 +210,6 @@ class Game(val identifier: UUID, var name: String) {
   }
 
   override fun toString(): String {
-    return "Game(identifier='$identifier', name='$name')"
+    return "Game(identifier='$identifier', name='$name', state=$state)"
   }
 }
