@@ -25,7 +25,7 @@ object TeleportCommand : Executor<UserPerformer> {
         return
       }
 
-      TeleportationHistoryStorage.history.push(player.location)
+      TeleportationHistoryStorage.push(player.uniqueId, player.location)
       player.teleport(it.spawnLocation)
     }
   }

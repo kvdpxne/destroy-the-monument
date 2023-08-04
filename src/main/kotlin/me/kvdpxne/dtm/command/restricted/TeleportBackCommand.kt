@@ -8,13 +8,15 @@ import me.kvdpxne.dtm.user.UserPerformer
 object TeleportBackCommand : Executor<UserPerformer> {
 
   override fun execute(performer: UserPerformer, parameter: Parameter) {
-    if (TeleportationHistoryStorage.history.empty()) {
-      performer.sendMessage("The previous location is unknown.")
+    val player = performer.getPlayer() ?: return
+    val position = TeleportationHistoryStorage.pop(player.uniqueId)
+
+    if (null == position) {
+      player.sendMessage("Previous position is unknown.")
       return
     }
 
-    val last = TeleportationHistoryStorage.history.pop()
-    val player = performer.getPlayer() ?: return
-    player.teleport(last)
+    player.teleport(position)
+    player.sendMessage("You have been moved to an earlier position.")
   }
 }
