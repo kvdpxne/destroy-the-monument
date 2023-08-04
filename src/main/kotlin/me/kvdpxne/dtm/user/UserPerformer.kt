@@ -1,12 +1,11 @@
 package me.kvdpxne.dtm.user
 
 import me.kvdpxne.dtm.command.Performer
-import me.kvdpxne.dtm.shared.isTrue
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.lang.ref.Reference
 import java.lang.ref.WeakReference
-import java.util.*
+import java.util.UUID
 
 class UserPerformer(
   val identifier: UUID,
@@ -35,7 +34,7 @@ class UserPerformer(
   }
 
   override fun hasPermission(permission: String): Boolean {
-    isTrue(permission.isBlank(), "?")
+    require(permission.isBlank()) { "?" }
     return getPlayer()?.hasPermission(permission) ?: false
   }
 

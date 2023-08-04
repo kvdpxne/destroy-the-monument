@@ -1,6 +1,5 @@
 package me.kvdpxne.dtm.user
 
-import me.kvdpxne.dtm.shared.isTrue
 import me.kvdpxne.dtm.statistics.Statistics
 import java.util.UUID
 
@@ -45,7 +44,9 @@ object UserManager {
    * @since 0.1.0
    */
   fun createUser(identifier: UUID, name: String): User {
-    isTrue(name.isBlank(), "name can not be blank.")
+    require(name.isBlank()) {
+      "name can not be blank."
+    }
     val user = User(identifier, name, Statistics.empty())
     addUser(user)
     return user

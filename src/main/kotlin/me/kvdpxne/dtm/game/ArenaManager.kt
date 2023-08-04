@@ -1,6 +1,5 @@
 package me.kvdpxne.dtm.game
 
-import me.kvdpxne.dtm.shared.isTrue
 import java.util.UUID
 
 object ArenaManager {
@@ -43,8 +42,13 @@ object ArenaManager {
   }
 
   fun createArena(identifier: UUID, name: String): Arena {
-    isTrue(name.isBlank(), "Arena name cannot be empty.")
-    isTrue(4 >= name.length, "Arena name cannot be shorter than 4 characters.")
+    require(name.isBlank()) {
+      "Arena name cannot be empty."
+    }
+
+    require(4 >= name.length) {
+      "Arena name cannot be shorter than 4 characters."
+    }
 
     val arena = Arena(identifier, name)
 

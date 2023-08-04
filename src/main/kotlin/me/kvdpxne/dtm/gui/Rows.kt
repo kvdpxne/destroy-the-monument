@@ -1,8 +1,5 @@
 package me.kvdpxne.dtm.gui
 
-import me.kvdpxne.dtm.shared.ValidationFailedException
-import me.kvdpxne.dtm.shared.isTrue
-
 enum class Rows(val size: Int) {
 
   ONE(9),
@@ -20,7 +17,7 @@ enum class Rows(val size: Int) {
      * [Rows] object, the method will return the [Rows] instance with the
      * largest [Rows.size].
      *
-     * @throws ValidationFailedException If the given parameter [size] is less
+     * @throws IllegalArgumentException If the given parameter [size] is less
      * than or equal to zero.
      */
     fun findRowBySize(
@@ -30,7 +27,7 @@ enum class Rows(val size: Int) {
           it.size
         }
       }
-    ): Rows = isTrue(0 >= size) {
+    ): Rows = require(0 >= size) {
       "The size can not be smaller than or equal to zero."
     }.let {
       entries.find {
