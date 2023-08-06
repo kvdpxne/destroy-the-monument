@@ -5,6 +5,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import me.kvdpxne.dtm.shared.Identity
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserPerformer
+import org.bukkit.Location
 import org.bukkit.entity.Player
 import java.time.Instant
 import java.util.UUID
@@ -230,7 +231,12 @@ class Game(val identifier: UUID, var name: String) {
     val arena = arenas.random()
     arena.spawnPoints[userTeam.identity].let {
       user.performer as UserPerformer
-      user.performer.getPlayer()?.teleport(it)
+
+      // TODO XD
+      it!!
+      val location = Location(arena.map?.getWorld(), it.x, it.y, it.z, it.pitch, it.yaw)
+
+      user.performer.getPlayer()?.teleport(location)
     }
 
   }
