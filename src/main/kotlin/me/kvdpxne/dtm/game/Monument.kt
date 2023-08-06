@@ -18,4 +18,21 @@ data class Monument(
       "The given team identity cannot be used."
     }
   }
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
+
+    other as Monument
+
+    return identifier == other.identifier
+  }
+
+  override fun hashCode(): Int {
+    return identifier.hashCode()
+  }
+
+  override fun toString(): String {
+    return "Monument(team=$team, x=$x, y=$y, z=$z, identifier=$identifier)"
+  }
 }

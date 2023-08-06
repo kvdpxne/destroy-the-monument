@@ -61,8 +61,35 @@ class Arena(
     }
   }
 
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
+
+    other as Arena
+
+    if (identifier != other.identifier) return false
+    if (name != other.name) return false
+    if (map != other.map) return false
+
+    return true
+  }
+
+  override fun hashCode(): Int {
+    var result = identifier.hashCode()
+    result = 31 * result + name.hashCode()
+    result = 31 * result + (map?.hashCode() ?: 0)
+    return result
+  }
+
+  override fun toString(): String {
+    return "Arena(identifier=$identifier, name='$name', map=$map)"
+  }
+
+
 //  fun removeMonument(name: Identity, position: Location) {
 //    val monumentSet = monuments[name] ?: return
 //    monumentSet.remove(position)
 //  }
+
+
 }
