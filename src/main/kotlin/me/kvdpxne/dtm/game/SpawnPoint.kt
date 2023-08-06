@@ -3,11 +3,22 @@ package me.kvdpxne.dtm.game
 import me.kvdpxne.dtm.shared.Identity
 import java.util.UUID
 
-data class Monument(
+/**
+ * @param team
+ * @param x
+ * @param y
+ * @param z
+ * @param pitch
+ * @param yaw
+ * @param identifier
+ */
+data class SpawnPoint(
   var team: Identity,
-  var x: Int,
-  var y: Int,
-  var z: Int,
+  var x: Double,
+  var y: Double,
+  var z: Double,
+  var pitch: Float,
+  var yaw: Float,
   // An automatically generated unique object identifier.
   val identifier: UUID = UUID.randomUUID()
 ) {

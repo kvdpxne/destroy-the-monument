@@ -5,41 +5,43 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import me.kvdpxne.dtm.shared.Identity
 import me.kvdpxne.dtm.shared.debug
 import org.bukkit.Location
-import org.bukkit.World
 import java.util.UUID
 
 private val logger: KLogger = KotlinLogging.logger {  }
 
 class Arena(
   val identifier: UUID = UUID.randomUUID(),
-  var name: String,
+  var name: String
 ) {
 
   /**
    * Map of positions for each team where teammates will be spawned after death
    * or being moved to the arena map.
    */
-  val spawnPoints: MutableMap<Identity, Location>
+  val spawnPoints: MutableMap<Identity, SpawnPoint> = mutableMapOf()
 
   /**
    *
    */
-  val monuments: MutableMap<Identity, MutableSet<Monument>>
+  val monuments: MutableMap<Identity, MutableSet<Monument>> = mutableMapOf()
 
-  var world: World?
-
-  init {
-    spawnPoints = linkedMapOf()
-    monuments = linkedMapOf()
-
-    world = null
-  }
+  /**
+   *
+   */
+  var map: ArenaMap? = null
 
   /**
    *
    */
   fun setSpawnPoint(team: Identity, position: Location) {
-    spawnPoints[team] = position
+    spawnPoints[team] = SpawnPoint(
+      team,
+      position.x,
+      position.y,
+      position.z,
+      position.pitch,
+      position.yaw
+    )
   }
 
   /**
@@ -51,7 +53,7 @@ class Arena(
       // the given team.
       mutableSetOf()
     }.run {
-      add(Monument(arena = this@Arena, team = team, position = position))
+      add(Monument(team, position.blockX, position.blockY, position.blockZ))
     }.also {
       logger.debug(it) {
         "Assigned a new monument to the $team team in the $this Arena."
