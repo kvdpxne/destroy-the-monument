@@ -5,22 +5,17 @@ import me.kvdpxne.dtm.command.Parameter
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.user.UserPerformer
 
-object StartCommand : Executor<UserPerformer> {
+object CreateGameCommand : Executor<UserPerformer> {
 
+  // Usage: /dtm CreateGame <GAME_NAME>
   override fun execute(performer: UserPerformer, parameter: Parameter) {
-    if (parameter.isEmpty()) {
-      performer.sendMessage("The command requires at least 1 argument.")
+    if (1 > parameter.length()) {
+      performer.sendMessage("Usage: /dtm create <game|arena> <name>")
       return
     }
 
     val gameName = parameter.asText()
-    val game = GameManager.findByName(gameName)
-
-    if (null == game) {
-      performer.sendMessage("No found game.")
-      return
-    }
-
-    game.start(performer.user)
+    GameManager.createGame(gameName)
+    performer.sendMessage("Success")
   }
 }

@@ -44,7 +44,7 @@ object UserManager {
    * @since 0.1.0
    */
   fun createUser(identifier: UUID, name: String): User {
-    require(name.isBlank()) {
+    require(name.isNotBlank()) {
       "name can not be blank."
     }
     val user = User(identifier, name, Statistics.empty())

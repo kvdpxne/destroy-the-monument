@@ -11,14 +11,19 @@ object BaseCommand : Command("dtm"), Executor<Performer> {
   val nameSubCommandMap: Map<String, Executor<*>>
 
   init {
+    // TODO XDDD
     nameSubCommandMap = buildMap {
       this["help"] = HelpCommand
       this["join"] = JoinCommand
       this["kit"] = KitCommand
       this["leave"] = LeaveCommand
 
-      this["create"] = CreateCommand
-      this["set"] = SetCommand
+      this["addarena"] = AddArenaCommand
+      this["addmonument"] = AddMonumentCommand
+      this["addteam"] = AddTeamCommand
+      this["createarena"] = CreateArenaCommand
+      this["creategame"] = CreateGameCommand
+      this["setspawnpoint"] = SetSpawnPointCommand
       this["start"] = StartCommand
       this["teleportback"] = TeleportBackCommand
       this["teleport"] = TeleportCommand

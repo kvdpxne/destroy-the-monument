@@ -27,7 +27,7 @@ enum class Rows(val size: Int) {
           it.size
         }
       }
-    ): Rows = require(0 >= size) {
+    ): Rows = require(0 <= size) {
       "The size can not be smaller than or equal to zero."
     }.let {
       entries.find {

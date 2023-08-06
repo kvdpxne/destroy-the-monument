@@ -6,12 +6,10 @@ import org.ktorm.schema.Table
 import org.ktorm.schema.varchar
 import java.util.UUID
 
-object ArenaTable : Table<Nothing>("area") {
+object ArenaTable : Table<Nothing>("arena") {
 
   var identifier = varchar("identifier").primaryKey()
   val name = varchar("name")
-
-  var world = varchar("world")
 }
 
 object ArenaDao {
@@ -24,9 +22,8 @@ object ArenaDao {
         val uuid = UUID.fromString(it[ArenaTable.identifier])
 
         val name = it[ArenaTable.name]!!
-        val world = it[ArenaTable.world]
 
-        Arena(uuid, name, world)
+        Arena(uuid, name)
       }
       .firstOrNull()
   }

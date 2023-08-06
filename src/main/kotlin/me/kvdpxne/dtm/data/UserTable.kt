@@ -8,15 +8,15 @@ import org.ktorm.schema.int
 import org.ktorm.schema.varchar
 import java.util.*
 
-object UserTable : Table<Nothing>("_user") {
+object UserTable : Table<Nothing>("user") {
 
-  var identifier = varchar("_identifier").primaryKey()
-  val name = varchar("_name")
+  var identifier = varchar("identifier").primaryKey()
+  val name = varchar("name")
 
   // Statistics
-  val kills = int("_kills")
-  val assists = int("_assists")
-  val deaths = int("_deaths")
+  val kills = int("kills")
+  val assists = int("assists")
+  val deaths = int("deaths")
 }
 
 object UserDao {

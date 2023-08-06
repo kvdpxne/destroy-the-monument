@@ -7,6 +7,7 @@ import me.kvdpxne.dtm.gui.Rows
 import me.kvdpxne.dtm.user.User
 import org.bukkit.ChatColor
 import org.bukkit.Material
+import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
 fun createTeamSelectionGui(game: Game, user: User) = Gui("Wybór drużyny", Rows.ONE).apply {
@@ -20,7 +21,13 @@ fun createTeamSelectionGui(game: Game, user: User) = Gui("Wybór drużyny", Rows
   }
 
   setItem(0, coloredWool) {
-    game.addTeammate(DefaultTeamColor.RED) { user }
+    game.addTeammate(DefaultTeamColor.RED) {
+      user
+    }
+    with(it.whoClicked as Player) {
+      closeInventory()
+      sendMessage("You have been added to the red team.")
+    }
   }
 
   setItem(4, ItemStack(Material.OBSIDIAN).apply {
@@ -29,11 +36,15 @@ fun createTeamSelectionGui(game: Game, user: User) = Gui("Wybór drużyny", Rows
       lore = listOf(ChatColor.translateAlternateColorCodes('&', "&6Dołącz do mniejszej drużyny!"))
     }
   }) {
-    val name = game.teams.minBy {
-      it.teammates.size
-    }.identity
+    val name = game.findSmallerTeam()!!.identity
 
-    game.addTeammate(name) { user }
+    game.addTeammate(name) {
+      user
+    }
+    with(it.whoClicked as Player) {
+      closeInventory()
+      sendMessage("You have been added to the ${name.identifiableName} team.")
+    }
   }
 
   coloredWool.durability = 11
@@ -43,6 +54,12 @@ fun createTeamSelectionGui(game: Game, user: User) = Gui("Wybór drużyny", Rows
     }
   }
   setItem(8, coloredWool) {
-    game.addTeammate(DefaultTeamColor.BLUE) { user }
+    game.addTeammate(DefaultTeamColor.BLUE) {
+      user
+    }
+    with(it.whoClicked as Player) {
+      closeInventory()
+      sendMessage("You have been added to the blue team.")
+    }
   }
 }

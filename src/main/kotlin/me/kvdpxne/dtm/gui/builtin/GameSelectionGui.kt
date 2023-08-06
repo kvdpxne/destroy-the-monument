@@ -10,9 +10,8 @@ import org.bukkit.inventory.ItemStack
 
 fun createGameSelectionGui(user: User) = GameManager.games.let {
   Gui("Wybierz Gre", Rows.findRowBySize(it.size)).apply {
-    var next = 0
-    it.forEach { (key, game) ->
-      setItem(next, ItemStack(Material.CLAY).apply {
+    it.onEachIndexed { index, (key, game) ->
+      setItem(index, ItemStack(Material.CLAY).apply {
         itemMeta = itemMeta.apply {
           displayName = game.name
           lore = listOf(key.toString())
@@ -24,7 +23,6 @@ fun createGameSelectionGui(user: User) = GameManager.games.let {
           sendMessage("You have been added to the ${game.name} game.")
         }
       }
-      next++
     }
   }
 }

@@ -4,8 +4,10 @@ import io.github.oshai.kotlinlogging.KLogger
 import io.github.oshai.kotlinlogging.KotlinLogging
 import me.kvdpxne.dtm.shared.Identity
 import me.kvdpxne.dtm.user.User
+import me.kvdpxne.dtm.user.UserPerformer
+import org.bukkit.entity.Player
 import java.time.Instant
-import java.util.*
+import java.util.UUID
 
 private val logger: KLogger = KotlinLogging.logger { }
 
@@ -24,7 +26,7 @@ class Game(val identifier: UUID, var name: String) {
   /**
    * The current arena where the game will be, is or was played.
    */
-  var arena: Arena? = null
+  var arenas: MutableCollection<Arena> = mutableSetOf()
 
   /**
    * The start time of a phase of the game.
@@ -54,6 +56,14 @@ class Game(val identifier: UUID, var name: String) {
 
   fun findTeam(user: User): Team? = teams.find {
     it.hasTeammate(user)
+  }
+
+  /**
+   * @return The [Team] with fewer [Team.teammates], or null if no team is
+   * assigned to the game.
+   */
+  fun findSmallerTeam(): Team? = teams.minByOrNull {
+    it.size()
   }
 
   /**
@@ -148,6 +158,10 @@ class Game(val identifier: UUID, var name: String) {
     }
   }
 
+  fun addArena(arena: Arena) {
+    this.arenas.add(arena)
+  }
+
   /**
    *
    */
@@ -204,13 +218,25 @@ class Game(val identifier: UUID, var name: String) {
     }
   }
 
-  fun start() {
+  fun start(user: User) {
     end = Instant.now()
     state = GameState.STARTING
 
 //    logger.debug {
 //      "The game took off after the FSF time."
 //    }
+
+    val userTeam = findTeam(user) ?: return
+    val arena = arenas.random()
+    arena.spawnPoints[userTeam.identity].let {
+      user.performer as UserPerformer
+      user.performer.getPlayer()?.teleport(it)
+    }
+
+  }
+
+  fun stop() {
+
   }
 
   override fun toString(): String {

@@ -7,10 +7,10 @@ object ArenaManager {
   /**
    *
    */
-  private val identifierArenaMap = hashMapOf<UUID, Arena>()
+  private val arenas: MutableMap<UUID, Arena> = mutableMapOf()
 
   fun count(): Int {
-    return identifierArenaMap.size
+    return arenas.size
   }
 
   fun getArenas(): Collection<Arena> {
@@ -19,37 +19,45 @@ object ArenaManager {
       return emptySet()
     }
     return buildSet(capacity) {
-      addAll(identifierArenaMap.values)
+      addAll(arenas.values)
     }
   }
 
-  fun getArenaByIdentifier(identifier: UUID): Arena? {
-    return identifierArenaMap[identifier]
+  fun findArenaByIdentifier(identifier: UUID): Arena? {
+    return arenas[identifier]
   }
 
-  fun getArenaByName(name: String, ignoreCase: Boolean = true): Arena? {
-    return identifierArenaMap.values.find {
+  /**
+   *
+   */
+  fun findArenaByName(name: String, ignoreCase: Boolean = true): Arena? {
+    return arenas.values.find {
       it.name.equals(name, ignoreCase)
     }
   }
 
   fun addArena(arena: Arena) {
-    identifierArenaMap[arena.identifier] = arena
+    arenas[arena.identifier] = arena
   }
 
   fun removeArena(arena: Arena) {
-    identifierArenaMap.remove(arena.identifier)
+    arenas.remove(arena.identifier)
   }
 
-  fun createArena(identifier: UUID, name: String): Arena {
-    require(name.isBlank()) {
+  fun createArena(name: String): Arena? {
+    require(name.isNotBlank()) {
       "Arena name cannot be empty."
     }
 
-    require(4 >= name.length) {
+    require(4 <= name.length) {
       "Arena name cannot be shorter than 4 characters."
     }
 
+    if (null != findArenaByName(name)) {
+      return null
+    }
+
+    val identifier = UUID.randomUUID()
     val arena = Arena(identifier, name)
 
 
