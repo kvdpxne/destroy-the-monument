@@ -18,14 +18,16 @@ object BaseCommand : Command("dtm"), Executor<Performer> {
       this["kit"] = KitCommand
       this["leave"] = LeaveCommand
 
-      this["addarena"] = AddArenaCommand
-      this["addmonument"] = AddMonumentCommand
-      this["addteam"] = AddTeamCommand
-      this["createarena"] = CreateArenaCommand
-      this["creategame"] = CreateGameCommand
-      this["setspawnpoint"] = SetSpawnPointCommand
+      this["addArena"] = AddArenaCommand
+      this["addMonument"] = AddMonumentCommand
+      this["addTeam"] = AddTeamCommand
+      this["createArena"] = CreateArenaCommand
+      this["createGame"] = CreateGameCommand
+      this["createTeam"] = CreateTeamCommand
+      this["setArenaMap"] = SetArenaMapCommand
+      this["setSpawnPoint"] = SetSpawnPointCommand
       this["start"] = StartCommand
-      this["teleportback"] = TeleportBackCommand
+      this["teleportBack"] = TeleportBackCommand
       this["teleport"] = TeleportCommand
       this["wand"] = WandCommand
     }
@@ -38,7 +40,9 @@ object BaseCommand : Command("dtm"), Executor<Performer> {
     }
 
     val name = parameter.asText()
-    val executor = nameSubCommandMap[name]
+    val executor = nameSubCommandMap.entries.find {
+      it.key.equals(name, true)
+    }?.value
 
     if (null == executor) {
       performer.sendMessage("not found command called $name")

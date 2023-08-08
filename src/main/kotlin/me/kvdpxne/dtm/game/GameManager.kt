@@ -1,5 +1,6 @@
 package me.kvdpxne.dtm.game
 
+import me.kvdpxne.dtm.data.GameDao
 import me.kvdpxne.dtm.user.User
 import java.util.UUID
 
@@ -11,15 +12,15 @@ object GameManager {
     games = linkedMapOf()
 
     // TODO Delete in the future.
-    UUID.fromString("4d966ed3-86b8-4acd-bb48-aed322cf14fe").let {
-      games[it] = Game(it, "test").apply {
-        addTeam(Team(DefaultTeamColor.BLUE, this))
-        addTeam(Team(DefaultTeamColor.RED, this))
-
-        val arena = ArenaManager.createArena("test_arena")!!
-        addArena(arena)
-      }
-    }
+//    UUID.fromString("4d966ed3-86b8-4acd-bb48-aed322cf14fe").let {
+//      games[it] = Game(it, "test").apply {
+//        addTeam(Team(DefaultTeamColor.BLUE, this))
+//        addTeam(Team(DefaultTeamColor.RED, this))
+//
+//        val arena = ArenaManager.createArena("test_arena")!!
+//        addArena(arena)
+//      }
+//    }
   }
 
   /**
@@ -54,7 +55,9 @@ object GameManager {
       return false
     }
     val identifier = UUID.randomUUID()
-    games[identifier] = Game(identifier, name)
+    val game = Game(identifier, name)
+    games[identifier] = game
+    GameDao.insert(game)
     return true
   }
 }

@@ -27,6 +27,13 @@ object TeleportCommand : Executor<UserPerformer> {
 
       TeleportationHistoryStorage.push(player.uniqueId, player.location)
       player.teleport(it.spawnLocation)
+      try {
+        player.sendMessage(it.name)
+        player.sendMessage(it.uid.toString())
+      } catch (e: Exception) {
+        // ignore
+      }
+
     }
   }
 }

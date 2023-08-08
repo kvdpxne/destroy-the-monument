@@ -15,7 +15,7 @@ object PlayerJoinListener : Listener {
     val identifier = player.uniqueId
     val name = player.name
 
-    var user = UserDao.getUserByIdentifier(identifier)
+    var user = UserDao.findByIdentifier(identifier)
     if (null == user) {
       user = UserManager.createUser(identifier, name)
       UserDao.insert(user)

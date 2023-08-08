@@ -21,10 +21,12 @@ object UserTable : Table<Nothing>("user") {
 
 object UserDao {
 
-  fun getUserByIdentifier(identifier: UUID): User? {
+  fun findByIdentifier(identifier: UUID): User? {
     return database.from(UserTable)
       .select()
-      .where { UserTable.identifier eq identifier.toString() }
+      .where {
+        UserTable.identifier eq identifier.toString()
+      }
       .map { row ->
         val identifier2 = row[UserTable.identifier].let {
           UUID.fromString(it)

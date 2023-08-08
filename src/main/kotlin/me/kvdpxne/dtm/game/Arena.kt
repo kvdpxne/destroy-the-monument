@@ -2,6 +2,10 @@ package me.kvdpxne.dtm.game
 
 import io.github.oshai.kotlinlogging.KLogger
 import io.github.oshai.kotlinlogging.KotlinLogging
+import me.kvdpxne.dtm.data.ArenaMonumentsDao
+import me.kvdpxne.dtm.data.ArenaSpawnPointsDao
+import me.kvdpxne.dtm.data.MonumentDao
+import me.kvdpxne.dtm.data.SpawnPointDao
 import me.kvdpxne.dtm.shared.Identity
 import me.kvdpxne.dtm.shared.debug
 import org.bukkit.Location
@@ -30,35 +34,46 @@ class Arena(
    */
   var map: ArenaMap? = null
 
+  fun setSpawnPoint(spawnPoint: SpawnPoint) {
+    spawnPoints[spawnPoint.team] = spawnPoint
+  }
+
   /**
    *
    */
   fun setSpawnPoint(team: Identity, position: Location) {
-    spawnPoints[team] = SpawnPoint(
-      team,
-      position.x,
-      position.y,
-      position.z,
-      position.pitch,
-      position.yaw
-    )
+    val spawnPoint = SpawnPoint(team, position.x, position.y, position.z, position.pitch, position.yaw)
+    spawnPoints[team] = spawnPoint
+
+    SpawnPointDao.insert(spawnPoint)
+    ArenaSpawnPointsDao.insert(this, spawnPoint)
+  }
+
+  fun addMonument(monument: Monument): Boolean {
+    val team = monument.team
+    return monuments.getOrPut(team) {
+      // Creates new instances of the modified set, if one is not assigned to
+      // the given team.
+      mutableSetOf()
+    }.run {
+      add(monument)
+    }.also {
+      logger.debug(it) {
+        "Assigned a new monument to the $team team in the $this Arena."
+      }
+    }
   }
 
   /**
    *
    */
   fun addMonument(team: Identity, position: Location): Boolean {
-    return monuments.getOrPut(team) {
-      // Creates new instances of the modified set, if one is not assigned to
-      // the given team.
-      mutableSetOf()
-    }.run {
-      add(Monument(team, position.blockX, position.blockY, position.blockZ))
-    }.also {
-      logger.debug(it) {
-        "Assigned a new monument to the $team team in the $this Arena."
-      }
-    }
+    val monument = Monument(team, position.blockX, position.blockY, position.blockZ)
+
+    MonumentDao.insert(monument)
+    ArenaMonumentsDao.insert(this@Arena, monument)
+
+    return addMonument(monument)
   }
 
   override fun equals(other: Any?): Boolean {

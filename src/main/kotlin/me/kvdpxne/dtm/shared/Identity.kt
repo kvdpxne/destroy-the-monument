@@ -1,6 +1,10 @@
 package me.kvdpxne.dtm.shared
 
+import java.util.UUID
+
 interface Identity {
 
-  val identifiableName: String
+  val identifier: UUID
+
+  val key: String
 }

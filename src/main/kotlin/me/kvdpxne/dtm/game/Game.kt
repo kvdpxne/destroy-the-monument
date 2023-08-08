@@ -2,6 +2,8 @@ package me.kvdpxne.dtm.game
 
 import io.github.oshai.kotlinlogging.KLogger
 import io.github.oshai.kotlinlogging.KotlinLogging
+import me.kvdpxne.dtm.data.GameArenasDao
+import me.kvdpxne.dtm.data.GameArenasTable
 import me.kvdpxne.dtm.shared.Identity
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserPerformer
@@ -161,6 +163,7 @@ class Game(val identifier: UUID, var name: String) {
 
   fun addArena(arena: Arena) {
     this.arenas.add(arena)
+    GameArenasDao.insert(this, arena)
   }
 
   /**

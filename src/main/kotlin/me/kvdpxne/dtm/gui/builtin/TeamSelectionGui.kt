@@ -43,7 +43,7 @@ fun createTeamSelectionGui(game: Game, user: User) = Gui("Wybór drużyny", Rows
     }
     with(it.whoClicked as Player) {
       closeInventory()
-      sendMessage("You have been added to the ${name.identifiableName} team.")
+      sendMessage("You have been added to the ${name.key} team.")
     }
   }
 

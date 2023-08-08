@@ -2,12 +2,15 @@ package me.kvdpxne.dtm
 
 import me.kvdpxne.dtm.command.BaseCommand
 import me.kvdpxne.dtm.command.bukkit.BukkitCommandMapAccessor
+import me.kvdpxne.dtm.game.ArenaManager
+import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.gui.GuiActionHandler
 import me.kvdpxne.dtm.listener.PlayerInteractListener
 import me.kvdpxne.dtm.listener.PlayerJoinListener
 import me.kvdpxne.dtm.listener.PlayerQuitListener
 import me.kvdpxne.dtm.listener.WeatherChangeListener
 import me.kvdpxne.dtm.shared.BukkitTextFormatter
+import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.event.Listener
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -16,6 +19,11 @@ class DestroyTheMonument : JavaPlugin() {
 
   init {
     PluginContext.textFormatter = BukkitTextFormatter
+
+    // Initialize
+    GameManager
+    ArenaManager
+    UserManager
   }
 
   private fun registerListener(vararg listeners: Listener) {
@@ -27,6 +35,18 @@ class DestroyTheMonument : JavaPlugin() {
 
   override fun onLoad() {
     System.setProperty(org.slf4j.simple.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "TRACE")
+
+//    ArenaManager.arenas.values.forEach {
+//      println(it.toString())
+//      it.spawnPoints.values.forEach {
+//        println(it.toString())
+//      }
+//      it.monuments.values.forEach {
+//        it.forEach {
+//          println(it.toString())
+//        }
+//      }
+//    }
   }
 
   override fun onEnable() {

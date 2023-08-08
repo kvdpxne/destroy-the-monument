@@ -15,11 +15,13 @@ object GameTable : Table<Nothing>("game") {
 
 object GameDao {
 
-  fun findGameByIdentifier(identifier: UUID): Game? {
+  fun findByIdentifier(identifier: UUID): Game? {
     return database.from(GameTable)
-      .innerJoin(GameArenasTable, on = GameTable.identifier eq GameArenasTable.game)
+      .innerJoin(GameArenasTable, GameArenasTable.game eq GameTable.identifier)
       .select()
-      .where { GameTable.identifier eq identifier.toString() }
+      .where {
+        GameTable.identifier eq identifier.toString()
+      }
       .map {
         val uuid = UUID.fromString(it[GameTable.identifier])
 
@@ -28,6 +30,13 @@ object GameDao {
         Game(uuid, name)
       }
       .firstOrNull()
+  }
+
+  fun insert(game: Game) {
+    database.insert(GameTable) {
+      set(it.identifier, game.identifier.toString())
+      set(it.name, game.name)
+    }
   }
 
   fun count(): Int {

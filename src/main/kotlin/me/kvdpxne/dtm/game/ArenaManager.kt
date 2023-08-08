@@ -1,5 +1,6 @@
 package me.kvdpxne.dtm.game
 
+import me.kvdpxne.dtm.data.ArenaDao
 import java.util.UUID
 
 object ArenaManager {
@@ -7,20 +8,16 @@ object ArenaManager {
   /**
    *
    */
-  private val arenas: MutableMap<UUID, Arena> = mutableMapOf()
+  val arenas: MutableMap<UUID, Arena> = mutableMapOf()
+
+  init {
+    ArenaDao.findAll().forEach {
+      addArena(it)
+    }
+  }
 
   fun count(): Int {
     return arenas.size
-  }
-
-  fun getArenas(): Collection<Arena> {
-    val capacity = count()
-    if (0 >= capacity) {
-      return emptySet()
-    }
-    return buildSet(capacity) {
-      addAll(arenas.values)
-    }
   }
 
   fun findArenaByIdentifier(identifier: UUID): Arena? {
@@ -60,7 +57,7 @@ object ArenaManager {
     val identifier = UUID.randomUUID()
     val arena = Arena(identifier, name)
 
-
+    ArenaDao.insert(arena)
     addArena(arena)
     return arena
   }
