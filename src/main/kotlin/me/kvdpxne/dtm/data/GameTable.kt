@@ -15,6 +15,27 @@ object GameTable : Table<Nothing>("game") {
 
 object GameDao {
 
+  /**
+   * @throws StackOverflowError
+   */
+  fun findAll(): Collection<Game> {
+    return database.from(GameTable)
+      .innerJoin(GameArenasTable, GameArenasTable.game eq GameTable.identifier)
+      .select()
+      .mapNotNull {
+        val key = UUID.fromString(it[GameTable.identifier])
+
+        val arenas = GameArenasDao.findAllByGameIdentifier(key)
+
+        Game(
+          key,
+          it[GameTable.name]!!
+        ).apply {
+          this.arenas.addAll(arenas)
+        }
+      }
+  }
+
   fun findByIdentifier(identifier: UUID): Game? {
     return database.from(GameTable)
       .innerJoin(GameArenasTable, GameArenasTable.game eq GameTable.identifier)

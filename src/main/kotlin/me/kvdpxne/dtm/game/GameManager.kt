@@ -12,15 +12,11 @@ object GameManager {
     games = linkedMapOf()
 
     // TODO Delete in the future.
-//    UUID.fromString("4d966ed3-86b8-4acd-bb48-aed322cf14fe").let {
-//      games[it] = Game(it, "test").apply {
-//        addTeam(Team(DefaultTeamColor.BLUE, this))
-//        addTeam(Team(DefaultTeamColor.RED, this))
-//
-//        val arena = ArenaManager.createArena("test_arena")!!
-//        addArena(arena)
-//      }
-//    }
+    // Information about games should be loaded into memory only when it is
+    // really needed and removed when it is no longer needed.
+    GameDao.findAll().forEach {
+      games[it.identifier] = it
+    }
   }
 
   /**
