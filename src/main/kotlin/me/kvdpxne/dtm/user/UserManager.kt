@@ -1,5 +1,6 @@
 package me.kvdpxne.dtm.user
 
+import me.kvdpxne.dtm.data.UserDao
 import me.kvdpxne.dtm.statistics.Statistics
 import java.util.UUID
 
@@ -11,10 +12,21 @@ object UserManager {
   private val identifierUserMap = mutableMapOf<UUID, User>()
 
   /**
-   * @since 0.1.0
+   * Tries to find a [User] by the given unique user identifier.
    */
   fun findByIdentifier(identifier: UUID): User? {
-    return identifierUserMap[identifier]
+    var user = identifierUserMap[identifier]
+    if (null != user) {
+      return user
+    }
+
+    user = UserDao.findByIdentifier(identifier)
+    if (null != user) {
+      this.addUser(user)
+      return user
+    }
+
+    return null
   }
 
   /**
