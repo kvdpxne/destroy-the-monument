@@ -25,12 +25,19 @@ object GameDao {
       .mapNotNull {
         val key = UUID.fromString(it[GameTable.identifier])
 
+        val teams = GameTeamsDao.findAllByGameIdentifier(key)
         val arenas = GameArenasDao.findAllByGameIdentifier(key)
 
         Game(
           key,
           it[GameTable.name]!!
         ).apply {
+          teams.forEach {
+            if (null == it.game) {
+              it.game = this
+            }
+            this.teams.add(it)
+          }
           this.arenas.addAll(arenas)
         }
       }
@@ -44,11 +51,18 @@ object GameDao {
         GameTable.identifier eq identifier.toString()
       }
       .map {
-        val uuid = UUID.fromString(it[GameTable.identifier])
+        val key = UUID.fromString(it[GameTable.identifier])
 
-        val name = it[GameTable.name]!!
+        val teams = GameTeamsDao.findAllByGameIdentifier(key)
+        val arenas = GameArenasDao.findAllByGameIdentifier(key)
 
-        Game(uuid, name)
+        Game(
+          key,
+          it[GameTable.name]!!
+        ).apply {
+          this.teams.addAll(teams)
+          this.arenas.addAll(arenas)
+        }
       }
       .firstOrNull()
   }

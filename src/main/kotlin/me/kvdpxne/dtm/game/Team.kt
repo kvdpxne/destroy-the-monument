@@ -7,7 +7,7 @@ import me.kvdpxne.dtm.user.User
 
 private val logger: KLogger = KotlinLogging.logger { }
 
-class Team(val identity: Identity, val game: Game) {
+class Team(val identity: Identity, var game: Game? = null) {
 
   /**
    * Collection of teammates belonging to the team.

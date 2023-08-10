@@ -4,7 +4,9 @@ import io.github.oshai.kotlinlogging.KLogger
 import io.github.oshai.kotlinlogging.KotlinLogging
 import me.kvdpxne.dtm.data.GameArenasDao
 import me.kvdpxne.dtm.data.GameArenasTable
+import me.kvdpxne.dtm.data.GameTeamsDao
 import me.kvdpxne.dtm.shared.Identity
+import me.kvdpxne.dtm.shared.debug
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserPerformer
 import org.bukkit.Location
@@ -119,12 +121,19 @@ class Game(val identifier: UUID, var name: String) {
    * given [team] already exists in the [teams] collection and has not been
    * added to the [teams] collection.
    */
-  fun addTeam(team: Team) = teams.add(team).also {
-    if (it) {
-      logger.debug {
+  fun addTeam(team: Team): Boolean {
+    if (null == team.game) {
+      team.game = this
+    }
+
+    val result = teams.add(team).also {
+      logger.debug(it) {
         "A new $team team has been added to the $this game."
       }
     }
+
+    GameTeamsDao.insert(this, team)
+    return result
   }
 
   fun addTeammate(identity: Identity, user: () -> User): Boolean {
@@ -230,16 +239,21 @@ class Game(val identifier: UUID, var name: String) {
 //      "The game took off after the FSF time."
 //    }
 
+    println("sfs")
     val userTeam = findTeam(user) ?: return
+    println("sfs")
     val arena = arenas.random()
     arena.spawnPoints[userTeam.identity].let {
       user.performer as UserPerformer
 
       // TODO XD
       it!!
+      println("sfs")
       val location = Location(arena.map?.getWorld(), it.x, it.y, it.z, it.pitch, it.yaw)
 
+      println("sfs")
       user.performer.getPlayer()?.teleport(location)
+      println("sfs")
     }
 
   }
