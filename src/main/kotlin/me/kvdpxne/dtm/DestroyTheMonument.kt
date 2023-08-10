@@ -18,6 +18,7 @@ import org.bukkit.plugin.java.JavaPlugin
 class DestroyTheMonument : JavaPlugin() {
 
   init {
+    System.setProperty(org.slf4j.simple.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "TRACE")
     PluginContext.textFormatter = BukkitTextFormatter
 
     // Initialize
@@ -34,8 +35,6 @@ class DestroyTheMonument : JavaPlugin() {
   }
 
   override fun onLoad() {
-    System.setProperty(org.slf4j.simple.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "TRACE")
-
 //    ArenaManager.arenas.values.forEach {
 //      println(it.toString())
 //      it.spawnPoints.values.forEach {
