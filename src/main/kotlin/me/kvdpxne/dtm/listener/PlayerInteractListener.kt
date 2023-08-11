@@ -15,6 +15,7 @@ object PlayerInteractListener : Listener {
       return
     }
 
+    event.item ?: return
     if (!event.item.isSimilar(wand)) {
       return
     }
