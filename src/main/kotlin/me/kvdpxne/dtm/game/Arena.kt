@@ -34,6 +34,14 @@ class Arena(
    */
   var map: ArenaMap? = null
 
+  fun findMonument(x: Int, y: Int, z: Int): Monument? {
+    return monuments.values
+      .find {
+        null != it.find { it.has(x, y, z) }
+      }
+      ?.firstOrNull()
+  }
+
   fun setSpawnPoint(spawnPoint: SpawnPoint) {
     spawnPoints[spawnPoint.team] = spawnPoint
   }

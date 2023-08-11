@@ -19,6 +19,10 @@ data class Monument(
     }
   }
 
+  fun has(x: Int, y: Int, z: Int): Boolean {
+    return this.x == x && this.y == y && this.z == z
+  }
+
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (javaClass != other?.javaClass) return false

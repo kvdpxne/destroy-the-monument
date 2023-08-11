@@ -34,6 +34,11 @@ class Game(val identifier: UUID, var name: String) {
   var arenas: MutableCollection<Arena> = mutableSetOf()
 
   /**
+   *
+   */
+  var currentArena: Arena? = null
+
+  /**
    * The start time of a phase of the game.
    */
   var start: Instant = Instant.now()
