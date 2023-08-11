@@ -14,6 +14,12 @@ open class Gui(displayName: String, rows: Rows) {
     holder.inventory = this.inventory
   }
 
+  fun last(): Int = inventory.size - 1
+
+  fun free(range: IntRange = 0..last()) = range.firstOrNull {
+    hasItem(it).not()
+  }
+
   private fun hasItem(slot: Int): Boolean {
     val item = inventory.getItem(slot)
     return null != item && Material.AIR != item.type
