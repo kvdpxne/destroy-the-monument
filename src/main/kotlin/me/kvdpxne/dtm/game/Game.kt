@@ -244,21 +244,18 @@ class Game(val identifier: UUID, var name: String) {
 //      "The game took off after the FSF time."
 //    }
 
-    println("sfs")
     val userTeam = findTeam(user) ?: return
-    println("sfs")
+
     val arena = arenas.random()
+    currentArena = arena
+
     arena.spawnPoints[userTeam.identity].let {
       user.performer as UserPerformer
 
       // TODO XD
       it!!
-      println("sfs")
       val location = Location(arena.map?.getWorld(), it.x, it.y, it.z, it.pitch, it.yaw)
-
-      println("sfs")
       user.performer.getPlayer()?.teleport(location)
-      println("sfs")
     }
 
   }
