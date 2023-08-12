@@ -1,6 +1,7 @@
 package me.kvdpxne.dtm.listener
 
 import me.kvdpxne.dtm.game.GameManager
+import me.kvdpxne.dtm.game.findMonument
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -14,21 +15,27 @@ object BlockBreakListener : Listener {
       return
     }
 
-    val player = event.player
-
-    val user = UserManager.findByIdentifier(player.uniqueId) ?: return
-    val game = GameManager.findGameWithUser(user) ?: return
-
     //
-    if (game.isInTeam(user).not()) {
-      return
-    }
+    val user = UserManager.findByIdentifier(event.player.uniqueId) ?: return
+
+    // Tries to find a user in any game.
+    val game = GameManager.findGameByUser(user) ?: return
+
+    // Tries to find the user's team in a previously found game.
+    val team = game.findTeam(user) ?: return
 
     //
     val arena = game.currentArena ?: return
-    val location = event.block.location
 
-    val monument = arena.findMonument(location.blockX, location.blockY, location.blockZ) ?: return
+    //
+    val monument = arena.findMonument(event.block.location) ?: return
+
+    if (team.identity == monument.team) {
+      event.isCancelled = true
+      user.performer.sendMessage("You cannot destroy your team's monument")
+      return
+    }
+
     game.hostages.values.forEach {
       it.performer.run {
         sendMessage("An $it player has destroyed an ${monument.team} team monument.")

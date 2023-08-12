@@ -40,7 +40,7 @@ object GameManager {
 //      .find { it.arenas?.name.equals(name, ignoreCase) }
 //  }
 
-  fun findGameWithUser(user: User): Game? {
+  fun findGameByUser(user: User): Game? {
     return games.values.find {
       it.isInGame(user)
     }
