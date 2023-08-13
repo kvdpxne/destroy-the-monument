@@ -2,6 +2,7 @@ package me.kvdpxne.dtm.game
 
 import io.github.oshai.kotlinlogging.KLogger
 import io.github.oshai.kotlinlogging.KotlinLogging
+import java.util.UUID
 import me.kvdpxne.dtm.data.ArenaMonumentsDao
 import me.kvdpxne.dtm.data.ArenaSpawnPointsDao
 import me.kvdpxne.dtm.data.MonumentDao
@@ -9,9 +10,8 @@ import me.kvdpxne.dtm.data.SpawnPointDao
 import me.kvdpxne.dtm.shared.Identity
 import me.kvdpxne.dtm.shared.debug
 import org.bukkit.Location
-import java.util.UUID
 
-private val logger: KLogger = KotlinLogging.logger {  }
+private val logger: KLogger = KotlinLogging.logger { }
 
 class Arena(
   val identifier: UUID = UUID.randomUUID(),
@@ -34,13 +34,13 @@ class Arena(
    */
   var map: ArenaMap? = null
 
-  fun findMonument(x: Int, y: Int, z: Int): Monument? {
-    return monuments.values
-      .find {
-        null != it.find { it.isIn(x, y, z) }
-      }
-      ?.firstOrNull()
-  }
+  var leftMonuments = 0
+
+  fun findMonument(x: Int, y: Int, z: Int) = monuments.map { (_, value) ->
+    value.find {
+      it.isIn(x, y, z)
+    }
+  }.firstOrNull()
 
   fun setSpawnPoint(spawnPoint: SpawnPoint) {
     spawnPoints[spawnPoint.team] = spawnPoint
