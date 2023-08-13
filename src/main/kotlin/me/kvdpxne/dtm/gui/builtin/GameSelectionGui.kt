@@ -21,6 +21,8 @@ fun createGameSelectionGui(user: User) = GameManager.games.let {
         with(event.whoClicked as Player) {
           closeInventory()
           sendMessage("You have been added to the ${game.name} game.")
+
+          createTeamSelectionGui(game, user).open(this)
         }
       }
     }
