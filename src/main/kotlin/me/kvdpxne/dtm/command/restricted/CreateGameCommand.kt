@@ -10,7 +10,7 @@ object CreateGameCommand : Executor<UserPerformer> {
   // Usage: /dtm CreateGame <GAME_NAME>
   override fun execute(performer: UserPerformer, parameter: Parameter) {
     if (1 > parameter.length()) {
-      performer.sendMessage("Usage: /dtm create <game|arena> <name>")
+      performer.sendMessage("Usage: /dtm CreateGame <GAME_NAME>")
       return
     }
 

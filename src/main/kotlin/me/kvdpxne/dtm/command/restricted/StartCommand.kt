@@ -9,7 +9,7 @@ object StartCommand : Executor<UserPerformer> {
 
   override fun execute(performer: UserPerformer, parameter: Parameter) {
     if (parameter.isEmpty()) {
-      performer.sendMessage("The command requires at least 1 argument.")
+      performer.sendMessage("Usage: /dtm start <GAME_NAME>")
       return
     }
 

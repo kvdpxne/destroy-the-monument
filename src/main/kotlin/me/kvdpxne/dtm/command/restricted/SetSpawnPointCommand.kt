@@ -11,7 +11,7 @@ object SetSpawnPointCommand : Executor<UserPerformer> {
   // Usage: /dtm SetSpawnPoint <ARENA_NAME> <TEAM_IDENTITY>
   override fun execute(performer: UserPerformer, parameter: Parameter) {
     if (2 > parameter.length()) {
-      performer.sendMessage("the command requires 2 arguments.")
+      performer.sendMessage("Usage: /dtm SetSpawnPoint <ARENA_NAME> <TEAM_IDENTITY>")
       return
     }
 

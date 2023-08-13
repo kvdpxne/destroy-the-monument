@@ -13,7 +13,7 @@ object SetArenaMapCommand : Executor<UserPerformer> {
   // Usage: /dtm SetArenaMap <ARENA_NAME> <WORLD_NAME>
   override fun execute(performer: UserPerformer, parameter: Parameter) {
     if (2 > parameter.length()) {
-      performer.sendMessage("the command requires 2 arguments.")
+      performer.sendMessage("Usage: /dtm SetArenaMap <ARENA_NAME> <WORLD_NAME>")
       return
     }
 

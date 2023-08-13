@@ -12,7 +12,7 @@ object TeleportCommand : Executor<UserPerformer> {
     val player = performer.getPlayer() ?: return
 
     if (parameter.isEmpty()) {
-      performer.sendMessage("The command requires at least 1 argument.")
+      performer.sendMessage("Usage: /dtm teleport <WORLD_NAME>")
       return
     }
 

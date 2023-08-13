@@ -10,6 +10,10 @@ object CreateTeamCommand : Executor<UserPerformer> {
 
   // Usage: /dtm CreateTeam <TEAM_NAME>
   override fun execute(performer: UserPerformer, parameter: Parameter) {
+    if (parameter.isEmpty()) {
+      performer.sendMessage("Usage: /dtm CreateTeam <TEAM_NAME>")
+      return
+    }
     val name = parameter.asText()
     TeamDao.insert(DefaultTeamColor.findByIdentityKey(name)!!)
     performer.sendMessage(name)
