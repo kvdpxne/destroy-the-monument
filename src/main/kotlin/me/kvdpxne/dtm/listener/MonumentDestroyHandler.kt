@@ -7,7 +7,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
 
-object BlockBreakListener : Listener {
+object MonumentDestroyHandler : Listener {
 
   @EventHandler
   fun handleBlockBreak(event: BlockBreakEvent) {
@@ -19,7 +19,7 @@ object BlockBreakListener : Listener {
     val user = UserManager.findByIdentifier(event.player.uniqueId) ?: return
 
     // Tries to find a user in any game.
-    val game = GameManager.findGameByUser(user) ?: return
+    val game = GameManager.findByUser(user) ?: return
 
     // Tries to find the user's team in a previously found game.
     val team = game.findTeam(user) ?: return
@@ -29,6 +29,11 @@ object BlockBreakListener : Listener {
 
     //
     val monument = arena.findMonument(event.block.location) ?: return
+
+    //
+    if (monument.destroyed) {
+      return
+    }
 
     if (team.identity == monument.team) {
       event.isCancelled = true
@@ -42,5 +47,7 @@ object BlockBreakListener : Listener {
         sendMessage("There are ${arena.monuments[monument.team]?.size} monuments left.")
       }
     }
+
+    monument.destroy()
   }
 }

@@ -1,16 +1,15 @@
 package me.kvdpxne.dtm.game
 
+import java.util.UUID
 import me.kvdpxne.dtm.data.GameDao
 import me.kvdpxne.dtm.user.User
-import java.util.UUID
 
 object GameManager {
 
-  val games: MutableMap<UUID, Game>
+  var games: MutableMap<UUID, Game> = mutableMapOf()
+    private set
 
   init {
-    games = linkedMapOf()
-
     // TODO Delete in the future.
     // Information about games should be loaded into memory only when it is
     // really needed and removed when it is no longer needed.
@@ -40,13 +39,18 @@ object GameManager {
 //      .find { it.arenas?.name.equals(name, ignoreCase) }
 //  }
 
-  fun findGameByUser(user: User): Game? {
+  fun findByUser(user: User): Game? {
     return games.values.find {
       it.isInGame(user)
     }
   }
 
   fun createGame(name: String): Boolean {
+    require(name.isNotBlank()) {
+      "The name of the game must contain some characters and cannot be just" +
+        "whitespace."
+    }
+
     if (null != findByName(name)) {
       return false
     }

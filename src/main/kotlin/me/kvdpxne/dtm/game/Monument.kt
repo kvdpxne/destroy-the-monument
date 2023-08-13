@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.game
 
-import me.kvdpxne.dtm.shared.Identity
 import java.util.UUID
+import me.kvdpxne.dtm.shared.Identity
 
 data class Monument(
   var team: Identity,
@@ -12,6 +12,10 @@ data class Monument(
   val identifier: UUID = UUID.randomUUID()
 ) {
 
+  @Transient
+  var destroyed: Boolean = false
+    private set
+
   init {
     // Checks if the given team identity can be used to create this object.
     check(null != DefaultTeamColor.findByIdentity(this.team)) {
@@ -19,8 +23,16 @@ data class Monument(
     }
   }
 
-  fun has(x: Int, y: Int, z: Int): Boolean {
+  fun isIn(x: Int, y: Int, z: Int): Boolean {
     return this.x == x && this.y == y && this.z == z
+  }
+
+  fun destroy() {
+    destroyed = true
+  }
+
+  fun restore() {
+    destroyed = false
   }
 
   override fun equals(other: Any?): Boolean {

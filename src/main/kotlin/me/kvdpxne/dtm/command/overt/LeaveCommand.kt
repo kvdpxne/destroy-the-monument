@@ -8,7 +8,7 @@ import me.kvdpxne.dtm.user.UserPerformer
 object LeaveCommand : Executor<UserPerformer> {
 
   override fun execute(performer: UserPerformer, parameter: Parameter) {
-    val game = GameManager.findGameByUser(performer.user)
+    val game = GameManager.findByUser(performer.user)
     if (null == game) {
       performer.sendMessage("You are not in any game.")
       return

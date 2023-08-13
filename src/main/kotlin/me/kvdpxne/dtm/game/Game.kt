@@ -99,6 +99,10 @@ class Game(val identifier: UUID, var name: String) {
     it.identity == identity
   }?.hasTeammate(user()) ?: false
 
+  fun isInArenaMap(user: User) = currentArena?.map?.world?.players?.any {
+    it.uniqueId == user.identifier
+  } ?: false
+
   /**
    *
    */
@@ -254,7 +258,7 @@ class Game(val identifier: UUID, var name: String) {
 
       // TODO XD
       it!!
-      val location = Location(arena.map?.getWorld(), it.x, it.y, it.z, it.pitch, it.yaw)
+      val location = Location(arena.map?.world, it.x, it.y, it.z, it.pitch, it.yaw)
       user.performer.getPlayer()?.teleport(location)
     }
 

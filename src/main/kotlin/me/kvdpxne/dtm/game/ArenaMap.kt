@@ -1,13 +1,35 @@
 package me.kvdpxne.dtm.game
 
-import me.kvdpxne.dtm.shared.WorldLoaderHelper
-import org.bukkit.World
 import java.util.UUID
+import me.kvdpxne.dtm.shared.WorldLoaderHelper
+import org.bukkit.Bukkit
+import org.bukkit.World
 
 data class ArenaMap(var identifier: UUID, var name: String) {
 
-  fun getWorld(): World? {
-    return WorldLoaderHelper.getWorld(name)
+  var world: World? = null
+    get() {
+      if (null != field) {
+        return field
+      }
+
+      load()
+      return field
+    }
+    private set
+
+  fun load() {
+    world = WorldLoaderHelper.getWorld(name)?.let {
+      it.isAutoSave = false
+      it
+    }
+  }
+
+  fun unload() {
+    world ?: return
+
+    Bukkit.unloadWorld(world, false)
+    world = null
   }
 
   override fun equals(other: Any?): Boolean {

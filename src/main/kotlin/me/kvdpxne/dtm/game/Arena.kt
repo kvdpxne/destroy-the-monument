@@ -37,7 +37,7 @@ class Arena(
   fun findMonument(x: Int, y: Int, z: Int): Monument? {
     return monuments.values
       .find {
-        null != it.find { it.has(x, y, z) }
+        null != it.find { it.isIn(x, y, z) }
       }
       ?.firstOrNull()
   }
