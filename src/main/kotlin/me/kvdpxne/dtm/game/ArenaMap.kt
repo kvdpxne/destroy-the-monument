@@ -25,11 +25,24 @@ data class ArenaMap(var identifier: UUID, var name: String) {
     }
   }
 
-  fun unload() {
-    world ?: return
+  /**
+   * @throws IllegalArgumentException If the arena map is not currently loaded
+   * and an attempt has been made to unload it.
+   */
+  fun unload(): Boolean {
+    requireNotNull(world) {
+      "Arena map cannot be unloaded if it is not currently loaded."
+    }
 
-    Bukkit.unloadWorld(world, false)
-    world = null
+    world?.players?.forEach {
+      it.teleport(Bukkit.getWorlds()[0].spawnLocation)
+    }
+
+    return Bukkit.unloadWorld(world, false).also {
+      if (it) {
+        world = null
+      }
+    }
   }
 
   override fun equals(other: Any?): Boolean {

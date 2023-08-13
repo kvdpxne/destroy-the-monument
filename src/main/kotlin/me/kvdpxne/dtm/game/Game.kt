@@ -2,17 +2,15 @@ package me.kvdpxne.dtm.game
 
 import io.github.oshai.kotlinlogging.KLogger
 import io.github.oshai.kotlinlogging.KotlinLogging
+import java.time.Instant
+import java.util.UUID
 import me.kvdpxne.dtm.data.GameArenasDao
-import me.kvdpxne.dtm.data.GameArenasTable
 import me.kvdpxne.dtm.data.GameTeamsDao
 import me.kvdpxne.dtm.shared.Identity
 import me.kvdpxne.dtm.shared.debug
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserPerformer
 import org.bukkit.Location
-import org.bukkit.entity.Player
-import java.time.Instant
-import java.util.UUID
 
 private val logger: KLogger = KotlinLogging.logger { }
 
@@ -241,8 +239,8 @@ class Game(val identifier: UUID, var name: String) {
   }
 
   fun start(user: User) {
-    end = Instant.now()
     state = GameState.STARTING
+    start = Instant.now()
 
 //    logger.debug {
 //      "The game took off after the FSF time."
@@ -262,10 +260,21 @@ class Game(val identifier: UUID, var name: String) {
       user.performer.getPlayer()?.teleport(location)
     }
 
+    state = GameState.STARTED
   }
 
   fun stop() {
+    state = GameState.STOPPING
 
+
+    if (false == currentArena?.map?.unload()) {
+      return
+    }
+
+    currentArena = null
+
+    end = Instant.now()
+    state = GameState.STOPPED
   }
 
   override fun toString(): String {

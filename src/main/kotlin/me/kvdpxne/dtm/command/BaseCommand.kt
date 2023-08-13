@@ -27,6 +27,7 @@ object BaseCommand : Command("dtm"), Executor<Performer> {
       this["setArenaMap"] = SetArenaMapCommand
       this["setSpawnPoint"] = SetSpawnPointCommand
       this["start"] = StartCommand
+      this["stop"] = StopCommand
       this["teleportBack"] = TeleportBackCommand
       this["teleport"] = TeleportCommand
       this["wand"] = WandCommand
