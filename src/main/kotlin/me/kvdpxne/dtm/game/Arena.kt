@@ -36,11 +36,16 @@ class Arena(
 
   var leftMonuments = 0
 
-  fun findMonument(x: Int, y: Int, z: Int) = monuments.map { (_, value) ->
-    value.find {
-      it.isIn(x, y, z)
+  fun findMonument(x: Int, y: Int, z: Int): Monument? {
+    for (monumentList in monuments.values) {
+      for (monument in monumentList) {
+        if (monument.isIn(x, y, z)) {
+          return monument
+        }
+      }
     }
-  }.firstOrNull()
+    return null
+  }
 
   fun setSpawnPoint(spawnPoint: SpawnPoint) {
     spawnPoints[spawnPoint.team] = spawnPoint
