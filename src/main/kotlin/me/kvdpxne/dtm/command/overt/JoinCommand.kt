@@ -3,8 +3,8 @@ package me.kvdpxne.dtm.command.overt
 import me.kvdpxne.dtm.command.Executor
 import me.kvdpxne.dtm.command.Parameter
 import me.kvdpxne.dtm.game.GameManager
-import me.kvdpxne.dtm.gui.builtin.createGameSelectionGui
-import me.kvdpxne.dtm.gui.builtin.createTeamSelectionGui
+import me.kvdpxne.dtm.gui.createGameSelectionGui
+import me.kvdpxne.dtm.gui.createTeamSelectionGui
 import me.kvdpxne.dtm.user.UserPerformer
 
 object JoinCommand : Executor<UserPerformer> {

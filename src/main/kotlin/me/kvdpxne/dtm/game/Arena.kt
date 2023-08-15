@@ -89,6 +89,14 @@ class Arena(
     return addMonument(monument)
   }
 
+  fun restore() {
+    monuments.forEach { (_, value) ->
+      value.forEach { monument ->
+        monument.restore()
+      }
+    }
+  }
+
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (javaClass != other?.javaClass) return false

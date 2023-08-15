@@ -3,6 +3,7 @@ package me.kvdpxne.dtm.user
 import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.statistics.Statistics
 import java.util.*
+import me.kvdpxne.dtm.profession.Profession
 
 class User(
   val identifier: UUID,
@@ -11,6 +12,7 @@ class User(
 ) {
 
   val performer: Performer
+  var profession: Profession? = null
 
   init {
     performer = UserPerformer(identifier, name, this)

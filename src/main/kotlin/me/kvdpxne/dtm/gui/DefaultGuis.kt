@@ -1,9 +1,9 @@
-package me.kvdpxne.dtm.gui.builtin
+package me.kvdpxne.dtm.gui
 
 import me.kvdpxne.dtm.game.DefaultTeamColor
 import me.kvdpxne.dtm.game.Game
-import me.kvdpxne.dtm.gui.Gui
-import me.kvdpxne.dtm.gui.Rows
+import me.kvdpxne.dtm.game.GameManager
+import me.kvdpxne.dtm.profession.ProfessionManager
 import me.kvdpxne.dtm.user.User
 import org.bukkit.ChatColor
 import org.bukkit.Material
@@ -60,6 +60,55 @@ fun createTeamSelectionGui(game: Game, user: User) = Gui("Wybór drużyny", Rows
     with(it.whoClicked as Player) {
       closeInventory()
       sendMessage("You have been added to the blue team.")
+    }
+  }
+}
+
+fun createGameSelectionGui(user: User) = GameManager.games.let {
+  Gui("Wybierz Gre", Rows.findRowBySize(it.size)).apply {
+    it.onEachIndexed { index, (key, game) ->
+      setItem(index, ItemStack(Material.CLAY).apply {
+        itemMeta = itemMeta.apply {
+          displayName = game.name
+          lore = listOf(key.toString())
+        }
+      }) { event ->
+        game.addHostage(user)
+        with(event.whoClicked as Player) {
+          closeInventory()
+          sendMessage("You have been added to the ${game.name} game.")
+
+          createTeamSelectionGui(game, user).open(this)
+        }
+      }
+    }
+  }
+}
+
+fun createProfessionSelectionGui(user: User) = Gui("Wybór klasy", Rows.TWO).apply {
+  val item = ItemStack(Material.STAINED_CLAY, 1, 4)
+  ProfessionManager.forEachIndexed { index, profession ->
+    if (user.profession == profession) {
+      item.durability = 5
+    }
+    setItem(index, item)
+    setItem(9 + index, profession.icon) { event ->
+      user.profession = profession
+
+      with(event.whoClicked as Player) {
+        event.isCancelled = true
+
+        closeInventory()
+        sendMessage("The $profession class was selected.")
+      }
+
+      val game = GameManager.findByUser(user) ?: return@setItem
+      val team = game.findTeam(user) ?: return@setItem
+      val teammate = team.findTeammate(user) ?: return@setItem
+
+      if (teammate.profession != profession) {
+        teammate.nextProfession = profession
+      }
     }
   }
 }

@@ -6,11 +6,14 @@ import me.kvdpxne.dtm.game.ArenaManager
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.gui.GuiActionHandler
 import me.kvdpxne.dtm.listener.MonumentDestroyHandler
+import me.kvdpxne.dtm.listener.PlayerDeathListener
+import me.kvdpxne.dtm.listener.PlayerRespawnListener
 import me.kvdpxne.dtm.listener.PlayerDropItemListener
 import me.kvdpxne.dtm.listener.PlayerInteractListener
 import me.kvdpxne.dtm.listener.PlayerJoinListener
 import me.kvdpxne.dtm.listener.PlayerQuitListener
 import me.kvdpxne.dtm.listener.WeatherChangeListener
+import me.kvdpxne.dtm.profession.ProfessionManager
 import me.kvdpxne.dtm.shared.BukkitTextFormatter
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.event.Listener
@@ -27,6 +30,8 @@ class DestroyTheMonument : JavaPlugin() {
     GameManager
     ArenaManager
     UserManager
+
+    ProfessionManager.initializeBuiltInProfessions()
   }
 
   private fun registerListener(vararg listeners: Listener) {
@@ -57,10 +62,12 @@ class DestroyTheMonument : JavaPlugin() {
       GuiActionHandler,
 
       MonumentDestroyHandler,
+      PlayerDeathListener,
       PlayerDropItemListener,
       PlayerInteractListener,
       PlayerJoinListener,
       PlayerQuitListener,
+      PlayerRespawnListener,
       WeatherChangeListener
     )
 

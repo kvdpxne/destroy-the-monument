@@ -6,11 +6,11 @@ import java.time.Instant
 import java.util.UUID
 import me.kvdpxne.dtm.data.GameArenasDao
 import me.kvdpxne.dtm.data.GameTeamsDao
+import me.kvdpxne.dtm.profession.ProfessionManager
 import me.kvdpxne.dtm.shared.Identity
 import me.kvdpxne.dtm.shared.debug
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserPerformer
-import org.bukkit.Location
 
 private val logger: KLogger = KotlinLogging.logger { }
 
@@ -246,19 +246,30 @@ class Game(val identifier: UUID, var name: String) {
 //      "The game took off after the FSF time."
 //    }
 
-    val userTeam = findTeam(user) ?: return
+    val team = findTeam(user) ?: return
+    val teammate = team.findTeammate(user) ?: return
 
     val arena = arenas.random()
     currentArena = arena
 
-    arena.spawnPoints[userTeam.identity].let {
-      user.performer as UserPerformer
+    user.performer as UserPerformer
+    val player = user.performer.getPlayer() ?: return
 
-      // TODO XD
-      it!!
-      val location = Location(arena.map?.world, it.x, it.y, it.z, it.pitch, it.yaw)
-      user.performer.getPlayer()?.teleport(location)
+    arena.spawnPoints[team.identity]?.let {
+      val world = arena.map?.world ?: return
+      player.teleport(it.toLocation(world))
     }
+
+    player.inventory.clear()
+    player.activePotionEffects.clear()
+    player.resetMaxHealth()
+    player.setHealth(20.0)
+
+    if (null == teammate.profession) {
+      val randomProfession = ProfessionManager.getRandomProfession()
+      teammate.profession = randomProfession
+    }
+    teammate.profession?.equip(player, (teammate.teamColor as DefaultTeamColor).dyeColor)
 
     state = GameState.STARTED
   }
@@ -271,6 +282,7 @@ class Game(val identifier: UUID, var name: String) {
       return
     }
 
+    currentArena?.restore()
     currentArena = null
 
     end = Instant.now()
