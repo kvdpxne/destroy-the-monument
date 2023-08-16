@@ -86,10 +86,12 @@ fun createGameSelectionGui(user: User) = GameManager.games.let {
 }
 
 fun createProfessionSelectionGui(user: User) = Gui("Wybór klasy", Rows.TWO).apply {
-  val item = ItemStack(Material.STAINED_CLAY, 1, 4)
+  val item = ItemStack(Material.STAINED_CLAY)
   ProfessionManager.forEachIndexed { index, profession ->
     if (user.profession == profession) {
       item.durability = 5
+    } else {
+      item.durability = 4
     }
     setItem(index, item)
     setItem(9 + index, profession.icon) { event ->
