@@ -67,11 +67,12 @@ fun createTeamSelectionGui(game: Game, user: User) = Gui("Wybór drużyny", Rows
 fun createGameSelectionGui(user: User) = GameManager.games.let {
   Gui("Wybierz Gre", Rows.findRowBySize(it.size)).apply {
     it.onEachIndexed { index, (key, game) ->
-      setItem(index, ItemStack(Material.CLAY).apply {
+      setItem(index, ItemStack(Material.STAINED_CLAY).apply {
         itemMeta = itemMeta.apply {
           displayName = game.name
           lore = listOf(key.toString())
         }
+        durability = 5
       }) { event ->
         game.addHostage(user)
         with(event.whoClicked as Player) {
@@ -110,6 +111,7 @@ fun createProfessionSelectionGui(user: User) = Gui("Wybór klasy", Rows.TWO).app
 
       if (teammate.profession != profession) {
         teammate.nextProfession = profession
+
       }
     }
   }

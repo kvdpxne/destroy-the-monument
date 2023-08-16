@@ -26,4 +26,26 @@ class Profession(
       player.inventory.setItem(it.index, item)
     }
   }
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
+
+    other as Profession
+
+    if (name != other.name) return false
+    if (identifier != other.identifier) return false
+
+    return true
+  }
+
+  override fun hashCode(): Int {
+    var result = name.hashCode()
+    result = 31 * result + identifier.hashCode()
+    return result
+  }
+
+  override fun toString(): String {
+    return "Profession(name='$name', identifier=$identifier)"
+  }
 }
