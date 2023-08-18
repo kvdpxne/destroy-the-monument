@@ -5,6 +5,7 @@ import me.kvdpxne.dtm.command.bukkit.BukkitCommandMapAccessor
 import me.kvdpxne.dtm.game.ArenaManager
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.gui.GuiActionHandler
+import me.kvdpxne.dtm.listener.EntityDamageListener
 import me.kvdpxne.dtm.listener.MonumentDestroyHandler
 import me.kvdpxne.dtm.listener.PlayerDeathListener
 import me.kvdpxne.dtm.listener.PlayerRespawnListener
@@ -60,6 +61,8 @@ class DestroyTheMonument : JavaPlugin() {
     registerListener(
       //
       GuiActionHandler,
+
+      EntityDamageListener,
 
       MonumentDestroyHandler,
       PlayerDeathListener,
