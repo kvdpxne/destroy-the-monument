@@ -15,6 +15,17 @@ object PlayerDeathListener : Listener {
 
     if (game.isInArenaMap(user)) {
       event.drops.clear()
+      event.droppedExp = 0
+
+      val victim = event.entity
+      val murder = victim.killer
+
+      if (null == murder) {
+        event.deathMessage = "${victim.displayName} zginął"
+        return
+      }
+
+      event.deathMessage = "${victim.displayName} został zabity przez ${murder.displayName}"
     }
   }
 }
