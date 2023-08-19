@@ -35,7 +35,7 @@ fun archer() = Profession(
 )
 
 fun scout() = Profession(
-  "Scout",
+  "scout",
   "Scout",
   mutableListOf(
     slotItem(Material.LEATHER_HELMET, index = 39),

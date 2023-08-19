@@ -10,12 +10,18 @@ import org.bukkit.potion.PotionEffect
 
 class Profession(
   var name: String,
-  var displayName: String,
+  var displayName: String? = null,
   var items: List<SlotItem>,
   var icon: ItemStack,
   var effect: PotionEffect? = null,
   val identifier: UUID = UUID.randomUUID()
 ) {
+
+  init {
+    if (displayName.isNullOrBlank()) {
+      displayName = name
+    }
+  }
 
   fun equip(player: Player, dyeColor: DyeColor) {
     items.forEach {

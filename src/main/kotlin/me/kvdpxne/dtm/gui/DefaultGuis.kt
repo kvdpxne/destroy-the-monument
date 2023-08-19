@@ -107,7 +107,7 @@ fun createProfessionSelectionGui(user: User) = Gui("Wybór klasy", Rows.TWO).app
         event.isCancelled = true
 
         closeInventory()
-        sendMessage("The $profession class was selected.")
+        sendMessage("The ${profession.displayName} class was selected.")
       }
 
       val game = GameManager.findByUser(user) ?: return@setItem
