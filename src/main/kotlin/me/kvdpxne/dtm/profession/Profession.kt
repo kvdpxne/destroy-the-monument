@@ -6,12 +6,14 @@ import org.bukkit.DyeColor
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.LeatherArmorMeta
+import org.bukkit.potion.PotionEffect
 
 class Profession(
   var name: String,
   var displayName: String,
   var items: List<SlotItem>,
   var icon: ItemStack,
+  var effect: PotionEffect? = null,
   val identifier: UUID = UUID.randomUUID()
 ) {
 
@@ -24,6 +26,12 @@ class Profession(
         item.itemMeta = meta
       }
       player.inventory.setItem(it.index, item)
+    }
+  }
+
+  fun addEffect(player: Player) {
+    if (null != effect) {
+      player.addPotionEffect(effect, true)
     }
   }
 

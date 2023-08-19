@@ -24,7 +24,7 @@ import org.bukkit.plugin.java.JavaPlugin
 class DestroyTheMonument : JavaPlugin() {
 
   init {
-    System.setProperty(org.slf4j.simple.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "TRACE")
+//    System.setProperty(org.slf4j.simple.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "TRACE")
     PluginContext.textFormatter = BukkitTextFormatter
 
     // Initialize
@@ -70,7 +70,7 @@ class DestroyTheMonument : JavaPlugin() {
       PlayerInteractListener,
       PlayerJoinListener,
       PlayerQuitListener,
-      PlayerRespawnListener,
+      PlayerRespawnListener(this),
       WeatherChangeListener
     )
 

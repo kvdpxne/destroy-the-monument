@@ -4,11 +4,13 @@ import me.kvdpxne.dtm.game.DefaultTeamColor
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.toLocation
 import me.kvdpxne.dtm.user.UserManager
+import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerRespawnEvent
+import org.bukkit.plugin.java.JavaPlugin
 
-object PlayerRespawnListener : Listener {
+class PlayerRespawnListener(val plugin: JavaPlugin) : Listener {
 
   @EventHandler
   fun handlePlayerRespawn(event: PlayerRespawnEvent) {
@@ -33,5 +35,8 @@ object PlayerRespawnListener : Listener {
     }
 
     teammate.profession?.equip(player, (teammate.teamColor as DefaultTeamColor).dyeColor)
+    Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, {
+      teammate.profession?.addEffect(player)
+    }, 20L)
   }
 }

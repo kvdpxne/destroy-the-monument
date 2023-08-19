@@ -4,6 +4,7 @@ import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.statistics.Statistics
 import java.util.*
 import me.kvdpxne.dtm.profession.Profession
+import me.kvdpxne.dtm.profession.ProfessionManager
 
 class User(
   val identifier: UUID,
@@ -12,7 +13,7 @@ class User(
 ) {
 
   val performer: Performer
-  var profession: Profession? = null
+  var profession: Profession = ProfessionManager.getRandomProfession()
 
   init {
     performer = UserPerformer(identifier, name, this)

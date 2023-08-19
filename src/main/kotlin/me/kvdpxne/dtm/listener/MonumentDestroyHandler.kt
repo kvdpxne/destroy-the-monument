@@ -51,7 +51,7 @@ object MonumentDestroyHandler : Listener {
     }
 
     if (0 >= arena.leftMonuments) {
-      game.stop()
+      game.stop(user)
     }
   }
 }

@@ -265,16 +265,18 @@ class Game(val identifier: UUID, var name: String) {
     player.resetMaxHealth()
     player.setHealth(20.0)
 
-    if (null == teammate.profession) {
-      val randomProfession = ProfessionManager.getRandomProfession()
-      teammate.profession = randomProfession
+    var profession = teammate.profession
+    if (null == profession) {
+      profession = user.profession
     }
-    teammate.profession?.equip(player, (teammate.teamColor as DefaultTeamColor).dyeColor)
+
+    profession.equip(player, (teammate.teamColor as DefaultTeamColor).dyeColor)
+    profession.addEffect(player)
 
     state = GameState.STARTED
   }
 
-  fun stop() {
+  fun stop(user: User) {
     state = GameState.STOPPING
 
 
@@ -284,6 +286,14 @@ class Game(val identifier: UUID, var name: String) {
 
     currentArena?.restore()
     currentArena = null
+
+    user.performer as UserPerformer
+    val player = user.performer.getPlayer() ?: return
+
+    player.inventory.clear()
+    player.activePotionEffects.clear()
+    player.resetMaxHealth()
+    player.setHealth(20.0)
 
     end = Instant.now()
     state = GameState.STOPPED

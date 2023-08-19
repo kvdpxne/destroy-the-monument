@@ -56,7 +56,8 @@ fun scout() = Profession(
     slotItem(Material.POTION, 2, 7),
     slotItem(Material.WOOD, 45, 8)
   ),
-  ItemStack(Material.FISHING_ROD)
+  ItemStack(Material.FISHING_ROD),
+  PotionEffect(PotionEffectType.SPEED, Int.MAX_VALUE, 0)
 )
 //
 //fun scout() = Profession(
