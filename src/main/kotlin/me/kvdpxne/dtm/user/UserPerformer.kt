@@ -1,11 +1,11 @@
 package me.kvdpxne.dtm.user
 
-import me.kvdpxne.dtm.command.Performer
-import org.bukkit.Bukkit
-import org.bukkit.entity.Player
 import java.lang.ref.Reference
 import java.lang.ref.WeakReference
 import java.util.UUID
+import me.kvdpxne.dtm.command.Performer
+import org.bukkit.Bukkit
+import org.bukkit.entity.Player
 
 class UserPerformer(
   val identifier: UUID,

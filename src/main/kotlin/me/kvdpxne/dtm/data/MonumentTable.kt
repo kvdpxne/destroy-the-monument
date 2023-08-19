@@ -1,12 +1,16 @@
 package me.kvdpxne.dtm.data
 
+import java.util.UUID
 import me.kvdpxne.dtm.game.Monument
-import org.ktorm.dsl.*
+import org.ktorm.dsl.eq
+import org.ktorm.dsl.from
+import org.ktorm.dsl.insert
+import org.ktorm.dsl.map
+import org.ktorm.dsl.select
+import org.ktorm.dsl.where
 import org.ktorm.schema.Table
 import org.ktorm.schema.int
-import org.ktorm.schema.uuid
 import org.ktorm.schema.varchar
-import java.util.UUID
 
 object MonumentTable : Table<Nothing>("monument") {
 

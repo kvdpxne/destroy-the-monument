@@ -1,9 +1,17 @@
 package me.kvdpxne.dtm.data
 
-import me.kvdpxne.dtm.game.SpawnPoint
-import org.ktorm.dsl.*
-import org.ktorm.schema.*
 import java.util.UUID
+import me.kvdpxne.dtm.game.SpawnPoint
+import org.ktorm.dsl.eq
+import org.ktorm.dsl.from
+import org.ktorm.dsl.insert
+import org.ktorm.dsl.map
+import org.ktorm.dsl.select
+import org.ktorm.dsl.where
+import org.ktorm.schema.Table
+import org.ktorm.schema.double
+import org.ktorm.schema.float
+import org.ktorm.schema.varchar
 
 object SpawnPointTable : Table<Nothing>("spawn_point") {
 

@@ -8,11 +8,11 @@ import me.kvdpxne.dtm.gui.GuiActionHandler
 import me.kvdpxne.dtm.listener.EntityDamageListener
 import me.kvdpxne.dtm.listener.MonumentDestroyHandler
 import me.kvdpxne.dtm.listener.PlayerDeathListener
-import me.kvdpxne.dtm.listener.PlayerRespawnListener
 import me.kvdpxne.dtm.listener.PlayerDropItemListener
 import me.kvdpxne.dtm.listener.PlayerInteractListener
 import me.kvdpxne.dtm.listener.PlayerJoinListener
 import me.kvdpxne.dtm.listener.PlayerQuitListener
+import me.kvdpxne.dtm.listener.PlayerRespawnListener
 import me.kvdpxne.dtm.listener.WeatherChangeListener
 import me.kvdpxne.dtm.profession.ProfessionManager
 import me.kvdpxne.dtm.shared.BukkitTextFormatter

@@ -4,7 +4,19 @@ import me.kvdpxne.dtm.command.overt.HelpCommand
 import me.kvdpxne.dtm.command.overt.JoinCommand
 import me.kvdpxne.dtm.command.overt.KitCommand
 import me.kvdpxne.dtm.command.overt.LeaveCommand
-import me.kvdpxne.dtm.command.restricted.*
+import me.kvdpxne.dtm.command.restricted.AddArenaCommand
+import me.kvdpxne.dtm.command.restricted.AddMonumentCommand
+import me.kvdpxne.dtm.command.restricted.AddTeamCommand
+import me.kvdpxne.dtm.command.restricted.CreateArenaCommand
+import me.kvdpxne.dtm.command.restricted.CreateGameCommand
+import me.kvdpxne.dtm.command.restricted.CreateTeamCommand
+import me.kvdpxne.dtm.command.restricted.SetArenaMapCommand
+import me.kvdpxne.dtm.command.restricted.SetSpawnPointCommand
+import me.kvdpxne.dtm.command.restricted.StartCommand
+import me.kvdpxne.dtm.command.restricted.StopCommand
+import me.kvdpxne.dtm.command.restricted.TeleportBackCommand
+import me.kvdpxne.dtm.command.restricted.TeleportCommand
+import me.kvdpxne.dtm.command.restricted.WandCommand
 
 object BaseCommand : Command("dtm"), Executor<Performer> {
 

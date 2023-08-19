@@ -6,7 +6,6 @@ import java.time.Instant
 import java.util.UUID
 import me.kvdpxne.dtm.data.GameArenasDao
 import me.kvdpxne.dtm.data.GameTeamsDao
-import me.kvdpxne.dtm.profession.ProfessionManager
 import me.kvdpxne.dtm.shared.Identity
 import me.kvdpxne.dtm.shared.debug
 import me.kvdpxne.dtm.user.User

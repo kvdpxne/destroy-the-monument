@@ -1,9 +1,9 @@
 package me.kvdpxne.dtm.shared
 
+import java.io.File
 import org.bukkit.Bukkit
 import org.bukkit.World
 import org.bukkit.WorldCreator
-import java.io.File
 
 object WorldLoaderHelper {
 

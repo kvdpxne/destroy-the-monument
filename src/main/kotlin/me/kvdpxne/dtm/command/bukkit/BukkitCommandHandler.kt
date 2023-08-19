@@ -9,11 +9,11 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
 class BukkitCommandHandler(
-  name       : String,
-  permission : String       = "",
-  description: String       = "",
-  usage      : String       = "",
-  aliases    : List<String> = emptyList(),
+  name: String,
+  permission: String = "",
+  description: String = "",
+  usage: String = "",
+  aliases: List<String> = emptyList(),
 
   private val executionPlace: ExecutionPlaceType = ExecutionPlaceType.EVERYWHERE
 ) : Command(name, description, usage, aliases) {

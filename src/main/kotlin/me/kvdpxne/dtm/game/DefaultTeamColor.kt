@@ -1,9 +1,9 @@
 package me.kvdpxne.dtm.game
 
+import java.util.UUID
 import me.kvdpxne.dtm.shared.Identity
 import org.bukkit.ChatColor
 import org.bukkit.DyeColor
-import java.util.UUID
 
 enum class DefaultTeamColor(
   // TODO DXX

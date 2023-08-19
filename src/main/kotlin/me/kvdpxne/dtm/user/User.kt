@@ -1,10 +1,10 @@
 package me.kvdpxne.dtm.user
 
+import java.util.UUID
 import me.kvdpxne.dtm.command.Performer
-import me.kvdpxne.dtm.statistics.Statistics
-import java.util.*
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionManager
+import me.kvdpxne.dtm.statistics.Statistics
 
 class User(
   val identifier: UUID,

@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.shared
 
-import org.bukkit.Location
 import java.util.UUID
+import org.bukkit.Location
 
 object SelectedPositionStorage {
 

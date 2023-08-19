@@ -1,10 +1,10 @@
 package me.kvdpxne.dtm.command.bukkit
 
+import java.lang.ref.Reference
+import java.lang.ref.WeakReference
 import me.kvdpxne.dtm.command.Command
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandMap
-import java.lang.ref.Reference
-import java.lang.ref.WeakReference
 
 object BukkitCommandMapAccessor {
 
@@ -27,13 +27,14 @@ object BukkitCommandMapAccessor {
   fun registerCommands(vararg commands: Command) {
     val commandMap = getCommandMap()
     commands.forEach {
-      commandMap.register("dtm", BukkitCommandHandler(
-        it.name,
-        it.permission,
-        it.description,
-        it.usage,
-        it.aliases.toList()
-      )
+      commandMap.register(
+        "dtm", BukkitCommandHandler(
+          it.name,
+          it.permission,
+          it.description,
+          it.usage,
+          it.aliases.toList()
+        )
       )
     }
   }
