@@ -3,6 +3,7 @@ package me.kvdpxne.dtm.gui
 import me.kvdpxne.dtm.game.DefaultTeamColor
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
+import me.kvdpxne.dtm.game.Team
 import me.kvdpxne.dtm.profession.ProfessionManager
 import me.kvdpxne.dtm.user.User
 import org.bukkit.ChatColor
@@ -36,7 +37,11 @@ fun createTeamSelectionGui(game: Game, user: User) = Gui("Wybór drużyny", Rows
       lore = listOf(ChatColor.translateAlternateColorCodes('&', "&6Dołącz do mniejszej drużyny!"))
     }
   }) {
-    val name = game.findSmallerTeam()!!.identity
+    val name = if (game.allTeamsAreSameSize()) {
+      game.teams.random().identity
+    } else {
+      game.findSmallerTeam()!!.identity
+    }
 
     game.addTeammate(name) {
       user

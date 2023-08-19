@@ -65,6 +65,20 @@ class Game(val identifier: UUID, var name: String) {
     it.hasTeammate(user)
   }
 
+  fun allTeamsAreSameSize(): Boolean {
+    var size = -1
+    for (team in teams) {
+      if (-1 == size) {
+        size = team.size()
+        continue
+      }
+      if (size != team.size()) {
+        return false
+      }
+    }
+    return true
+  }
+
   /**
    * @return The [Team] with fewer [Team.teammates], or null if no team is
    * assigned to the game.
