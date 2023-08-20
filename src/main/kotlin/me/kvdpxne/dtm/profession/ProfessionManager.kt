@@ -31,6 +31,10 @@ object ProfessionManager : Iterable<Profession> {
   fun initializeBuiltInProfessions() {
     arrayOf(
       archer(),
+      engineer(),
+      knight(),
+      medic(),
+      pyro(),
       scout()
     ).forEach { addProfession(it) }
   }
