@@ -20,6 +20,7 @@ object EntityDamageListener : Listener {
 
     val player = event.entity as Player
     if (DamageCause.VOID == event.cause) {
+      event.isCancelled = true
       player.setHealth(0.0)
     }
   }
