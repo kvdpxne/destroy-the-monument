@@ -1,5 +1,6 @@
 package me.kvdpxne.dtm.listener
 
+import me.kvdpxne.dtm.game.DefaultTeamColor
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.findMonument
 import me.kvdpxne.dtm.user.UserManager
@@ -35,19 +36,28 @@ object MonumentDestroyHandler : Listener {
       return
     }
 
-    if (team.identity == monument.team) {
+    val teamIdentity = team.identity
+    val monumentIdentity = monument.team
+
+    if (teamIdentity == monumentIdentity) {
       event.isCancelled = true
-      user.performer.sendMessage("You cannot destroy your team's monument")
+      user.sendMessage("&7You cannot destroy your team's monument!")
       return
     }
 
     monument.destroy(arena)
 
-    game.hostages.values.forEach {
-      it.performer.run {
-        sendMessage("An $it player has destroyed an ${monument.team} team monument.")
-        sendMessage("There are ${arena.leftMonuments} monuments left.")
-      }
+    game.sendMessages {
+      (teamIdentity as DefaultTeamColor)
+      val coloredUser = teamIdentity.chatColor.toString() + user.name
+
+      (monumentIdentity as DefaultTeamColor)
+      val coloredMonument = monumentIdentity.chatColor.toString() + monumentIdentity.key
+
+      arrayOf(
+        "&7An $coloredUser &7player has destroyed the $coloredMonument &7team monument.",
+        "&7There are &6${arena.leftMonuments} &7monuments left."
+      )
     }
 
     if (0 >= arena.leftMonuments) {

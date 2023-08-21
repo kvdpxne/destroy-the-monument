@@ -3,6 +3,7 @@ package me.kvdpxne.dtm.user
 import java.lang.ref.Reference
 import java.lang.ref.WeakReference
 import java.util.UUID
+import me.kvdpxne.dtm.PluginContext
 import me.kvdpxne.dtm.command.Performer
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -40,6 +41,6 @@ class UserPerformer(
 
 
   override fun sendMessage(message: String) {
-    getPlayer()?.sendMessage(message)
+    getPlayer()?.sendMessage(PluginContext.textFormatter.format(message))
   }
 }

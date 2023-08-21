@@ -312,6 +312,18 @@ class Game(val identifier: UUID, var name: String) {
     state = GameState.STOPPED
   }
 
+  fun sendMessage(message: () -> String) {
+    hostages.forEach { (_, user) -> user.sendMessage(message()) }
+  }
+
+  fun sendMessages(message: () -> Array<out String>) {
+    hostages.forEach { (_, user) ->
+      message().forEach {
+        user.sendMessage(it)
+      }
+    }
+  }
+
   override fun toString(): String {
     return "Game(identifier='$identifier', name='$name', state=$state)"
   }

@@ -19,6 +19,10 @@ class User(
     performer = UserPerformer(identifier, name, this)
   }
 
+  fun sendMessage(message: String) {
+    performer.sendMessage(message)
+  }
+
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (javaClass != other?.javaClass) return false
