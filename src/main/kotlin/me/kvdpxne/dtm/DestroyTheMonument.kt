@@ -5,6 +5,7 @@ import me.kvdpxne.dtm.command.bukkit.BukkitCommandMapAccessor
 import me.kvdpxne.dtm.game.ArenaManager
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.gui.GuiActionHandler
+import me.kvdpxne.dtm.implementations.bukkit.BukkitPluginBootLoader
 import me.kvdpxne.dtm.listener.EntityDamageListener
 import me.kvdpxne.dtm.listener.MonumentDestroyHandler
 import me.kvdpxne.dtm.listener.PlayerDeathListener
@@ -15,7 +16,6 @@ import me.kvdpxne.dtm.listener.PlayerQuitListener
 import me.kvdpxne.dtm.listener.PlayerRespawnListener
 import me.kvdpxne.dtm.listener.WeatherChangeListener
 import me.kvdpxne.dtm.profession.ProfessionManager
-import me.kvdpxne.dtm.shared.BukkitTextFormatter
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.event.Listener
 import org.bukkit.plugin.java.JavaPlugin
@@ -25,7 +25,7 @@ class DestroyTheMonument : JavaPlugin() {
 
   init {
 //    System.setProperty(org.slf4j.simple.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "TRACE")
-    PluginContext.textFormatter = BukkitTextFormatter
+    BukkitPluginBootLoader()
 
     // Initialize
     GameManager

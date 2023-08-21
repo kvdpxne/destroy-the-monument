@@ -16,6 +16,8 @@ class User(
   val performer: Performer
   var profession: Profession = ProfessionManager.getRandomProfession()
 
+  var inGame: InGameUser<out Any>? = null
+
   init {
     performer = UserPerformer(identifier, name, this)
   }

@@ -32,7 +32,10 @@ object SetSpawnPointCommand : Executor<UserPerformer> {
     }
 
     val player = performer.getPlayer() ?: return
-    arena.setSpawnPoint(team, player.location)
+//    val position = PluginContext.positionConverter.toPosition(player.location, DefaultPositionType.ENTITY_POSITION) as EntityPosition
+//
+//
+//    arena.setSpawnPoint(team, position)
 
     player.sendMessage("Success")
   }

@@ -1,24 +1,17 @@
 package me.kvdpxne.dtm.game
 
 import java.util.UUID
+import me.kvdpxne.dtm.shared.EntityPosition
 import me.kvdpxne.dtm.shared.Identity
 
 /**
  * @param team
- * @param x
- * @param y
- * @param z
- * @param pitch
- * @param yaw
+ * @param position
  * @param identifier
  */
 data class SpawnPoint(
   var team: Identity,
-  var x: Double,
-  var y: Double,
-  var z: Double,
-  var pitch: Float,
-  var yaw: Float,
+  val position: EntityPosition,
   // An automatically generated unique object identifier.
   val identifier: UUID = UUID.randomUUID()
 ) {
@@ -44,6 +37,6 @@ data class SpawnPoint(
   }
 
   override fun toString(): String {
-    return "SpawnPoint(team=$team, x=$x, y=$y, z=$z, pitch=$pitch, yaw=$yaw, identifier=$identifier)"
+    return "SpawnPoint(team=$team, position=$position, identifier=$identifier)"
   }
 }

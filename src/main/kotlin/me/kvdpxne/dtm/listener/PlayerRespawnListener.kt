@@ -2,7 +2,9 @@ package me.kvdpxne.dtm.listener
 
 import me.kvdpxne.dtm.game.DefaultTeamColor
 import me.kvdpxne.dtm.game.GameManager
-import me.kvdpxne.dtm.game.toLocation
+import me.kvdpxne.dtm.implementations.bukkit.BukkitPositionConverter
+import me.kvdpxne.dtm.positionConverter
+import me.kvdpxne.dtm.shared.PositionConvertException
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
@@ -24,7 +26,16 @@ class PlayerRespawnListener(val plugin: JavaPlugin) : Listener {
     if (null != arena) {
       val spawnPoint = arena.spawnPoints[team.identity] ?: return
       val map = arena.map?.world!!
-      event.respawnLocation = spawnPoint.toLocation(map)
+
+      val converter = positionConverter as BukkitPositionConverter
+
+      val location = try {
+        converter.fromPosition(map, spawnPoint.position)
+      } catch (exception: PositionConvertException) {
+        return
+      }
+
+      event.respawnLocation = location
     }
 
     val teammate = team.findTeammate(user) ?: return

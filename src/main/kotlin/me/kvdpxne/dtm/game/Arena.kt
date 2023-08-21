@@ -7,6 +7,7 @@ import me.kvdpxne.dtm.data.ArenaMonumentsDao
 import me.kvdpxne.dtm.data.ArenaSpawnPointsDao
 import me.kvdpxne.dtm.data.MonumentDao
 import me.kvdpxne.dtm.data.SpawnPointDao
+import me.kvdpxne.dtm.shared.EntityPosition
 import me.kvdpxne.dtm.shared.Identity
 import me.kvdpxne.dtm.shared.debug
 import org.bukkit.Location
@@ -54,8 +55,8 @@ class Arena(
   /**
    *
    */
-  fun setSpawnPoint(team: Identity, position: Location) {
-    val spawnPoint = SpawnPoint(team, position.x, position.y, position.z, position.pitch, position.yaw)
+  fun setSpawnPoint(team: Identity, position: EntityPosition) {
+    val spawnPoint = SpawnPoint(team, position)
     spawnPoints[team] = spawnPoint
 
     SpawnPointDao.insert(spawnPoint)

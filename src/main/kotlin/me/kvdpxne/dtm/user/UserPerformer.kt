@@ -3,8 +3,8 @@ package me.kvdpxne.dtm.user
 import java.lang.ref.Reference
 import java.lang.ref.WeakReference
 import java.util.UUID
-import me.kvdpxne.dtm.PluginContext
 import me.kvdpxne.dtm.command.Performer
+import me.kvdpxne.dtm.textFormatter
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
@@ -41,24 +41,24 @@ class UserPerformer(
 
 
   override fun sendMessage(message: String) {
-    getPlayer()?.sendMessage(PluginContext.textFormatter.format(message))
+    getPlayer()?.sendMessage(textFormatter.format(message))
   }
 
   override fun sendMessage(message: () -> String) {
-    getPlayer()?.sendMessage(PluginContext.textFormatter.format(message()))
+    getPlayer()?.sendMessage(textFormatter.format(message()))
   }
 
   override fun sendMessages(messages: Array<out String>) {
     val player = getPlayer() ?: return
     messages.forEach {
-      player.sendMessage(PluginContext.textFormatter.format(it))
+      player.sendMessage(textFormatter.format(it))
     }
   }
 
   override fun sendMessages(messages: () -> Array<out String>) {
     val player = getPlayer() ?: return
     messages().forEach {
-      player.sendMessage(PluginContext.textFormatter.format(it))
+      player.sendMessage(textFormatter.format(it))
     }
   }
 }

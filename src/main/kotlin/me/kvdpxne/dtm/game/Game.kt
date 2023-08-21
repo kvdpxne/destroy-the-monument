@@ -7,6 +7,7 @@ import java.util.UUID
 import me.kvdpxne.dtm.command.Communicative
 import me.kvdpxne.dtm.data.GameArenasDao
 import me.kvdpxne.dtm.data.GameTeamsDao
+import me.kvdpxne.dtm.implementations.bukkit.BukkitInGameUser
 import me.kvdpxne.dtm.shared.Identity
 import me.kvdpxne.dtm.shared.debug
 import me.kvdpxne.dtm.user.User
@@ -271,7 +272,8 @@ class Game(val identifier: UUID, var name: String) : Communicative {
 
     arena.spawnPoints[team.identity]?.let {
       val world = arena.map?.world ?: return
-      player.teleport(it.toLocation(world))
+
+      (user.inGame as BukkitInGameUser).teleport(world, it.position)
     }
 
     player.inventory.clear()

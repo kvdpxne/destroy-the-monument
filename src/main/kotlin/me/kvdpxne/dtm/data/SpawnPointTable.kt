@@ -2,6 +2,7 @@ package me.kvdpxne.dtm.data
 
 import java.util.UUID
 import me.kvdpxne.dtm.game.SpawnPoint
+import me.kvdpxne.dtm.shared.EntityPosition
 import org.ktorm.dsl.eq
 import org.ktorm.dsl.from
 import org.ktorm.dsl.insert
@@ -41,11 +42,13 @@ object SpawnPointDao {
 
         SpawnPoint(
           team,
-          it[SpawnPointTable.x]!!,
-          it[SpawnPointTable.y]!!,
-          it[SpawnPointTable.z]!!,
-          it[SpawnPointTable.pitch]!!,
-          it[SpawnPointTable.yaw]!!,
+          EntityPosition(
+            it[SpawnPointTable.x]!!,
+            it[SpawnPointTable.y]!!,
+            it[SpawnPointTable.z]!!,
+            it[SpawnPointTable.pitch]!!,
+            it[SpawnPointTable.yaw]!!
+          ),
           UUID.fromString(it[SpawnPointTable.identifier])
         )
       }
@@ -56,11 +59,14 @@ object SpawnPointDao {
     database.insert(SpawnPointTable) {
       set(SpawnPointTable.identifier, spawnPoint.identifier.toString())
       set(SpawnPointTable.team, spawnPoint.team.identifier.toString())
-      set(SpawnPointTable.x, spawnPoint.x)
-      set(SpawnPointTable.y, spawnPoint.y)
-      set(SpawnPointTable.z, spawnPoint.z)
-      set(SpawnPointTable.pitch, spawnPoint.pitch)
-      set(SpawnPointTable.yaw, spawnPoint.yaw)
+
+      val position = spawnPoint.position
+
+      set(SpawnPointTable.x, position.x)
+      set(SpawnPointTable.y, position.y)
+      set(SpawnPointTable.z, position.z)
+      set(SpawnPointTable.pitch, position.pitch)
+      set(SpawnPointTable.yaw, position.yaw)
     }
   }
 }
