@@ -11,6 +11,8 @@ import me.kvdpxne.dtm.shared.Identity
 import me.kvdpxne.dtm.shared.debug
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserPerformer
+import org.bukkit.inventory.ItemStack
+import org.ktorm.dsl.eq
 
 private val logger: KLogger = KotlinLogging.logger { }
 
@@ -274,10 +276,18 @@ class Game(val identifier: UUID, var name: String) : Communicative {
       player.teleport(it.toLocation(world))
     }
 
-    player.inventory.clear()
-    player.activePotionEffects.clear()
-    player.resetMaxHealth()
-    player.setHealth(20.0)
+    player.run {
+      inventory.also {
+        it.clear()
+        it.armorContents = arrayOfNulls(it.armorContents.size)
+      }
+      activePotionEffects.forEach {
+        removePotionEffect(it.type)
+      }
+      resetMaxHealth()
+      setHealth(20.0)
+      fireTicks = 0
+    }
 
     var profession = teammate.profession
     if (null == profession) {
@@ -304,10 +314,18 @@ class Game(val identifier: UUID, var name: String) : Communicative {
     user.performer as UserPerformer
     val player = user.performer.getPlayer() ?: return
 
-    player.inventory.clear()
-    player.activePotionEffects.clear()
-    player.resetMaxHealth()
-    player.setHealth(20.0)
+    player.run {
+      inventory.also {
+        it.clear()
+        it.armorContents = arrayOfNulls(it.armorContents.size)
+      }
+      activePotionEffects.forEach {
+        removePotionEffect(it.type)
+      }
+      resetMaxHealth()
+      setHealth(20.0)
+      fireTicks = 0
+    }
 
     end = Instant.now()
     state = GameState.STOPPED
