@@ -15,4 +15,24 @@ class BukkitConsolePerformer : Performer {
   override fun sendMessage(message: String) {
     Bukkit.getConsoleSender().sendMessage(message)
   }
+
+  override fun sendMessage(message: () -> String) {
+    val context = message()
+    Bukkit.getConsoleSender().sendMessage(context)
+  }
+
+  override fun sendMessages(messages: Array<out String>) {
+    val sender = Bukkit.getConsoleSender()
+    messages.forEach {
+      sender.sendMessage(it)
+    }
+  }
+
+  override fun sendMessages(messages: () -> Array<out String>) {
+    val context = messages()
+    val sender = Bukkit.getConsoleSender()
+    context.forEach {
+      sender.sendMessage(it)
+    }
+  }
 }

@@ -1,6 +1,7 @@
 package me.kvdpxne.dtm.user
 
 import java.util.UUID
+import me.kvdpxne.dtm.command.Communicative
 import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionManager
@@ -10,7 +11,7 @@ class User(
   val identifier: UUID,
   var name: String,
   var statistics: Statistics = Statistics.empty()
-) {
+) : Communicative {
 
   val performer: Performer
   var profession: Profession = ProfessionManager.getRandomProfession()
@@ -19,8 +20,20 @@ class User(
     performer = UserPerformer(identifier, name, this)
   }
 
-  fun sendMessage(message: String) {
+  override fun sendMessage(message: String) {
     performer.sendMessage(message)
+  }
+
+  override fun sendMessage(message: () -> String) {
+    performer.sendMessage(message)
+  }
+
+  override fun sendMessages(messages: Array<out String>) {
+    performer.sendMessages(messages)
+  }
+
+  override fun sendMessages(messages: () -> Array<out String>) {
+    performer.sendMessages(messages)
   }
 
   override fun equals(other: Any?): Boolean {

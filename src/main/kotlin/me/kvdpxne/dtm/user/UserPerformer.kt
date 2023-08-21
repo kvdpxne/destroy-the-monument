@@ -43,4 +43,22 @@ class UserPerformer(
   override fun sendMessage(message: String) {
     getPlayer()?.sendMessage(PluginContext.textFormatter.format(message))
   }
+
+  override fun sendMessage(message: () -> String) {
+    getPlayer()?.sendMessage(PluginContext.textFormatter.format(message()))
+  }
+
+  override fun sendMessages(messages: Array<out String>) {
+    val player = getPlayer() ?: return
+    messages.forEach {
+      player.sendMessage(PluginContext.textFormatter.format(it))
+    }
+  }
+
+  override fun sendMessages(messages: () -> Array<out String>) {
+    val player = getPlayer() ?: return
+    messages().forEach {
+      player.sendMessage(PluginContext.textFormatter.format(it))
+    }
+  }
 }

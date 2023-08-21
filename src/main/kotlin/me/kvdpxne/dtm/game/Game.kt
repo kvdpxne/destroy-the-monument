@@ -4,6 +4,7 @@ import io.github.oshai.kotlinlogging.KLogger
 import io.github.oshai.kotlinlogging.KotlinLogging
 import java.time.Instant
 import java.util.UUID
+import me.kvdpxne.dtm.command.Communicative
 import me.kvdpxne.dtm.data.GameArenasDao
 import me.kvdpxne.dtm.data.GameTeamsDao
 import me.kvdpxne.dtm.shared.Identity
@@ -13,7 +14,7 @@ import me.kvdpxne.dtm.user.UserPerformer
 
 private val logger: KLogger = KotlinLogging.logger { }
 
-class Game(val identifier: UUID, var name: String) {
+class Game(val identifier: UUID, var name: String) : Communicative {
 
   /**
    * Map of users who have been signed up for this game.
@@ -312,16 +313,20 @@ class Game(val identifier: UUID, var name: String) {
     state = GameState.STOPPED
   }
 
-  fun sendMessage(message: () -> String) {
-    hostages.forEach { (_, user) -> user.sendMessage(message()) }
+  override fun sendMessage(message: String) {
+    hostages.forEach { (_, user) -> user.sendMessage(message) }
   }
 
-  fun sendMessages(message: () -> Array<out String>) {
-    hostages.forEach { (_, user) ->
-      message().forEach {
-        user.sendMessage(it)
-      }
-    }
+  override fun sendMessage(message: () -> String) {
+    hostages.forEach { (_, user) -> user.sendMessage(message) }
+  }
+
+  override fun sendMessages(messages: Array<out String>) {
+    hostages.forEach { (_, user) -> user.sendMessages(messages) }
+  }
+
+  override fun sendMessages(messages: () -> Array<out String>) {
+    hostages.forEach { (_, user) -> user.sendMessages(messages) }
   }
 
   override fun toString(): String {
