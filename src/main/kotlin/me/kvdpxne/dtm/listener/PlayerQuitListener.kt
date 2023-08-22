@@ -12,7 +12,7 @@ object PlayerQuitListener : Listener {
   fun handlePlayerQuit(event: PlayerQuitEvent) {
     val player = event.player
 
-    UserManager.findByIdentifier(player.uniqueId).also {
+    UserManager.getUserByIdentifierOrNull(player.uniqueId).also {
       if (null == it) {
         return@also
       }

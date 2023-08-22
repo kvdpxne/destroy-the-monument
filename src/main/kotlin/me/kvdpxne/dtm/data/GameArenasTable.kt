@@ -27,7 +27,7 @@ object GameArenasDao {
         GameArenasTable.game eq identifier.toString()
       }
       .mapNotNull {
-        ArenaDao.findByIdentifier(
+        ArenaDao.findByIdentifierOrNull(
           UUID.fromString(
             it[GameArenasTable.arena]
           )

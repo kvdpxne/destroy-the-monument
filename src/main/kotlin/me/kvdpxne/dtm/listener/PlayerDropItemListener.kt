@@ -20,7 +20,7 @@ object PlayerDropItemListener : Listener {
       return
     }
 
-    val user = UserManager.findByIdentifier(player.uniqueId) ?: return
+    val user = UserManager.getUserByIdentifierOrNull(player.uniqueId) ?: return
     val game = GameManager.findByUser(user) ?: return
 
     if (game.isInArenaMap(user).not()) {

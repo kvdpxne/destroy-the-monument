@@ -55,7 +55,7 @@ object ArenaDao {
       }
   }
 
-  fun findByIdentifier(identifier: UUID): Arena? {
+  fun findByIdentifierOrNull(identifier: UUID): Arena? {
     return database.from(ArenaTable)
       .innerJoin(ArenaMonumentsTable, ArenaMonumentsTable.arena eq ArenaTable.identifier)
       .innerJoin(ArenaSpawnPointsTable, ArenaSpawnPointsTable.arena eq ArenaTable.identifier)
@@ -129,5 +129,9 @@ object ArenaDao {
     return database.from(ArenaTable)
       .select()
       .totalRecordsInAllPages
+  }
+
+  fun findByNameOrNull(name: String): Arena? {
+    TODO("Not yet implemented")
   }
 }

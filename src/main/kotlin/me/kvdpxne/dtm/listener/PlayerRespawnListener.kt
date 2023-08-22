@@ -18,7 +18,7 @@ class PlayerRespawnListener(val plugin: JavaPlugin) : Listener {
   fun handlePlayerRespawn(event: PlayerRespawnEvent) {
     val player = event.player
 
-    val user = UserManager.findByIdentifier(player.uniqueId) ?: return
+    val user = UserManager.getUserByIdentifierOrNull(player.uniqueId) ?: return
     val game = GameManager.findByUser(user) ?: return
     val team = game.findTeam(user) ?: return
 

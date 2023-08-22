@@ -1,7 +1,8 @@
 package me.kvdpxne.dtm.listener
 
-import me.kvdpxne.dtm.data.UserDao
 import me.kvdpxne.dtm.implementations.bukkit.BukkitInGameUser
+import me.kvdpxne.dtm.user.User
+import me.kvdpxne.dtm.user.UserLifecycleService
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -13,14 +14,27 @@ object PlayerJoinListener : Listener {
   fun handlePlayerJoin(event: PlayerJoinEvent) {
     val player = event.player
 
-    val identifier = player.uniqueId
-    val name = player.name
+    //
+    val userIdentifier = player.uniqueId
+    val userName = player.name
 
-    var user = UserDao.findByIdentifier(identifier)
+    /*
+     * First, it searches for the user in the cache by the given user identifier
+     * Secondly, if the user was not found in the cache, the user is searched
+     * in the database according to the given user identifier.
+     */
+    var user: User? = UserManager.getUserByIdentifierOrNull(
+      identifier = userIdentifier,
+      load = true
+    )
+
     if (null == user) {
-      user = UserManager.createUser(identifier, name)
-      UserDao.insert(user)
-    } else {
+      user = User(
+        identifier = userIdentifier,
+        name = userName
+      )
+
+      UserLifecycleService.createUser(user)
       UserManager.addUser(user)
     }
 

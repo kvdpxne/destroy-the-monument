@@ -1,15 +1,9 @@
 package me.kvdpxne.dtm.statistics
 
 class Statistics(
-  var kills: Int,
-  var assists: Int,
-  var deaths: Int
+  var kills: Int = 0,
+  var assists: Int = 0,
+  var deaths: Int = 0
 ) {
 
-  companion object {
-
-    fun empty(): Statistics {
-      return Statistics(0, 0, 0)
-    }
-  }
 }

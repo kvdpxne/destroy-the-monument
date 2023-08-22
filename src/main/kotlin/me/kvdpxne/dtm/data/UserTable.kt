@@ -27,11 +27,32 @@ object UserTable : Table<Nothing>("user") {
 
 object UserDao {
 
-  fun findByIdentifier(identifier: UUID): User? {
+  fun findUserByIdentifierOrNull(identifier: UUID): User? {
     return database.from(UserTable)
       .select()
       .where {
         UserTable.identifier eq identifier.toString()
+      }
+      .map { row ->
+        val identifier2 = row[UserTable.identifier].let {
+          UUID.fromString(it)
+        }
+
+        val name = row[UserTable.name]!!
+        val kills = row[UserTable.kills]!!
+        val assists = row[UserTable.assists]!!
+        val deaths = row[UserTable.deaths]!!
+
+        User(identifier2, name, Statistics(kills, assists, deaths))
+      }
+      .firstOrNull()
+  }
+
+  fun findUserByNameOrNull(name: String): User? {
+    return database.from(UserTable)
+      .select()
+      .where {
+        UserTable.name eq name.lowercase()
       }
       .map { row ->
         val identifier2 = row[UserTable.identifier].let {

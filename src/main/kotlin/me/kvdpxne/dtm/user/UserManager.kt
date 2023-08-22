@@ -1,29 +1,44 @@
 package me.kvdpxne.dtm.user
 
 import java.util.UUID
-import me.kvdpxne.dtm.data.UserDao
-import me.kvdpxne.dtm.statistics.Statistics
 
 /**
- * @since 0.1.0
+ * Manager responsible for managing [User]s.
+ *
+ * @since 1.0.0
  */
-object UserManager {
+object UserManager : Iterable<User> {
 
-  private val identifierUserMap = mutableMapOf<UUID, User>()
+  /**
+   * A set of users that temporarily stores user data that is needed for some
+   * function to work.
+   */
+  var users: MutableSet<User> = mutableSetOf()
+    private set
 
   /**
    * Tries to find a [User] by the given unique user identifier.
    */
-  fun findByIdentifier(identifier: UUID): User? {
-    var user = identifierUserMap[identifier]
+  fun getUserByIdentifierOrNull(
+    identifier: UUID,
+    load: Boolean = false
+  ): User? {
+    var user: User? = this.users.find {
+      it.identifier == identifier
+    }
+
     if (null != user) {
       return user
     }
 
-    user = UserDao.findByIdentifier(identifier)
-    if (null != user) {
-      this.addUser(user)
-      return user
+    if (load) {
+      return try {
+        user = UserLifecycleService.getUserByIdentifier(identifier)
+        this.addUser(user)
+        user
+      } catch (exception: UserNotFoundException) {
+        null
+      }
     }
 
     return null
@@ -32,42 +47,54 @@ object UserManager {
   /**
    * @since 0.1.0
    */
-  fun findByName(name: String, ignoreCase: Boolean = true): User? {
-    return identifierUserMap.values.find {
+  fun getUserByNameOrNull(
+    name: String,
+    ignoreCase: Boolean = true,
+    load: Boolean = false
+  ): User? {
+    var user: User? = this.users.find {
       it.name.equals(name, ignoreCase)
     }
+
+    if (null != user) {
+      return user
+    }
+
+    if (load) {
+      return try {
+        user = UserLifecycleService.getUserByName(name)
+        this.addUser(user)
+        user
+      } catch (exception: UserNotFoundException) {
+        null
+      }
+    }
+
+    return null
   }
 
   /**
    * @since 0.1.0
    */
   fun addUser(user: User) {
-    identifierUserMap[user.identifier] = user
+    this.users.add(user)
   }
 
   /**
    * @since 0.1.0
    */
   fun removeUser(user: User) {
-    identifierUserMap.remove(user.identifier)
-  }
-
-  /**
-   * @since 0.1.0
-   */
-  fun createUser(identifier: UUID, name: String): User {
-    require(name.isNotBlank()) {
-      "name can not be blank."
-    }
-    val user = User(identifier, name, Statistics.empty())
-    addUser(user)
-    return user
+    this.users.remove(user)
   }
 
   /**
    * @since 0.1.0
    */
   fun count(): Int {
-    return identifierUserMap.size
+    return users.size
+  }
+
+  override fun iterator(): Iterator<User> {
+    return this.users.iterator()
   }
 }

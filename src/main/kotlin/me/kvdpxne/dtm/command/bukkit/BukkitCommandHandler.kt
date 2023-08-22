@@ -37,7 +37,7 @@ class BukkitCommandHandler(
       return true
     }
 
-    val user = UserManager.findByIdentifier(sender.uniqueId)!!
+    val user = UserManager.getUserByIdentifierOrNull(sender.uniqueId)!!
     BaseCommand.execute(user.performer, Parameter(arguments))
     return true
   }

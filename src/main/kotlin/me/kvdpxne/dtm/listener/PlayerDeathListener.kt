@@ -10,7 +10,7 @@ object PlayerDeathListener : Listener {
 
   @EventHandler
   fun handlePlayerDeath(event: PlayerDeathEvent) {
-    val user = UserManager.findByIdentifier(event.entity.uniqueId) ?: return
+    val user = UserManager.getUserByIdentifierOrNull(event.entity.uniqueId) ?: return
     val game = GameManager.findByUser(user) ?: return
 
     if (game.isInArenaMap(user)) {

@@ -17,7 +17,7 @@ object MonumentDestroyHandler : Listener {
     }
 
     //
-    val user = UserManager.findByIdentifier(event.player.uniqueId) ?: return
+    val user = UserManager.getUserByIdentifierOrNull(event.player.uniqueId) ?: return
 
     // Tries to find a user in any game.
     val game = GameManager.findByUser(user) ?: return

@@ -10,7 +10,7 @@ import me.kvdpxne.dtm.statistics.Statistics
 class User(
   val identifier: UUID,
   var name: String,
-  var statistics: Statistics = Statistics.empty()
+  var statistics: Statistics = Statistics()
 ) : Communicative {
 
   val performer: Performer
@@ -19,6 +19,10 @@ class User(
   var inGame: InGameUser<out Any>? = null
 
   init {
+    require(name.isNotBlank()) {
+      "Username cannot be empty or blank."
+    }
+
     performer = UserPerformer(identifier, name, this)
   }
 

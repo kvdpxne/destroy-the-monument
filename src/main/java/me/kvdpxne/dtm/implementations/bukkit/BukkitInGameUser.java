@@ -4,10 +4,12 @@ import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
 import java.util.Optional;
 import me.kvdpxne.dtm.PluginContextKt;
+import me.kvdpxne.dtm.shared.DefaultPositionType;
 import me.kvdpxne.dtm.shared.Position;
 import me.kvdpxne.dtm.shared.PositionConvertException;
 import me.kvdpxne.dtm.user.InGameUser;
 import me.kvdpxne.dtm.user.User;
+import me.kvdpxne.dtm.user.UserException;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -18,18 +20,18 @@ import static org.bukkit.event.player.PlayerTeleportEvent.TeleportCause.PLUGIN;
 
 public class BukkitInGameUser implements InGameUser<World> {
 
-  private final User user;
+  private final User membership;
   private Reference<Player> playerReference;
 
-  public BukkitInGameUser(final @NotNull User user) {
-    this.user = user;
+  public BukkitInGameUser(final @NotNull User membership) {
+    this.membership = membership;
     this.playerReference = new WeakReference<>(null);
   }
 
   public Optional<Player> getPlayer() {
     Player player = this.playerReference.get();
     if (null == player) {
-      player = Bukkit.getPlayer(this.user.getIdentifier());
+      player = Bukkit.getPlayer(this.membership.getIdentifier());
       if (null == player) {
         this.playerReference = new WeakReference<>(null);
         return Optional.empty();
@@ -38,6 +40,35 @@ public class BukkitInGameUser implements InGameUser<World> {
       return Optional.of(player);
     }
     return Optional.of(player);
+  }
+
+  @Override
+  public Position getPosition() throws UserException {
+    return this.getPlayer().map(player -> {
+        final BukkitPositionConverter converter = (BukkitPositionConverter)
+          PluginContextKt.getPositionConverter();
+
+      final Location location = player.getLocation();
+
+        try {
+          return converter.toPosition(location, DefaultPositionType.ENTITY_POSITION);
+        } catch (PositionConvertException e) {
+          throw new RuntimeException(e);
+        }
+      })
+      .orElseThrow(() -> new UserException(""));
+  }
+
+  @Override
+  public boolean isOnline() {
+    return this.getPlayer()
+      .map(Player::isOnline)
+      .orElse(false);
+  }
+
+  @Override
+  public boolean isHidden() {
+    return false;
   }
 
   @Override
