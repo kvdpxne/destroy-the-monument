@@ -7,12 +7,11 @@ import java.util.UUID
 import me.kvdpxne.dtm.command.Communicative
 import me.kvdpxne.dtm.data.GameArenasDao
 import me.kvdpxne.dtm.data.GameTeamsDao
+import me.kvdpxne.dtm.eventManager
 import me.kvdpxne.dtm.shared.Identity
 import me.kvdpxne.dtm.shared.debug
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserPerformer
-import org.bukkit.inventory.ItemStack
-import org.ktorm.dsl.eq
 
 private val logger: KLogger = KotlinLogging.logger { }
 
@@ -254,53 +253,22 @@ class Game(val identifier: UUID, var name: String) : Communicative {
     }
   }
 
-  fun start(user: User) {
+  fun start() {
     state = GameState.STARTING
     start = Instant.now()
-
-//    logger.debug {
-//      "The game took off after the FSF time."
-//    }
-
-    val team = findTeam(user) ?: return
-    val teammate = team.findTeammate(user) ?: return
 
     val arena = arenas.random()
     currentArena = arena
 
-    user.performer as UserPerformer
-    val player = user.performer.getPlayer() ?: return
-
-    arena.spawnPoints[team.identity]?.let {
-      val world = arena.map?.world ?: return
-      player.teleport(it.toLocation(world))
-    }
-
-    player.run {
-      inventory.also {
-        it.clear()
-        it.armorContents = arrayOfNulls(it.armorContents.size)
-      }
-      activePotionEffects.forEach {
-        removePotionEffect(it.type)
-      }
-      resetMaxHealth()
-      setHealth(20.0)
-      fireTicks = 0
-    }
-
-    var profession = teammate.profession
-    if (null == profession) {
-      profession = user.profession
-    }
-
-    profession.equip(player, (teammate.teamColor as DefaultTeamColor).dyeColor)
-    profession.addEffect(player)
+    //
+    //
+    val event = GameStartEvent(this)
+    eventManager.callEvent(event)
 
     state = GameState.STARTED
   }
 
-  fun stop(user: User) {
+  fun stop() {
     state = GameState.STOPPING
 
 
@@ -311,21 +279,8 @@ class Game(val identifier: UUID, var name: String) : Communicative {
     currentArena?.restore()
     currentArena = null
 
-    user.performer as UserPerformer
-    val player = user.performer.getPlayer() ?: return
-
-    player.run {
-      inventory.also {
-        it.clear()
-        it.armorContents = arrayOfNulls(it.armorContents.size)
-      }
-      activePotionEffects.forEach {
-        removePotionEffect(it.type)
-      }
-      resetMaxHealth()
-      setHealth(20.0)
-      fireTicks = 0
-    }
+    val event = GameStopEvent(this)
+    eventManager.callEvent(event)
 
     end = Instant.now()
     state = GameState.STOPPED

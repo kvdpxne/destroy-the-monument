@@ -14,11 +14,16 @@ import me.kvdpxne.dtm.listener.PlayerJoinListener
 import me.kvdpxne.dtm.listener.PlayerQuitListener
 import me.kvdpxne.dtm.listener.PlayerRespawnListener
 import me.kvdpxne.dtm.listener.WeatherChangeListener
+import me.kvdpxne.dtm.listener.internal.GameStartListener
+import me.kvdpxne.dtm.listener.internal.GameStopListener
 import me.kvdpxne.dtm.profession.ProfessionManager
 import me.kvdpxne.dtm.shared.BukkitTextFormatter
 import me.kvdpxne.dtm.user.UserManager
+import me.kvdpxne.thrivi.EventManager
 import org.bukkit.event.Listener
 import org.bukkit.plugin.java.JavaPlugin
+
+val eventManager: EventManager = EventManager()
 
 @Suppress("unused")
 class DestroyTheMonument : JavaPlugin() {
@@ -73,6 +78,9 @@ class DestroyTheMonument : JavaPlugin() {
       PlayerRespawnListener(this),
       WeatherChangeListener
     )
+
+    eventManager.registerListener(GameStartListener)
+    eventManager.registerListener(GameStopListener)
 
     BukkitCommandMapAccessor.registerCommands(
       BaseCommand

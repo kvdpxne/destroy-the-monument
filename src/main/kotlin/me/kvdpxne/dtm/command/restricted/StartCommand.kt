@@ -16,11 +16,7 @@ object StartCommand : Executor<UserPerformer> {
       return
     }
 
-    game.teams.forEach { team ->
-      team.teammates.forEach { teammate ->
-        game.start(teammate.user)
-      }
-    }
+    game.start()
 
     user.sendMessage("The game ${game.name} has started.")
   }

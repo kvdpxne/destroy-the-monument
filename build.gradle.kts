@@ -19,6 +19,8 @@ val fileName = "craftbukkit-1.7.10.jar"
 repositories {
   mavenCentral()
   mavenLocal()
+
+  maven("https://jitpack.io")
 }
 
 dependencies {
@@ -32,6 +34,8 @@ dependencies {
   implementation("org.slf4j:slf4j-api:2.0.7")
   implementation("org.slf4j:slf4j-simple:2.0.7")
 
+  // TODO not safe
+  implementation("com.github.kvdpxne:thrivi:13199ef603")
 
 
   testImplementation(kotlin("test"))

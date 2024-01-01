@@ -17,7 +17,7 @@ object StopCommand : Executor<UserPerformer> {
     }
 
     try {
-      game.stop(user)
+      game.stop()
     } catch (exception: IllegalArgumentException) {
       // It's stupid but for the current phase the point is that the world in
       // which the player is located will be unloaded. it cannot be discharged
