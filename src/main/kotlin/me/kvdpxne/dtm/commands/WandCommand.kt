@@ -1,7 +1,7 @@
-package me.kvdpxne.dtm.command.restricted
+package me.kvdpxne.dtm.commands
 
-import me.kvdpxne.dtm.command.Executor
-import me.kvdpxne.dtm.command.Parameter
+import me.kvdpxne.dtm.command.Command
+import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.user.UserPerformer
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
@@ -13,9 +13,10 @@ val wand = ItemStack(Material.STICK).apply {
   itemMeta = meta
 }
 
-object WandCommand : Executor<UserPerformer> {
-
-  override fun execute(performer: UserPerformer, parameter: Parameter) {
+fun createWandCommand(): Command = CommandBuilder()
+  .name("wand")
+  .parent("dtm")
+  .handler<UserPerformer> { performer, _ ->
     performer.getPlayer()?.inventory?.addItem(wand)
   }
-}
+  .build()

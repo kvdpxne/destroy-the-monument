@@ -1,19 +1,21 @@
-package me.kvdpxne.dtm.command.restricted
+package me.kvdpxne.dtm.commands
 
-import me.kvdpxne.dtm.command.Executor
-import me.kvdpxne.dtm.command.Parameter
+import me.kvdpxne.dtm.command.Command
+import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.shared.TeleportationHistoryStorage
 import me.kvdpxne.dtm.shared.WorldLoaderHelper
 import me.kvdpxne.dtm.user.UserPerformer
 
-object TeleportCommand : Executor<UserPerformer> {
-
-  override fun execute(performer: UserPerformer, parameter: Parameter) {
-    val player = performer.getPlayer() ?: return
+fun createTeleportCommand(): Command = CommandBuilder()
+  .name("teleport")
+  .aliases("tp")
+  .parent("dtm")
+  .handler<UserPerformer> { performer, parameter ->
+    val player = performer.getPlayer() ?: return@handler
 
     if (parameter.isEmpty()) {
       performer.sendMessage("Usage: /dtm teleport <WORLD_NAME>")
-      return
+      return@handler
     }
 
     // The name of the world registered as an arena.
@@ -22,7 +24,7 @@ object TeleportCommand : Executor<UserPerformer> {
     WorldLoaderHelper.getWorld(name).let {
       if (null == it) {
         performer.sendMessage("World named \"$name\" does not exist.")
-        return
+        return@handler
       }
 
       TeleportationHistoryStorage.push(player.uniqueId, player.location)
@@ -36,4 +38,4 @@ object TeleportCommand : Executor<UserPerformer> {
 
     }
   }
-}
+  .build()

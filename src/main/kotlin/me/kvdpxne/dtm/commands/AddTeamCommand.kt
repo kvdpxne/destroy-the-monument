@@ -1,19 +1,20 @@
-package me.kvdpxne.dtm.command.restricted
+package me.kvdpxne.dtm.commands
 
-import me.kvdpxne.dtm.command.Executor
-import me.kvdpxne.dtm.command.Parameter
+import me.kvdpxne.dtm.command.Command
+import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.game.DefaultTeamColor
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.Team
 import me.kvdpxne.dtm.user.UserPerformer
 
-object AddTeamCommand : Executor<UserPerformer> {
-
-  // Usage: /dtm AddTeam <GAME_NAME> <TEAM_IDENTITY>
-  override fun execute(performer: UserPerformer, parameter: Parameter) {
+// Usage: /dtm AddTeam <GAME_NAME> <TEAM_IDENTITY>
+fun createAddTeamCommand(): Command = CommandBuilder()
+  .name("addTeam")
+  .parent("dtm")
+  .handler<UserPerformer> { performer, parameter ->
     if (2 > parameter.length()) {
       performer.sendMessage("Usage: /dtm AddTeam <GAME_NAME> <TEAM_IDENTITY>")
-      return
+      return@handler
     }
 
     val gameName = parameter.asText()
@@ -21,7 +22,7 @@ object AddTeamCommand : Executor<UserPerformer> {
 
     if (null == game) {
       performer.sendMessage("An game named $gameName does not exist.")
-      return
+      return@handler
     }
 
     val teamName = parameter.asText(1)
@@ -29,10 +30,10 @@ object AddTeamCommand : Executor<UserPerformer> {
 
     if (null == team) {
       performer.sendMessage("An team named $teamName does not exist.")
-      return
+      return@handler
     }
 
     game.addTeam(Team(team, game))
     performer.sendMessage("Success")
   }
-}
+  .build()

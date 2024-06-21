@@ -28,8 +28,8 @@ class User(
     performer.sendMessage(message)
   }
 
-  override fun sendMessages(messages: Array<out String>) {
-    performer.sendMessages(messages)
+  override fun sendMessages(vararg messages: String) {
+    performer.sendMessages(*messages)
   }
 
   override fun sendMessages(messages: () -> Array<out String>) {

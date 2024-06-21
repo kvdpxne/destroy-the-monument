@@ -1,7 +1,6 @@
 package me.kvdpxne.dtm
 
-import me.kvdpxne.dtm.command.BaseCommand
-import me.kvdpxne.dtm.command.bukkit.BukkitCommandMapAccessor
+import me.kvdpxne.dtm.command.CommandManager
 import me.kvdpxne.dtm.game.ArenaManager
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.gui.GuiActionHandler
@@ -82,9 +81,7 @@ class DestroyTheMonument : JavaPlugin() {
     eventManager.registerListener(GameStartListener)
     eventManager.registerListener(GameStopListener)
 
-    BukkitCommandMapAccessor.registerCommands(
-      BaseCommand
-    )
+    CommandManager.registerBuiltItCommands()
   }
 
   override fun onDisable() {

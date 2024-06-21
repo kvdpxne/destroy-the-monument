@@ -10,7 +10,7 @@ interface Communicative {
   /**
    * Forces one or more messages to be sent to the performer.
    */
-  fun sendMessages(messages: Array<out String>)
+  fun sendMessages(vararg messages: String)
 
   /**
    * Sends a message to the performer if possible.

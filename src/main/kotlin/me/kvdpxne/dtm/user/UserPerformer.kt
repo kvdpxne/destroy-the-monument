@@ -8,7 +8,7 @@ import me.kvdpxne.dtm.command.Performer
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
-class UserPerformer(
+open class UserPerformer(
   val identifier: UUID,
   override val name: String,
   val user: User

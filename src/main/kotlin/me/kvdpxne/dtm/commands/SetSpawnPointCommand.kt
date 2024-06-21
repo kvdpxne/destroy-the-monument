@@ -1,18 +1,19 @@
-package me.kvdpxne.dtm.command.restricted
+package me.kvdpxne.dtm.commands
 
-import me.kvdpxne.dtm.command.Executor
-import me.kvdpxne.dtm.command.Parameter
+import me.kvdpxne.dtm.command.Command
+import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.game.ArenaManager
 import me.kvdpxne.dtm.game.DefaultTeamColor
 import me.kvdpxne.dtm.user.UserPerformer
 
-object SetSpawnPointCommand : Executor<UserPerformer> {
-
-  // Usage: /dtm SetSpawnPoint <ARENA_NAME> <TEAM_IDENTITY>
-  override fun execute(performer: UserPerformer, parameter: Parameter) {
+// Usage: /dtm SetSpawnPoint <ARENA_NAME> <TEAM_IDENTITY>
+fun createSetSpawnPointCommand(): Command = CommandBuilder()
+  .name("setSpawnPoint")
+  .parent("dtm")
+  .handler<UserPerformer> { performer, parameter ->
     if (2 > parameter.length()) {
       performer.sendMessage("Usage: /dtm SetSpawnPoint <ARENA_NAME> <TEAM_IDENTITY>")
-      return
+      return@handler
     }
 
     val arenaName = parameter.asText()
@@ -20,7 +21,7 @@ object SetSpawnPointCommand : Executor<UserPerformer> {
 
     if (null == arena) {
       performer.sendMessage("An arena named $arenaName does not exist.")
-      return
+      return@handler
     }
 
     val teamName = parameter.asText(1)
@@ -28,12 +29,12 @@ object SetSpawnPointCommand : Executor<UserPerformer> {
 
     if (null == team) {
       performer.sendMessage("An team named $teamName does not exist.")
-      return
+      return@handler
     }
 
-    val player = performer.getPlayer() ?: return
+    val player = performer.getPlayer() ?: return@handler
     arena.setSpawnPoint(team, player.location)
 
     player.sendMessage("Success")
   }
-}
+  .build()

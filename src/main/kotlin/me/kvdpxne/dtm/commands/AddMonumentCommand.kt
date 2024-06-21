@@ -1,19 +1,21 @@
-package me.kvdpxne.dtm.command.restricted
+package me.kvdpxne.dtm.commands
 
-import me.kvdpxne.dtm.command.Executor
-import me.kvdpxne.dtm.command.Parameter
+import me.kvdpxne.dtm.command.Command
+import me.kvdpxne.dtm.command.CommandBuilder
+import me.kvdpxne.dtm.command.CommandHandler
 import me.kvdpxne.dtm.game.ArenaManager
 import me.kvdpxne.dtm.game.DefaultTeamColor
 import me.kvdpxne.dtm.shared.SelectedPositionStorage
 import me.kvdpxne.dtm.user.UserPerformer
 
-object AddMonumentCommand : Executor<UserPerformer> {
-
-  // Usage: /dtm AddMonument <ARENA_NAME> <TEAM_IDENTITY>
-  override fun execute(performer: UserPerformer, parameter: Parameter) {
+// Usage: /dtm AddMonument <ARENA_NAME> <TEAM_IDENTITY>
+fun createAddMonumentCommand(): Command = CommandBuilder()
+  .name("addMonument")
+  .parent("dtm")
+  .handler<UserPerformer> { performer, parameter ->
     if (2 > parameter.length()) {
       performer.sendMessage("Usage: /dtm AddMonument <ARENA_NAME> <TEAM_IDENTITY>")
-      return
+      return@handler
     }
 
     val arenaName = parameter.asText()
@@ -21,7 +23,7 @@ object AddMonumentCommand : Executor<UserPerformer> {
 
     if (null == arena) {
       performer.sendMessage("An arena named $arenaName does not exist.")
-      return
+      return@handler
     }
 
     val teamName = parameter.asText(1)
@@ -29,18 +31,18 @@ object AddMonumentCommand : Executor<UserPerformer> {
 
     if (null == team) {
       performer.sendMessage("An team named $teamName does not exist.")
-      return
+      return@handler
     }
 
-    val player = performer.getPlayer() ?: return
+    val player = performer.getPlayer() ?: return@handler
     val position = SelectedPositionStorage.selectedBlocks[player.uniqueId]
 
     if (null == position) {
       performer.sendMessage("No block is selected.")
-      return
+      return@handler
     }
 
     arena.addMonument(team, position)
     player.sendMessage("Success")
   }
-}
+  .build()

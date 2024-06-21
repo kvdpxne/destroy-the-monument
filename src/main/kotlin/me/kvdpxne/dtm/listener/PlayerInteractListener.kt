@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.listener
 
-import me.kvdpxne.dtm.command.restricted.wand
+import me.kvdpxne.dtm.commands.wand
 import me.kvdpxne.dtm.shared.SelectedPositionStorage
 import org.bukkit.Material
 import org.bukkit.event.EventHandler

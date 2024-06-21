@@ -24,18 +24,28 @@ object BukkitCommandMapAccessor {
     return commandMap
   }
 
-  fun registerCommands(vararg commands: Command) {
+  fun registerCommands(commands: Array<out Command>) {
     val commandMap = getCommandMap()
+
     commands.forEach {
+      // parent = minecraft command
+      if (it.parent != null) {
+        return@forEach
+      }
+
       commandMap.register(
-        "dtm", BukkitCommandHandler(
+        it.name,
+        BukkitCommandHandler(
           it.name,
           it.permission,
           it.description,
           it.usage,
-          it.aliases.toList()
+          it.aliases.toList(),
+          it.handler,
+          it.executionType
         )
       )
     }
+
   }
 }

@@ -1,20 +1,20 @@
-package me.kvdpxne.dtm.command.restricted
+package me.kvdpxne.dtm.commands
 
-import me.kvdpxne.dtm.command.Executor
-import me.kvdpxne.dtm.command.Parameter
+import me.kvdpxne.dtm.command.Command
+import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.data.ArenaDao
 import me.kvdpxne.dtm.game.ArenaManager
 import me.kvdpxne.dtm.game.ArenaMap
 import me.kvdpxne.dtm.shared.WorldLoaderHelper
 import me.kvdpxne.dtm.user.UserPerformer
 
-object SetArenaMapCommand : Executor<UserPerformer> {
-
-  // Usage: /dtm SetArenaMap <ARENA_NAME> <WORLD_NAME>
-  override fun execute(performer: UserPerformer, parameter: Parameter) {
+fun createSetArenaMapCommand(): Command = CommandBuilder()
+  .name("setArenaMap")
+  .parent("dtm")
+  .handler<UserPerformer> { performer, parameter ->
     if (2 > parameter.length()) {
       performer.sendMessage("Usage: /dtm SetArenaMap <ARENA_NAME> <WORLD_NAME>")
-      return
+      return@handler
     }
 
     val arenaName = parameter.asText()
@@ -22,7 +22,7 @@ object SetArenaMapCommand : Executor<UserPerformer> {
 
     if (null == arena) {
       performer.sendMessage("An game named $arenaName does not exist.")
-      return
+      return@handler
     }
 
     val name = parameter.asText(1)
@@ -30,7 +30,7 @@ object SetArenaMapCommand : Executor<UserPerformer> {
     WorldLoaderHelper.getWorld(name).let {
       if (null == it) {
         performer.sendMessage("World named \"$name\" does not exist.")
-        return
+        return@handler
       }
 
       arena.map = ArenaMap(it.uid, it.name)
@@ -38,4 +38,4 @@ object SetArenaMapCommand : Executor<UserPerformer> {
       performer.sendMessage("Success!")
     }
   }
-}
+  .build()

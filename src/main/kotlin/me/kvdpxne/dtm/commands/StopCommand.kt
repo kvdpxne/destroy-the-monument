@@ -1,13 +1,13 @@
-package me.kvdpxne.dtm.command.restricted
+package me.kvdpxne.dtm.commands
 
-import me.kvdpxne.dtm.command.Executor
-import me.kvdpxne.dtm.command.Parameter
+import me.kvdpxne.dtm.command.Command
+import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserPerformer
 
-object StopCommand : Executor<UserPerformer> {
+object StopCommand {
 
   private fun stopGame(game: Game?, user: User) {
     if (null == game) {
@@ -29,16 +29,20 @@ object StopCommand : Executor<UserPerformer> {
     user.sendMessage("The ${game.name} game has been stopped.")
   }
 
-  override fun execute(performer: UserPerformer, parameter: Parameter) {
-    if (parameter.isEmpty()) {
-      performer.user.run {
-        stopGame(GameManager.findByUser(this), this)
+  fun createStopCommand(): Command = CommandBuilder()
+    .name("stop")
+    .parent("dtm")
+    .handler<UserPerformer> { performer, parameter ->
+      if (parameter.isEmpty()) {
+        performer.user.run {
+          stopGame(GameManager.findByUser(this), this)
+        }
+        return@handler
       }
-      return
-    }
 
-    performer.user.run {
-      stopGame(GameManager.findByName(parameter.asText()), this)
+      performer.user.run {
+        stopGame(GameManager.findByName(parameter.asText()), this)
+      }
     }
-  }
+    .build()
 }

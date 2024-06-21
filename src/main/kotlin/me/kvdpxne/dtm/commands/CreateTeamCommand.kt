@@ -1,21 +1,21 @@
-package me.kvdpxne.dtm.command.restricted
+package me.kvdpxne.dtm.commands
 
-import me.kvdpxne.dtm.command.Executor
-import me.kvdpxne.dtm.command.Parameter
+import me.kvdpxne.dtm.command.Command
+import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.data.TeamDao
 import me.kvdpxne.dtm.game.DefaultTeamColor
 import me.kvdpxne.dtm.user.UserPerformer
 
-object CreateTeamCommand : Executor<UserPerformer> {
-
-  // Usage: /dtm CreateTeam <TEAM_NAME>
-  override fun execute(performer: UserPerformer, parameter: Parameter) {
+fun createCreateTeamCommand(): Command = CommandBuilder()
+  .name("createTeam")
+  .parent("dtm")
+  .handler<UserPerformer> { performer, parameter ->
     if (parameter.isEmpty()) {
       performer.sendMessage("Usage: /dtm CreateTeam <TEAM_NAME>")
-      return
+      return@handler
     }
     val name = parameter.asText()
     TeamDao.insert(DefaultTeamColor.findByIdentityKey(name)!!)
     performer.sendMessage(name)
   }
-}
+  .build()

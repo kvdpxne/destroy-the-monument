@@ -294,8 +294,8 @@ class Game(val identifier: UUID, var name: String) : Communicative {
     hostages.forEach { (_, user) -> user.sendMessage(message) }
   }
 
-  override fun sendMessages(messages: Array<out String>) {
-    hostages.forEach { (_, user) -> user.sendMessages(messages) }
+  override fun sendMessages(vararg messages: String) {
+    hostages.forEach { (_, user) -> user.sendMessages(*messages) }
   }
 
   override fun sendMessages(messages: () -> Array<out String>) {
