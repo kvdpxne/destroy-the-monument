@@ -1,9 +1,9 @@
 package me.kvdpxne.dtm.gui
 
+import me.kvdpxne.dtm.PluginContext
 import me.kvdpxne.dtm.game.DefaultTeamColor
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
-import me.kvdpxne.dtm.game.Team
 import me.kvdpxne.dtm.profession.ProfessionManager
 import me.kvdpxne.dtm.user.User
 import org.bukkit.ChatColor
@@ -28,6 +28,8 @@ fun createTeamSelectionGui(game: Game, user: User) = Gui("Wybór drużyny", Rows
     with(it.whoClicked as Player) {
       closeInventory()
       sendMessage("You have been added to the red team.")
+
+      game.sendMessage("&7> &f$displayName&7 joined the &l&cRED&7 team.")
     }
   }
 
@@ -65,6 +67,8 @@ fun createTeamSelectionGui(game: Game, user: User) = Gui("Wybór drużyny", Rows
     with(it.whoClicked as Player) {
       closeInventory()
       sendMessage("You have been added to the blue team.")
+
+      game.sendMessage("&7> &f$displayName&7 joined the &l&9RED&7 team.")
     }
   }
 }
@@ -94,13 +98,28 @@ fun createGameSelectionGui(user: User) = GameManager.games.let {
 fun createProfessionSelectionGui(user: User) = Gui("Wybór klasy", Rows.TWO).apply {
   val item = ItemStack(Material.STAINED_CLAY)
   ProfessionManager.forEachIndexed { index, profession ->
+
     if (user.profession == profession) {
+      val meta = item.itemMeta
+      meta.displayName = PluginContext.textFormatter.format("&a&lWYBRANO")
+      item.itemMeta = meta
       item.durability = 5
     } else {
+      val meta = item.itemMeta
+      meta.displayName = " "
+      item.itemMeta = meta
       item.durability = 4
     }
+
     setItem(index, item)
-    setItem(9 + index, profession.icon) { event ->
+
+    val professionItemIcon = profession.icon
+    val meta = professionItemIcon.itemMeta
+
+    meta.displayName = PluginContext.textFormatter.format("&7${profession.displayName}")
+    professionItemIcon.itemMeta = meta
+
+    setItem(9 + index, professionItemIcon) { event ->
       user.profession = profession
 
       with(event.whoClicked as Player) {
