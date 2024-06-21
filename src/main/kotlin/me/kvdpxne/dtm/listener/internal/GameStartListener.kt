@@ -3,6 +3,8 @@ package me.kvdpxne.dtm.listener.internal
 import me.kvdpxne.dtm.game.DefaultTeamColor
 import me.kvdpxne.dtm.game.GameStartEvent
 import me.kvdpxne.dtm.game.toLocation
+import me.kvdpxne.dtm.scoreboard.createServerScoreboard
+import me.kvdpxne.dtm.scoreboard.createServerTeam
 import me.kvdpxne.dtm.user.UserPerformer
 import me.kvdpxne.thrivi.EventHandler
 import me.kvdpxne.thrivi.Listenable
@@ -14,7 +16,18 @@ object GameStartListener : Listenable {
   fun handleGameStart(event: GameStartEvent) {
     val game = event.game
     val arena = game.currentArena!!
+
+    //
+    val bukkitTeamScoreboard = createServerScoreboard()
+
     game.teams.forEach { team ->
+
+      val bukkitTeam = createServerTeam(
+        bukkitTeamScoreboard,
+        team.identity.key,
+        DefaultTeamColor.findByIdentity(team.identity)!!.chatColor
+      )
+
       val location = arena.spawnPoints[team.identity]?.let {
         val world = arena.map?.world ?: return@forEach
         it.toLocation(world)
@@ -27,6 +40,10 @@ object GameStartListener : Listenable {
         val performer = teammate.user.performer as UserPerformer
         performer.getPlayer()!!.run {
           this.teleport(location)
+
+          scoreboard = bukkitTeamScoreboard
+          bukkitTeam.addPlayer(this)
+
           this.inventory.also {
             it.clear()
             it.armorContents = arrayOfNulls(it.armorContents.size)

@@ -22,6 +22,7 @@ object GameStopListener : Listenable {
           this.activePotionEffects.forEach {
             removePotionEffect(it.type)
           }
+          this.scoreboard.getPlayerTeam(this).removePlayer(this)
           this.resetMaxHealth()
           this.setHealth(20.0)
           this.fireTicks = 0
