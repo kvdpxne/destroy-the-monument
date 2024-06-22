@@ -23,7 +23,7 @@ enum class DefaultTeamColor(
   RED(
     UUID.fromString("7a34aa4a-4979-4a46-9b7c-1ec2530e239d"),
     "red",
-    ChatColor.DARK_RED,
+    ChatColor.RED,
     DyeColor.RED
   );
 

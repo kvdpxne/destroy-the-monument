@@ -35,7 +35,8 @@ object ProfessionManager : Iterable<Profession> {
       knight(),
       medic(),
       pyro(),
-      scout()
+      scout(),
+      defender()
     ).forEach { addProfession(it) }
   }
 

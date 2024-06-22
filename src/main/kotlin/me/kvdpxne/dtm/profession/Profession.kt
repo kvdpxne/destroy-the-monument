@@ -2,7 +2,9 @@ package me.kvdpxne.dtm.profession
 
 import java.util.UUID
 import me.kvdpxne.dtm.gui.SlotItem
+import me.kvdpxne.dtm.shared.toBuilder
 import org.bukkit.DyeColor
+import org.bukkit.entity.Damageable
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.LeatherArmorMeta
@@ -25,13 +27,15 @@ class Profession(
 
   fun equip(player: Player, dyeColor: DyeColor) {
     items.forEach {
-      val item = it.item
-      val meta = item.itemMeta
-      if (meta is LeatherArmorMeta) {
-        meta.color = dyeColor.color
-        item.itemMeta = meta
-      }
-      player.inventory.setItem(it.index, item)
+      player.inventory.setItem(
+        it.index,
+        it.item.toBuilder()
+          // TODO NBT problem
+          // if item already has NBT defined and its itemMeta is edited NBT is lost
+          .leather(dyeColor.color)
+          .unbreakable()
+          .build()
+      )
     }
   }
 
