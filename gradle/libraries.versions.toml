@@ -1,6 +1,19 @@
 [versions]
-kotlin = "1.9.0"
+# Plugins
+kotlin = "1.9.24"
 shadow = "8.1.1"
+
+# Dependencites
+kotlin-logging = "7.0.0"
+ktorm = "4.0.0"
+sqlite = "3.46.0.0"
+thrivi = "13199ef603"
+
+[libraries]
+kotlin-logging = { group = "io.github.oshai", name = "kotlin-logging-jvm", version.ref = "kotlin-logging" }
+ktorm = { group = "org.ktorm", name = "ktorm-support-sqlite", version.ref = "ktorm" }
+sqlite = { group = "org.xerial", name = "sqlite-jdbc", version.ref = "sqlite" }
+thrivi = { group = "com.github.kvdpxne", name = "thrivi", version.ref = "thrivi" }
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

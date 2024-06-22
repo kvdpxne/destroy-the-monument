@@ -16,27 +16,18 @@ val targetJavaVersion = 8
 // Filename with the extension.
 val fileName = "craftbukkit-1.7.10.jar"
 
-repositories {
-  mavenCentral()
-  mavenLocal()
-
-  maven("https://jitpack.io")
-}
-
 dependencies {
   compileOnly(files("libraries/$fileName"))
 
-  implementation("org.xerial:sqlite-jdbc:3.42.0.0")
+  implementation(libraries.kotlin.logging)
 
-  implementation("org.ktorm:ktorm-support-sqlite:3.6.0")
+  implementation(libraries.sqlite)
+  implementation(libraries.ktorm)
 
-  implementation("io.github.oshai:kotlin-logging-jvm:5.0.1")
+  implementation(libraries.thrivi)
+
   implementation("org.slf4j:slf4j-api:2.0.7")
   implementation("org.slf4j:slf4j-simple:2.0.7")
-
-  // TODO not safe
-  implementation("com.github.kvdpxne:thrivi:13199ef603")
-
 
   testImplementation(kotlin("test"))
 }
