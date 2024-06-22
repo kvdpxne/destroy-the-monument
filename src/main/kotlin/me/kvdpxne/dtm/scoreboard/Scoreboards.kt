@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.scoreboard
 
-import me.kvdpxne.dtm.PluginContext
+import me.kvdpxne.dtm.colorize
 import me.kvdpxne.dtm.shared.BukkitScoreboard
 import me.kvdpxne.dtm.shared.BukkitTeam
 import org.bukkit.Bukkit
@@ -15,7 +15,7 @@ fun createServerTeam(scoreboard: BukkitScoreboard, name: String, color: ChatColo
 
   team.setAllowFriendlyFire(false)
   team.setCanSeeFriendlyInvisibles(true)
-  team.prefix = PluginContext.textFormatter.format("$color&l${name.uppercase()}&f")
+  team.prefix = "$color&l${name.uppercase()} &r".colorize()
 
   return team
 }
