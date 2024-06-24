@@ -10,12 +10,14 @@ enum class DefaultTeamColor(
   override val identifier: UUID,
   override val key: String,
   val chatColor: ChatColor,
+  val professionColor: ChatColor,
   val dyeColor: DyeColor
 ) : Identity {
 
   BLUE(
     UUID.fromString("0e97e38e-2123-4e17-bfe1-33031b35e08c"),
     "blue",
+    ChatColor.AQUA,
     ChatColor.BLUE,
     DyeColor.BLUE
   ),
@@ -24,6 +26,7 @@ enum class DefaultTeamColor(
     UUID.fromString("7a34aa4a-4979-4a46-9b7c-1ec2530e239d"),
     "red",
     ChatColor.RED,
+    ChatColor.DARK_RED,
     DyeColor.RED
   );
 
