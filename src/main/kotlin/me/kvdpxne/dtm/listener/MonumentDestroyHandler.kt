@@ -4,6 +4,7 @@ import me.kvdpxne.dtm.game.DefaultTeamColor
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.findMonument
 import me.kvdpxne.dtm.user.UserManager
+import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
@@ -44,6 +45,9 @@ object MonumentDestroyHandler : Listener {
       user.sendMessage("&7You cannot destroy your team's monument!")
       return
     }
+
+    event.isCancelled = true
+    event.block.type = Material.AIR
 
     monument.destroy(arena)
 
