@@ -4,14 +4,20 @@ import io.github.oshai.kotlinlogging.KLogger
 import io.github.oshai.kotlinlogging.KotlinLogging
 import java.time.Instant
 import java.util.UUID
+import me.kvdpxne.dtm.DestroyTheMonument
 import me.kvdpxne.dtm.command.Communicative
 import me.kvdpxne.dtm.data.GameArenasDao
 import me.kvdpxne.dtm.data.GameTeamsDao
 import me.kvdpxne.dtm.eventManager
 import me.kvdpxne.dtm.shared.Identity
 import me.kvdpxne.dtm.shared.debug
+import me.kvdpxne.dtm.tasks.GameStartTaskTimer
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserPerformer
+import org.bukkit.Bukkit
+import org.bukkit.plugin.java.JavaPlugin
+
+val MIN_HOSTAGE_SIZE_ = 2
 
 private val logger: KLogger = KotlinLogging.logger { }
 
@@ -176,20 +182,34 @@ class Game(val identifier: UUID, var name: String) : Communicative {
       it.removeTeammate(teammate)
     }
 
-    //
-    //
-    return team.addTeammate(teammate).also {
-      if (!it) {
-        return@also
-      }
-      logger.debug {
-        "A new $teammate teammate has been added to the $team team in the " +
-          "$this game."
-      }
-      // If the user has successfully joined the team, the number of users
-      // (spectators) who are currently not playing should decrease.
-      --spectators
+    if (team.addTeammate(teammate).not()) {
+      return false
     }
+
+    logger.debug {
+      "A new $teammate teammate has been added to the $team team in the " +
+        "$this game."
+    }
+
+    // If the user has successfully joined the team, the number of users
+    // (spectators) who are currently not playing should decrease.
+    --spectators
+
+    if (this.playersInGame() >= MIN_HOSTAGE_SIZE_ && state.isInitialized()) {
+      state = GameState.STARTING
+
+      // TODO task
+      GameStartTaskTimer(this).runTaskTimerAsynchronously(
+        JavaPlugin.getPlugin(DestroyTheMonument::class.java),
+        10L,
+        20L
+      )
+    }
+    return true
+  }
+
+  fun playersInGame(): Int {
+    return this.hostages.size - this.spectators
   }
 
   fun addArena(arena: Arena) {
@@ -254,7 +274,7 @@ class Game(val identifier: UUID, var name: String) : Communicative {
   }
 
   fun start() {
-    state = GameState.STARTING
+    state = GameState.STARTED
     start = Instant.now()
 
     val arena = arenas.random()
@@ -264,8 +284,6 @@ class Game(val identifier: UUID, var name: String) : Communicative {
     //
     val event = GameStartEvent(this)
     eventManager.callEvent(event)
-
-    state = GameState.STARTED
   }
 
   fun stop() {
@@ -284,6 +302,9 @@ class Game(val identifier: UUID, var name: String) : Communicative {
 
     end = Instant.now()
     state = GameState.STOPPED
+
+    // Reinitializing
+    state = GameState.INITIALIZED
   }
 
   override fun sendMessage(message: String) {

@@ -26,5 +26,11 @@ enum class GameState {
   /**
    * The game has stopped or ended.
    */
-  STOPPED
+  STOPPED;
+
+  fun isInitialized() = this == INITIALIZED
+  fun isStarting() = this == STARTING
+  fun isStarted() = this == STARTED
+  fun isStopped() = this == STOPPING
+  fun isStopping() = this == STOPPED
 }
