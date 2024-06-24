@@ -227,7 +227,7 @@ class Game(val identifier: UUID, var name: String) : Communicative {
       removeTeammate(user)
       // If a player does not belong to any team during his tenure in this game
       // then he has never stopped being a spectator.
-      --spectators
+      ++spectators
     }
     hostages -= identifier
     logger.debug {
