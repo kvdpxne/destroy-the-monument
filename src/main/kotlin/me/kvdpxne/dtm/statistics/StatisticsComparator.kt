@@ -30,16 +30,20 @@ object StatisticsComparator {
    * @throws IllegalArgumentException if the provided `type` is not supported.
    * @since 0.1.0
    */
-  fun compare(type: Int) = Comparator { a: Statistics, b: Statistics ->
-    when (type) {
-      0 -> b.kills - a.kills
-      1 -> b.deaths - a.deaths
-      2 -> b.assists - a.assists
-      3 -> b.playedGames - a.playedGames
-      4 -> b.gamesWon - a.gamesWon
-      5 -> b.gamesLost - a.gamesLost
-      6 -> b.destroyedMonuments - a.destroyedMonuments
-      else -> throw IllegalArgumentException("Unknown type $type")
+  fun compare(
+    type: Int = StatisticsCriteria.BY_KILLS
+  ): Comparator<Statistics> {
+    return Comparator { a: Statistics, b: Statistics ->
+      when (type) {
+        0 -> b.kills - a.kills
+        1 -> b.deaths - a.deaths
+        2 -> b.assists - a.assists
+        3 -> b.playedGames - a.playedGames
+        4 -> b.gamesWon - a.gamesWon
+        5 -> b.gamesLost - a.gamesLost
+        6 -> b.destroyedMonuments - a.destroyedMonuments
+        else -> throw IllegalArgumentException("Unknown type $type")
+      }
     }
   }
 }
