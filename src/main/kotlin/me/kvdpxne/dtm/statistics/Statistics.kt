@@ -1,9 +1,15 @@
 package me.kvdpxne.dtm.statistics
 
 class Statistics(
-  var kills: Int,
-  var assists: Int,
-  var deaths: Int
+  // @formatter:off
+  var kills             : Int = 0,
+  var assists           : Int = 0,
+  var deaths            : Int = 0,
+  var playedGames       : Int = 0,
+  var gamesWon          : Int = 0,
+  var gamesLost         : Int = 0,
+  var destroyedMonuments: Int = 0
+  // @formatter:on
 ) {
 
   companion object {
