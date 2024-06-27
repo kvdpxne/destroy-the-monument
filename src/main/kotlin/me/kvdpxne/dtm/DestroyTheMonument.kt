@@ -8,6 +8,7 @@ import me.kvdpxne.dtm.listener.EntityDamageListener
 import me.kvdpxne.dtm.listener.MonumentDestroyHandler
 import me.kvdpxne.dtm.listener.PlayerDeathListener
 import me.kvdpxne.dtm.listener.PlayerDropItemListener
+import me.kvdpxne.dtm.listener.PlayerFoodLevelChangeListener
 import me.kvdpxne.dtm.listener.PlayerInteractListener
 import me.kvdpxne.dtm.listener.PlayerItemConsumeListener
 import me.kvdpxne.dtm.listener.PlayerJoinListener
@@ -72,6 +73,7 @@ class DestroyTheMonument : JavaPlugin() {
       MonumentDestroyHandler,
       PlayerDeathListener,
       PlayerDropItemListener,
+      PlayerFoodLevelChangeListener,
       PlayerInteractListener,
       PlayerItemConsumeListener,
       PlayerJoinListener,
