@@ -44,6 +44,7 @@ class CommandBuilder {
 
     return Command(
       name = this.name!!,
+      aliases = this.aliases,
       handler = this.handler!!
     )
   }
