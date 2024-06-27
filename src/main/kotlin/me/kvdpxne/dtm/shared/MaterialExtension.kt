@@ -6,3 +6,11 @@ import org.bukkit.inventory.ItemStack
 fun Material.asItem(): ItemStack {
   return ItemStack(this)
 }
+
+fun Material.toBuilder(): ItemBuilder {
+  return ItemBuilder().item(this)
+}
+
+fun ItemStack.toBuilder(): ItemBuilder {
+  return ItemBuilder().item(this)
+}
