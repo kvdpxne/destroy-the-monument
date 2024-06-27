@@ -16,9 +16,6 @@ object PlayerDropItemListener : Listener {
     }
 
     val player = event.player
-    if (player.isSneaking.not()) {
-      return
-    }
 
     val user = UserManager.findByIdentifier(player.uniqueId) ?: return
     val game = GameManager.findByUser(user) ?: return
@@ -28,6 +25,11 @@ object PlayerDropItemListener : Listener {
     }
 
     event.isCancelled = true
+
+    if (player.isSneaking.not()) {
+      return
+    }
+
     createProfessionSelectionGui(user).open(player)
   }
 }
