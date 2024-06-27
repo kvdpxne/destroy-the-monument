@@ -5,6 +5,7 @@ import me.kvdpxne.dtm.game.DefaultTeamColor
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.Team
 import me.kvdpxne.dtm.game.findMonument
+import me.kvdpxne.dtm.shared.hardClean
 import me.kvdpxne.dtm.shared.toBuilder
 import me.kvdpxne.dtm.tasks.GameStopTaskTimer
 import me.kvdpxne.dtm.user.UserManager
@@ -30,15 +31,16 @@ object MonumentDestroyHandler : Listener {
     team.teammates.forEach { teammate ->
       val player = (teammate.user.performer as UserPerformer).getPlayer()!!
 
+      player.hardClean()
+
       player.inventory.also { inventory ->
-        inventory.clear()
-        inventory.armorContents = arrayOfNulls(inventory.armorContents.size)
         repeat(36) { i ->
           inventory.setItem(i, item)
         }
       }
-      player.openInventory(player.inventory)
+
       player.allowFlight = true
+      player.isFlying = true
     }
   }
 
