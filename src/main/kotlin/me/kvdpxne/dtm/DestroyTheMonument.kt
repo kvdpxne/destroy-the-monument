@@ -9,6 +9,7 @@ import me.kvdpxne.dtm.listener.MonumentDestroyHandler
 import me.kvdpxne.dtm.listener.PlayerDeathListener
 import me.kvdpxne.dtm.listener.PlayerDropItemListener
 import me.kvdpxne.dtm.listener.PlayerInteractListener
+import me.kvdpxne.dtm.listener.PlayerItemConsumeListener
 import me.kvdpxne.dtm.listener.PlayerJoinListener
 import me.kvdpxne.dtm.listener.PlayerQuitListener
 import me.kvdpxne.dtm.listener.PlayerRespawnListener
@@ -72,6 +73,7 @@ class DestroyTheMonument : JavaPlugin() {
       PlayerDeathListener,
       PlayerDropItemListener,
       PlayerInteractListener,
+      PlayerItemConsumeListener,
       PlayerJoinListener,
       PlayerQuitListener,
       PlayerRespawnListener(this),
