@@ -45,6 +45,8 @@ object PlayerDeathListener : Listener {
 
     val murder = victim.killer
     if (null == murder) {
+      victimUser.statistics.addDeaths()
+
       // VICTIM_KIT_NAME VICTIM_USER_NAME ACTION
       // Zwiadowca       currant          zginął
       event.deathMessage = "${this.formatTeammate(victimTeam, victimUser)} &6died".colorize()
@@ -53,6 +55,9 @@ object PlayerDeathListener : Listener {
 
     val murderUser = UserManager.findByIdentifier(murder.uniqueId)!!
     val murderTeam = game.findTeam(murderUser)!!
+
+    murderUser.statistics.addKills()
+    victimUser.statistics.addDeaths()
 
     // MURDER_KIT_NAME MURDER_USER_NAME ACTION VICTIM_KIT_NAME VICTIM_USER_NAME
     // Zwiadowca       currant          -->    Łucznik         strawberry

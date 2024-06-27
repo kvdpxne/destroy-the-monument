@@ -59,7 +59,7 @@ object UserManager {
     require(name.isNotBlank()) {
       "name can not be blank."
     }
-    val user = User(identifier, name, Statistics.empty())
+    val user = User(identifier, name)
     addUser(user)
     return user
   }
