@@ -1,10 +1,12 @@
 package me.kvdpxne.dtm.listener.internal
 
 import me.kvdpxne.dtm.game.GameStopEvent
+import me.kvdpxne.dtm.shared.hardClean
 import me.kvdpxne.dtm.user.UserPerformer
 import me.kvdpxne.thrivi.EventHandler
 import me.kvdpxne.thrivi.Listenable
 import me.kvdpxne.thrivi.StandardEventPriorities
+import org.bukkit.Bukkit
 
 object GameStopListener : Listenable {
 
@@ -19,18 +21,9 @@ object GameStopListener : Listenable {
         val performer = teammate.user.performer as UserPerformer
 
         performer.getPlayer()!!.run {
-          this.inventory.also {
-            it.clear()
-            it.armorContents = arrayOfNulls(it.armorContents.size)
-          }
-          this.activePotionEffects.forEach {
-            removePotionEffect(it.type)
-          }
           this.scoreboard.getPlayerTeam(this).removePlayer(this)
-          this.resetMaxHealth()
-          this.setHealth(20.0)
-          this.foodLevel = 20
-          this.fireTicks = 0
+          this.scoreboard = Bukkit.getScoreboardManager().mainScoreboard
+          this.hardClean()
         }
       }
     }

@@ -5,6 +5,7 @@ import me.kvdpxne.dtm.game.GameStartEvent
 import me.kvdpxne.dtm.game.toLocation
 import me.kvdpxne.dtm.scoreboard.createServerScoreboard
 import me.kvdpxne.dtm.scoreboard.createServerTeam
+import me.kvdpxne.dtm.shared.hardClean
 import me.kvdpxne.dtm.user.UserPerformer
 import me.kvdpxne.thrivi.EventHandler
 import me.kvdpxne.thrivi.Listenable
@@ -41,22 +42,15 @@ object GameStartListener : Listenable {
           profession = teammate.user.profession
         }
         val performer = teammate.user.performer as UserPerformer
+
         performer.getPlayer()!!.run {
           this.teleport(location)
 
           scoreboard = bukkitTeamScoreboard
           bukkitTeam.addPlayer(this)
 
-          this.inventory.also {
-            it.clear()
-            it.armorContents = arrayOfNulls(it.armorContents.size)
-          }
-          this.activePotionEffects.forEach {
-            removePotionEffect(it.type)
-          }
-          this.resetMaxHealth()
-          this.setHealth(20.0)
-          this.fireTicks = 0
+         this.hardClean()
+
           profession.equip(this, (teammate.teamColor as DefaultTeamColor).dyeColor)
           profession.addEffect(this)
         }
