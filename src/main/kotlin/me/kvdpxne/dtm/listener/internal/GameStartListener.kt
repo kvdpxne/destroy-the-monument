@@ -28,10 +28,13 @@ object GameStartListener : Listenable {
         DefaultTeamColor.findByIdentity(team.identity)!!.chatColor
       )
 
+      team.health = arena.monuments[team.identity]?.size!!
+
       val location = arena.spawnPoints[team.identity]?.let {
         val world = arena.map?.world ?: return@forEach
         it.toLocation(world)
       }
+
       team.teammates.forEach { teammate ->
         var profession = teammate.profession
         if (null == profession) {

@@ -14,6 +14,8 @@ class Team(val identity: Identity, var game: Game? = null) {
    */
   val teammates: MutableCollection<Teammate> = mutableSetOf()
 
+  var health: Int = 0
+
   /**
    *
    */

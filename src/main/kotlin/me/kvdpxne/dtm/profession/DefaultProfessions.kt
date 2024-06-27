@@ -259,9 +259,86 @@ fun defender() = Profession(
     slotItem(TOOL_PICKAXE, index = 3),
 
     slotItem(Material.POTION, 2, 7),
-    slotItem(Material.WOOD, 10, 8),
+    slotItem(Material.WOOD, 20, 8),
     slotItem(Material.ARROW, 1, 17)
   ),
-  Material.IRON_SWORD.asItem(),
+  Material.IRON_SWORD.toBuilder()
+    .enchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
+    .build(),
   PotionEffect(PotionEffectType.SLOW, Int.MAX_VALUE, 0)
+)
+
+fun assassin() = Profession(
+  "assassin",
+  "Asasyn",
+  mutableListOf(
+    // Armor
+    slotHelmet(Material.LEATHER_HELMET),
+    slotChestplate(Material.LEATHER_CHESTPLATE),
+    slotLeggings(Material.LEATHER_LEGGINGS),
+    slotBoots(Material.LEATHER_BOOTS),
+
+    // Weapons
+    slotItem({
+      Material.WOOD_SWORD.toBuilder()
+        .enchantment(Enchantment.DAMAGE_ALL, 2)
+        .unbreakable()
+        .build()
+    }, index = 0),
+    slotItem({
+      Material.STICK.toBuilder()
+        .lore(
+          "&7Hitting an opponent in the back",
+          "&7deals &c&lHUGE &7damage."
+        )
+        .enchantment(Enchantment.DAMAGE_ALL, 1)
+        .unbreakable()
+        .build()
+    }, index = 1),
+
+    // Tools
+    slotItem(TOOL_AXE, index = 2),
+    slotItem(TOOL_PICKAXE, index = 3),
+
+    slotItem(Material.POTION, 2, 7),
+    slotItem(Material.WOOD, 10, 8),
+  ),
+  Material.STICK.toBuilder()
+    .enchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
+    .build()
+)
+
+fun specialist() = Profession(
+  "specialist",
+  "Specjalista",
+  mutableListOf(
+    // Armor
+    slotHelmet(Material.IRON_HELMET),
+    slotChestplate(Material.IRON_CHESTPLATE),
+    slotLeggings(Material.LEATHER_LEGGINGS),
+    slotBoots(Material.LEATHER_BOOTS),
+
+    // Weapons
+    slotItem({
+      Material.STONE_SWORD.toBuilder()
+        .enchantment(Enchantment.DAMAGE_ALL, 1)
+        .unbreakable()
+        .build()
+    }, index = 0),
+    slotItem({
+      Material.SLIME_BALL.toBuilder()
+        .lore("")
+        .build()
+    }, index = 1),
+
+    // Tools
+    slotItem(TOOL_AXE, index = 2),
+    slotItem(TOOL_PICKAXE, index = 3),
+
+    slotItem(Material.POTION, 2, 7),
+    slotItem(Material.COBBLESTONE, 40, 8),
+  ),
+  Material.STONE_SWORD.toBuilder()
+    .enchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
+    .build()
 )

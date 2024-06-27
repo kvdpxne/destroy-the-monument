@@ -27,17 +27,6 @@ data class Monument(
     return this.x == x && this.y == y && this.z == z
   }
 
-  fun destroy(arena: Arena) {
-    destroyed = true
-
-    val left = arena.leftMonuments
-    if (0 >= left) {
-      arena.leftMonuments = arena.monuments.size - 1
-    } else {
-      arena.leftMonuments = left - 1
-    }
-  }
-
   fun restore() {
     destroyed = false
   }

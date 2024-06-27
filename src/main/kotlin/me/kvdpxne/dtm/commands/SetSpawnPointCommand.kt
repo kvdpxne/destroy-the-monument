@@ -4,6 +4,7 @@ import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.game.ArenaManager
 import me.kvdpxne.dtm.game.DefaultTeamColor
+import me.kvdpxne.dtm.game.setSpawnPoint
 import me.kvdpxne.dtm.user.UserPerformer
 
 // Usage: /dtm SetSpawnPoint <ARENA_NAME> <TEAM_IDENTITY>

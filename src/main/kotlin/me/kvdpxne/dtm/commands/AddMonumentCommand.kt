@@ -5,6 +5,7 @@ import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.CommandHandler
 import me.kvdpxne.dtm.game.ArenaManager
 import me.kvdpxne.dtm.game.DefaultTeamColor
+import me.kvdpxne.dtm.game.addMonument
 import me.kvdpxne.dtm.shared.SelectedPositionStorage
 import me.kvdpxne.dtm.user.UserPerformer
 

@@ -31,12 +31,14 @@ object ProfessionManager : Iterable<Profession> {
   fun initializeBuiltInProfessions() {
     arrayOf(
       archer(),
-      engineer(),
       knight(),
+      engineer(),
+      scout(),
       medic(),
       pyro(),
-      scout(),
-      defender()
+      defender(),
+      assassin(),
+      specialist()
     ).forEach { addProfession(it) }
   }
 
