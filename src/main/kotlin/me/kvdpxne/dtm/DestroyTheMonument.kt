@@ -38,7 +38,7 @@ class DestroyTheMonument : JavaPlugin() {
     ArenaManager
     UserManager
 
-    ProfessionManager.initializeBuiltInProfessions()
+    ProfessionManager.addBuiltInProfessions()
   }
 
   private fun registerListener(vararg listeners: Listener) {

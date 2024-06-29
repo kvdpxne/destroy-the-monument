@@ -22,12 +22,14 @@ fun Player.hardClean() {
   this.exp = 0.0F
   this.totalExperience = 0
   this.level = 0
+//  this.maximumAir
+//  this.remainingAir
 
   // Damage
   this.lastDamageCause = null
-  this.maximumNoDamageTicks = 0
-  this.noDamageTicks = 0
-  this.fireTicks = 0
+  this.maximumNoDamageTicks = 20
+  this.noDamageTicks = 20
+  this.fireTicks = 0 // TODO maybe it should be 0
   this.fallDistance = 0.0F
 
   // Abilities
