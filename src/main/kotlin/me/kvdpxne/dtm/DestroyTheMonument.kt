@@ -12,6 +12,7 @@ import me.kvdpxne.dtm.listener.PlayerFoodLevelChangeListener
 import me.kvdpxne.dtm.listener.PlayerInteractListener
 import me.kvdpxne.dtm.listener.PlayerItemConsumeListener
 import me.kvdpxne.dtm.listener.PlayerJoinListener
+import me.kvdpxne.dtm.listener.PlayerPrepareItemEnchantListener
 import me.kvdpxne.dtm.listener.PlayerQuitListener
 import me.kvdpxne.dtm.listener.PlayerRespawnListener
 import me.kvdpxne.dtm.listener.WeatherChangeListener
@@ -77,6 +78,7 @@ class DestroyTheMonument : JavaPlugin() {
       PlayerInteractListener,
       PlayerItemConsumeListener,
       PlayerJoinListener,
+      PlayerPrepareItemEnchantListener,
       PlayerQuitListener,
       PlayerRespawnListener(this),
       WeatherChangeListener
