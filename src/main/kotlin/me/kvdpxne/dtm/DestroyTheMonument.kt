@@ -5,7 +5,7 @@ import me.kvdpxne.dtm.game.ArenaManager
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.gui.GuiActionHandler
 import me.kvdpxne.dtm.listener.EntityDamageListener
-import me.kvdpxne.dtm.listener.MonumentDestroyHandler
+import me.kvdpxne.dtm.listener.BlockBreakListener
 import me.kvdpxne.dtm.listener.PlayerDeathListener
 import me.kvdpxne.dtm.listener.PlayerDropItemListener
 import me.kvdpxne.dtm.listener.PlayerFoodLevelChangeListener
@@ -71,7 +71,7 @@ class DestroyTheMonument : JavaPlugin() {
 
       EntityDamageListener,
 
-      MonumentDestroyHandler,
+      BlockBreakListener,
       PlayerDeathListener,
       PlayerDropItemListener,
       PlayerFoodLevelChangeListener,

@@ -25,7 +25,7 @@ private val WON = Material.DIAMOND.toBuilder()
   .name("&a&lWYGRALES")
   .build()
 
-object MonumentDestroyHandler : Listener {
+object BlockBreakListener : Listener {
 
   private fun fs(team: Team, item: ItemStack) {
     team.teammates.forEach { teammate ->
