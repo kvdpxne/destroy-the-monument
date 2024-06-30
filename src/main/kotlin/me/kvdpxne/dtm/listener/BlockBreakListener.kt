@@ -6,6 +6,8 @@ import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.Team
 import me.kvdpxne.dtm.game.findMonument
 import me.kvdpxne.dtm.shared.hardClean
+import me.kvdpxne.dtm.shared.isMonument
+import me.kvdpxne.dtm.shared.isRich
 import me.kvdpxne.dtm.shared.toBuilder
 import me.kvdpxne.dtm.tasks.GameStopTaskTimer
 import me.kvdpxne.dtm.user.UserManager
@@ -44,14 +46,28 @@ object BlockBreakListener : Listener {
     }
   }
 
+  /**
+   * Cancels a block break event and replaces the broken block with air.
+   *
+   * @param event The `BlockBreakEvent` representing the block being broken.
+   */
+  private fun disappearBlock(event: BlockBreakEvent) {
+    event.isCancelled = true
+    event.block.type = Material.AIR
+  }
+
   @EventHandler
   fun handleBlockBreak(event: BlockBreakEvent) {
     if (event.isCancelled) {
       return
     }
 
-    //
-    if (event.block.type != Material.OBSIDIAN) {
+    val type = event.block.type
+
+    val isRich = type.isRich()
+    val isMonument = type.isMonument()
+
+    if (isRich.not() && isMonument.not()) {
       return
     }
 
@@ -61,16 +77,20 @@ object BlockBreakListener : Listener {
     // A game in which the user destroyed a monument
     val game = GameManager.findByUser(user) ?: return
 
-    // An arena in which the game is played
-    val arena = game.currentArena
+    // The team to which the user who destroyed the monument is assigned
+    val team = game.findTeam(user) ?: return
 
-    //
-    if (null == arena || game.state.isStarted().not()) {
+    // An arena in which the game is played
+    val arena = game.currentArena ?: return
+
+    if (game.state.isStarted().not() || game.isInArenaMap(user).not()) {
       return
     }
 
-    // The team to which the user who destroyed the monument is assigned
-    val team = game.findTeam(user) ?: return
+    if (isRich) {
+      this.disappearBlock(event)
+      return
+    }
 
     // A monument that was destroyed by the user
     val monument = arena.findMonument(event.block.location) ?: return
@@ -89,8 +109,7 @@ object BlockBreakListener : Listener {
       return
     }
 
-    event.isCancelled = true
-    event.block.type = Material.AIR
+    this.disappearBlock(event)
 
     // The team to which the destroyed monument belonged
     val attackedTeam = game.findTeam(monumentIdentity) ?: return
