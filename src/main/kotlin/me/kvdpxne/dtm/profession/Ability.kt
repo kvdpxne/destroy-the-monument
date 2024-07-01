@@ -1,11 +1,15 @@
 package me.kvdpxne.dtm.profession
 
 import me.kvdpxne.dtm.DestroyTheMonument
+import me.kvdpxne.dtm.shared.resetExpBar
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 
+typealias WhenAbilityReadyHandler = (Player) -> Unit
+
 class Ability(
-  val delay: Int
+  val delay: Int,
+  val whenReady: WhenAbilityReadyHandler,
 ) {
 
   var ready: Boolean = true
@@ -20,6 +24,7 @@ class Ability(
 
   fun run(player: Player) {
     this.ready = false
+    player.resetExpBar()
 
     this.taskIdentifier = AbilityCooldownTaskTimer(
       this,

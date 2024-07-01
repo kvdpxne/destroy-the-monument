@@ -61,8 +61,8 @@ object PlayerToggleFlightListener : Listener {
     event.isCancelled = true
 
     //
-//    player.isFlying = false
-//    player.allowFlight = false
+    player.isFlying = false
+    player.allowFlight = false
 
     //
     player.velocity = player.location.direction.multiply(0.995F).setY(1)

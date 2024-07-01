@@ -37,7 +37,15 @@ fun Player.hardClean() {
   this.isSneaking = false
   this.isSprinting = false
   this.isFlying = false
-  this.allowFlight = true // TODO testing
+  this.allowFlight = false
   this.flySpeed = 0.1F
   this.walkSpeed = 0.2F
+}
+
+fun Player.fillExpBar() {
+  this.exp = 1.0F
+}
+
+fun Player.resetExpBar() {
+  this.exp = 0.0F
 }

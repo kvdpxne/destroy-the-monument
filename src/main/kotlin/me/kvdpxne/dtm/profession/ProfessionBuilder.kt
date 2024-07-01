@@ -63,7 +63,10 @@ class ProfessionBuilder {
       items.toMutableList(),
       icon,
       effect,
-      Ability(60),
+      Ability(60) {
+        // TODO static scout ability
+        it.allowFlight = true
+      },
       identifier,
     )
   }

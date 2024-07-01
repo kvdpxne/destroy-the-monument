@@ -3,6 +3,7 @@ package me.kvdpxne.dtm.listener
 import me.kvdpxne.dtm.game.DefaultTeamColor
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.toLocation
+import me.kvdpxne.dtm.shared.fillExpBar
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -35,6 +36,11 @@ object PlayerRespawnListener : Listener {
       }
 
       this.current.equip(player, (teammate.teamColor as DefaultTeamColor).dyeColor)
+
+      this.current.ability?.let {
+        player.fillExpBar()
+        it.whenReady(player)
+      }
     }
   }
 }
