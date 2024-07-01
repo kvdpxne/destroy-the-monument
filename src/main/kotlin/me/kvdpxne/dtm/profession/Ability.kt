@@ -5,8 +5,6 @@ import me.kvdpxne.dtm.shared.resetExpBar
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 
-typealias WhenAbilityReadyHandler = (Player) -> Unit
-
 class Ability(
   val delay: Int,
   val whenReady: WhenAbilityReadyHandler,
