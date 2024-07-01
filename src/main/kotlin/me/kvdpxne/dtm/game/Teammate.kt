@@ -11,7 +11,7 @@ class Teammate(
 ) {
 
   // Currently selected profession.
-  var profession: Profession? = user.profession
+  var profession: Profession = user.profession
 
   //
   var nextProfession: Profession? = null

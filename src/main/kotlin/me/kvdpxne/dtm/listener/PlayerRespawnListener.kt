@@ -30,13 +30,13 @@ class PlayerRespawnListener(val plugin: JavaPlugin) : Listener {
     val teammate = team.findTeammate(user) ?: return
 
     if (null != teammate.nextProfession) {
-      teammate.profession = teammate.nextProfession
+      teammate.profession = teammate.nextProfession!!
       teammate.nextProfession = null
     }
 
-    teammate.profession?.equip(player, (teammate.teamColor as DefaultTeamColor).dyeColor)
+    teammate.profession.equip(player, (teammate.teamColor as DefaultTeamColor).dyeColor)
     Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, {
-      teammate.profession?.addEffect(player)
+      teammate.profession.addEffect(player)
     }, 20L)
   }
 }

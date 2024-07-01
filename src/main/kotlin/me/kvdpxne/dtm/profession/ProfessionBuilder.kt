@@ -10,13 +10,18 @@ import org.bukkit.potion.PotionEffectType
 class ProfessionBuilder {
 
   // @formatter:off
-  private lateinit var identifier : UUID
+  private          var identifier : UUID
   private lateinit var name       : String
   private lateinit var displayName: String
   private lateinit var items      : Array<out SlotItem>
   private lateinit var icon       : ItemStack
-  private lateinit var effect     : PotionEffect
+  private          var effect     : PotionEffect?
   // @formatter:on
+
+  init {
+    this.effect = null
+    this.identifier = UUID.randomUUID()
+  }
 
   fun name(name: String): ProfessionBuilder {
     this.name = name
@@ -58,6 +63,7 @@ class ProfessionBuilder {
       items.toMutableList(),
       icon,
       effect,
+      Ability(60),
       identifier,
     )
   }

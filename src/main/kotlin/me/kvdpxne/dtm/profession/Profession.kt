@@ -15,6 +15,7 @@ class Profession(
   var items      : List<SlotItem>,
   var icon       : ItemStack,
   var effect     : PotionEffect? = null,
+  var ability    : Ability? = null,
   val identifier : UUID = UUID.randomUUID()
   // @formatter:on
 ) {

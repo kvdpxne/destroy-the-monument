@@ -1,5 +1,7 @@
 package me.kvdpxne.dtm.profession
 
+import io.github.oshai.kotlinlogging.KLogger
+import io.github.oshai.kotlinlogging.KotlinLogging
 import java.util.UUID
 import me.kvdpxne.dtm.professions.createArcher
 import me.kvdpxne.dtm.professions.createAssassin
@@ -12,6 +14,8 @@ import me.kvdpxne.dtm.professions.createScout
 import me.kvdpxne.dtm.professions.createSpecialist
 
 val professionMap: MutableMap<UUID, Profession> = mutableMapOf()
+
+private val logger: KLogger = KotlinLogging.logger {}
 
 object ProfessionManager : Iterable<Profession> {
 
@@ -33,10 +37,14 @@ object ProfessionManager : Iterable<Profession> {
   ) {
     val identifier = profession.identifier
     if (professionMap.contains(identifier)) {
-
+      return
     }
 
     professionMap[identifier] = profession
+    logger.debug {
+      "The profession \"$profession\" has been added and assigned to the " +
+        "identifier \"$identifier\"."
+    }
   }
 
   fun addProfessions(
@@ -63,14 +71,17 @@ object ProfessionManager : Iterable<Profession> {
       createSpecialist()
     )
 
-
+    logger.info {
+      "All built-in professions have been added"
+    }
   }
-
 
   /**
    * Returns an iterator over the elements of this object.
    */
-  override fun iterator() = professionMap.values.iterator()
+  override fun iterator(): Iterator<Profession> {
+    return professionMap.values.iterator()
+  }
 
   override fun toString(): String {
     return "ProfessionManager(professions=$professionMap)"
