@@ -3,8 +3,7 @@ package me.kvdpxne.dtm.listener
 import me.kvdpxne.dtm.colorize
 import me.kvdpxne.dtm.game.DefaultTeamColor
 import me.kvdpxne.dtm.game.GameManager
-import me.kvdpxne.dtm.game.Team
-import me.kvdpxne.dtm.user.User
+import me.kvdpxne.dtm.game.Teammate
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -13,13 +12,12 @@ import org.bukkit.event.entity.PlayerDeathEvent
 object PlayerDeathListener : Listener {
 
   private fun formatTeammate(
-    team: Team,
-    user: User
+    teammate: Teammate
   ): String {
-    val professionName = user.profession.displayName ?: return "UNKNOWN"
-    val teammateName = user.name
+    val professionName = teammate.professionQueuingPair.current.displayName
+    val teammateName = teammate.user.name
 
-    val teamColor = team.identity as DefaultTeamColor
+    val teamColor = teammate.teamColor as DefaultTeamColor
     val professionColor = teamColor.professionColor
     val teammateColor = teamColor.chatColor
 
@@ -34,14 +32,20 @@ object PlayerDeathListener : Listener {
     val victimUser = UserManager.findByIdentifier(victim.uniqueId) ?: return
     val game = GameManager.findByUser(victimUser) ?: return
 
-    if (game.isInArenaMap(victimUser).not()) {
+    if (
+      !game.state.isStarted() ||
+      null == game.currentArena ||
+      !game.isInTeam(victimUser) ||
+      !game.isInArenaMap(victimUser)
+    ) {
       return
     }
 
     event.drops.clear()
     event.droppedExp = 0
 
-    val victimTeam = game.findTeam(victimUser)!!
+    //
+    val victimTeammate = game.findTeam(victimUser)!!.findTeammate(victimUser)!!
 
     val murder = victim.killer
     if (null == murder) {
@@ -49,18 +53,18 @@ object PlayerDeathListener : Listener {
 
       // VICTIM_KIT_NAME VICTIM_USER_NAME ACTION
       // Zwiadowca       currant          zginął
-      event.deathMessage = "${this.formatTeammate(victimTeam, victimUser)} &6died".colorize()
+      event.deathMessage = "${this.formatTeammate(victimTeammate)} &6died".colorize()
       return
     }
 
     val murderUser = UserManager.findByIdentifier(murder.uniqueId)!!
-    val murderTeam = game.findTeam(murderUser)!!
+    val murderTeammate = game.findTeam(murderUser)!!.findTeammate(murderUser)!!
 
     murderUser.statistics.addKills()
     victimUser.statistics.addDeaths()
 
     // MURDER_KIT_NAME MURDER_USER_NAME ACTION VICTIM_KIT_NAME VICTIM_USER_NAME
     // Zwiadowca       currant          -->    Łucznik         strawberry
-    event.deathMessage = "${this.formatTeammate(murderTeam, murderUser)} &6--> ${this.formatTeammate(victimTeam, victimUser)}".colorize()
+    event.deathMessage = "${this.formatTeammate(murderTeammate)} &6--> ${this.formatTeammate(victimTeammate)}".colorize()
   }
 }

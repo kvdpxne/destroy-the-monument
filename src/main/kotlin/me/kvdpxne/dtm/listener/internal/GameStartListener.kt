@@ -37,10 +37,7 @@ object GameStartListener : Listenable {
       }
 
       team.teammates.forEach { teammate ->
-        var profession = teammate.profession
-        if (null == profession) {
-          profession = teammate.user.profession
-        }
+        val profession = teammate.professionQueuingPair.current
         val performer = teammate.user.performer as UserPerformer
 
         performer.getPlayer()!!.run {
@@ -52,7 +49,6 @@ object GameStartListener : Listenable {
          this.hardClean()
 
           profession.equip(this, (teammate.teamColor as DefaultTeamColor).dyeColor)
-          profession.addEffect(this)
         }
       }
     }

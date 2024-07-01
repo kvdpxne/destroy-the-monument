@@ -141,9 +141,10 @@ fun createProfessionSelectionGui(user: User) = Gui("Choose your profession", Row
       val team = game.findTeam(user) ?: return@setItem
       val teammate = team.findTeammate(user) ?: return@setItem
 
-      if (teammate.profession != profession) {
-        teammate.nextProfession = profession
-
+      teammate.professionQueuingPair.apply {
+        if (this.current != profession) {
+          this.next = profession
+        }
       }
     }
   }

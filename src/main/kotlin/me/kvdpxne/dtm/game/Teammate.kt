@@ -2,6 +2,8 @@ package me.kvdpxne.dtm.game
 
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.shared.Identity
+import me.kvdpxne.dtm.shared.QueuingPair
+import me.kvdpxne.dtm.shared.toQueuingPair
 import me.kvdpxne.dtm.user.User
 
 class Teammate(
@@ -10,11 +12,11 @@ class Teammate(
   val team: Team
 ) {
 
-  // Currently selected profession.
-  var profession: Profession = user.profession
-
-  //
-  var nextProfession: Profession? = null
+  /**
+   *
+   */
+  val professionQueuingPair: QueuingPair<Profession> =
+    user.profession.toQueuingPair()
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true

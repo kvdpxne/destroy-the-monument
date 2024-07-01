@@ -46,7 +46,8 @@ object PlayerToggleFlightListener : Listener {
 
     val teammate = team.findTeammate(user) ?: return
 
-    val profession = teammate.profession
+    // Current profession
+    val profession = teammate.professionQueuingPair.current
 
     if (profession.name != "scout") {
       return

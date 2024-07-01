@@ -83,7 +83,7 @@ class DestroyTheMonument : JavaPlugin() {
       PlayerJoinListener,
       PlayerPrepareItemEnchantListener,
       PlayerQuitListener,
-      PlayerRespawnListener(this),
+      PlayerRespawnListener,
       PlayerToggleFlightListener,
       WeatherChangeListener
     )
