@@ -14,6 +14,7 @@ import me.kvdpxne.dtm.commands.createCreateArenaCommand
 import me.kvdpxne.dtm.commands.createCreateGameCommand
 import me.kvdpxne.dtm.commands.createCreateTeamCommand
 import me.kvdpxne.dtm.commands.createBaseCommand
+import me.kvdpxne.dtm.commands.createGlobalChatCommand
 import me.kvdpxne.dtm.commands.createSetArenaMapCommand
 import me.kvdpxne.dtm.commands.createSetSpawnPointCommand
 import me.kvdpxne.dtm.commands.createTeleportBackCommand
@@ -65,6 +66,7 @@ object CommandManager {
     }
 
     it.add(parent)
+    it.add(createGlobalChatCommand())
 
     registerCommands(it.toTypedArray())
     BukkitCommandMapAccessor.registerCommands(it.toTypedArray())

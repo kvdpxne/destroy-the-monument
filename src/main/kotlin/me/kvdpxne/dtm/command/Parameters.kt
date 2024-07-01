@@ -24,6 +24,10 @@ class Parameters(arguments: Array<out String>) {
     return arguments[index]
   }
 
+  fun asText(): String {
+    return this.arguments.joinToString(" ")
+  }
+
   fun isEmpty(): Boolean {
     return 0 == length()
   }
