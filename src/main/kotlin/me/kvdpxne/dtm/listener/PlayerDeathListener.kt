@@ -5,6 +5,7 @@ import me.kvdpxne.dtm.game.DefaultTeamColor
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.Teammate
 import me.kvdpxne.dtm.user.UserManager
+import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.PlayerDeathEvent
@@ -14,7 +15,18 @@ object PlayerDeathListener : Listener {
   private fun formatTeammate(
     teammate: Teammate
   ): String {
-    val professionName = teammate.professionQueuingPair.current.displayName
+    val profession = teammate.professionQueuingPair.current
+
+    profession.ability?.let {
+      if (0 > it.taskIdentifier) {
+        return@let
+      }
+
+      Bukkit.getScheduler().cancelTask(it.taskIdentifier)
+      it.markRead()
+    }
+
+    val professionName = profession.displayName
     val teammateName = teammate.user.name
 
     val teamColor = teammate.teamColor as DefaultTeamColor

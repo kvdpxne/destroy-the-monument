@@ -11,13 +11,17 @@ class Ability(
   var ready: Boolean = true
     private set
 
+  var taskIdentifier = -1
+    private set
+
   fun markRead() {
     this.ready = true
   }
 
   fun run(player: Player) {
     this.ready = false
-    AbilityCooldownTaskTimer(
+
+    this.taskIdentifier = AbilityCooldownTaskTimer(
       this,
       this.delay,
       player
@@ -25,6 +29,6 @@ class Ability(
       JavaPlugin.getPlugin(DestroyTheMonument::class.java),
       5L,
       20L
-    )
+    ).taskId
   }
 }
