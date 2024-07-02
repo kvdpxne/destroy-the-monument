@@ -32,6 +32,12 @@ object ProfessionManager : Iterable<Profession> {
     return professionMap.values.random()
   }
 
+  fun findByName(name: String, ignoreCase: Boolean = true): Profession? {
+    return professionMap.values.find {
+      it.name.equals(name, ignoreCase)
+    }
+  }
+
   fun addProfession(
     profession: Profession
   ) {

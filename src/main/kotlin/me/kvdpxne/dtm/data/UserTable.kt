@@ -1,6 +1,7 @@
 package me.kvdpxne.dtm.data
 
 import java.util.UUID
+import me.kvdpxne.dtm.profession.ProfessionManager
 import me.kvdpxne.dtm.statistics.Statistics
 import me.kvdpxne.dtm.user.User
 import org.ktorm.dsl.eq
@@ -18,6 +19,9 @@ object UserTable : Table<Nothing>("user") {
 
   var identifier = varchar("identifier").primaryKey()
   val name = varchar("name")
+
+  // profession
+  val profession = varchar("profession")
 
   // Statistics
   val kills = int("kills")
@@ -39,11 +43,16 @@ object UserDao {
         }
 
         val name = row[UserTable.name]!!
+        val profession = row[UserTable.profession]!!
         val kills = row[UserTable.kills]!!
         val assists = row[UserTable.assists]!!
         val deaths = row[UserTable.deaths]!!
 
-        User(identifier2, name, Statistics(kills, assists, deaths))
+        User(identifier2, name, Statistics(kills, assists, deaths)).apply {
+          ProfessionManager.findByName(profession)?.let {
+            this.profession = it
+          }
+        }
       }
       .firstOrNull()
   }
@@ -52,6 +61,7 @@ object UserDao {
   fun update(user: User) {
     database.update(UserTable) {
       set(it.name, user.name)
+      set(it.profession, user.profession.name)
 
       val statistics = user.statistics
       set(it.kills, statistics.kills)
@@ -68,6 +78,7 @@ object UserDao {
     database.insert(UserTable) {
       set(it.identifier, user.identifier.toString())
       set(it.name, user.name)
+      set(it.profession, user.profession.name)
 
       val statistics = user.statistics
       set(it.kills, statistics.kills)
