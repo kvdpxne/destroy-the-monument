@@ -10,7 +10,6 @@ import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerRespawnEvent
-import org.bukkit.plugin.java.JavaPlugin
 
 object PlayerRespawnListener : Listener {
 
@@ -47,7 +46,7 @@ object PlayerRespawnListener : Listener {
 
           // Fill player exp bar after 200 ms
           Bukkit.getScheduler().runTaskLaterAsynchronously(
-            JavaPlugin.getPlugin(DestroyTheMonument::class.java),
+            DestroyTheMonument.instance,
             { player.fillExpBar() },
             4L
           )

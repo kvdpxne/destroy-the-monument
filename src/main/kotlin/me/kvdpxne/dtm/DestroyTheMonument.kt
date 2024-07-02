@@ -4,9 +4,9 @@ import me.kvdpxne.dtm.command.CommandManager
 import me.kvdpxne.dtm.game.ArenaManager
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.gui.GuiActionHandler
-import me.kvdpxne.dtm.listener.EntityDamageListener
 import me.kvdpxne.dtm.listener.BlockBreakListener
 import me.kvdpxne.dtm.listener.BlockPlaceListener
+import me.kvdpxne.dtm.listener.EntityDamageListener
 import me.kvdpxne.dtm.listener.PlayerChatListener
 import me.kvdpxne.dtm.listener.PlayerDeathListener
 import me.kvdpxne.dtm.listener.PlayerDropItemListener
@@ -32,6 +32,11 @@ val eventManager: EventManager = EventManager()
 
 @Suppress("unused")
 class DestroyTheMonument : JavaPlugin() {
+
+  companion object {
+    var instance: DestroyTheMonument? = null
+      private set
+  }
 
   init {
 //    System.setProperty(org.slf4j.simple.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "TRACE")
@@ -64,6 +69,7 @@ class DestroyTheMonument : JavaPlugin() {
 //        }
 //      }
 //    }
+    instance = this
   }
 
   override fun onEnable() {
@@ -97,5 +103,6 @@ class DestroyTheMonument : JavaPlugin() {
   }
 
   override fun onDisable() {
+    instance = null
   }
 }

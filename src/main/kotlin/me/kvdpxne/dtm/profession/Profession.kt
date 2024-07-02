@@ -52,11 +52,11 @@ class Profession(
     }
 
     Bukkit.getScheduler().runTaskLaterAsynchronously(
-      JavaPlugin.getPlugin(DestroyTheMonument::class.java),
+      DestroyTheMonument.instance,
       {
         player.addPotionEffect(this.effect, true)
       },
-      10L
+      4L
     )
   }
 

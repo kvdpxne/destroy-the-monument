@@ -7,10 +7,8 @@ import org.bukkit.scheduler.BukkitRunnable
 
 class GameStartTaskTimer(
   private val game: Game,
-  remainingSeconds: Int = 30
+  private var remainingSeconds: Int = 30
 ) : BukkitRunnable() {
-
-  private var i = remainingSeconds
 
   override fun run() {
     if (MIN_HOSTAGE_SIZE_ > game.playersInGame()) {
@@ -20,25 +18,30 @@ class GameStartTaskTimer(
       return
     }
 
-    if (0 >= i) {
+    if (game.state.isStarted()) {
+      this.cancel()
+      return
+    }
+
+    if (0 >= remainingSeconds) {
       game.start()
       game.sendMessage("&6&lDTM &7> &fThe game has been &asuccessfully &7started.")
       this.cancel()
       return
     }
 
-    if (5 >= i) {
-      game.sendMessage("&6&lDTM &7> &fThe game will start in &6$i &fseconds.")
-      --i
+    if (5 >= remainingSeconds) {
+      game.sendMessage("&6&lDTM &7> &fThe game will start in &6$remainingSeconds &fseconds.")
+      --remainingSeconds
       return
     }
 
-    if (0 == i % 10) {
-      game.sendMessage("&6&lDTM &7> &6$i &fseconds left to start the game.")
-      --i
+    if (0 == remainingSeconds % 10) {
+      game.sendMessage("&6&lDTM &7> &6$remainingSeconds &fseconds left to start the game.")
+      --remainingSeconds
       return
     }
 
-    --i
+    --remainingSeconds
   }
 }

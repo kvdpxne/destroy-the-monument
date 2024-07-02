@@ -200,7 +200,7 @@ class Game(val identifier: UUID, var name: String) : Communicative {
 
       // TODO task
       GameStartTaskTimer(this).runTaskTimerAsynchronously(
-        JavaPlugin.getPlugin(DestroyTheMonument::class.java),
+        DestroyTheMonument.instance,
         10L,
         20L
       )

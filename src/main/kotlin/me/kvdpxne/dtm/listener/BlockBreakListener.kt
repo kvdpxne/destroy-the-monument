@@ -144,7 +144,7 @@ object BlockBreakListener : Listener {
     }
 
     GameStopTaskTimer(game).runTaskLater(
-      JavaPlugin.getPlugin(DestroyTheMonument::class.java),
+      DestroyTheMonument.instance,
       20 * 20L
     )
     game.sendMessages(

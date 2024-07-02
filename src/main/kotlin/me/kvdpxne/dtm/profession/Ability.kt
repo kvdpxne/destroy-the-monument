@@ -39,7 +39,7 @@ class Ability(
       remainingSeconds,
       player
     ).runTaskTimerAsynchronously(
-      JavaPlugin.getPlugin(DestroyTheMonument::class.java),
+      DestroyTheMonument.instance,
       2L,
       20L
     ).taskId
