@@ -25,6 +25,7 @@ dependencies {
   implementation(libraries.ktorm)
 
   implementation(libraries.thrivi)
+  implementation("fr.mrmicky:fastboard:2.1.2")
 
   implementation("org.slf4j:slf4j-api:2.0.7")
   implementation("org.slf4j:slf4j-simple:2.0.7")
@@ -77,6 +78,10 @@ tasks {
 
   shadowJar {
     archiveClassifier.set("bukkit")
+    relocate("fr.mrmicky.fastboard", "me.kvdpxne.fastboard")
+
+//    // Replace 'com.yourpackage' with the package of your plugin
+//    relocate 'fr.mrmicky.fastboard', 'com.yourpackage.fastboard'
   }
 
   register("runMinecraftServer") {

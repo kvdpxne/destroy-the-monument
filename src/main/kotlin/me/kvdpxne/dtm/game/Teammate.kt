@@ -1,10 +1,13 @@
 package me.kvdpxne.dtm.game
 
+import fr.mrmicky.fastboard.FastBoard
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.shared.Identity
 import me.kvdpxne.dtm.shared.QueuingPair
 import me.kvdpxne.dtm.shared.toQueuingPair
+import me.kvdpxne.dtm.statistics.Statistics
 import me.kvdpxne.dtm.user.User
+import me.kvdpxne.dtm.user.UserPerformer
 
 class Teammate(
   val user: User,
@@ -17,6 +20,10 @@ class Teammate(
    */
   val professionQueuingPair: QueuingPair<Profession> =
     user.profession.toQueuingPair()
+
+  val statistics: Statistics = Statistics()
+
+  var fastBoard: FastBoard? = null
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true

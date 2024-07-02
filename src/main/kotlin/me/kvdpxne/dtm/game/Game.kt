@@ -13,9 +13,7 @@ import me.kvdpxne.dtm.shared.Identity
 import me.kvdpxne.dtm.shared.debug
 import me.kvdpxne.dtm.tasks.GameStartTaskTimer
 import me.kvdpxne.dtm.user.User
-import me.kvdpxne.dtm.user.UserPerformer
 import org.bukkit.Bukkit
-import org.bukkit.plugin.java.JavaPlugin
 
 val MIN_HOSTAGE_SIZE_ = 2
 
@@ -62,6 +60,8 @@ class Game(val identifier: UUID, var name: String) : Communicative {
    * Number of users present in the game but not currently playing.
    */
   var spectators: Int = 0
+
+  var timerTaskIdentifier = -1
 
   fun findHostage(identifier: UUID): User? = hostages[identifier]
 
@@ -296,6 +296,11 @@ class Game(val identifier: UUID, var name: String) : Communicative {
 
     currentArena?.restore()
     currentArena = null
+
+    if (timerTaskIdentifier >= 0) {
+      Bukkit.getScheduler().cancelTask(timerTaskIdentifier)
+      timerTaskIdentifier = -1
+    }
 
     val event = GameStopEvent(this)
     eventManager.callEvent(event)

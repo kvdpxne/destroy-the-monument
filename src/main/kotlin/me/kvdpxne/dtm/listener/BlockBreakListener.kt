@@ -5,6 +5,8 @@ import me.kvdpxne.dtm.game.DefaultTeamColor
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.Team
 import me.kvdpxne.dtm.game.findMonument
+import me.kvdpxne.dtm.scoreboard.updateBlueMonumentCount
+import me.kvdpxne.dtm.scoreboard.updateRedMonumentCount
 import me.kvdpxne.dtm.shared.hardClean
 import me.kvdpxne.dtm.shared.isMonument
 import me.kvdpxne.dtm.shared.isRich
@@ -115,6 +117,20 @@ object BlockBreakListener : Listener {
     val attackedTeam = game.findTeam(monumentIdentity) ?: return
 
     attackedTeam.health -= 1
+
+    if (attackedTeam.identity == DefaultTeamColor.RED) {
+      game.teams.forEach {
+        it.teammates.forEach { teammate ->
+          updateRedMonumentCount(teammate.fastBoard!!, attackedTeam.health)
+        }
+      }
+    } else {
+      game.teams.forEach {
+        it.teammates.forEach { teammate ->
+          updateBlueMonumentCount(teammate.fastBoard!!, attackedTeam.health)
+        }
+      }
+    }
 
     game.sendMessages {
       (teamIdentity as DefaultTeamColor)

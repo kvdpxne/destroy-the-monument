@@ -20,6 +20,9 @@ object GameStopListener : Listenable {
 
         val performer = teammate.user.performer as UserPerformer
 
+        teammate.fastBoard!!.delete()
+        teammate.fastBoard = null
+
         performer.getPlayer()!!.run {
           this.scoreboard.getPlayerTeam(this).removePlayer(this)
           this.scoreboard = Bukkit.getScoreboardManager().mainScoreboard

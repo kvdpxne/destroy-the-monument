@@ -4,6 +4,8 @@ import me.kvdpxne.dtm.colorize
 import me.kvdpxne.dtm.game.DefaultTeamColor
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.Teammate
+import me.kvdpxne.dtm.scoreboard.updateDeathCount
+import me.kvdpxne.dtm.scoreboard.updateKillCount
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
@@ -60,22 +62,39 @@ object PlayerDeathListener : Listener {
 
     val murder = victim.killer
     if (null == murder) {
-      victimUser.statistics.addDeaths()
-
       // VICTIM_KIT_NAME VICTIM_USER_NAME ACTION
       // Zwiadowca       currant          zginął
       event.deathMessage = "${this.formatTeammate(victimTeammate)} &6died".colorize()
+
+      victimUser.statistics.addDeaths()
+      victimTeammate.statistics.addDeaths()
+
+      victimTeammate.fastBoard?.let {
+        updateDeathCount(it, victimTeammate.statistics.deaths)
+      }
+
       return
     }
 
     val murderUser = UserManager.findByIdentifier(murder.uniqueId)!!
     val murderTeammate = game.findTeam(murderUser)!!.findTeammate(murderUser)!!
 
-    murderUser.statistics.addKills()
-    victimUser.statistics.addDeaths()
-
     // MURDER_KIT_NAME MURDER_USER_NAME ACTION VICTIM_KIT_NAME VICTIM_USER_NAME
     // Zwiadowca       currant          -->    Łucznik         strawberry
     event.deathMessage = "${this.formatTeammate(murderTeammate)} &6--> ${this.formatTeammate(victimTeammate)}".colorize()
+
+    murderUser.statistics.addKills()
+    murderTeammate.statistics.addKills()
+
+    murderTeammate.fastBoard?.let {
+      updateKillCount(it, victimTeammate.statistics.kills)
+    }
+
+    victimUser.statistics.addDeaths()
+    victimTeammate.statistics.addDeaths()
+
+    victimTeammate.fastBoard?.let {
+      updateDeathCount(it, victimTeammate.statistics.deaths)
+    }
   }
 }
