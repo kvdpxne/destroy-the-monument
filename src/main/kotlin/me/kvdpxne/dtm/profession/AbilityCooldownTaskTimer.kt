@@ -19,10 +19,12 @@ class AbilityCooldownTaskTimer(
     if (0 >= this.remainingSeconds) {
       this.cancel()
 
-      this.target.fillExpBar()
-      this.ability.markRead()
-      this.ability.whenReady(this.target)
+      this.ability.let {
+        it.markReady()
+        it.whenReady(this.target)
+      }
 
+      this.target.fillExpBar()
       return
     }
 

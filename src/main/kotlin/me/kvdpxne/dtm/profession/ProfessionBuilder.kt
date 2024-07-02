@@ -16,10 +16,12 @@ class ProfessionBuilder {
   private lateinit var items      : Array<out SlotItem>
   private lateinit var icon       : ItemStack
   private          var effect     : PotionEffect?
+  private          var ability    : Ability?
   // @formatter:on
 
   init {
     this.effect = null
+    this.ability = null
     this.identifier = UUID.randomUUID()
   }
 
@@ -56,6 +58,11 @@ class ProfessionBuilder {
     return this.effect(PotionEffect(type, Int.MAX_VALUE, level, ambient))
   }
 
+  fun ability(delay: Int, whenReady: WhenAbilityReadyHandler = {}): ProfessionBuilder {
+    this.ability = Ability(delay, whenReady)
+    return this
+  }
+
   fun build() : Profession {
     return Profession(
       name,
@@ -63,10 +70,7 @@ class ProfessionBuilder {
       items.toMutableList(),
       icon,
       effect,
-      Ability(60) {
-        // TODO static scout ability
-        it.allowFlight = true
-      },
+      this.ability,
       identifier,
     )
   }

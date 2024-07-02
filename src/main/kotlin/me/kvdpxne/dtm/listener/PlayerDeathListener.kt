@@ -23,7 +23,6 @@ object PlayerDeathListener : Listener {
       }
 
       Bukkit.getScheduler().cancelTask(it.taskIdentifier)
-      it.markRead()
     }
 
     val professionName = profession.displayName

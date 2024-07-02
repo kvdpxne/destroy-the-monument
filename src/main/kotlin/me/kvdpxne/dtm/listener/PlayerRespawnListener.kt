@@ -1,13 +1,16 @@
 package me.kvdpxne.dtm.listener
 
+import me.kvdpxne.dtm.DestroyTheMonument
 import me.kvdpxne.dtm.game.DefaultTeamColor
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.toLocation
 import me.kvdpxne.dtm.shared.fillExpBar
 import me.kvdpxne.dtm.user.UserManager
+import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerRespawnEvent
+import org.bukkit.plugin.java.JavaPlugin
 
 object PlayerRespawnListener : Listener {
 
@@ -38,8 +41,20 @@ object PlayerRespawnListener : Listener {
       this.current.equip(player, (teammate.teamColor as DefaultTeamColor).dyeColor)
 
       this.current.ability?.let {
-        player.fillExpBar()
-        it.whenReady(player)
+        if (it.readyAfterDeath) {
+          it.markReady()
+          it.whenReady(player)
+
+          // Fill player exp bar after 200 ms
+          Bukkit.getScheduler().runTaskLaterAsynchronously(
+            JavaPlugin.getPlugin(DestroyTheMonument::class.java),
+            { player.fillExpBar() },
+            4L
+          )
+          return
+        }
+
+        it.run(player, true)
       }
     }
   }

@@ -6,8 +6,12 @@ import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 
 class Ability(
-  val delay: Int,
-  val whenReady: WhenAbilityReadyHandler,
+  // @formatter:off
+  val delay          : Int,
+  val whenReady      : WhenAbilityReadyHandler = {},
+  val readyAfterDeath: Boolean                 = false,
+  val readyAfterKill : Boolean                 = false
+  // @formatter:on
 ) {
 
   var ready: Boolean = true
@@ -16,21 +20,27 @@ class Ability(
   var taskIdentifier = -1
     private set
 
-  fun markRead() {
+  fun markReady() {
     this.ready = true
   }
 
-  fun run(player: Player) {
+  fun run(player: Player, a: Boolean = false) {
     this.ready = false
     player.resetExpBar()
 
+    val remainingSeconds = if (a) {
+      Math.round(this.delay * 0.333F) + this.delay
+    } else {
+      this.delay
+    }
+
     this.taskIdentifier = AbilityCooldownTaskTimer(
       this,
-      this.delay,
+      remainingSeconds,
       player
     ).runTaskTimerAsynchronously(
       JavaPlugin.getPlugin(DestroyTheMonument::class.java),
-      5L,
+      2L,
       20L
     ).taskId
   }

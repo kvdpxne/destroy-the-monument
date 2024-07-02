@@ -42,4 +42,7 @@ fun createScout(): Profession = ProfessionBuilder()
   )
   .icon(Material.FISHING_ROD)
   .effect(PotionEffectType.SPEED, 1)
+  .ability(60) {
+    it.allowFlight = true
+  }
   .build()
