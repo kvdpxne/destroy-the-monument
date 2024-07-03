@@ -8,17 +8,14 @@ interface Communicative {
   fun sendMessage(message: String)
 
   /**
-   * Forces one or more messages to be sent to the performer.
-   */
-  fun sendMessages(vararg messages: String)
-
-  /**
    * Sends a message to the performer if possible.
    */
-  fun sendMessage(message: () -> String)
+  fun sendMessage(message: () -> String) {
+    this.sendMessage(message())
+  }
 
   /**
-   * Sends one or more messages to the performer if possible.
+   * Forces one or more messages to be sent to the performer.
    */
-  fun sendMessages(messages: () -> Array<out String>)
+  fun sendMessages(vararg messageArray: String)
 }

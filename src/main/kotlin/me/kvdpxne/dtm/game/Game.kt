@@ -24,12 +24,22 @@ class Game(val identifier: UUID, var name: String) : Communicative {
   /**
    * Map of users who have been signed up for this game.
    */
-  val hostages: MutableMap<UUID, User> = mutableMapOf()
+  val hostages: MutableMap<UUID, User>
 
   /**
    *
    */
   val teams: MutableCollection<Team> = mutableSetOf()
+
+  /**
+   *
+   */
+  val teamHealthMutableMap: MutableMap<Identity, Int>
+
+  /**
+   *
+   */
+  val teamSizeMutableMap: MutableMap<Identity, Int>
 
   /**
    * The current arena where the game will be, is or was played.
@@ -61,18 +71,51 @@ class Game(val identifier: UUID, var name: String) : Communicative {
    */
   var spectators: Int = 0
 
+  /**
+   *
+   */
   var timerTaskIdentifier = -1
 
-  fun findHostage(identifier: UUID): User? = hostages[identifier]
+  /**
+   *
+   */
+  init {
+    //
+    this.hostages = mutableMapOf()
 
-  fun findTeam(identity: Identity): Team? = teams.find {
-    it.identity == identity
+    //
+    this.teamHealthMutableMap = mutableMapOf()
+    this.teamSizeMutableMap = mutableMapOf()
   }
 
-  fun findTeam(user: User): Team? = teams.find {
-    it.hasTeammate(user)
+  /**
+   *
+   */
+  fun findHostage(identifier: UUID): User? {
+    return this.hostages[identifier]
   }
 
+  /**
+   *
+   */
+  fun findTeam(identity: Identity): Team? {
+    return this.teams.find {
+      it.identity == identity
+    }
+  }
+
+  /**
+   *
+   */
+  fun findTeam(user: User): Team? {
+    return this.teams.find {
+      it.hasTeammate(user)
+    }
+  }
+
+  /**
+   *
+   */
   fun allTeamsAreSameSize(): Boolean {
     var size = -1
     for (team in teams) {
@@ -88,23 +131,29 @@ class Game(val identifier: UUID, var name: String) : Communicative {
   }
 
   /**
-   * @return The [Team] with fewer [Team.teammates], or null if no team is
+   * @return The [Team] with fewer [Team.teammateMutableSet], or null if no team is
    * assigned to the game.
    */
-  fun findSmallerTeam(): Team? = teams.minByOrNull {
-    it.size()
+  fun findSmallerTeam(): Team? {
+    return this.teams.minByOrNull {
+      it.size()
+    }
   }
 
   /**
    * Checks if the given [user] is in the game.
    */
-  fun isInGame(user: User): Boolean = hostages.contains(user.identifier)
+  fun isInGame(user: User): Boolean {
+    return this.hostages.contains(user.identifier)
+  }
 
   /**
    * Checks if the given [user] is in any team.
    */
-  fun isInTeam(user: User): Boolean = teams.any {
-    it.hasTeammate(user)
+  fun isInTeam(user: User): Boolean {
+    return this.teams.any {
+      it.hasTeammate(user)
+    }
   }
 
   /**
@@ -114,13 +163,17 @@ class Game(val identifier: UUID, var name: String) : Communicative {
    * @param identity
    * @param user
    */
-  fun isInTeam(identity: Identity, user: () -> User): Boolean = teams.find {
-    it.identity == identity
-  }?.hasTeammate(user()) ?: false
+  fun isInTeam(identity: Identity, user: () -> User): Boolean {
+    return this.teams.find {
+      it.identity == identity
+    }?.hasTeammate(user()) ?: false
+  }
 
-  fun isInArenaMap(user: User) = currentArena?.map?.world?.players?.any {
-    it.uniqueId == user.identifier
-  } ?: false
+  fun isInArenaMap(user: User): Boolean {
+    return currentArena?.map?.world?.players?.any {
+      it.uniqueId == user.identifier
+    } ?: false
+  }
 
   /**
    *
@@ -186,6 +239,8 @@ class Game(val identifier: UUID, var name: String) : Communicative {
       return false
     }
 
+    this.teamSizeMutableMap[identity] = team.size()
+
     logger.debug {
       "A new $teammate teammate has been added to the $team team in the " +
         "$this game."
@@ -208,10 +263,16 @@ class Game(val identifier: UUID, var name: String) : Communicative {
     return true
   }
 
+  /**
+   *
+   */
   fun playersInGame(): Int {
     return this.hostages.size - this.spectators
   }
 
+  /**
+   *
+   */
   fun addArena(arena: Arena) {
     this.arenas.add(arena)
     GameArenasDao.insert(this, arena)
@@ -220,21 +281,23 @@ class Game(val identifier: UUID, var name: String) : Communicative {
   /**
    *
    */
-  fun removeHostage(user: User) = findHostage(user.identifier)?.run {
-    // If the user is in any team, he should be removed from that team before
-    // he is removed from the whole game.
-    findTeam(this)?.run {
-      removeTeammate(user)
-      // If a player does not belong to any team during his tenure in this game
-      // then he has never stopped being a spectator.
-      ++spectators
-    }
-    hostages -= identifier
-    logger.debug {
-      "Removed $this user from ${this@Game} game."
-    }
-    true
-  } ?: false
+  fun removeHostage(user: User): Boolean {
+    return findHostage(user.identifier)?.run {
+      // If the user is in any team, he should be removed from that team before
+      // he is removed from the whole game.
+      findTeam(this)?.run {
+        removeTeammate(user)
+        // If a player does not belong to any team during his tenure in this game
+        // then he has never stopped being a spectator.
+        ++spectators
+      }
+      hostages -= identifier
+      logger.debug {
+        "Removed $this user from ${this@Game} game."
+      }
+      true
+    } ?: false
+  }
 
   /**
    * Tries to remove the given [team] from the [teams] collection if the given
@@ -247,14 +310,19 @@ class Game(val identifier: UUID, var name: String) : Communicative {
    * successfully removed, false if the given [team] was not in the [teams]
    * collection and was not removed.
    */
-  fun removeTeam(team: Team) = teams.remove(team).also {
-    if (it) {
-      logger.debug {
-        "Removed the $team team from the $this game."
+  fun removeTeam(team: Team): Boolean {
+    return teams.remove(team).also {
+      if (it) {
+        logger.debug {
+          "Removed the $team team from the $this game."
+        }
       }
     }
   }
 
+  /**
+   *
+   */
   fun removeTeammate(
     identity: Identity,
     user: () -> User
@@ -273,6 +341,9 @@ class Game(val identifier: UUID, var name: String) : Communicative {
     }
   }
 
+  /**
+   *
+   */
   fun start() {
     state = GameState.STARTED
     start = Instant.now()
@@ -280,12 +351,22 @@ class Game(val identifier: UUID, var name: String) : Communicative {
     val arena = arenas.random()
     currentArena = arena
 
+    this.teams.forEach { team ->
+      val identity = team.identity
+      arena.monuments[identity]?.let {
+        this.teamHealthMutableMap[identity] = it.size
+      }
+    }
+
     //
     //
     val event = GameStartEvent(this)
     eventManager.callEvent(event)
   }
 
+  /**
+   *
+   */
   fun stop() {
     state = GameState.STOPPING
 
@@ -312,20 +393,50 @@ class Game(val identifier: UUID, var name: String) : Communicative {
     state = GameState.INITIALIZED
   }
 
-  override fun sendMessage(message: String) {
-    hostages.forEach { (_, user) -> user.sendMessage(message) }
+  /**
+   * Alias for [User.sendMessage]
+   */
+  override fun sendMessage(
+    message: String
+  ) {
+    if (this.hostages.isEmpty()) {
+      return
+    }
+
+    this.hostages.values.forEach { user: User ->
+      user.sendMessage(message)
+    }
   }
 
-  override fun sendMessage(message: () -> String) {
-    hostages.forEach { (_, user) -> user.sendMessage(message) }
+  /**
+   * Alias for [User.sendMessage]
+   */
+  override fun sendMessage(
+    message: () -> String
+  ) {
+    if (this.hostages.isEmpty()) {
+      return
+    }
+
+    val body = message()
+    this.hostages.values.forEach { user: User ->
+      user.sendMessage(body)
+    }
   }
 
-  override fun sendMessages(vararg messages: String) {
-    hostages.forEach { (_, user) -> user.sendMessages(*messages) }
-  }
+  /**
+   * Alias for [User.sendMessages]
+   */
+  override fun sendMessages(
+    vararg messageArray: String
+  ) {
+    if (this.hostages.isEmpty() || messageArray.isEmpty()) {
+      return
+    }
 
-  override fun sendMessages(messages: () -> Array<out String>) {
-    hostages.forEach { (_, user) -> user.sendMessages(messages) }
+    this.hostages.values.forEach { user: User ->
+      user.sendMessages(*messageArray)
+    }
   }
 
   override fun toString(): String {

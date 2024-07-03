@@ -49,9 +49,6 @@ object PlayerChatListener : Listener {
 
     event.isCancelled = true
 
-    team.teammates.forEach {
-      it.user.sendMessage("${this.formatTeammate(teammate)}&7: &f${event.message}")
-    }
-
+    team.sendMessage("${this.formatTeammate(teammate)}&7: &f${event.message}")
   }
 }

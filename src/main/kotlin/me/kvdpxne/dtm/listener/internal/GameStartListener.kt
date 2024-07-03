@@ -27,19 +27,6 @@ object GameStartListener : Listenable {
     //
     val bukkitTeamScoreboard = createServerScoreboard()
 
-    val teamSizeMap = mutableMapOf<Identity, Int>()
-    val teamHealthMap = mutableMapOf<Identity, Int>()
-
-    for (team in game.teams) {
-      val identity = team.identity
-      val size = team.size()
-
-      team.health = arena.monuments[identity]?.size!!
-
-      teamSizeMap[identity] = size
-      teamHealthMap[identity] = team.health
-    }
-
     //
     val timeTask = GameTimeUpdateTaskTimer(game)
 
@@ -56,7 +43,7 @@ object GameStartListener : Listenable {
         it.toLocation(world)
       }
 
-      team.teammates.forEach { teammate ->
+      team.teammateMutableSet.forEach { teammate ->
         val profession = teammate.professionQueuingPair.current
         val performer = teammate.user.performer as UserPerformer
 
@@ -69,10 +56,10 @@ object GameStartListener : Listenable {
 
           val fastBoard = initScoreboard(
             this,
-            teamSizeMap[DefaultTeamColor.RED] ?: 0,
-            teamHealthMap[DefaultTeamColor.RED] ?: 0,
-            teamSizeMap[DefaultTeamColor.BLUE] ?: 0,
-            teamHealthMap[DefaultTeamColor.RED] ?: 0,
+            game.teamSizeMutableMap[DefaultTeamColor.RED] ?: 0,
+            game.teamHealthMutableMap[DefaultTeamColor.RED] ?: 0,
+            game.teamSizeMutableMap[DefaultTeamColor.BLUE] ?: 0,
+            game.teamHealthMutableMap[DefaultTeamColor.BLUE] ?: 0,
             1000
           )
 

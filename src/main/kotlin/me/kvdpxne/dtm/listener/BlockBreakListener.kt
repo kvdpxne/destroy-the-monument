@@ -19,7 +19,6 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.inventory.ItemStack
-import org.bukkit.plugin.java.JavaPlugin
 
 private val LOSE = Material.DEAD_BUSH.toBuilder()
   .name("&c&lPRZEGRALES")
@@ -32,7 +31,7 @@ private val WON = Material.DIAMOND.toBuilder()
 object BlockBreakListener : Listener {
 
   private fun fs(team: Team, item: ItemStack) {
-    team.teammates.forEach { teammate ->
+    team.teammateMutableSet.forEach { teammate ->
       val player = (teammate.user.performer as UserPerformer).getPlayer()!!
 
       player.hardClean()
@@ -116,34 +115,35 @@ object BlockBreakListener : Listener {
     // The team to which the destroyed monument belonged
     val attackedTeam = game.findTeam(monumentIdentity) ?: return
 
-    attackedTeam.health -= 1
+    if (!attackedTeam.dealDamage()) {
+      // TODO stop game
+    }
 
     if (attackedTeam.identity == DefaultTeamColor.RED) {
       game.teams.forEach {
-        it.teammates.forEach { teammate ->
+        it.teammateMutableSet.forEach { teammate ->
           updateRedMonumentCount(teammate.fastBoard!!, attackedTeam.health)
         }
       }
     } else {
       game.teams.forEach {
-        it.teammates.forEach { teammate ->
+        it.teammateMutableSet.forEach { teammate ->
           updateBlueMonumentCount(teammate.fastBoard!!, attackedTeam.health)
         }
       }
     }
 
-    game.sendMessages {
-      (teamIdentity as DefaultTeamColor)
-      val coloredUser = teamIdentity.chatColor.toString() + user.name
+    (teamIdentity as DefaultTeamColor)
+    val coloredUser = teamIdentity.chatColor.toString() + user.name
 
-      (monumentIdentity as DefaultTeamColor)
-      val coloredMonument = monumentIdentity.chatColor.toString() + monumentIdentity.key
+    (monumentIdentity as DefaultTeamColor)
+    val coloredMonument = monumentIdentity.chatColor.toString() + monumentIdentity.key
 
-      arrayOf(
-        "&7An $coloredUser &7player has destroyed the $coloredMonument &7team monument.",
-        "&7There are &6${attackedTeam.health} &7monuments left."
-      )
-    }
+    game.sendMessages(
+      "",
+      "&6&lDTM &7> &fGracz $coloredUser &fzniszczył monument drużyny $coloredMonument",
+      "&6&lDTM &7> &fPozostało &6${attackedTeam.health} &fmonumenty."
+    )
 
     //
     if (0 < attackedTeam.health) {

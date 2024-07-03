@@ -2,7 +2,6 @@ package me.kvdpxne.dtm.user
 
 import java.util.UUID
 import me.kvdpxne.dtm.command.Communicative
-import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionManager
 import me.kvdpxne.dtm.statistics.Statistics
@@ -13,27 +12,33 @@ class User(
   var statistics: Statistics = Statistics()
 ) : Communicative {
 
-  val performer: Performer
+  val performer: UserPerformer
   var profession: Profession = ProfessionManager.getRandomProfession()
 
   init {
     performer = UserPerformer(identifier, name, this)
   }
 
-  override fun sendMessage(message: String) {
-    performer.sendMessage(message)
+  /**
+   * Alias for [UserPerformer.sendMessage]
+   *
+   * @since 0.1
+   */
+  override fun sendMessage(
+    message: String
+  ) {
+    this.performer.sendMessage(message)
   }
 
-  override fun sendMessage(message: () -> String) {
-    performer.sendMessage(message)
-  }
-
-  override fun sendMessages(vararg messages: String) {
-    performer.sendMessages(*messages)
-  }
-
-  override fun sendMessages(messages: () -> Array<out String>) {
-    performer.sendMessages(messages)
+  /**
+   * Alias for [UserPerformer.sendMessages]
+   *
+   * @since 0.1
+   */
+  override fun sendMessages(
+    vararg messageArray: String
+  ) {
+    this.performer.sendMessages(*messageArray)
   }
 
   override fun equals(other: Any?): Boolean {

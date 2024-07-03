@@ -3,7 +3,8 @@ package me.kvdpxne.dtm.user
 import java.lang.ref.Reference
 import java.lang.ref.WeakReference
 import java.util.UUID
-import me.kvdpxne.dtm.PluginContext
+import kotlin.system.measureNanoTime
+import me.kvdpxne.dtm.colorize
 import me.kvdpxne.dtm.command.Performer
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -40,25 +41,43 @@ open class UserPerformer(
   }
 
 
-  override fun sendMessage(message: String) {
-    getPlayer()?.sendMessage(PluginContext.textFormatter.format(message))
+  /**
+   *
+   */
+  override fun sendMessage(
+    message: String
+  ) {
+    this.getPlayer()?.sendMessage(message.colorize())
   }
 
-  override fun sendMessage(message: () -> String) {
-    getPlayer()?.sendMessage(PluginContext.textFormatter.format(message()))
+  /**
+   *
+   */
+  override fun sendMessage(
+    message: () -> String
+  ) {
+    this.getPlayer()?.sendMessage(message().colorize())
   }
 
-  override fun sendMessages(messages: Array<out String>) {
-    val player = getPlayer() ?: return
-    messages.forEach {
-      player.sendMessage(PluginContext.textFormatter.format(it))
+  /**
+   *
+   */
+  override fun sendMessages(
+    vararg messageArray: String
+  ) {
+    if (1 < messageArray.size) {
+      val player = this.getPlayer() ?: return
+      //
+      //
+      messageArray.forEach { message ->
+        player.sendMessage(message.colorize())
+      }
+      return
     }
-  }
 
-  override fun sendMessages(messages: () -> Array<out String>) {
-    val player = getPlayer() ?: return
-    messages().forEach {
-      player.sendMessage(PluginContext.textFormatter.format(it))
+    if (1 == messageArray.size) {
+      this.sendMessage(messageArray[0])
+      return
     }
   }
 }

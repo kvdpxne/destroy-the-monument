@@ -16,7 +16,7 @@ object GameStopListener : Listenable {
     val game = event.game
 
     game.teams.forEach { team ->
-      team.teammates.forEach { teammate ->
+      team.teammateMutableSet.forEach { teammate ->
 
         val performer = teammate.user.performer as UserPerformer
 
