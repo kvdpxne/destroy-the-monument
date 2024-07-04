@@ -8,7 +8,6 @@ import me.kvdpxne.dtm.shared.QueuingPair
 import me.kvdpxne.dtm.shared.toQueuingPair
 import me.kvdpxne.dtm.statistics.Statistics
 import me.kvdpxne.dtm.user.User
-import me.kvdpxne.dtm.user.UserPerformer
 
 class Teammate(
   val user: User,
@@ -40,6 +39,46 @@ class Teammate(
 
 
     this.fastBoard = null
+  }
+
+  /**
+   * Alias for [Statistics.addKills]
+   *
+   * @since 0.1
+   */
+  fun addKill() {
+    this.user.statistics.addKills()
+    this.statistics.addKills()
+  }
+
+  /**
+   * Alias for [Statistics.addAssists]
+   *
+   * @since 0.1
+   */
+  fun addAssist() {
+    this.user.statistics.addAssists()
+    this.statistics.addAssists()
+  }
+
+  /**
+   * Alias for [Statistics.addDeaths]
+   *
+   * @since 0.1
+   */
+  fun addDeath() {
+    this.user.statistics.addDeaths()
+    this.statistics.addDeaths()
+  }
+
+  /**
+   * Alias for [Statistics.addDestroyedMonuments]
+   *
+   * @since 0.1
+   */
+  fun addDestroyedMonument() {
+    this.user.statistics.addDestroyedMonuments()
+    this.statistics.addDestroyedMonuments()
   }
 
   /**

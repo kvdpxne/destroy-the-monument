@@ -81,6 +81,9 @@ object BlockBreakListener : Listener {
     // The team to which the user who destroyed the monument is assigned
     val team = game.findTeam(user) ?: return
 
+    //
+    val teammate = team.findTeammate(user) ?: return
+
     // An arena in which the game is played
     val arena = game.currentArena ?: return
 
@@ -118,6 +121,9 @@ object BlockBreakListener : Listener {
     if (!attackedTeam.dealDamage()) {
       // TODO stop game
     }
+
+    //
+    teammate.addDestroyedMonument()
 
     if (attackedTeam.identity == DefaultTeamColor.RED) {
       game.teams.forEach {

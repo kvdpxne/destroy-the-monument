@@ -37,6 +37,20 @@ object PlayerDeathListener : Listener {
     return "$professionColor&l$professionName $teammateColor$teammateName&r"
   }
 
+  private fun addAndUpdateKills(teammate: Teammate) {
+    teammate.addKill()
+    teammate.fastBoard?.let {
+      updateKillCount(it, teammate.statistics.kills)
+    }
+  }
+
+  private fun addAndUpdateDeaths(teammate: Teammate) {
+    teammate.addDeath()
+    teammate.fastBoard?.let {
+      updateDeathCount(it, teammate.statistics.deaths)
+    }
+  }
+
   @EventHandler
   fun handlePlayerDeath(event: PlayerDeathEvent) {
     val victim = event.entity
@@ -66,13 +80,8 @@ object PlayerDeathListener : Listener {
       // Zwiadowca       currant          zginął
       event.deathMessage = "${this.formatTeammate(victimTeammate)} &6died".colorize()
 
-      victimUser.statistics.addDeaths()
-      victimTeammate.statistics.addDeaths()
-
-      victimTeammate.fastBoard?.let {
-        updateDeathCount(it, victimTeammate.statistics.deaths)
-      }
-
+      //
+      this.addAndUpdateDeaths(victimTeammate)
       return
     }
 
@@ -83,18 +92,7 @@ object PlayerDeathListener : Listener {
     // Zwiadowca       currant          -->    Łucznik         strawberry
     event.deathMessage = "${this.formatTeammate(murderTeammate)} &6--> ${this.formatTeammate(victimTeammate)}".colorize()
 
-    murderUser.statistics.addKills()
-    murderTeammate.statistics.addKills()
-
-    murderTeammate.fastBoard?.let {
-      updateKillCount(it, victimTeammate.statistics.kills)
-    }
-
-    victimUser.statistics.addDeaths()
-    victimTeammate.statistics.addDeaths()
-
-    victimTeammate.fastBoard?.let {
-      updateDeathCount(it, victimTeammate.statistics.deaths)
-    }
+    this.addAndUpdateDeaths(victimTeammate)
+    this.addAndUpdateKills(murderTeammate)
   }
 }
