@@ -232,7 +232,12 @@ class Game(val identifier: UUID, var name: String) : Communicative {
       // Checking if the user is present in the team is not necessary because
       // the method to remove the user from the team filters the collections
       // of current users in the team to find the given user.
-      it.removeTeammate(teammate)
+      if (!it.removeTeammate(teammate)) {
+        return@forEach
+      }
+
+      this.teamSizeMutableMap[identity] = team.size()
+      ++spectators
     }
 
     if (team.addTeammate(teammate).not()) {
