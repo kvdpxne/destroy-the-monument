@@ -8,6 +8,8 @@ import me.kvdpxne.dtm.DestroyTheMonument
 import me.kvdpxne.dtm.command.Communicative
 import me.kvdpxne.dtm.data.GameArenasDao
 import me.kvdpxne.dtm.data.GameTeamsDao
+import me.kvdpxne.dtm.event.GameStartEvent
+import me.kvdpxne.dtm.event.GameStopEvent
 import me.kvdpxne.dtm.eventManager
 import me.kvdpxne.dtm.shared.Identity
 import me.kvdpxne.dtm.shared.debug

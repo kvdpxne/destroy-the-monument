@@ -2,12 +2,11 @@ package me.kvdpxne.dtm.listener.internal
 
 import me.kvdpxne.dtm.DestroyTheMonument
 import me.kvdpxne.dtm.game.DefaultTeamColor
-import me.kvdpxne.dtm.game.GameStartEvent
+import me.kvdpxne.dtm.event.GameStartEvent
 import me.kvdpxne.dtm.game.toLocation
 import me.kvdpxne.dtm.scoreboard.createServerScoreboard
 import me.kvdpxne.dtm.scoreboard.createServerTeam
 import me.kvdpxne.dtm.scoreboard.initScoreboard
-import me.kvdpxne.dtm.shared.Identity
 import me.kvdpxne.dtm.shared.fillExpBar
 import me.kvdpxne.dtm.shared.hardClean
 import me.kvdpxne.dtm.tasks.GameTimeUpdateTaskTimer

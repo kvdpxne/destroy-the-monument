@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.listener.internal
 
-import me.kvdpxne.dtm.game.GameStopEvent
+import me.kvdpxne.dtm.event.GameStopEvent
 import me.kvdpxne.dtm.shared.hardClean
 import me.kvdpxne.dtm.user.UserPerformer
 import me.kvdpxne.thrivi.EventHandler
