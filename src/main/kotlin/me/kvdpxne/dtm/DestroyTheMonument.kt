@@ -20,8 +20,6 @@ import me.kvdpxne.dtm.listener.PlayerRespawnListener
 import me.kvdpxne.dtm.listener.PlayerToggleFlightListener
 import me.kvdpxne.dtm.listener.ProjectileHitListener
 import me.kvdpxne.dtm.listener.WeatherChangeListener
-import me.kvdpxne.dtm.listener.internal.GameStartListener
-import me.kvdpxne.dtm.listener.internal.GameStopListener
 import me.kvdpxne.dtm.profession.ProfessionManager
 import me.kvdpxne.dtm.shared.BukkitTextFormatter
 import me.kvdpxne.dtm.user.UserManager
@@ -97,9 +95,6 @@ class DestroyTheMonument : JavaPlugin() {
       ProjectileHitListener,
       WeatherChangeListener
     )
-
-    eventManager.registerListener(GameStartListener)
-    eventManager.registerListener(GameStopListener)
 
     CommandManager.registerBuiltItCommands()
   }

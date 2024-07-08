@@ -31,10 +31,8 @@ object MonumentDao {
         MonumentTable.identifier eq identifier.toString()
       }
       .map {
-        val team = TeamDao.findByIdentifier(
-          UUID.fromString(
-            it[MonumentTable.team]
-          )
+        val team = TeamIdentityDao.findByIdentifier(
+          it[MonumentTable.team]!!
         ) ?: return null
 
         Monument(

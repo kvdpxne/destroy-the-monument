@@ -33,10 +33,8 @@ object SpawnPointDao {
         SpawnPointTable.identifier eq identifier.toString()
       }
       .map {
-        val team = TeamDao.findByIdentifier(
-          UUID.fromString(
-            it[SpawnPointTable.team]
-          )
+        val team = TeamIdentityDao.findByIdentifier(
+          it[SpawnPointTable.team]!!
         ) ?: return null
 
         SpawnPoint(

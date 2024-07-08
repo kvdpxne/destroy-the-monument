@@ -4,7 +4,7 @@ import java.util.UUID
 import me.kvdpxne.dtm.shared.Identity
 
 data class Monument(
-  var team: Identity,
+  var team: TeamIdentity,
   var x: Int,
   var y: Int,
   var z: Int,
@@ -18,7 +18,7 @@ data class Monument(
 
   init {
     // Checks if the given team identity can be used to create this object.
-    check(null != DefaultTeamColor.findByIdentity(this.team)) {
+    require(TeamService.existsTeamIdentityByIdentifier(this.team.identifier)) {
       "The given team identity cannot be used."
     }
   }

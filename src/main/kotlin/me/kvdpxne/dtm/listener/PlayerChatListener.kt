@@ -1,6 +1,5 @@
 package me.kvdpxne.dtm.listener
 
-import me.kvdpxne.dtm.game.DefaultTeamColor
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.Teammate
 import me.kvdpxne.dtm.user.UserManager
@@ -16,9 +15,9 @@ object PlayerChatListener : Listener {
     val professionName = teammate.professionQueuingPair.current.displayName
     val teammateName = teammate.user.name
 
-    val teamColor = teammate.teamColor as DefaultTeamColor
+    val teamColor = teammate.team.identity
     val professionColor = teamColor.professionColor
-    val teammateColor = teamColor.chatColor
+    val teammateColor = teamColor.colorInChat
 
     return "$professionColor&l$professionName $teammateColor$teammateName&r"
   }

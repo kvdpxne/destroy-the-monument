@@ -4,7 +4,7 @@ import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.CommandHandler
 import me.kvdpxne.dtm.game.ArenaManager
-import me.kvdpxne.dtm.game.DefaultTeamColor
+import me.kvdpxne.dtm.game.TeamService
 import me.kvdpxne.dtm.game.addMonument
 import me.kvdpxne.dtm.shared.SelectedPositionStorage
 import me.kvdpxne.dtm.user.UserPerformer
@@ -28,7 +28,7 @@ fun createAddMonumentCommand(): Command = CommandBuilder()
     }
 
     val teamName = parameter.asText(1)
-    val team = DefaultTeamColor.findByIdentityKey(teamName)
+    val team = TeamService.findTeamIdentity(teamName)
 
     if (null == team) {
       performer.sendMessage("An team named $teamName does not exist.")

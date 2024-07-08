@@ -1,7 +1,6 @@
 package me.kvdpxne.dtm.listener
 
 import me.kvdpxne.dtm.DestroyTheMonument
-import me.kvdpxne.dtm.game.DefaultTeamColor
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.Team
 import me.kvdpxne.dtm.game.findMonument
@@ -13,7 +12,6 @@ import me.kvdpxne.dtm.shared.isRich
 import me.kvdpxne.dtm.shared.toBuilder
 import me.kvdpxne.dtm.tasks.GameStopTaskTimer
 import me.kvdpxne.dtm.user.UserManager
-import me.kvdpxne.dtm.user.UserPerformer
 import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -31,8 +29,8 @@ private val WON = Material.DIAMOND.toBuilder()
 object BlockBreakListener : Listener {
 
   private fun fs(team: Team, item: ItemStack) {
-    team.teammateMutableSet.forEach { teammate ->
-      val player = (teammate.user.performer as UserPerformer).getPlayer()!!
+    team.teammates.forEach { teammate ->
+      val player = teammate.user.performer.getPlayer()!!
 
       player.hardClean()
 
@@ -125,25 +123,21 @@ object BlockBreakListener : Listener {
     //
     teammate.addDestroyedMonument()
 
-    if (attackedTeam.identity == DefaultTeamColor.RED) {
-      game.teams.forEach {
-        it.teammateMutableSet.forEach { teammate ->
-          updateRedMonumentCount(teammate.fastBoard!!, attackedTeam.health)
+    game.teams.forEach {
+      if (attackedTeam.identity == monumentIdentity) {
+        it.teammates.forEach {
+          updateRedMonumentCount(it.fastBoard!!, attackedTeam.health)
         }
+        return@forEach
       }
-    } else {
-      game.teams.forEach {
-        it.teammateMutableSet.forEach { teammate ->
-          updateBlueMonumentCount(teammate.fastBoard!!, attackedTeam.health)
-        }
+
+      it.teammates.forEach { teammate ->
+        updateBlueMonumentCount(teammate.fastBoard!!, attackedTeam.health)
       }
     }
 
-    (teamIdentity as DefaultTeamColor)
-    val coloredUser = teamIdentity.chatColor.toString() + user.name
-
-    (monumentIdentity as DefaultTeamColor)
-    val coloredMonument = monumentIdentity.chatColor.toString() + monumentIdentity.key
+    val coloredUser = "${teamIdentity.colorInChat}${user.name}"
+    val coloredMonument = "${monumentIdentity.colorInChat}${monumentIdentity.name}"
 
     game.sendMessages(
       "",

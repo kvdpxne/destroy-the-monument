@@ -1,7 +1,6 @@
 package me.kvdpxne.dtm.listener
 
 import me.kvdpxne.dtm.DestroyTheMonument
-import me.kvdpxne.dtm.game.DefaultTeamColor
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.toLocation
 import me.kvdpxne.dtm.shared.fillExpBar
@@ -37,7 +36,7 @@ object PlayerRespawnListener : Listener {
         this.shift()
       }
 
-      this.current.equip(player, (teammate.teamColor as DefaultTeamColor).dyeColor)
+      this.current.equip(player, teammate.team.identity.dyeColor)
 
       this.current.ability?.let {
         if (it.readyAfterDeath) {

@@ -2,9 +2,9 @@ package me.kvdpxne.dtm.commands
 
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
-import me.kvdpxne.dtm.game.DefaultTeamColor
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.Team
+import me.kvdpxne.dtm.game.TeamService
 import me.kvdpxne.dtm.user.UserPerformer
 
 // Usage: /dtm AddTeam <GAME_NAME> <TEAM_IDENTITY>
@@ -26,7 +26,7 @@ fun createAddTeamCommand(): Command = CommandBuilder()
     }
 
     val teamName = parameter.asText(1)
-    val team = DefaultTeamColor.findByIdentityKey(teamName)
+    val team = TeamService.findTeamIdentityByName(teamName)
 
     if (null == team) {
       performer.sendMessage("An team named $teamName does not exist.")

@@ -2,8 +2,8 @@ package me.kvdpxne.dtm.commands
 
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
-import me.kvdpxne.dtm.data.TeamDao
-import me.kvdpxne.dtm.game.DefaultTeamColor
+import me.kvdpxne.dtm.data.TeamIdentityDao
+import me.kvdpxne.dtm.game.TeamService
 import me.kvdpxne.dtm.user.UserPerformer
 
 fun createCreateTeamCommand(): Command = CommandBuilder()
@@ -15,7 +15,7 @@ fun createCreateTeamCommand(): Command = CommandBuilder()
       return@handler
     }
     val name = parameter.asText()
-    TeamDao.insert(DefaultTeamColor.findByIdentityKey(name)!!)
+    TeamIdentityDao.insert(TeamService.findTeamIdentityByName(name)!!)
     performer.sendMessage(name)
   }
   .build()

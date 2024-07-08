@@ -3,32 +3,31 @@ package me.kvdpxne.dtm.game
 import io.github.oshai.kotlinlogging.KLogger
 import io.github.oshai.kotlinlogging.KotlinLogging
 import me.kvdpxne.dtm.command.Communicative
-import me.kvdpxne.dtm.shared.Identity
 import me.kvdpxne.dtm.user.User
 
 private val logger: KLogger = KotlinLogging.logger { }
 
 class Team(
-  val identity: Identity,
+  val identity: TeamIdentity,
   var game: Game? = null
 ) : Communicative {
 
   /**
    * Collection of teammates belonging to the team.
    */
-  val teammateMutableSet: MutableSet<Teammate>
+  val teammates: MutableSet<Teammate>
 
   /**
    *
    */
   var health: Int
-    private set
+    internal set
 
   /**
    *
    */
   init {
-    this.teammateMutableSet = mutableSetOf()
+    this.teammates = mutableSetOf()
     this.health = -1
   }
 
@@ -36,7 +35,7 @@ class Team(
    *
    */
   fun findTeammate(user: User): Teammate? {
-    return teammateMutableSet.find {
+    return teammates.find {
       it.user == user
     }
   }
@@ -54,7 +53,7 @@ class Team(
    * method.
    */
   fun addTeammate(user: User): Boolean {
-    return addTeammate(user.toTeammate(identity, this))
+    return addTeammate(user.toTeammate(this))
   }
 
   /**
@@ -63,7 +62,7 @@ class Team(
    * method.
    */
   fun addTeammate(teammate: Teammate): Boolean {
-    return teammateMutableSet.add(teammate).also {
+    return teammates.add(teammate).also {
       if (it) {
         logger.debug {
           "A new $teammate teammate has been added to the $this team."
@@ -89,7 +88,7 @@ class Team(
    * [Game.removeTeammate] method.
    */
   fun removeTeammate(teammate: Teammate): Boolean {
-    return teammateMutableSet.remove(teammate).also {
+    return teammates.remove(teammate).also {
       if (it) {
         logger.debug {
           "Removed $teammate user from $this team."
@@ -118,7 +117,7 @@ class Team(
    * @since 0.1
    */
   fun size(): Int {
-    return this.teammateMutableSet.size
+    return this.teammates.size
   }
 
   /**
@@ -129,7 +128,7 @@ class Team(
   override fun sendMessage(
     message: String
   ) {
-    this.teammateMutableSet.forEach { teammate: Teammate ->
+    this.teammates.forEach { teammate: Teammate ->
       teammate.sendMessage(message)
     }
   }
@@ -142,12 +141,12 @@ class Team(
   override fun sendMessage(
     message: () -> String
   ) {
-    if (this.teammateMutableSet.isEmpty()) {
+    if (this.teammates.isEmpty()) {
       return
     }
 
     val body = message()
-    this.teammateMutableSet.forEach { teammate: Teammate ->
+    this.teammates.forEach { teammate: Teammate ->
       teammate.sendMessage(body)
     }
   }
@@ -160,11 +159,11 @@ class Team(
   override fun sendMessages(
     vararg messageArray: String
   ) {
-    if (this.teammateMutableSet.isEmpty() || messageArray.isEmpty()) {
+    if (this.teammates.isEmpty() || messageArray.isEmpty()) {
       return
     }
 
-    this.teammateMutableSet.forEach { teammate: Teammate ->
+    this.teammates.forEach { teammate: Teammate ->
       teammate.sendMessages(*messageArray)
     }
   }

@@ -2,7 +2,6 @@ package me.kvdpxne.dtm.gui
 
 import me.kvdpxne.dtm.colorize
 import me.kvdpxne.dtm.colorizeAll
-import me.kvdpxne.dtm.game.DefaultTeamColor
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.profession.ProfessionManager
@@ -14,10 +13,13 @@ import org.bukkit.inventory.ItemStack
 fun createTeamSelectionGui(game: Game, user: User) = Gui("Team selection", Rows.ONE).apply {
   val coloredWool = ItemStack(Material.WOOL)
 
+  val iterator = game.teams.iterator()
+
+  val red = iterator.next().identity
   setItem(0, coloredWool.apply {
     durability = 14
     itemMeta = itemMeta.apply {
-      val teamSize = game.findTeam(DefaultTeamColor.RED)?.size() ?: 0
+      val teamSize = game.findTeam(red)?.size() ?: 0
       displayName = "&c&lRED &r&8| &6$teamSize/unlimited".colorize()
       lore = arrayOf(
         "&7You will be added directly to",
@@ -25,17 +27,18 @@ fun createTeamSelectionGui(game: Game, user: User) = Gui("Team selection", Rows.
       ).colorizeAll()
     }
   }) {
-    game.addTeammate(DefaultTeamColor.RED) { user }
+    game.addTeammate(red) { user }
     with(it.whoClicked as Player) {
       closeInventory()
       game.sendMessage("&7> &f$displayName &7joined the &c&lRED &7team.")
     }
   }
 
+  val blue = iterator.next().identity
   setItem(8, coloredWool.apply {
     durability = 11
     itemMeta = itemMeta.apply {
-      val teamSize = game.findTeam(DefaultTeamColor.BLUE)?.size() ?: 0
+      val teamSize = game.findTeam(blue)?.size() ?: 0
       displayName = "&9&lBLUE &r&8| &6$teamSize/unlimited".colorize()
       lore = arrayOf(
         "&7You will be added directly to",
@@ -43,7 +46,7 @@ fun createTeamSelectionGui(game: Game, user: User) = Gui("Team selection", Rows.
       ).colorizeAll()
     }
   }) {
-    game.addTeammate(DefaultTeamColor.BLUE) { user }
+    game.addTeammate(blue) { user }
     with(it.whoClicked as Player) {
       closeInventory()
       game.sendMessage("&7> &f$displayName &7joined the &9&lBLUE &7team.")
@@ -63,13 +66,13 @@ fun createTeamSelectionGui(game: Game, user: User) = Gui("Team selection", Rows.
       game.teams.random().identity
     } else {
       game.findSmallerTeam()!!.identity
-    } as DefaultTeamColor
+    }
 
     game.addTeammate(name) { user }
     with(it.whoClicked as Player) {
       closeInventory()
 
-      game.sendMessage("&7> &f$displayName &7joined the ${name.chatColor}&l${name.key.uppercase()} &7team.")
+      game.sendMessage("&7> &f$displayName &7joined the ${name.colorInChat}&l${name.name.uppercase()} &7team.")
     }
   }
 }

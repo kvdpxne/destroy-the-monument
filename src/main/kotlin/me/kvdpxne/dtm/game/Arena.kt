@@ -3,7 +3,6 @@ package me.kvdpxne.dtm.game
 import io.github.oshai.kotlinlogging.KLogger
 import io.github.oshai.kotlinlogging.KotlinLogging
 import java.util.UUID
-import me.kvdpxne.dtm.shared.Identity
 import me.kvdpxne.dtm.shared.debug
 
 private val logger: KLogger = KotlinLogging.logger { }
@@ -17,12 +16,12 @@ class Arena(
    * Map of positions for each team where teammates will be spawned after death
    * or being moved to the arena map.
    */
-  val spawnPoints: MutableMap<Identity, SpawnPoint> = mutableMapOf()
+  val spawnPoints: MutableMap<TeamIdentity, SpawnPoint> = mutableMapOf()
 
   /**
    *
    */
-  val monuments: MutableMap<Identity, MutableSet<Monument>> = mutableMapOf()
+  val monuments: MutableMap<TeamIdentity, MutableSet<Monument>> = mutableMapOf()
 
   /**
    *

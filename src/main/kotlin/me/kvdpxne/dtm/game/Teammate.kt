@@ -11,7 +11,6 @@ import me.kvdpxne.dtm.user.User
 
 class Teammate(
   val user: User,
-  var teamColor: Identity,
   val team: Team
 ): Communicative {
 
