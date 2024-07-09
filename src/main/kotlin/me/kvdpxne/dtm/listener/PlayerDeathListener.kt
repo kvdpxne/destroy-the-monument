@@ -1,10 +1,12 @@
 package me.kvdpxne.dtm.listener
 
+import me.kvdpxne.dtm.DestroyTheMonument
 import me.kvdpxne.dtm.colorize
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.Teammate
 import me.kvdpxne.dtm.scoreboard.updateDeathCount
 import me.kvdpxne.dtm.scoreboard.updateKillCount
+import me.kvdpxne.dtm.shared.respawn
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
@@ -72,6 +74,12 @@ object PlayerDeathListener : Listener {
 
     //
     val victimTeammate = game.findTeam(victimUser)!!.findTeammate(victimUser)!!
+
+    Bukkit.getScheduler().runTaskLater(
+      DestroyTheMonument.instance,
+      { victim.respawn() },
+      20L
+    )
 
     val murder = victim.killer
     if (null == murder) {

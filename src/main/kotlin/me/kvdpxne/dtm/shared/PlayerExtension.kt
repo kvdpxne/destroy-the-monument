@@ -1,6 +1,9 @@
 package me.kvdpxne.dtm.shared
 
+import net.minecraft.server.v1_7_R4.EnumClientCommand
+import net.minecraft.server.v1_7_R4.PacketPlayInClientCommand
 import org.bukkit.GameMode
+import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer
 import org.bukkit.entity.Player
 
 fun Player.hardClean() {
@@ -48,4 +51,14 @@ fun Player.fillExpBar() {
 
 fun Player.resetExpBar() {
   this.exp = 0.0F
+}
+
+fun Player.respawn() {
+  this as CraftPlayer
+  if (0.0 < this.health || !this.isOnline) {
+    return
+  }
+
+  val packet = PacketPlayInClientCommand(EnumClientCommand.PERFORM_RESPAWN)
+  this.handle.playerConnection.a(packet)
 }
