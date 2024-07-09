@@ -3,7 +3,6 @@ package me.kvdpxne.dtm.game
 import fr.mrmicky.fastboard.FastBoard
 import me.kvdpxne.dtm.command.Communicative
 import me.kvdpxne.dtm.profession.Profession
-import me.kvdpxne.dtm.shared.Identity
 import me.kvdpxne.dtm.shared.QueuingPair
 import me.kvdpxne.dtm.shared.toQueuingPair
 import me.kvdpxne.dtm.statistics.Statistics
@@ -28,6 +27,9 @@ class Teammate(
    *
    */
   var fastBoard: FastBoard?
+
+  val currentProfession: Profession
+    get() = this.professionQueuingPair.current
 
   /**
    *

@@ -20,14 +20,6 @@ object PlayerDeathListener : Listener {
   ): String {
     val profession = teammate.professionQueuingPair.current
 
-    profession.ability?.let {
-      if (0 > it.taskIdentifier) {
-        return@let
-      }
-
-      Bukkit.getScheduler().cancelTask(it.taskIdentifier)
-    }
-
     val professionName = profession.displayName
     val teammateName = teammate.user.name
 
@@ -74,6 +66,7 @@ object PlayerDeathListener : Listener {
 
     //
     val victimTeammate = game.findTeam(victimUser)!!.findTeammate(victimUser)!!
+    victimTeammate.currentProfession.ability?.cancelCooldown()
 
     Bukkit.getScheduler().runTaskLater(
       DestroyTheMonument.instance,

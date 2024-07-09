@@ -2,6 +2,7 @@ package me.kvdpxne.dtm.profession
 
 import me.kvdpxne.dtm.DestroyTheMonument
 import me.kvdpxne.dtm.shared.resetExpBar
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -43,5 +44,13 @@ class Ability(
       2L,
       20L
     ).taskId
+  }
+
+  fun cancelCooldown() {
+    if (0 > this.taskIdentifier) {
+      return
+    }
+
+    Bukkit.getScheduler().cancelTask(this.taskIdentifier)
   }
 }
