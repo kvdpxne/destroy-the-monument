@@ -4,6 +4,7 @@ import me.kvdpxne.dtm.DestroyTheMonument
 import me.kvdpxne.dtm.colorize
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.Teammate
+import me.kvdpxne.dtm.scoreboard.updateCoinCount
 import me.kvdpxne.dtm.scoreboard.updateDeathCount
 import me.kvdpxne.dtm.scoreboard.updateKillCount
 import me.kvdpxne.dtm.shared.respawn
@@ -91,6 +92,9 @@ object PlayerDeathListener : Listener {
     // MURDER_KIT_NAME MURDER_USER_NAME ACTION VICTIM_KIT_NAME VICTIM_USER_NAME
     // Zwiadowca       currant          -->    Łucznik         strawberry
     event.deathMessage = "${this.formatTeammate(murderTeammate)} &6--> ${this.formatTeammate(victimTeammate)}".colorize()
+
+    murderUser.wallet.addCoins(20)
+    updateCoinCount(murderTeammate.fastBoard!!, murderUser.wallet.coins)
 
     this.addAndUpdateDeaths(victimTeammate)
     this.addAndUpdateKills(murderTeammate)

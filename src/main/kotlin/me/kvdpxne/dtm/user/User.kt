@@ -5,11 +5,13 @@ import me.kvdpxne.dtm.command.Communicative
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionManager
 import me.kvdpxne.dtm.statistics.Statistics
+import me.kvdpxne.dtm.wallet.Wallet
 
 class User(
   val identifier: UUID,
   var name: String,
-  var statistics: Statistics = Statistics()
+  var statistics: Statistics = Statistics(),
+  val wallet: Wallet = Wallet(),
 ) : Communicative {
 
   val performer: UserPerformer

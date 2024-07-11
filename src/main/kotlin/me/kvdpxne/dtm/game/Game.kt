@@ -411,7 +411,7 @@ class Game(val identifier: UUID, var name: String) : Communicative {
             teamHealthMutableMap[teamsIdentity[1]] ?: 0,
             teamSizeMutableMap[teamsIdentity[0]] ?: 0,
             teamHealthMutableMap[teamsIdentity[1]] ?: 0,
-            1000
+            teammate.user.wallet.coins
           )
 
           teammate.fastBoard = fastBoard

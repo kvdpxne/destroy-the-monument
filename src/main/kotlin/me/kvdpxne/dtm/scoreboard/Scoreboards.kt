@@ -82,3 +82,7 @@ fun updateKillCount(fastBoard: FastBoard, count: Int) {
 fun updateDeathCount(fastBoard: FastBoard, count: Int) {
   fastBoard.updateLine(11, "&7Smierci: &6&l$count".colorize())
 }
+
+fun updateCoinCount(fastBoard: FastBoard, count: Int) {
+  fastBoard.updateLine(14, "&6&l$count".colorize())
+}
