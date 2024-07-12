@@ -4,13 +4,12 @@ import java.io.File
 import org.bukkit.Bukkit
 import org.bukkit.World
 import org.bukkit.WorldCreator
-import org.bukkit.craftbukkit.v1_7_R4.CraftWorld
 
 object WorldLoaderHelper {
 
   private fun prepareWorld(world: World) {
     world.fullTime = 6000L
-    (world as CraftWorld).handle.worldData.setStorm(false)
+    (world as BukkitWorld).handle.worldData.setStorm(false)
   }
 
   fun getWorld(name: String): World? {
