@@ -1,20 +1,21 @@
 package me.kvdpxne.dtm.command
 
 import me.kvdpxne.dtm.command.bukkit.BukkitCommandMapAccessor
-import me.kvdpxne.dtm.commands.createHelpCommand
-import me.kvdpxne.dtm.commands.createJoinCommand
-import me.kvdpxne.dtm.commands.createKitCommand
-import me.kvdpxne.dtm.commands.createLeaveCommand
 import me.kvdpxne.dtm.commands.StartCommand
 import me.kvdpxne.dtm.commands.StopCommand
 import me.kvdpxne.dtm.commands.createAddArenaCommand
 import me.kvdpxne.dtm.commands.createAddMonumentCommand
 import me.kvdpxne.dtm.commands.createAddTeamCommand
+import me.kvdpxne.dtm.commands.createBaseCommand
+import me.kvdpxne.dtm.commands.createCoinsCommand
 import me.kvdpxne.dtm.commands.createCreateArenaCommand
 import me.kvdpxne.dtm.commands.createCreateGameCommand
 import me.kvdpxne.dtm.commands.createCreateTeamCommand
-import me.kvdpxne.dtm.commands.createBaseCommand
 import me.kvdpxne.dtm.commands.createGlobalChatCommand
+import me.kvdpxne.dtm.commands.createHelpCommand
+import me.kvdpxne.dtm.commands.createJoinCommand
+import me.kvdpxne.dtm.commands.createKitCommand
+import me.kvdpxne.dtm.commands.createLeaveCommand
 import me.kvdpxne.dtm.commands.createSetArenaMapCommand
 import me.kvdpxne.dtm.commands.createSetSpawnPointCommand
 import me.kvdpxne.dtm.commands.createTeleportBackCommand
@@ -60,7 +61,9 @@ object CommandManager {
       StopCommand.createStopCommand(),
       createTeleportBackCommand(),
       createTeleportCommand(),
-      createWandCommand()
+      createWandCommand(),
+
+      createCoinsCommand()
     ).onEach {
       it.parent = parent
     }
