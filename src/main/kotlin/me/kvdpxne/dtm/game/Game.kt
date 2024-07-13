@@ -478,7 +478,16 @@ class Game(val identifier: UUID, var name: String) : Communicative {
           this.hardClean()
         }
       }
+
+      // Clean
+      team.removeAllTeammates()
     }
+
+    // TODO remove
+    this.teamHealthMutableMap.clear()
+    this.teamSizeMutableMap.clear()
+
+    this.spectators = this.hostages.size
 
     end = Instant.now()
     state = GameState.STOPPED

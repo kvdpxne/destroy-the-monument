@@ -97,6 +97,10 @@ class Team(
     }
   }
 
+  fun removeAllTeammates() {
+    this.teammates.clear()
+  }
+
   /**
    *
    */
