@@ -2,7 +2,6 @@ package me.kvdpxne.dtm.user
 
 import java.util.UUID
 import me.kvdpxne.dtm.data.UserDao
-import me.kvdpxne.dtm.statistics.Statistics
 
 /**
  * @since 0.1.0

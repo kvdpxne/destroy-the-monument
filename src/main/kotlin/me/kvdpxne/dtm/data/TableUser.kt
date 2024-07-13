@@ -2,7 +2,7 @@ package me.kvdpxne.dtm.data
 
 import java.util.UUID
 import me.kvdpxne.dtm.profession.ProfessionManager
-import me.kvdpxne.dtm.statistics.Statistics
+import me.kvdpxne.dtm.user.UserStatistics
 import me.kvdpxne.dtm.user.User
 import org.ktorm.dsl.QueryRowSet
 import org.ktorm.dsl.eq
@@ -24,12 +24,8 @@ object UserTable : Table<Nothing>("user") {
   // profession
   val profession = varchar("profession")
 
+  val statisticsIdentifier = varchar("statistics_identifier")
   val walletIdentifier = varchar("wallet_identifier")
-
-  // Statistics
-  val kills = int("kills")
-  val assists = int("assists")
-  val deaths = int("deaths")
 }
 
 internal fun toUser(
@@ -41,9 +37,8 @@ internal fun toUser(
 
   val profession = row[UserTable.profession]!!
 
-  val kills = row[UserTable.kills]!!
-  val assists = row[UserTable.assists]!!
-  val deaths = row[UserTable.deaths]!!
+  val statisticsIdentifier = row[UserTable.statisticsIdentifier]!!
+  val statistics = findUserStatisticsByIdentifier(statisticsIdentifier)!!
 
 
   val walletIdentifier = row[UserTable.walletIdentifier]!!
@@ -53,7 +48,7 @@ internal fun toUser(
   return User(
     identifier,
     name,
-    Statistics(kills, assists, deaths),
+    statistics,
     wallet
   ).apply {
     ProfessionManager.findByName(profession)?.let {
@@ -78,11 +73,7 @@ object UserDao {
       set(it.name, user.name)
       set(it.profession, user.profession.name)
 
-      val statistics = user.statistics
-      set(it.kills, statistics.kills)
-      set(it.assists, statistics.assists)
-      set(it.deaths, statistics.deaths)
-
+      set(it.statisticsIdentifier, user.statistics.identifier)
       set(it.walletIdentifier, user.wallet.identifier)
 
       where {
@@ -90,6 +81,7 @@ object UserDao {
       }
     }
 
+    updateUserStatistics(user.statistics)
     updateUserWaller(user.wallet)
   }
 
@@ -99,14 +91,11 @@ object UserDao {
       set(it.name, user.name)
       set(it.profession, user.profession.name)
 
-      val statistics = user.statistics
-      set(it.kills, statistics.kills)
-      set(it.assists, statistics.assists)
-      set(it.deaths, statistics.deaths)
-
+      set(it.statisticsIdentifier, user.statistics.identifier)
       set(it.walletIdentifier, user.wallet.identifier)
     }
 
+    insertUserStatistics(user.statistics)
     insertUserWallet(user.wallet)
   }
 

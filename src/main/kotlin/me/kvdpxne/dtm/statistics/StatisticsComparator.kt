@@ -1,7 +1,13 @@
 package me.kvdpxne.dtm.statistics
 
+import me.kvdpxne.dtm.user.UserStatistics
+
 /**
- * Provides utility functions for comparing statistics objects.
+ * Provides utility functions for creating comparators used to sort statistics
+ * objects.
+ *
+ * This class offers a static method, `compare`, for generating comparators
+ * that sort statistics objects based on a specific criterion.
  *
  * @since 0.1.0
  */
@@ -33,17 +39,40 @@ object StatisticsComparator {
   fun compare(
     type: Int = StatisticsCriteria.BY_KILLS
   ): Comparator<Statistics> {
+    require(type in 0..6) {
+      "Unsupported comparison criteria: $type"
+    }
+
     return Comparator { a: Statistics, b: Statistics ->
-      when (type) {
-        0 -> b.kills - a.kills
-        1 -> b.deaths - a.deaths
-        2 -> b.assists - a.assists
-        3 -> b.playedGames - a.playedGames
-        4 -> b.gamesWon - a.gamesWon
-        5 -> b.gamesLost - a.gamesLost
-        6 -> b.destroyedMonuments - a.destroyedMonuments
-        else -> throw IllegalArgumentException("Unknown type $type")
+
+      // Handle UserStatistics objects first
+      if (a is UserStatistics && b is UserStatistics) {
+        return@Comparator when (type) {
+          0 -> b.kills - a.kills
+          1 -> b.deaths - a.deaths
+          2 -> b.assists - a.assists
+          3 -> b.playedGames - a.playedGames
+          4 -> b.gamesWon - a.gamesWon
+          5 -> b.gamesLost - a.gamesLost
+          6 -> b.destroyedMonuments - a.destroyedMonuments
+          else -> throw IllegalArgumentException("Unknown type $type")
+        }
       }
+
+      // Then handle BaseStatistics objects
+      if (a is BaseStatistics && b is BaseStatistics) {
+        return@Comparator when (type) {
+          0 -> b.kills - a.kills
+          1 -> b.deaths - a.deaths
+          2 -> b.assists - a.assists
+          6 -> b.destroyedMonuments - a.destroyedMonuments
+          else -> throw IllegalArgumentException("Unknown type $type")
+        }
+      }
+
+      throw StatisticsException(
+        "Unsupported statistics object types for comparison."
+      )
     }
   }
 }
