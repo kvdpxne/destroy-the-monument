@@ -13,10 +13,12 @@ val wand = ItemStack(Material.STICK).apply {
   itemMeta = meta
 }
 
-fun createWandCommand(): Command = CommandBuilder()
-  .name("wand")
-  .parent("dtm")
-  .handler<UserPerformer> { performer, _ ->
-    performer.getPlayer()?.inventory?.addItem(wand)
-  }
-  .build()
+fun createWandCommand(): Command {
+  // Usage: /dtm wand
+  return CommandBuilder()
+    .name("wand")
+    .handler<UserPerformer> { performer, _ ->
+      performer.getPlayer()?.inventory?.addItem(wand)
+    }
+    .build()
+}

@@ -10,6 +10,9 @@ object UserManager {
 
   private val identifierUserMap = mutableMapOf<UUID, User>()
 
+  val users: List<User>
+    get() = this.identifierUserMap.values.toList()
+
   /**
    * Tries to find a [User] by the given unique user identifier.
    */

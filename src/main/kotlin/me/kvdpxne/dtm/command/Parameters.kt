@@ -1,34 +1,50 @@
 package me.kvdpxne.dtm.command
 
-class Parameters(arguments: Array<out String>) {
+import me.kvdpxne.dtm.game.ArenaManager
+import me.kvdpxne.dtm.game.GameManager
+import me.kvdpxne.dtm.user.UserManager
 
-  var arguments: Array<out String> = arguments
-    private set
-
-  fun length(): Int {
-    return arguments.size
-  }
-
-  fun asParameter(from: Int = 1): Parameters {
-    val size = length()
-    if (from > size) {
-      return this
+fun builderUserNameParameter(
+  name: String = "user_name"
+): ParameterBuilder<String> {
+  return ParameterBuilder<String>()
+    .name(name)
+    .validationBy(ParameterValidators.STRING_VALIDATOR)
+    .autocompletedWith { begin, _ ->
+      //
+      UserManager.users
+        .filter { it.name.startsWith(begin, true) }
+        .map { it.name }
     }
-    return Parameters(arguments.copyOfRange(from, size))
-  }
+}
 
-  /**
-   * @throws ArrayIndexOutOfBoundsException
-   */
-  fun asText(index: Int = 0): String {
-    return arguments[index]
-  }
+/**
+ *
+ */
+fun builderArenaNameParameter(
+  name: String = "arena_name"
+): ParameterBuilder<String> {
+  return ParameterBuilder<String>()
+    .name(name)
+    .validationBy(ParameterValidators.STRING_VALIDATOR)
+    .autocompletedWith { begin, _ ->
+      //
+      ArenaManager.registeredArenas
+        .filter { it.name.startsWith(begin) }
+        .map { it.name }
+    }
+}
 
-  fun asText(): String {
-    return this.arguments.joinToString(" ")
-  }
-
-  fun isEmpty(): Boolean {
-    return 0 == length()
-  }
+fun builderGameNameParameter(
+  name: String = "game_name"
+): ParameterBuilder<String> {
+  return ParameterBuilder<String>()
+    .name(name)
+    .validationBy(ParameterValidators.STRING_VALIDATOR)
+    .autocompletedWith { begin, _ ->
+      //
+      GameManager.registeredGames
+        .filter { it.name.startsWith(begin) }
+        .map { it.name }
+    }
 }

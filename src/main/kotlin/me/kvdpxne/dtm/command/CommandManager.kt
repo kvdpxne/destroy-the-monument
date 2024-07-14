@@ -1,22 +1,23 @@
 package me.kvdpxne.dtm.command
 
 import me.kvdpxne.dtm.command.bukkit.BukkitCommandMapAccessor
-import me.kvdpxne.dtm.commands.StartCommand
-import me.kvdpxne.dtm.commands.StopCommand
-import me.kvdpxne.dtm.commands.createAddArenaCommand
+import me.kvdpxne.dtm.commands.CommandStart
+import me.kvdpxne.dtm.commands.CommandStop
+import me.kvdpxne.dtm.commands.createArenaAddCommand
 import me.kvdpxne.dtm.commands.createAddMonumentCommand
-import me.kvdpxne.dtm.commands.createAddTeamCommand
-import me.kvdpxne.dtm.commands.createBaseCommand
+import me.kvdpxne.dtm.commands.createArenaCommand
+import me.kvdpxne.dtm.commands.createTeamAddCommand
 import me.kvdpxne.dtm.commands.createCoinsCommand
-import me.kvdpxne.dtm.commands.createCreateArenaCommand
-import me.kvdpxne.dtm.commands.createCreateGameCommand
-import me.kvdpxne.dtm.commands.createCreateTeamCommand
+import me.kvdpxne.dtm.commands.createArenaCreateCommand
+import me.kvdpxne.dtm.commands.createGameCreateCommand
+import me.kvdpxne.dtm.commands.createTeamCreateCommand
 import me.kvdpxne.dtm.commands.createGlobalChatCommand
 import me.kvdpxne.dtm.commands.createHelpCommand
 import me.kvdpxne.dtm.commands.createJoinCommand
 import me.kvdpxne.dtm.commands.createKitCommand
 import me.kvdpxne.dtm.commands.createLeaveCommand
-import me.kvdpxne.dtm.commands.createSetArenaMapCommand
+import me.kvdpxne.dtm.commands.createArenaMapSetCommand
+import me.kvdpxne.dtm.commands.createGameCommand
 import me.kvdpxne.dtm.commands.createSetSpawnPointCommand
 import me.kvdpxne.dtm.commands.createTeleportBackCommand
 import me.kvdpxne.dtm.commands.createTeleportCommand
@@ -36,42 +37,26 @@ object CommandManager {
     registeredCommandMap[parent] = ff
   }
 
-  fun registerCommands(commands: Array<out Command>) {
+  fun registerCommands(vararg commands: Command) {
     commands.forEach(::registerCommand)
   }
 
   fun registerBuiltItCommands() {
-    // root
-    val parent = createBaseCommand()
-
-    val it = mutableListOf(
-      createAddArenaCommand(),
-      createAddMonumentCommand(),
-      createAddTeamCommand(),
-      createCreateArenaCommand(),
-      createCreateGameCommand(),
-      createCreateTeamCommand(),
+    registerCommands(
+      createArenaCommand(),
+      createCoinsCommand(),
+      createGameCommand(),
+      createGlobalChatCommand(),
       createHelpCommand(),
       createJoinCommand(),
       createKitCommand(),
       createLeaveCommand(),
-      createSetArenaMapCommand(),
-      createSetSpawnPointCommand(),
-      StartCommand.createStartCommand(),
-      StopCommand.createStopCommand(),
-      createTeleportBackCommand(),
+      createAddMonumentCommand(),
+      CommandStart.createStartCommand(),
+      CommandStop.createStopCommand(),
       createTeleportCommand(),
-      createWandCommand(),
-
-      createCoinsCommand()
-    ).onEach {
-      it.parent = parent
-    }
-
-    it.add(parent)
-    it.add(createGlobalChatCommand())
-
-    registerCommands(it.toTypedArray())
-    BukkitCommandMapAccessor.registerCommands(it.toTypedArray())
+      createTeleportBackCommand(),
+      createWandCommand()
+    )
   }
 }

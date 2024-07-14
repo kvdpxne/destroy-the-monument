@@ -8,7 +8,10 @@ object ArenaManager {
   /**
    *
    */
-  val arenas: MutableMap<UUID, Arena> = mutableMapOf()
+  private val _registeredArenas: MutableMap<UUID, Arena> = mutableMapOf()
+
+  val registeredArenas: List<Arena>
+    get() = this._registeredArenas.values.toList()
 
   init {
     ArenaDao.findAll().forEach {
@@ -17,28 +20,28 @@ object ArenaManager {
   }
 
   fun count(): Int {
-    return arenas.size
+    return _registeredArenas.size
   }
 
   fun findArenaByIdentifier(identifier: UUID): Arena? {
-    return arenas[identifier]
+    return _registeredArenas[identifier]
   }
 
   /**
    *
    */
   fun findArenaByName(name: String, ignoreCase: Boolean = true): Arena? {
-    return arenas.values.find {
+    return _registeredArenas.values.find {
       it.name.equals(name, ignoreCase)
     }
   }
 
   fun addArena(arena: Arena) {
-    arenas[arena.identifier] = arena
+    _registeredArenas[arena.identifier] = arena
   }
 
   fun removeArena(arena: Arena) {
-    arenas.remove(arena.identifier)
+    _registeredArenas.remove(arena.identifier)
   }
 
   fun createArena(name: String): Arena? {

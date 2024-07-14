@@ -9,7 +9,7 @@ object WeatherChangeListener : Listener {
 
   @EventHandler
   fun handleWeatherChange(event: WeatherChangeEvent) {
-    event.isCancelled = ArenaManager.arenas.values.any {
+    event.isCancelled = ArenaManager._registeredArenas.values.any {
       it.identifier == event.world.uid
     }
   }

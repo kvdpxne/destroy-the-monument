@@ -1,9 +1,4 @@
-package me.kvdpxne.dtm.commands
-
-import me.kvdpxne.dtm.command.Command
-import me.kvdpxne.dtm.command.CommandBuilder
-import me.kvdpxne.dtm.command.Performer
-import me.kvdpxne.dtm.command.registeredCommandMap
+package me.kvdpxne.dtm.command
 
 fun createBaseCommand(): Command = CommandBuilder()
   .name("dtm")
@@ -16,7 +11,7 @@ fun createBaseCommand(): Command = CommandBuilder()
       return@handler
     }
 
-    val name = parameter.asText()
+    val name = parameter.asFullText()
     val childCommand = registeredCommandMap[
       registeredCommandMap.keys.find {
         it.matches("dtm")
@@ -30,6 +25,6 @@ fun createBaseCommand(): Command = CommandBuilder()
       return@handler
     }
 
-    childCommand.handler(performer, parameter.asParameter())
+    childCommand.handler?.invoke(performer, parameter.asArguments())
   }
   .build()
