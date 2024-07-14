@@ -8,7 +8,7 @@ import me.kvdpxne.dtm.user.UserPerformer
 fun createKitCommand(): Command {
   return CommandBuilder()
     .name("kit")
-    .aliases("")
+    .aliases("kits", "class", "classes", "profession", "professions")
     .handler<UserPerformer> { performer, _ ->
       performer.getPlayer()?.let {
         createProfessionSelectionGui(performer.user).open(it)

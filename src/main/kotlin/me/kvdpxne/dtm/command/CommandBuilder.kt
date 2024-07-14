@@ -9,16 +9,16 @@ import me.kvdpxne.dtm.shared.Buildable
 class CommandBuilder : Buildable<Command> {
 
   // @formatter:off
-  private var name          : String?                = null
-  private var description   : String?                = null
-  private var usage         : String?                = null
-  private var aliases       : MutableList<String>    = mutableListOf()
-  private var permission   : String?                = null
-  private var executionPlace: ExecutionPlaceType     = EVERYWHERE
-  private var executable    : Boolean                = true
-  private var handler       : CommandHandler<Any>?   = null
-  private var parameters    : MutableList<Parameter> = mutableListOf()
-  private var children      : MutableList<Command>   = mutableListOf()
+  private var name          : String?                   = null
+  private var description   : String?                   = null
+  private var usage         : String?                   = null
+  private var aliases       : MutableList<String>       = mutableListOf()
+  private var permission    : String?                   = null
+  private var executionPlace: ExecutionPlaceType        = EVERYWHERE
+  private var executable    : Boolean                   = true
+  private var handler       : CommandHandler<Any>?      = null
+  private var parameters    : MutableList<Parameter<*>> = mutableListOf()
+  private var children      : MutableList<Command>      = mutableListOf()
   // @formatter:on
 
   /**
@@ -102,14 +102,14 @@ class CommandBuilder : Buildable<Command> {
    * @since 0.1.0
    */
   fun parameters(
-    vararg parameters: Parameter
+    vararg parameters: Parameter<*>
   ): CommandBuilder {
     this.parameters.addAll(parameters)
     return this
   }
 
   fun parameter(
-    parameter: Parameter
+    parameter: Parameter<*>
   ): CommandBuilder {
     this.parameters.add(parameter)
     return this
@@ -150,7 +150,7 @@ class CommandBuilder : Buildable<Command> {
       }
 
       isRequired = !it.required
-      isVarargs = it.required
+      isVarargs = it.varargs
     }
 
     return Command(
@@ -160,9 +160,10 @@ class CommandBuilder : Buildable<Command> {
       this.aliases.toTypedArray(),
       this.permission,
       this.executionPlace,
+      this.executable,
       this.handler,
-      this.children.toTypedArray(),
-      null
+      this.parameters.toTypedArray(),
+      this.children.toTypedArray()
     )
   }
 }

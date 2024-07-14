@@ -20,8 +20,10 @@ package me.kvdpxne.dtm.command
  *                      (optional).
  * @param executionType The location where the command can be executed (defaults
  *                      to `ExecutionPlaceType.EVERYWHERE`).
+ * @param executable
  * @param handler       The function that handles the execution of the command
  *                      (required).
+ * @param parameters
  * @param children      An array of sub-commands associated with this command
  *                      (optional, defaults to an empty array).
  * @param parent        The parent command in the command hierarchy (optional).
@@ -31,14 +33,16 @@ package me.kvdpxne.dtm.command
 open class Command(
   // @formatter:off
   val name          : String,
-      description   : String?            = null,
-      usage         : String?            = null,
-  val aliases       : Array<out String>  = emptyArray(),
-      permission    : String?            = null,
-  val executionType : ExecutionPlaceType = ExecutionPlaceType.EVERYWHERE,
+      description   : String?              = null,
+      usage         : String?              = null,
+  val aliases       : Array<out String>    = emptyArray(),
+      permission    : String?              = null,
+  val executionType : ExecutionPlaceType   = ExecutionPlaceType.EVERYWHERE,
+  val executable    : Boolean              = true,
   val handler       : CommandHandler<Any>? = null,
-  val children      : Array<Command>     = emptyArray(),
-  var parent        : Command?           = null
+  val parameters    : Array<Parameter<*>>  = emptyArray(),
+  val children      : Array<Command>       = emptyArray(),
+      parent        : Command?             = null
   // @formatter:on
 ) {
 
@@ -77,7 +81,34 @@ open class Command(
   lateinit var permission: String
     private set
 
+  /**
+   * @since 0.1.0
+   */
+  var parent: Command? = parent
+    internal set
+
+  /**
+   * @since 0.1.0
+   */
   init {
+    //
+    this.parameters.forEach {
+      require(null == it.command) {
+        "Parameter already has command."
+      }
+
+      it.command = this
+    }
+
+    //
+    this.children.forEach {
+      require(null == it.parent) {
+        "Child command cannot have the same parent."
+      }
+
+      it.parent = this
+    }
+
     // Set default description if not provided
     if (description.isNullOrBlank()) {
       this.description = "Description of command"

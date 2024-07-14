@@ -17,6 +17,7 @@ fun createWandCommand(): Command {
   // Usage: /dtm wand
   return CommandBuilder()
     .name("wand")
+    .aliases("w")
     .handler<UserPerformer> { performer, _ ->
       performer.getPlayer()?.inventory?.addItem(wand)
     }

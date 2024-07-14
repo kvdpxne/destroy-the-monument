@@ -12,7 +12,7 @@ fun createGlobalChatCommand(): Command {
   return CommandBuilder()
     .name("globalChat")
     .aliases("global", "g")
-    .parameters(
+    .parameter(
       ParameterBuilder<String>()
         .name("full_text")
         .validationBy(ParameterValidators.STRING_VALIDATOR)

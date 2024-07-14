@@ -1,6 +1,8 @@
 package me.kvdpxne.dtm.command
 
-class ParameterBuilder<T> {
+import me.kvdpxne.dtm.shared.Buildable
+
+class ParameterBuilder<T> : Buildable<Parameter<T>> {
 
   // @formatter:off
   private var name    : String?  = null
@@ -8,7 +10,7 @@ class ParameterBuilder<T> {
   private var varargs : Boolean = false
 
   private var validator: ParameterValidatorHandler<T>? = null
-  private var autoCompletionHandler: (String, List<String>) -> List<String> = { _, _ -> emptyList() }
+  private var autoCompletionHandler: AutoCompletionHandler? = null
   // @formatter:on
 
   fun name(name: String): ParameterBuilder<T> {
@@ -46,7 +48,7 @@ class ParameterBuilder<T> {
   }
 
   fun autocompletedWith(
-    autoCompletionHandler: (String, List<String>) -> List<String>
+    autoCompletionHandler: AutoCompletionHandler
   ): ParameterBuilder<T> {
     this.autoCompletionHandler = autoCompletionHandler
     return this
@@ -55,8 +57,8 @@ class ParameterBuilder<T> {
   /**
    *
    */
-  fun build(): Parameter {
-    return Parameter(
+  override fun build(): Parameter<T> {
+    return Parameter<T>(
       this.name!!,
       this.required ?: throw IllegalStateException(""),
       this.varargs

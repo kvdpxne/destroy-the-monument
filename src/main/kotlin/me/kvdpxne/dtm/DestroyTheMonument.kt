@@ -1,6 +1,8 @@
 package me.kvdpxne.dtm
 
 import me.kvdpxne.dtm.command.CommandManager
+import me.kvdpxne.dtm.commands.createBaseCommand
+import me.kvdpxne.dtm.commands.createGlobalChatCommand
 import me.kvdpxne.dtm.game.ArenaManager
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.gui.GuiActionHandler
@@ -96,7 +98,11 @@ class DestroyTheMonument : JavaPlugin() {
       WeatherChangeListener
     )
 
-    CommandManager.registerBuiltItCommands()
+    //
+    CommandManager.addCommands(
+      createBaseCommand(),
+      createGlobalChatCommand()
+    )
   }
 
   override fun onDisable() {

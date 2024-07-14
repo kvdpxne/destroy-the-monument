@@ -1,13 +1,11 @@
 package me.kvdpxne.dtm.command.bukkit
 
-import me.kvdpxne.dtm.command.CommandHandler
 import me.kvdpxne.dtm.command.ExecutionPlaceType
 import me.kvdpxne.dtm.command.ExecutionPlaceType.EVERYWHERE
 import me.kvdpxne.dtm.command.ExecutionPlaceType.IN_CONSOLE
 import me.kvdpxne.dtm.command.ExecutionPlaceType.IN_GAME
 import me.kvdpxne.dtm.command.ExecutionPlaceType.IN_GAME_WORLD
-import me.kvdpxne.dtm.command.Arguments
-import me.kvdpxne.dtm.command.Performer
+import me.kvdpxne.dtm.command.CommandExecutor
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
@@ -21,7 +19,6 @@ class BukkitCommandHandler(
               description   : String,
               usage         : String,
               aliases       : List<String>,
-  private val handler       : CommandHandler<Performer>,
   private val executionPlace: ExecutionPlaceType
   // @formatter:on
 ) : Command(name, description, usage, aliases) {
@@ -42,7 +39,7 @@ class BukkitCommandHandler(
     }
 
     val user = UserManager.findByIdentifier(sender.uniqueId)!!
-    handler(user.performer, Arguments(arguments))
+    CommandExecutor.execute(user.performer, arguments)
     return true
   }
 
@@ -55,7 +52,7 @@ class BukkitCommandHandler(
     //
     when (executionPlace) {
       IN_CONSOLE -> {
-        handler(BukkitConsolePerformer(), Arguments(arguments))
+        CommandExecutor.execute(BukkitConsolePerformer(), arguments)
         return true
       }
 
@@ -74,7 +71,7 @@ class BukkitCommandHandler(
         }
 
         if (sender is ConsoleCommandSender) {
-          handler(BukkitConsolePerformer(), Arguments(arguments))
+          CommandExecutor.execute(BukkitConsolePerformer(), arguments)
           return true
         }
         sender.sendMessage("Not supported yet.")
