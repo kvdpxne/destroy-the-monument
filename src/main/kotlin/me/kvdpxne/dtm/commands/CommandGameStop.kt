@@ -8,24 +8,32 @@ import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.user.UserPerformer
 
-object CommandStart {
+object CommandGameStop {
 
-  private fun startGame(game: Game?, user: Performer) {
+  private fun stopGame(game: Game?, performer: Performer) {
     if (null == game) {
-      user.sendMessage("No found game.")
-      user.sendMessage("Usage: /dtm start <GAME_NAME>")
+      performer.sendMessage("No found game.")
+      performer.sendMessage("Usage: /dtm stop <GAME_NAME>")
       return
     }
 
-    game.start()
+    try {
+      game.stop()
+    } catch (exception: IllegalArgumentException) {
+      // It's stupid but for the current phase the point is that the world in
+      // which the player is located will be unloaded. it cannot be discharged
+      // while any player is on this world.
+      performer.sendMessage("The game cannot be stopped.")
+      return
+    }
 
-    user.sendMessage("The game ${game.name} has started.")
+    performer.sendMessage("The ${game.name} game has been stopped.")
   }
 
-  fun createStartCommand(): Command {
-    // Usage: /dtm start [GAME_NAME]
+  fun createStopCommand(): Command {
+    // Usage: /dtm stop [GAME_NAME]
     return CommandBuilder()
-      .name("start")
+      .name("stop")
       .parameter(
         builderGameNameParameter()
           .optional()
@@ -40,12 +48,12 @@ object CommandStart {
           }
 
           val game = GameManager.findByUser(performer.user)
-          startGame(game, performer)
+          stopGame(game, performer)
           return@handler
         }
 
         val game = arguments.asFoundGame()
-        startGame(game, performer)
+        stopGame(game, performer)
       }
       .build()
   }

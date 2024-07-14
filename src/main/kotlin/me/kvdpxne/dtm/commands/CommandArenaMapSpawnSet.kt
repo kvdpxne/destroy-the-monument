@@ -4,14 +4,13 @@ import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.game.ArenaManager
 import me.kvdpxne.dtm.game.TeamService
-import me.kvdpxne.dtm.game.addMonument
-import me.kvdpxne.dtm.shared.SelectedPositionStorage
+import me.kvdpxne.dtm.game.setSpawnPoint
 import me.kvdpxne.dtm.user.UserPerformer
 
-// Usage: /dtm AddMonument <ARENA_NAME> <TEAM_IDENTITY>
-fun createAddMonumentCommand(): Command {
+fun createArenaMapSpawnSetCommand(): Command {
+  // Usage: /dtm arena map spawn set <ARENA_NAME> <TEAM_IDENTITY>
   return CommandBuilder()
-    .name("addMonument")
+    .name("set")
     .handler<UserPerformer> { performer, parameter ->
 
       val arenaName = parameter.asText()
@@ -23,7 +22,7 @@ fun createAddMonumentCommand(): Command {
       }
 
       val teamName = parameter.asText(1)
-      val team = TeamService.findTeamIdentity(teamName)
+      val team = TeamService.findTeamIdentityByName(teamName)
 
       if (null == team) {
         performer.sendMessage("An team named $teamName does not exist.")
@@ -31,14 +30,8 @@ fun createAddMonumentCommand(): Command {
       }
 
       val player = performer.getPlayer() ?: return@handler
-      val position = SelectedPositionStorage.selectedBlocks[player.uniqueId]
+      arena.setSpawnPoint(team, player.location)
 
-      if (null == position) {
-        performer.sendMessage("No block is selected.")
-        return@handler
-      }
-
-      arena.addMonument(team, position)
       player.sendMessage("Success")
     }
     .build()

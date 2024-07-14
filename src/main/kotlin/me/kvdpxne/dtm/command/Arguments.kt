@@ -4,6 +4,8 @@ import me.kvdpxne.dtm.game.Arena
 import me.kvdpxne.dtm.game.ArenaManager
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
+import me.kvdpxne.dtm.user.User
+import me.kvdpxne.dtm.user.UserManager
 
 /**
  * A class representing a collection of command arguments provided by the user.
@@ -150,8 +152,31 @@ class Arguments(
    *
    * @since 0.1.0
    */
-  fun asLong(index: Int = 0): Long {
+  fun asLong(
+    index: Int = 0
+  ): Long {
     return this.asText(index).toLong()
+  }
+
+  fun asFloat(
+    index: Int = 0
+  ): Float {
+    return this.asText(index).toFloat()
+  }
+
+  fun asDouble(
+    index: Int = 0
+  ): Double {
+    return this.asText(index).toDouble()
+  }
+
+  fun asFoundUser(
+    index: Int = 0
+  ): User? {
+    val userName = this.asText(index)
+    val user = UserManager.findByName(userName, true)
+
+    return user
   }
 
   fun asFoundArena(
@@ -183,9 +208,5 @@ class Arguments(
    */
   fun isEmpty(): Boolean {
     return 0 == this.size
-  }
-
-  fun asFloat(): Float {
-    TODO("Not yet implemented")
   }
 }
