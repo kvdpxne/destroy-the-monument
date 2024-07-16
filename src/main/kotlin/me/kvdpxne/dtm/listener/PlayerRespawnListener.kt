@@ -55,5 +55,11 @@ object PlayerRespawnListener : Listener {
         it.run(player, true)
       }
     }
+
+    Bukkit.getScheduler().runTaskLater(
+      DestroyTheMonument.instance,
+      { player.noDamageTicks = 2 * 20 },
+      2L
+    )
   }
 }
