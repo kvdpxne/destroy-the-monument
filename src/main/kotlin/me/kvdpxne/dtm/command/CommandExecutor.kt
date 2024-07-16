@@ -2,27 +2,6 @@ package me.kvdpxne.dtm.command
 
 object CommandExecutor {
 
-  /**
-   * The routine that handles the parsing of a single parameter
-   */
-  private fun parseParameter(argument: String, parameter: Parameter<*>): Any {
-    return if (parameter.validator == null) {
-      argument
-    } else {
-      val validationResult = parameter.validator.invoke(argument)
-
-      if (validationResult.errorMessage != null) {
-        throw CommandException(
-          "Invalid argument \"${parameter.name}\" for parameter \"$argument\". ${validationResult.errorMessage}"
-        )
-      }
-
-      val mappedResult = validationResult.value
-
-      mappedResult!!
-    }
-  }
-
   fun execute(
     performer: Performer,
     arguments: Array<out String>

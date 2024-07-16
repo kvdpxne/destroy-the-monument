@@ -6,6 +6,8 @@ import me.kvdpxne.dtm.command.ExecutionPlaceType.IN_CONSOLE
 import me.kvdpxne.dtm.command.ExecutionPlaceType.IN_GAME
 import me.kvdpxne.dtm.command.ExecutionPlaceType.IN_GAME_WORLD
 import me.kvdpxne.dtm.command.CommandExecutor
+import me.kvdpxne.dtm.command.CommandHandler
+import me.kvdpxne.dtm.command.toArguments
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
@@ -48,11 +50,14 @@ class BukkitCommandHandler(
     label: String,
     arguments: Array<out String>
   ): Boolean {
+
+    val newArguments = arrayOf(label, *arguments)
+
     //
     //
     when (executionPlace) {
       IN_CONSOLE -> {
-        CommandExecutor.execute(BukkitConsolePerformer(), arguments)
+        CommandExecutor.execute(BukkitConsolePerformer(), newArguments)
         return true
       }
 
@@ -62,16 +67,16 @@ class BukkitCommandHandler(
           return true
         }
 
-        return handle(sender, arguments)
+        return handle(sender, newArguments)
       }
 
       EVERYWHERE -> {
         if (sender is Player) {
-          return handle(sender, arguments)
+          return handle(sender, newArguments)
         }
 
         if (sender is ConsoleCommandSender) {
-          CommandExecutor.execute(BukkitConsolePerformer(), arguments)
+          CommandExecutor.execute(BukkitConsolePerformer(), newArguments)
           return true
         }
         sender.sendMessage("Not supported yet.")
