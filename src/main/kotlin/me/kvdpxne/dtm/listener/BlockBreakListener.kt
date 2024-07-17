@@ -1,6 +1,7 @@
 package me.kvdpxne.dtm.listener
 
 import me.kvdpxne.dtm.DestroyTheMonument
+import me.kvdpxne.dtm.colorize
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.Team
 import me.kvdpxne.dtm.game.findMonument
@@ -136,18 +137,21 @@ object BlockBreakListener : Listener {
       }
     }
 
-    val coloredUser = "${teamIdentity.colorInChat}${user.name}"
-    val coloredMonument = "${monumentIdentity.colorInChat}${monumentIdentity.name}"
-
-    game.sendMessages(
-      "",
-      "&6&lDTM &7> &fGracz $coloredUser &fzniszczył monument drużyny $coloredMonument",
-      "&6&lDTM &7> &fPozostało &6${attackedTeam.health} &fmonumenty."
-    )
-
-    //
     if (0 < attackedTeam.health) {
-      return
+      val coloredUser = "${teamIdentity.colorInChat}${user.name}"
+      val coloredMonument = "${monumentIdentity.colorInChat}&l${monumentIdentity.name}".colorize()
+
+      val end = when (attackedTeam.health) {
+        1 -> "&fPozostał &61 &fmonument."
+        in 2..4 -> "&fPozostały &6${attackedTeam.health} &fmonumenty."
+        else -> "&fPozostało &6${attackedTeam.health} &fmonumentów."
+      }
+
+      game.sendMessages(
+        "",
+        "&6&lDTM &7> &fGracz $coloredUser &fzniszczył monument drużyny $coloredMonument",
+        "&6&lDTM &7> $end"
+      )
     }
 
     game.teams.forEach {
@@ -164,8 +168,9 @@ object BlockBreakListener : Listener {
       20 * 20L
     )
     game.sendMessages(
-      "&7The game has ended.",
-      "&7In &620 &7seconds you will be moved to the lobby."
+      "",
+      "&6&lDTM &7> &fGra zostałą zakończona.",
+      "&6&lDTM &7> &fZa &620 &fsekund zostaniesz przeniesiony do poczekalni.",
     )
   }
 }
