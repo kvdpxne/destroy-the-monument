@@ -108,7 +108,7 @@ object BlockBreakListener : Listener {
 
     if (teamIdentity == monumentIdentity) {
       event.isCancelled = true
-      user.sendMessage("&7You cannot destroy your team's monument!")
+      user.sendMessage("&6&lDTM &7> &fNie możesz zniszczyć monumentu swojej drużyny.")
       return
     }
 
