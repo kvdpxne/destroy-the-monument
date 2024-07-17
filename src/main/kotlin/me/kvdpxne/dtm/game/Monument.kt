@@ -12,10 +12,6 @@ data class Monument(
   val identifier: UUID = UUID.randomUUID()
 ) {
 
-  @Transient
-  var destroyed: Boolean = false
-    private set
-
   init {
     // Checks if the given team identity can be used to create this object.
     require(TeamService.existsTeamIdentityByIdentifier(this.team.identifier)) {
@@ -25,10 +21,6 @@ data class Monument(
 
   fun isIn(x: Int, y: Int, z: Int): Boolean {
     return this.x == x && this.y == y && this.z == z
-  }
-
-  fun restore() {
-    destroyed = false
   }
 
   override fun equals(other: Any?): Boolean {
