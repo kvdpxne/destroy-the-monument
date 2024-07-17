@@ -98,11 +98,6 @@ object BlockBreakListener : Listener {
     // A monument that was destroyed by the user
     val monument = arena.findMonument(event.block.location) ?: return
 
-    //
-    if (monument.destroyed) {
-      return
-    }
-
     val teamIdentity = team.identity
     val monumentIdentity = monument.team
 

@@ -451,13 +451,8 @@ class Game(val identifier: UUID, var name: String) : Communicative {
   fun stop() {
     state = GameState.STOPPING
 
-
-    if (false == currentArena?.map?.unload()) {
-      return
-    }
-
-    currentArena?.restore()
-    currentArena = null
+    this.currentArena!!.map!!.unload()
+    this.currentArena = null
 
     if (timerTaskIdentifier >= 0) {
       Bukkit.getScheduler().cancelTask(timerTaskIdentifier)
