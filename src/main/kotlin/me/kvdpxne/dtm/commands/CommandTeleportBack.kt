@@ -11,7 +11,7 @@ fun createTeleportBackCommand(): Command {
     .name("teleportback")
     .aliases("tpback", "tpb")
     .handler<UserPerformer> { performer, _ ->
-      val player = performer.getPlayer() ?: return@handler
+      val player = performer.player ?: return@handler
       val position = TeleportationHistoryStorage.pop(player.uniqueId)
 
       if (null == position) {

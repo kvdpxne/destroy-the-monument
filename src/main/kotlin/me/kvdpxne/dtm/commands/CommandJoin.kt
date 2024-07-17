@@ -11,7 +11,7 @@ fun createJoinCommand(): Command {
   return CommandBuilder()
     .name("join")
     .handler<UserPerformer> { performer, _ ->
-      val player = performer.getPlayer() ?: return@handler
+      val player = performer.player ?: return@handler
 
       val game = GameManager.games.values.find {
         it.isInGame(performer.user)

@@ -29,7 +29,7 @@ fun createArenaMapSpawnSetCommand(): Command {
         return@handler
       }
 
-      val player = performer.getPlayer() ?: return@handler
+      val player = performer.player ?: return@handler
       arena.setSpawnPoint(team, player.location)
 
       player.sendMessage("Success")

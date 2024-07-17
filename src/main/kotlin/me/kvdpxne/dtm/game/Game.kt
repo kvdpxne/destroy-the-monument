@@ -398,7 +398,7 @@ class Game(val identifier: UUID, var name: String) : Communicative {
         val profession = teammate.professionQueuingPair.current
         val performer = teammate.user.performer
 
-        performer.getPlayer()!!.run {
+        performer.player!!.run {
           this.teleport(location)
           this.hardClean()
 
@@ -472,7 +472,7 @@ class Game(val identifier: UUID, var name: String) : Communicative {
         teammate.fastBoard!!.delete()
         teammate.fastBoard = null
 
-        performer.getPlayer()!!.run {
+        performer.player!!.run {
           this.scoreboard.getPlayerTeam(this).removePlayer(this)
           this.scoreboard = Bukkit.getScoreboardManager().mainScoreboard
           this.hardClean()

@@ -12,6 +12,9 @@ package me.kvdpxne.dtm.command
  *
  * @since 0.1.0
  */
-fun Array<out String>.toArguments(): Arguments {
-  return Arguments(this)
+fun Array<out String>.toArguments(from: Int = 0): Arguments {
+  if (0 == from) {
+    return Arguments(this)
+  }
+  return Arguments(this.copyOfRange(from, this.size))
 }

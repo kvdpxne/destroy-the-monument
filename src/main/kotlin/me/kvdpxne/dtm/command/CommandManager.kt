@@ -27,9 +27,9 @@ object CommandManager {
     idx: Int = 0
   ): Pair<Command, Int>? {
     // Return the last command when there are no more arguments
-//    if (idx >= args.size) {
-//      return currentCommand
-//    }
+    if (idx >= args.size) {
+      return currentCommand
+    }
 
     // If currentCommand is null, idx must be 0, so search in all commands
     val commandSupplier = currentCommand?.first?.children?.asIterable() ?: commands

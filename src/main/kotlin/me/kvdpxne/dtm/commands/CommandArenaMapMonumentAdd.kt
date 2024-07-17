@@ -30,7 +30,7 @@ fun createArenaMapMonumentAddCommand(): Command {
         return@handler
       }
 
-      val player = performer.getPlayer() ?: return@handler
+      val player = performer.player ?: return@handler
       val position = SelectedPositionStorage.selectedBlocks[player.uniqueId]
 
       if (null == position) {

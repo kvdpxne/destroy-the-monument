@@ -2,6 +2,7 @@ package me.kvdpxne.dtm.commands
 
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
+import me.kvdpxne.dtm.command.builderWorldNameParameter
 import me.kvdpxne.dtm.shared.TeleportationHistoryStorage
 import me.kvdpxne.dtm.shared.WorldLoaderHelper
 import me.kvdpxne.dtm.user.UserPerformer
@@ -11,8 +12,13 @@ fun createTeleportCommand(): Command {
   return CommandBuilder()
     .name("teleport")
     .aliases("tp")
+    .parameter(
+      builderWorldNameParameter()
+        .required()
+        .build()
+    )
     .handler<UserPerformer> { performer, parameter ->
-      val player = performer.getPlayer() ?: return@handler
+      val player = performer.player ?: return@handler
 
       if (parameter.isEmpty()) {
         performer.sendMessage("Usage: /dtm teleport <WORLD_NAME>")

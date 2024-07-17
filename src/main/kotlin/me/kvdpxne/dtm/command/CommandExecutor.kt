@@ -108,6 +108,6 @@ object CommandExecutor {
       return
     }
 
-    command.handler!!(performer, arguments.toArguments())
+    command.handler!!(performer, arguments.toArguments(idx + 1))
   }
 }

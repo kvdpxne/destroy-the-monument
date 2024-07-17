@@ -30,7 +30,7 @@ object BlockBreakListener : Listener {
 
   private fun fs(team: Team, item: ItemStack) {
     team.teammates.forEach { teammate ->
-      val player = teammate.user.performer.getPlayer()!!
+      val player = teammate.user.performer.player!!
 
       player.hardClean()
 

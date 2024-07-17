@@ -10,7 +10,7 @@ fun createKitCommand(): Command {
     .name("kit")
     .aliases("kits", "class", "classes", "profession", "professions")
     .handler<UserPerformer> { performer, _ ->
-      performer.getPlayer()?.let {
+      performer.player?.let {
         createProfessionSelectionGui(performer.user).open(it)
       }
     }

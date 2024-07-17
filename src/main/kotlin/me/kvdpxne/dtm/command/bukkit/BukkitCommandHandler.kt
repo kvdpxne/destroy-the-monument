@@ -1,13 +1,11 @@
 package me.kvdpxne.dtm.command.bukkit
 
+import me.kvdpxne.dtm.command.CommandExecutor
 import me.kvdpxne.dtm.command.ExecutionPlaceType
 import me.kvdpxne.dtm.command.ExecutionPlaceType.EVERYWHERE
 import me.kvdpxne.dtm.command.ExecutionPlaceType.IN_CONSOLE
 import me.kvdpxne.dtm.command.ExecutionPlaceType.IN_GAME
 import me.kvdpxne.dtm.command.ExecutionPlaceType.IN_GAME_WORLD
-import me.kvdpxne.dtm.command.CommandExecutor
-import me.kvdpxne.dtm.command.CommandHandler
-import me.kvdpxne.dtm.command.toArguments
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
@@ -83,5 +81,16 @@ class BukkitCommandHandler(
         return false
       }
     }
+  }
+
+  override fun tabComplete(
+    sender: CommandSender,
+    alias: String,
+    args: Array<out String>
+  ): MutableList<String> {
+
+
+
+    return super.tabComplete(sender, alias, args)
   }
 }

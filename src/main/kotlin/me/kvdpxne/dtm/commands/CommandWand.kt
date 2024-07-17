@@ -19,7 +19,7 @@ fun createWandCommand(): Command {
     .name("wand")
     .aliases("w")
     .handler<UserPerformer> { performer, _ ->
-      performer.getPlayer()?.inventory?.addItem(wand)
+      performer.player?.inventory?.addItem(wand)
     }
     .build()
 }

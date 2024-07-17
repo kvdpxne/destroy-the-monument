@@ -2,7 +2,20 @@ package me.kvdpxne.dtm.command
 
 import me.kvdpxne.dtm.game.ArenaManager
 import me.kvdpxne.dtm.game.GameManager
+import me.kvdpxne.dtm.shared.WorldLoaderHelper
 import me.kvdpxne.dtm.user.UserManager
+
+fun builderWorldNameParameter(
+  name: String = "MAP_ARENA"
+): ParameterBuilder<String> {
+  return ParameterBuilder<String>()
+    .name(name)
+    .validationBy(ParameterValidators.STRING_VALIDATOR)
+    .autocompletedWith { begin ->
+      //
+      emptyList()
+    }
+}
 
 /**
  * @since 0.1.0

@@ -28,7 +28,7 @@ fun createBaseCommand(): Command {
       createKitCommand(),
       createLeaveCommand(),
       createTeleportCommand(),
-      createTeleportCommand(),
+      createTeleportBackCommand(),
       createVersionCommand(),
       createWandCommand()
     )
