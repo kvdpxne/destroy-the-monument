@@ -22,5 +22,7 @@ object PlayerJoinListener : Listener {
     } else {
       UserManager.addUser(user)
     }
+
+    player.teleport(player.world.spawnLocation)
   }
 }
