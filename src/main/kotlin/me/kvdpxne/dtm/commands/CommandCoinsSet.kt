@@ -28,17 +28,31 @@ fun createCoinsSetCommand(): Command {
       if (1 == arguments.size) {
 
         if (performer !is UserPerformer) {
-          performer.sendMessage("Command is not accessible from the console.")
+          performer.sendMessage("Komenda nie może zostać użyta w konsoli.")
           return@handler
         }
 
-        val value = arguments.asInt()
-        performer.user.wallet.coins = value
-        performer.sendMessage("&fAdded &6$value &fcoins to your wallet.")
+        val oldValue = performer.user.wallet.coins
+        val newValue = arguments.asInt()
+
+        performer.user.wallet.coins = newValue
+        performer.sendMessage("&6&lDTM &7> &fZmieniono wartość portfela z &6$oldValue &fna &6$newValue.")
         return@handler
       }
 
-      val value = arguments.asInt()
+      if (2 == arguments.size) {
+        val user = arguments.asFoundUser(1)
+        if (null == user) {
+          performer.sendMessage("Nie znaleziono użytkownika.")
+          return@handler
+        }
+
+        val oldValue = user.wallet.coins
+        val newValue = arguments.asInt()
+
+        user.wallet.coins = newValue
+        performer.sendMessage("&6&lDTM &7> &fZmieniono wartość portfela z &6$oldValue &fna &6$newValue &fu użytkownika &6${user.name}&f.")
+      }
     }
     .build()
 }

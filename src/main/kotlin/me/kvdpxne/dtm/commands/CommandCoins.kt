@@ -8,7 +8,8 @@ import me.kvdpxne.dtm.command.CommandBuilder
  */
 fun createCoinsCommand(): Command {
   /* Usages:
-   * /dtm coins multiplier
+   * /dtm coins add <VALUE> [USER_NAME]
+   * /dtm coins multiplier [set|show]
    * /dtm coins set <VALUE> [USER_NAME]
    * /dtm coins show [USER_NAME]
    * /dtm coins subtract <VALUE> [USER_NAME]
@@ -19,6 +20,7 @@ fun createCoinsCommand(): Command {
     .aliases("money", "balance", "bal")
     .hub()
     .children(
+      createCoinsAddCommand(),
       createCoinsMultiplierCommand(),
       createCoinsSetCommand(),
       createCoinsShowCommand(),

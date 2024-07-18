@@ -28,18 +28,32 @@ fun createCoinsMultiplierSetCommand(): Command {
       if (1 == arguments.size) {
 
         if (performer !is UserPerformer) {
-          performer.sendMessage("")
+          performer.sendMessage("Komenda nie może zostać użyta w konsoli.")
           return@handler
         }
 
-        val multiplier = arguments.asFloat()
-        performer.user.wallet.multiplier = multiplier
-        performer.sendMessage("")
+        val oldMultiplier = performer.user.wallet.multiplier
+        val newMultiplier = arguments.asFloat()
+
+        performer.user.wallet.multiplier = newMultiplier
+        performer.sendMessage("&6&lDTM &7> &fZmieniono mnożnik z &6$oldMultiplier &fna &6$newMultiplier.")
         return@handler
       }
 
+      if (2 == arguments.size) {
+        val user = arguments.asFoundUser(1)
+        if (null == user) {
+          performer.sendMessage("Nie znaleziono użytkownika.")
+          return@handler
+        }
 
+        val oldMultiplier = user.wallet.multiplier
+        val newMultiplier = arguments.asFloat()
 
+        user.wallet.multiplier = newMultiplier
+        performer.sendMessage("&6&lDTM &7> &fZmieniono mnożnik z &6$oldMultiplier &fna &6$newMultiplier.")
+        return@handler
+      }
     }
     .build()
 }

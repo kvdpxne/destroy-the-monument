@@ -7,10 +7,10 @@ import me.kvdpxne.dtm.command.ParameterValidators
 import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.user.UserPerformer
 
-fun createCoinsSubtractCommand(): Command {
-  // Usage: /dtm coins subtract <VALUE> [USER_NAME]
+fun createCoinsAddCommand(): Command {
+  // Usage: /dtm coins add <VALUE> [USER_NAME]
   return CommandBuilder()
-    .name("subtract")
+    .name("add")
     .parameter(
       ParameterBuilder<Int>()
         .name("value")
@@ -27,8 +27,8 @@ fun createCoinsSubtractCommand(): Command {
         }
 
         val value = arguments.asInt()
-        performer.user.wallet.subtractCoins(value)
-        performer.sendMessage("&6&lDTM &7> &fZ twojego portfela zostało odjęte &6$value &fmonet.")
+        performer.user.wallet.addCoins(value)
+        performer.sendMessage("&6&lDTM &7> &fDo twojego portfela zostało dodane &6$value &fmonet.")
         return@handler
       }
 
@@ -41,8 +41,8 @@ fun createCoinsSubtractCommand(): Command {
         }
 
         val value = arguments.asInt()
-        user.wallet.subtractCoins(value)
-        performer.sendMessage("&6&lDTM &7> &fZ portfela użytkownika &6${user.name} &fzostało odjęte &6$value &fmonet.")
+        user.wallet.addCoins(value)
+        performer.sendMessage("&6&lDTM &7> &fDo portfela użytkownika &6${user.name} &fzostało dodane &6$value &fmonet.")
         return@handler
       }
     }
