@@ -1,5 +1,6 @@
 package me.kvdpxne.dtm.data
 
+import me.kvdpxne.dtm.data.tables.TableUserStatistics
 import me.kvdpxne.dtm.user.UserStatistics
 import org.ktorm.dsl.QueryRowSet
 import org.ktorm.dsl.eq
@@ -9,22 +10,6 @@ import org.ktorm.dsl.map
 import org.ktorm.dsl.select
 import org.ktorm.dsl.update
 import org.ktorm.dsl.where
-import org.ktorm.schema.Table
-import org.ktorm.schema.int
-import org.ktorm.schema.varchar
-
-object TableUserStatistics : Table<Nothing>("user_statistics") {
-
-  val identifier = varchar("identifier").primaryKey()
-
-  val kills = int("kills")
-  val assists = int("assists")
-  val deaths = int("deaths")
-  val destroyedMonuments = int("destroyed_monuments")
-  val playedGames = int("played_games")
-  val gamesWon = int("games_won")
-  val gamesLost = int("games_lost")
-}
 
 fun toUserStatistics(
   row: QueryRowSet

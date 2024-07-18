@@ -7,17 +7,72 @@ import me.kvdpxne.dtm.profession.ProfessionManager
 import me.kvdpxne.dtm.wallet.Wallet
 
 class User(
-  val identifier: UUID,
-  var name: String,
-  var statistics: UserStatistics = UserStatistics(),
-  val wallet: Wallet = Wallet(),
+  // @formatter:off
+  val identifier : UUID,
+  var name       : String,
+  var statistics : UserStatistics         = UserStatistics(),
+  val wallet     : Wallet                 = Wallet(),
+      professions: Collection<Profession> = emptySet()
+  // @formatter:on
 ) : Communicative {
 
-  val performer: UserPerformer
-  var profession: Profession = ProfessionManager.getRandomProfession()
+  /**
+   * @since 0.1.0
+   */
+  // available professions
+  private val _availableProfessions: MutableSet<Profession> = professions.toMutableSet()
 
-  init {
-    performer = UserPerformer(identifier, name, this)
+  /**
+   * @since 0.1.0
+   */
+  // current profession
+  var currentProfession: Profession? = ProfessionManager
+    .filter { it.enabled }
+    .randomOrNull()
+//    set(value) {
+//      if (!this._availableProfessions.contains(value)) {
+//        throw IllegalArgumentException("Profession $value is already in use.")
+//      }
+//
+//      field = value
+//    }
+
+  /**
+   * @since 0.1.0
+   */
+  val performer: UserPerformer = UserPerformer(this.identifier, this.name, this)
+
+  /**
+   * @since 0.1.0
+   */
+  val availableProfessions: List<Profession>
+    get() = this._availableProfessions.toList()
+
+  /**
+   * @since 0.1.0
+   */
+  fun addProfession(profession: Profession): Boolean {
+    return this._availableProfessions.add(profession)
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun removeProfession(
+    profession: Profession
+  ): Boolean {
+    return this._availableProfessions.remove(profession)
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun removeProfessionByIdentifier(
+    identifier: String
+  ): Boolean {
+    return this._availableProfessions.removeIf {
+      it.identifier.equals(identifier, true)
+    }
   }
 
   /**

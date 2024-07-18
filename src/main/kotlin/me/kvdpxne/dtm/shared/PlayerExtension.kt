@@ -29,7 +29,7 @@ fun Player.hardClean() {
   this.lastDamageCause = null
   this.maximumNoDamageTicks = 20
   this.noDamageTicks = 20
-  this.fireTicks = 0 // TODO maybe it should be 0
+  this.fireTicks = 0
   this.fallDistance = 0.0F
 
   // Abilities
@@ -42,11 +42,23 @@ fun Player.hardClean() {
   this.walkSpeed = 0.2F
 }
 
-fun Player.fillExpBar() {
+/**
+ * Fills a player's experience bar to its maximum level.
+ *
+ * This function sets the player's experience level to `1.0F`, which effectively
+ * fills the experience bar to its maximum.
+ *
+ * @receiver The player whose experience bar should be filled.
+ * @since 0.1.0
+ */
+fun Player.fillExperienceBar() {
   this.exp = 1.0F
 }
 
-fun Player.resetExpBar() {
+/**
+ * @since 0.1.0
+ */
+fun Player.resetExperienceBar() {
   this.exp = 0.0F
 }
 

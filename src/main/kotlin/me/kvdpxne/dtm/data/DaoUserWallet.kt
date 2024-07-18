@@ -1,5 +1,6 @@
 package me.kvdpxne.dtm.data
 
+import me.kvdpxne.dtm.data.tables.TableUserWallet
 import me.kvdpxne.dtm.wallet.Wallet
 import org.ktorm.dsl.QueryRowSet
 import org.ktorm.dsl.eq
@@ -9,17 +10,6 @@ import org.ktorm.dsl.map
 import org.ktorm.dsl.select
 import org.ktorm.dsl.update
 import org.ktorm.dsl.where
-import org.ktorm.schema.Table
-import org.ktorm.schema.float
-import org.ktorm.schema.int
-import org.ktorm.schema.varchar
-
-object TableUserWallet : Table<Nothing>("user_wallet") {
-
-  val identifier = varchar("identifier").primaryKey()
-  val coins = int("coins")
-  val multiplier = float("multiplier")
-}
 
 internal fun toUserWallet(
   row: QueryRowSet

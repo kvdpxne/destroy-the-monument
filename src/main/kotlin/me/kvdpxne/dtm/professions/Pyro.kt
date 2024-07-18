@@ -5,8 +5,6 @@ import me.kvdpxne.dtm.gui.slotHelmet
 import me.kvdpxne.dtm.gui.slotItem
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionBuilder
-import me.kvdpxne.dtm.profession.TOOL_AXE
-import me.kvdpxne.dtm.profession.TOOL_PICKAXE
 import me.kvdpxne.dtm.shared.toBuilder
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
@@ -44,4 +42,5 @@ fun createPyro(): Profession = ProfessionBuilder()
   )
   .icon(Material.FLINT_AND_STEEL)
   .effect(PotionEffectType.FIRE_RESISTANCE)
+  .disabled()
   .build()

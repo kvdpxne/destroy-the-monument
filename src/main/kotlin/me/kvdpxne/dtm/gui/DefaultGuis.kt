@@ -5,9 +5,11 @@ import me.kvdpxne.dtm.colorizeAll
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.profession.ProfessionManager
+import me.kvdpxne.dtm.shared.toBuilder
 import me.kvdpxne.dtm.user.User
 import org.bukkit.Material
 import org.bukkit.entity.Player
+import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemStack
 
 fun createTeamSelectionGui(game: Game, user: User) = Gui("Team selection", Rows.ONE).apply {
@@ -80,20 +82,24 @@ fun createTeamSelectionGui(game: Game, user: User) = Gui("Team selection", Rows.
 fun createGameSelectionGui(user: User) = GameManager.games.let {
   Gui("Game selection", Rows.findRowBySize(it.size)).apply {
     it.onEachIndexed { index, (key, game) ->
-      setItem(index, ItemStack(Material.STAINED_CLAY).apply {
-        itemMeta = itemMeta.apply {
+
+      setItem(index, Material.STAINED_CLAY.toBuilder()
+        .damage(5)
+        .name {
+          val name = game.name
           val hostagesCount = game.hostages.size
-          displayName = "&7> &f${game.name} &6$hostagesCount/unlimited".colorize()
-          lore = arrayOf(
-            "&7Join the game lobby to be able to",
-            "&7interact in the game.",
-            "",
-            "&7Current map: &6unknown", // TODO add selected map name
-            "&8Uid: $key"
-          ).colorizeAll()
+
+          "&7> &f$name &6$hostagesCount/unlimited"
         }
-        durability = 5
-      }) { event ->
+        .lore(
+          "&7Join the game lobby to be able to",
+          "&7interact in the game.",
+          "",
+          "&7Current map: &6unknown", // TODO add selected map name
+          "&8Uid: $key"
+        )
+        .build()
+      ) { event ->
         game.addHostage(user)
         with(event.whoClicked as Player) {
           closeInventory()
@@ -106,49 +112,60 @@ fun createGameSelectionGui(user: User) = GameManager.games.let {
   }
 }
 
-fun createProfessionSelectionGui(user: User) = Gui("Choose your profession", Rows.TWO).apply {
-  val item = ItemStack(Material.STAINED_CLAY)
-  ProfessionManager.forEachIndexed { index, profession ->
+fun createProfessionSelectionGui(user: User): Gui {
 
-    if (user.profession == profession) {
-      item.itemMeta = item.itemMeta.apply {
-        displayName = "&a&lWYBRANO".colorize()
-      }
-      item.durability = 5
+  val gui = Gui("Choose your profession", Rows.TWO)
+  val itemBuilder = Material.STAINED_CLAY.toBuilder()
+
+  ProfessionManager.professions.forEachIndexed { index, profession ->
+
+    gui.setItem(index, if (user.currentProfession == profession) {
+      itemBuilder.damage(5)
+        .name("&a&lWYBRANO")
+        .build()
+    } else if (!profession.enabled) {
+      itemBuilder.damage(14)
+        .name("&c&lNIEDOSTĘPNA")
+        .build()
     } else {
-      val meta = item.itemMeta
-      meta.displayName = " "
-      item.itemMeta = meta
-      item.durability = 4
-    }
+      itemBuilder.damage(4)
+        .name("&6&lDOSTĘPNA")
+        .build()
+    })
 
-    setItem(index, item)
-
-    val professionItemIcon = profession.icon
-    val meta = professionItemIcon.itemMeta
-
-    meta.displayName = "&7${profession.displayName}".colorize()
-    professionItemIcon.itemMeta = meta
-
-    setItem(9 + index, professionItemIcon) { event ->
-      user.profession = profession
-
-      with(event.whoClicked as Player) {
-        event.isCancelled = true
-
-        closeInventory()
-        sendMessage("The ${profession.displayName} class was selected.")
+    gui.setItem(
+      9 + index,
+      profession.icon.toBuilder()
+        .name("&7${profession.displayName}")
+        .build()
+    ) { event: InventoryClickEvent ->
+      if (!profession.enabled) {
+        user.sendMessage("&6&lDTM &7> &cProfesja jest obecnie wyłączona lub niedostępna.")
+        return@setItem
       }
+
+      //
+      user.currentProfession = profession.clone()
+
+      event.isCancelled = true
+      event.whoClicked.closeInventory()
+
+      user.sendMessage("&6&lDTM &7> &fProfesja &a&l${profession.displayName} &fzostała wybrana.")
 
       val game = GameManager.findByUser(user) ?: return@setItem
       val team = game.findTeam(user) ?: return@setItem
       val teammate = team.findTeammate(user) ?: return@setItem
 
       teammate.professionQueuingPair.apply {
-        if (this.current != profession) {
-          this.next = profession
+        if (this.current == profession) {
+          return@apply
         }
+
+        this.next = profession.clone()
+        teammate.sendMessage("&6&lDTM &7> &fProfesja zostanie zmieniona po śmierci.")
       }
     }
   }
+
+  return gui
 }

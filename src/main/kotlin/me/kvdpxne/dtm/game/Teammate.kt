@@ -36,7 +36,7 @@ class Teammate(
    *
    */
   init {
-    this.professionQueuingPair = this.user.profession.toQueuingPair()
+    this.professionQueuingPair = this.user.currentProfession!!.toQueuingPair()
     this.statistics = BaseStatistics()
 
 

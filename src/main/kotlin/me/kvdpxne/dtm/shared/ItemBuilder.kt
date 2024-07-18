@@ -58,6 +58,10 @@ class ItemBuilder {
     return this;
   }
 
+  fun name(name: () -> String): ItemBuilder {
+    return this.name(name())
+  }
+
   fun lore(vararg lore: String): ItemBuilder {
     this.itemStack?.itemMeta = this.itemStack?.itemMeta.apply {
       this?.lore = arrayOf(*lore).colorizeAll()

@@ -1,16 +1,14 @@
 package me.kvdpxne.dtm.profession
 
-import java.util.UUID
 import me.kvdpxne.dtm.DestroyTheMonument
 import me.kvdpxne.dtm.gui.SlotItem
 import me.kvdpxne.dtm.shared.toBuilder
+import me.kvdpxne.dtm.uid.Uid
 import org.bukkit.Bukkit
 import org.bukkit.DyeColor
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.potion.PotionEffect
-import org.bukkit.scheduler.BukkitRunnable
 
 class Profession(
   // @formatter:off
@@ -18,11 +16,12 @@ class Profession(
   var displayName: String,
   var items      : List<SlotItem>,
   var icon       : ItemStack,
+  var enabled    : Boolean       = true,
   var effect     : PotionEffect? = null,
-  var ability    : Ability? = null,
-  val identifier : UUID = UUID.randomUUID()
+  var ability    : Ability?      = null,
+  val identifier : String        = Uid.next()
   // @formatter:on
-) {
+) : Cloneable {
 
   init {
     if (displayName.isBlank()) {
@@ -57,6 +56,19 @@ class Profession(
         player.addPotionEffect(this.effect, true)
       },
       4L
+    )
+  }
+
+  public override fun clone(): Profession {
+    return Profession(
+      this.name,
+      this.displayName,
+      this.items,
+      this.icon,
+      this.enabled,
+      this.effect,
+      this.ability?.clone(),
+      this.identifier
     )
   }
 

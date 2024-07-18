@@ -1,8 +1,8 @@
 package me.kvdpxne.dtm.data
 
 import java.util.UUID
+import me.kvdpxne.dtm.data.tables.TableUser
 import me.kvdpxne.dtm.profession.ProfessionManager
-import me.kvdpxne.dtm.user.UserStatistics
 import me.kvdpxne.dtm.user.User
 import org.ktorm.dsl.QueryRowSet
 import org.ktorm.dsl.eq
@@ -12,36 +12,20 @@ import org.ktorm.dsl.map
 import org.ktorm.dsl.select
 import org.ktorm.dsl.update
 import org.ktorm.dsl.where
-import org.ktorm.schema.Table
-import org.ktorm.schema.int
-import org.ktorm.schema.varchar
-
-object UserTable : Table<Nothing>("user") {
-
-  var identifier = varchar("identifier").primaryKey()
-  val name = varchar("name")
-
-  // profession
-  val profession = varchar("profession")
-
-  val statisticsIdentifier = varchar("statistics_identifier")
-  val walletIdentifier = varchar("wallet_identifier")
-}
 
 internal fun toUser(
   row: QueryRowSet
 ): User {
 
-  val identifier = UUID.fromString(row[UserTable.identifier]!!)
-  val name = row[UserTable.name]!!
+  val identifier = UUID.fromString(row[TableUser.identifier]!!)
+  val name = row[TableUser.name]!!
 
-  val profession = row[UserTable.profession]!!
+  val profession = row[TableUser.profession]!!
 
-  val statisticsIdentifier = row[UserTable.statisticsIdentifier]!!
+  val statisticsIdentifier = row[TableUser.statisticsIdentifier]!!
   val statistics = findUserStatisticsByIdentifier(statisticsIdentifier)!!
 
-
-  val walletIdentifier = row[UserTable.walletIdentifier]!!
+  val walletIdentifier = row[TableUser.walletIdentifier]!!
   val wallet = findUserWalletByIdentifier(walletIdentifier)!!
 
 
@@ -51,33 +35,36 @@ internal fun toUser(
     statistics,
     wallet
   ).apply {
-    ProfessionManager.findByName(profession)?.let {
-      this.profession = it
+    ProfessionManager.findProfessionByName(profession)?.let {
+      val profession1 = it.clone()
+
+      this.addProfession(profession1)
+      this.currentProfession = profession1
     }
   }
 }
 
-object UserDao {
+object DaoUser {
 
   fun findByIdentifier(identifier: UUID): User? {
-    return database.from(UserTable)
+    return database.from(TableUser)
       .select()
-      .where { UserTable.identifier eq identifier.toString() }
+      .where { TableUser.identifier eq identifier.toString() }
       .map { toUser(it) }
       .firstOrNull()
   }
 
 
   fun update(user: User) {
-    database.update(UserTable) {
+    database.update(TableUser) {
       set(it.name, user.name)
-      set(it.profession, user.profession.name)
+      set(it.profession, user.currentProfession?.name)
 
       set(it.statisticsIdentifier, user.statistics.identifier)
       set(it.walletIdentifier, user.wallet.identifier)
 
       where {
-        UserTable.identifier eq user.identifier.toString()
+        TableUser.identifier eq user.identifier.toString()
       }
     }
 
@@ -86,10 +73,10 @@ object UserDao {
   }
 
   fun insert(user: User) {
-    database.insert(UserTable) {
+    database.insert(TableUser) {
       set(it.identifier, user.identifier.toString())
       set(it.name, user.name)
-      set(it.profession, user.profession.name)
+      set(it.profession, user.currentProfession?.name)
 
       set(it.statisticsIdentifier, user.statistics.identifier)
       set(it.walletIdentifier, user.wallet.identifier)
@@ -100,7 +87,7 @@ object UserDao {
   }
 
   fun count(): Int {
-    return database.from(UserTable)
+    return database.from(TableUser)
       .select()
       .totalRecordsInAllPages
   }

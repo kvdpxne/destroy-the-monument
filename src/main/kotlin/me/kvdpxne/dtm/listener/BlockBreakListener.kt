@@ -13,6 +13,7 @@ import me.kvdpxne.dtm.shared.isRich
 import me.kvdpxne.dtm.shared.toBuilder
 import me.kvdpxne.dtm.tasks.GameStopTaskTimer
 import me.kvdpxne.dtm.user.UserManager
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -134,7 +135,7 @@ object BlockBreakListener : Listener {
 
     if (0 < attackedTeam.health) {
       val coloredUser = "${teamIdentity.colorInChat}${user.name}"
-      val coloredMonument = "${monumentIdentity.colorInChat}&l${monumentIdentity.name}".colorize()
+      val coloredMonument = "${monumentIdentity.colorInChat}&l${monumentIdentity.name}".colorize().uppercase()
 
       val end = when (attackedTeam.health) {
         1 -> "&fPozostał &61 &fmonument."
@@ -147,6 +148,7 @@ object BlockBreakListener : Listener {
         "&6&lDTM &7> &fGracz $coloredUser &fzniszczył monument drużyny $coloredMonument",
         "&6&lDTM &7> $end"
       )
+      return
     }
 
     game.teams.forEach {
@@ -158,13 +160,14 @@ object BlockBreakListener : Listener {
       this.fs(it, WON)
     }
 
+    Bukkit.getScheduler().cancelTask(game.timerTaskIdentifier)
     GameStopTaskTimer(game).runTaskLater(
       DestroyTheMonument.instance,
       20 * 20L
     )
     game.sendMessages(
       "",
-      "&6&lDTM &7> &fGra zostałą zakończona.",
+      "&6&lDTM &7> &fGra została zakończona.",
       "&6&lDTM &7> &fZa &620 &fsekund zostaniesz przeniesiony do poczekalni.",
     )
   }

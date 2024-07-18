@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.user
 
 import java.util.UUID
-import me.kvdpxne.dtm.data.UserDao
+import me.kvdpxne.dtm.data.DaoUser
 
 /**
  * @since 0.1.0
@@ -22,7 +22,7 @@ object UserManager {
       return user
     }
 
-    user = UserDao.findByIdentifier(identifier)
+    user = DaoUser.findByIdentifier(identifier)
     if (null != user) {
       this.addUser(user)
       return user

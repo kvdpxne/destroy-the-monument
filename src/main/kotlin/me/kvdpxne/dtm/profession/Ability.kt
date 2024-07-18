@@ -1,10 +1,9 @@
 package me.kvdpxne.dtm.profession
 
 import me.kvdpxne.dtm.DestroyTheMonument
-import me.kvdpxne.dtm.shared.resetExpBar
+import me.kvdpxne.dtm.shared.resetExperienceBar
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import org.bukkit.plugin.java.JavaPlugin
 
 class Ability(
   // @formatter:off
@@ -13,7 +12,7 @@ class Ability(
   val readyAfterDeath: Boolean                 = false,
   val readyAfterKill : Boolean                 = false
   // @formatter:on
-) {
+): Cloneable {
 
   var ready: Boolean = true
     private set
@@ -27,10 +26,10 @@ class Ability(
 
   fun run(player: Player, a: Boolean = false) {
     this.ready = false
-    player.resetExpBar()
+    player.resetExperienceBar()
 
     val remainingSeconds = if (a) {
-      Math.round(this.delay * 0.333F) + this.delay
+      Math.round(this.delay * 0.334F) + this.delay
     } else {
       this.delay
     }
@@ -52,5 +51,14 @@ class Ability(
     }
 
     Bukkit.getScheduler().cancelTask(this.taskIdentifier)
+  }
+
+  public override fun clone(): Ability {
+    return Ability(
+      this.delay,
+      this.whenReady,
+      this.readyAfterDeath,
+      this.readyAfterKill
+    )
   }
 }

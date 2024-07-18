@@ -1,11 +1,11 @@
-package me.kvdpxne.dtm.profession
+package me.kvdpxne.dtm.professions
 
 import me.kvdpxne.dtm.shared.Attributes
 import me.kvdpxne.dtm.shared.toBuilder
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
 
-val TOOL_AXE = Material.IRON_AXE.toBuilder()
+internal val TOOL_AXE = Material.IRON_AXE.toBuilder()
   .lore(
     "&7Tools deal &c&lLESS DAMAGE &7than your main",
     "&7weapon because they should be used to",
@@ -17,7 +17,7 @@ val TOOL_AXE = Material.IRON_AXE.toBuilder()
   .unbreakable()
   .build()
 
-val TOOL_PICKAXE = Material.DIAMOND_PICKAXE.toBuilder()
+internal val TOOL_PICKAXE = Material.DIAMOND_PICKAXE.toBuilder()
   .lore(
     "&7Tools deal &c&lLESS DAMAGE &7than your main",
     "&7weapon because they should be used to",

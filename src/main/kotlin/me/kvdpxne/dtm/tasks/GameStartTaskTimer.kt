@@ -1,8 +1,10 @@
 package me.kvdpxne.dtm.tasks
 
+import me.kvdpxne.dtm.DestroyTheMonument
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameState
 import me.kvdpxne.dtm.game.MIN_HOSTAGE_SIZE_
+import org.bukkit.Bukkit
 import org.bukkit.scheduler.BukkitRunnable
 
 class GameStartTaskTimer(
@@ -24,7 +26,11 @@ class GameStartTaskTimer(
     }
 
     if (0 >= remainingSeconds) {
-      game.start()
+      Bukkit.getScheduler().runTask(
+        DestroyTheMonument.instance
+      ) {
+        game.start()
+      }
       game.sendMessage("&6&lDTM &7> &fThe game has been &asuccessfully &7started.")
       this.cancel()
       return

@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack
 open class Gui(displayName: String, rows: Rows) {
 
   private val holder = GuiHolder()
-  private val inventory = Bukkit.createInventory(holder, rows.size, displayName)
+  val inventory = Bukkit.createInventory(holder, rows.size, displayName)
 
   init {
     holder.inventory = this.inventory

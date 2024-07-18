@@ -12,7 +12,7 @@ import me.kvdpxne.dtm.scoreboard.createServerScoreboard
 import me.kvdpxne.dtm.scoreboard.createServerTeam
 import me.kvdpxne.dtm.scoreboard.initScoreboard
 import me.kvdpxne.dtm.shared.debug
-import me.kvdpxne.dtm.shared.fillExpBar
+import me.kvdpxne.dtm.shared.fillExperienceBar
 import me.kvdpxne.dtm.shared.hardClean
 import me.kvdpxne.dtm.tasks.GameStartTaskTimer
 import me.kvdpxne.dtm.tasks.GameTimeUpdateTaskTimer
@@ -426,7 +426,7 @@ class Game(val identifier: UUID, var name: String) : Communicative {
               // Fill player exp bar after 200 ms
               Bukkit.getScheduler().runTaskLaterAsynchronously(
                 DestroyTheMonument.instance,
-                { this.fillExpBar() },
+                { this.fillExperienceBar() },
                 4L
               )
               return

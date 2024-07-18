@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.listener
 
-import me.kvdpxne.dtm.data.UserDao
+import me.kvdpxne.dtm.data.DaoUser
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -15,10 +15,10 @@ object PlayerJoinListener : Listener {
     val identifier = player.uniqueId
     val name = player.name
 
-    var user = UserDao.findByIdentifier(identifier)
+    var user = DaoUser.findByIdentifier(identifier)
     if (null == user) {
       user = UserManager.createUser(identifier, name)
-      UserDao.insert(user)
+      DaoUser.insert(user)
     } else {
       UserManager.addUser(user)
     }
