@@ -1,4 +1,4 @@
-package me.kvdpxne.dtm.shared
+package me.kvdpxne.dtm.shared.ancillary
 
 /**
  * @since 0.1.0

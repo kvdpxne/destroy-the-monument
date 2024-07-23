@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.profession
 
 import me.kvdpxne.dtm.DestroyTheMonument
-import me.kvdpxne.dtm.shared.resetExperienceBar
+import me.kvdpxne.dtm.shared.bukkit.resetExperienceBar
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 

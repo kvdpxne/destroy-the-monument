@@ -1,4 +1,4 @@
-package me.kvdpxne.dtm.shared
+package me.kvdpxne.dtm.shared.ancillary
 
 /**
  * Provides a structure for creating builder objects, promoting code

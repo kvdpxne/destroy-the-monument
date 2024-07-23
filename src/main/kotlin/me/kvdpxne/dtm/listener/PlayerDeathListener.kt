@@ -7,7 +7,7 @@ import me.kvdpxne.dtm.game.Teammate
 import me.kvdpxne.dtm.scoreboard.updateCoinCount
 import me.kvdpxne.dtm.scoreboard.updateDeathCount
 import me.kvdpxne.dtm.scoreboard.updateKillCount
-import me.kvdpxne.dtm.shared.respawn
+import me.kvdpxne.dtm.shared.bukkit.respawn
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler

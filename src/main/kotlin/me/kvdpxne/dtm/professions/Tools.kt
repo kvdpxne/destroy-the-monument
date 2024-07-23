@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.professions
 
-import me.kvdpxne.dtm.shared.Attributes
-import me.kvdpxne.dtm.shared.toBuilder
+import me.kvdpxne.dtm.shared.bukkit.Attributes
+import me.kvdpxne.dtm.shared.bukkit.toBuilder
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
 

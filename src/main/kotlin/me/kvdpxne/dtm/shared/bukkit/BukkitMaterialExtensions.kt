@@ -1,4 +1,4 @@
-package me.kvdpxne.dtm.shared
+package me.kvdpxne.dtm.shared.bukkit
 
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
@@ -8,10 +8,6 @@ fun Material.asItem(): ItemStack {
 }
 
 fun Material.toBuilder(): ItemBuilder {
-  return ItemBuilder().item(this)
-}
-
-fun ItemStack.toBuilder(): ItemBuilder {
   return ItemBuilder().item(this)
 }
 

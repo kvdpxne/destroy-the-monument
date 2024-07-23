@@ -3,8 +3,8 @@ package me.kvdpxne.dtm.game
 import fr.mrmicky.fastboard.FastBoard
 import me.kvdpxne.dtm.command.Communicative
 import me.kvdpxne.dtm.profession.Profession
-import me.kvdpxne.dtm.shared.QueuingPair
-import me.kvdpxne.dtm.shared.toQueuingPair
+import me.kvdpxne.dtm.shared.collections.QueuingPair
+import me.kvdpxne.dtm.shared.collections.toQueuingPair
 import me.kvdpxne.dtm.statistics.BaseStatistics
 import me.kvdpxne.dtm.user.UserStatistics
 import me.kvdpxne.dtm.user.User

@@ -1,4 +1,4 @@
-package me.kvdpxne.dtm.shared
+package me.kvdpxne.dtm.shared.minecraft
 
 import net.minecraft.server.v1_7_R4.EnumClientCommand
 import net.minecraft.server.v1_7_R4.NBTTagCompound

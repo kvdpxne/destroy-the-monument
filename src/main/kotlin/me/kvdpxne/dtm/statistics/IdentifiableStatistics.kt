@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.statistics
 
-import me.kvdpxne.dtm.shared.Identifiable
+import me.kvdpxne.dtm.shared.ancillary.Identifiable
 
 /**
  * Defines a contract for player statistics that can be measured, compared,

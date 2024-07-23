@@ -2,7 +2,7 @@ package me.kvdpxne.dtm.profession
 
 import me.kvdpxne.dtm.DestroyTheMonument
 import me.kvdpxne.dtm.gui.SlotItem
-import me.kvdpxne.dtm.shared.toBuilder
+import me.kvdpxne.dtm.shared.bukkit.toBuilder
 import me.kvdpxne.dtm.uid.Uid
 import org.bukkit.Bukkit
 import org.bukkit.DyeColor

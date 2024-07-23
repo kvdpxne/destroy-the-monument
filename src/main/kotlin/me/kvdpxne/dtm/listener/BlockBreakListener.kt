@@ -7,10 +7,11 @@ import me.kvdpxne.dtm.game.Team
 import me.kvdpxne.dtm.game.findMonument
 import me.kvdpxne.dtm.scoreboard.updateBlueMonumentCount
 import me.kvdpxne.dtm.scoreboard.updateRedMonumentCount
-import me.kvdpxne.dtm.shared.hardClean
-import me.kvdpxne.dtm.shared.isMonument
-import me.kvdpxne.dtm.shared.isRich
-import me.kvdpxne.dtm.shared.toBuilder
+import me.kvdpxne.dtm.shared.ItemsClipboard
+import me.kvdpxne.dtm.shared.bukkit.hardClean
+import me.kvdpxne.dtm.shared.bukkit.isMonument
+import me.kvdpxne.dtm.shared.bukkit.isRich
+import me.kvdpxne.dtm.shared.bukkit.toBuilder
 import me.kvdpxne.dtm.tasks.GameStopTaskTimer
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.Bukkit
@@ -19,14 +20,6 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.inventory.ItemStack
-
-private val LOSE = Material.DEAD_BUSH.toBuilder()
-  .name("&c&lPRZEGRALES")
-  .build()
-
-private val WON = Material.DIAMOND.toBuilder()
-  .name("&a&lWYGRALES")
-  .build()
 
 object BlockBreakListener : Listener {
 
@@ -153,11 +146,11 @@ object BlockBreakListener : Listener {
 
     game.teams.forEach {
       if (attackedTeam == it) {
-        this.fs(it, LOSE)
+        this.fs(it, ItemsClipboard.LOSE)
         return@forEach
       }
 
-      this.fs(it, WON)
+      this.fs(it, ItemsClipboard.WON)
     }
 
     Bukkit.getScheduler().cancelTask(game.timerTaskIdentifier)

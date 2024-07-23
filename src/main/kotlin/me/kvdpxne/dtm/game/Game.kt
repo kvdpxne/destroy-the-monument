@@ -12,8 +12,8 @@ import me.kvdpxne.dtm.scoreboard.createServerScoreboard
 import me.kvdpxne.dtm.scoreboard.createServerTeam
 import me.kvdpxne.dtm.scoreboard.initScoreboard
 import me.kvdpxne.dtm.shared.debug
-import me.kvdpxne.dtm.shared.fillExperienceBar
-import me.kvdpxne.dtm.shared.hardClean
+import me.kvdpxne.dtm.shared.bukkit.fillExperienceBar
+import me.kvdpxne.dtm.shared.bukkit.hardClean
 import me.kvdpxne.dtm.tasks.GameStartTaskTimer
 import me.kvdpxne.dtm.tasks.GameTimeUpdateTaskTimer
 import me.kvdpxne.dtm.user.User

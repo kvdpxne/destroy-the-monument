@@ -6,7 +6,7 @@ import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionManager
-import me.kvdpxne.dtm.shared.BaseMutable
+import me.kvdpxne.dtm.shared.ancillary.BaseMutable
 import me.kvdpxne.dtm.wallet.Wallet
 
 class User(

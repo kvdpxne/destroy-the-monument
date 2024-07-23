@@ -4,12 +4,11 @@ import me.kvdpxne.dtm.colorize
 import me.kvdpxne.dtm.colorizeAll
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
-import me.kvdpxne.dtm.listener.ITEM_GAME_LEAVE
-import me.kvdpxne.dtm.listener.SELECT_PROFESSION_ITEM
-import me.kvdpxne.dtm.listener.SELECT_TEAM_ITEM
 import me.kvdpxne.dtm.profession.ProfessionManager
-import me.kvdpxne.dtm.shared.hardClean
-import me.kvdpxne.dtm.shared.toBuilder
+import me.kvdpxne.dtm.shared.ItemsClipboard
+import me.kvdpxne.dtm.shared.bukkit.hardClean
+import me.kvdpxne.dtm.shared.bukkit.setItem
+import me.kvdpxne.dtm.shared.bukkit.toBuilder
 import me.kvdpxne.dtm.user.User
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -22,21 +21,26 @@ fun createTeamSelectionGui(game: Game, user: User) = Gui("Team selection", Rows.
   val iterator = game.teams.iterator()
 
   val red = iterator.next().identity
+
   setItem(0, coloredWool.apply {
     durability = 14
     itemMeta = itemMeta.apply {
       val teamSize = game.findTeam(red)?.size() ?: 0
-      displayName = "&c&lRED &r&8| &6$teamSize/unlimited".colorize()
+      displayName = "&c&lCzerwoni &r&8| &6$teamSize/bez limitu".colorize()
       lore = arrayOf(
-        "&7You will be added directly to",
-        "&7the &cRED &7team."
+        "&7Zostaniesz dodany bezpośrednio",
+        "&7do drużyny &c&lCzerwonych&7."
       ).colorizeAll()
     }
   }) {
     game.addTeammate(red) { user }
-    with(it.whoClicked as Player) {
-      closeInventory()
-      game.sendMessage("&7> &f$displayName &7joined the &c&lRED &7team.")
+
+    val player = it.whoClicked as Player
+    player.closeInventory()
+
+    game.sendMessage {
+      val displayName = player.displayName
+      "&6&lDTM &7> &fGracz &6$displayName &fdołączył do drużyny &c&lCzerwonych&f."
     }
   }
 
@@ -45,40 +49,48 @@ fun createTeamSelectionGui(game: Game, user: User) = Gui("Team selection", Rows.
     durability = 11
     itemMeta = itemMeta.apply {
       val teamSize = game.findTeam(blue)?.size() ?: 0
-      displayName = "&9&lBLUE &r&8| &6$teamSize/unlimited".colorize()
+      displayName = "&b&lNiebiescy &r&8| &6$teamSize/bez limitu".colorize()
       lore = arrayOf(
-        "&7You will be added directly to",
-        "&7the &9BLUE &7team."
+        "&7Zostaniesz dodany bezpośrednio",
+        "&7do drużyny &b&lNiebieskich&7."
       ).colorizeAll()
     }
   }) {
     game.addTeammate(blue) { user }
-    with(it.whoClicked as Player) {
-      closeInventory()
-      game.sendMessage("&7> &f$displayName &7joined the &9&lBLUE &7team.")
+
+    val player = it.whoClicked as Player
+    player.closeInventory()
+
+    game.sendMessage {
+      val displayName = player.displayName
+      "&6&lDTM &7> &fGracz &6$displayName &fdołączył do drużyny &b&lNiebieskich&f."
     }
   }
 
-  setItem(4, ItemStack(Material.OBSIDIAN).apply {
-    itemMeta = itemMeta.apply {
-      displayName = "&6Join the Game".colorize()
-      lore = listOf(
-        "&7You will be added to a team that",
-        "&7currently has fewer players."
-      ).colorizeAll()
-    }
-  }) {
-    val name = if (game.allTeamsAreSameSize()) {
+  setItem(4, ItemsClipboard.ITEM_TEAM_SELECT_RANDOM) {
+
+    val team = if (game.allTeamsAreSameSize()) {
       game.teams.random().identity
     } else {
       game.findSmallerTeam()!!.identity
     }
 
-    game.addTeammate(name) { user }
-    with(it.whoClicked as Player) {
-      closeInventory()
+    game.addTeammate(team) { user }
 
-      game.sendMessage("&7> &f$displayName &7joined the ${name.colorInChat}&l${name.name.uppercase()} &7team.")
+    val player = it.whoClicked as Player
+    player.closeInventory()
+
+    game.sendMessage {
+      val displayName = player.displayName
+      val teamColor = team.colorInChat
+
+      val teamName = if (team.name.equals("blue", true)) {
+        "Niebieskich"
+      } else {
+        "Czerwonych"
+      }
+
+      "&6&lDTM &7> &fGracz &6$displayName &fdołączył do drużyny $teamColor&l$teamName&f."
     }
   }
 }
@@ -93,7 +105,7 @@ fun createGameSelectionGui(user: User) = GameManager.games.let {
           val name = game.name
           val hostagesCount = game.hostages.size
 
-          "&7> &f$name &6$hostagesCount/unlimited"
+          "&7> &f$name &6$hostagesCount/bez limitu"
         }
         .lore(
           "&7Join the game lobby to be able to",
@@ -111,9 +123,9 @@ fun createGameSelectionGui(user: User) = GameManager.games.let {
         player.closeInventory()
         player.hardClean()
 
-        player.inventory.setItem(0, SELECT_TEAM_ITEM)
-        player.inventory.setItem(1, SELECT_PROFESSION_ITEM)
-        player.inventory.setItem(8, ITEM_GAME_LEAVE)
+        player.setItem(0, ItemsClipboard.ITEM_TEAM_SELECT)
+        player.setItem(1, ItemsClipboard.ITEM_PROFESSION_SELECT)
+        player.setItem(8, ItemsClipboard.ITEM_GAME_LEAVE)
 
         createTeamSelectionGui(game, user).open(player)
       }

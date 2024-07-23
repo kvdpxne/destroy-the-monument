@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.command
 
 import me.kvdpxne.dtm.command.ExecutionPlaceType.EVERYWHERE
-import me.kvdpxne.dtm.shared.Buildable
+import me.kvdpxne.dtm.shared.ancillary.Buildable
 
 /**
  * @since 0.1.0

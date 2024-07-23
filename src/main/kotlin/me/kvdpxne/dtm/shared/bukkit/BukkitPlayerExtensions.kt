@@ -1,7 +1,14 @@
-package me.kvdpxne.dtm.shared
+package me.kvdpxne.dtm.shared.bukkit
 
+import me.kvdpxne.dtm.shared.minecraft.BukkitPlayer
+import me.kvdpxne.dtm.shared.minecraft.MinecraftEnumClientCommand
+import me.kvdpxne.dtm.shared.minecraft.MinecraftPacketPlayInClientCommand
+import org.bukkit.Bukkit
 import org.bukkit.GameMode
+import org.bukkit.Location
 import org.bukkit.entity.Player
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause
+import org.bukkit.inventory.ItemStack
 
 fun Player.hardClean() {
   this.inventory.also {
@@ -40,6 +47,37 @@ fun Player.hardClean() {
   this.allowFlight = false
   this.flySpeed = 0.1F
   this.walkSpeed = 0.2F
+
+  //
+  if (this.isInsideVehicle) {
+    this.leaveVehicle()
+  }
+}
+
+fun Player.moveTo(location: Location) {
+  this.teleport(location, TeleportCause.PLUGIN)
+}
+
+fun Player.moveToDefaultSpawnPosition() {
+  //
+  val position = Bukkit.getWorlds().firstOrNull()?.spawnLocation
+    ?: this.world.spawnLocation
+
+  //
+  this.moveTo(position)
+}
+
+/**
+ * @since 0.1.0
+ */
+fun Player.setItem(
+  index: Int,
+  itemStack: ItemStack,
+  force: Boolean = true
+) {
+  if (force || null != this.inventory.getItem(index)) {
+    this.inventory.setItem(index, itemStack)
+  }
 }
 
 /**

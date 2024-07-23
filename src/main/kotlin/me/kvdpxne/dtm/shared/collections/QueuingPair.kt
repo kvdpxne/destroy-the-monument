@@ -1,4 +1,4 @@
-package me.kvdpxne.dtm.shared
+package me.kvdpxne.dtm.shared.collections
 
 /**
  * Represents a pair of elements where one element is considered `current`

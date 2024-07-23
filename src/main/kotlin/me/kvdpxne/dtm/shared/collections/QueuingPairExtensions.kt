@@ -1,4 +1,4 @@
-package me.kvdpxne.dtm.shared
+package me.kvdpxne.dtm.shared.collections
 
 fun <T> queuingPair(current: T, next: T? = null): QueuingPair<T> {
   return QueuingPair(current, next)

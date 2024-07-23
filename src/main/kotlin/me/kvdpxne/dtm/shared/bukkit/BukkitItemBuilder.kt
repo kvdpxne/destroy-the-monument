@@ -1,7 +1,10 @@
-package me.kvdpxne.dtm.shared
+package me.kvdpxne.dtm.shared.bukkit
 
 import me.kvdpxne.dtm.colorize
 import me.kvdpxne.dtm.colorizeAll
+import me.kvdpxne.dtm.shared.minecraft.BukkitItemStack
+import me.kvdpxne.dtm.shared.minecraft.MinecraftNBTTagCompound
+import me.kvdpxne.dtm.shared.minecraft.MinecraftNBTTagList
 import org.bukkit.Color
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment

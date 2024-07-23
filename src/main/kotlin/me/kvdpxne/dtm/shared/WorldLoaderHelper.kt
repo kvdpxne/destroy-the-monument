@@ -1,6 +1,7 @@
 package me.kvdpxne.dtm.shared
 
 import java.io.File
+import me.kvdpxne.dtm.shared.minecraft.BukkitWorld
 import org.bukkit.Bukkit
 import org.bukkit.World
 import org.bukkit.WorldCreator

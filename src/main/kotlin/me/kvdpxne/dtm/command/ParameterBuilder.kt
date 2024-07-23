@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.command
 
-import me.kvdpxne.dtm.shared.Buildable
+import me.kvdpxne.dtm.shared.ancillary.Buildable
 
 class ParameterBuilder<T> : Buildable<Parameter<T>> {
 

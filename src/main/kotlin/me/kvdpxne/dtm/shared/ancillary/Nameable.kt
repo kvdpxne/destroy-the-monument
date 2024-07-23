@@ -1,4 +1,4 @@
-package me.kvdpxne.dtm.shared
+package me.kvdpxne.dtm.shared.ancillary
 
 /**
  * Defines a contract for objects that possess a unique identifier and

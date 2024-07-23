@@ -1,73 +1,84 @@
 package me.kvdpxne.dtm.listener
 
-import me.kvdpxne.dtm.commands.wand
-import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.gui.createGameSelectionGui
 import me.kvdpxne.dtm.gui.createProfessionSelectionGui
 import me.kvdpxne.dtm.gui.createTeamSelectionGui
+import me.kvdpxne.dtm.shared.ItemsClipboard
 import me.kvdpxne.dtm.shared.SelectedPositionStorage
-import me.kvdpxne.dtm.shared.hardClean
+import me.kvdpxne.dtm.shared.bukkit.cancel
+import me.kvdpxne.dtm.shared.bukkit.isNullOrTypeAir
+import me.kvdpxne.dtm.shared.bukkit.isRightClick
+import me.kvdpxne.dtm.shared.bukkit.hardClean
+import me.kvdpxne.dtm.shared.bukkit.setItem
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
-import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 
-fun Action.isPPM(): Boolean {
-  return this == Action.LEFT_CLICK_AIR || this == Action.RIGHT_CLICK_AIR
-}
-
+/**
+ *
+ */
 object PlayerInteractListener : Listener {
 
+  /**
+   * @since 0.1.0
+   */
   @EventHandler
   fun handlePlayerInteract(event: PlayerInteractEvent) {
-//    if (event.isCancelled) {
-//      return
-//    }
-
-
-    val player = event.player
-    val itemInHand = event.item ?: return
-
-    if (itemInHand.isSimilar(JOIN_GAME_ITEM)) {
-      val user = UserManager.findByIdentifier(event.player.uniqueId) ?: return
-      event.isCancelled = true
-      createGameSelectionGui(user).open(event.player)
+    val itemInHand = event.item
+    if (itemInHand.isNullOrTypeAir()) {
       return
     }
 
-    if (itemInHand.isSimilar(SELECT_TEAM_ITEM)) {
-      val user = UserManager.findByIdentifier(event.player.uniqueId) ?: return
-      val game = GameManager.findByUser(user) ?: return
-      event.isCancelled = true
-      createTeamSelectionGui(game, user).open(event.player)
+    if (event.action.isRightClick()) {
+
+      if (itemInHand.isSimilar(ItemsClipboard.ITEM_GAME_JOIN)) {
+        val user = UserManager.findByIdentifier(event.player.uniqueId) ?: return
+        event.cancel()
+        createGameSelectionGui(user).open(event.player)
+        return
+      }
+
+      if (itemInHand.isSimilar(ItemsClipboard.ITEM_TEAM_SELECT)) {
+        val user = UserManager.findByIdentifier(event.player.uniqueId) ?: return
+        val game = user.game ?: return
+
+        event.cancel()
+        createTeamSelectionGui(game, user).open(event.player)
+        return
+      }
+
+      if (itemInHand.isSimilar(ItemsClipboard.ITEM_PROFESSION_SELECT)) {
+        val user = UserManager.findByIdentifier(event.player.uniqueId) ?: return
+        event.cancel()
+        createProfessionSelectionGui(user).open(event.player)
+        return
+      }
+
+      if (itemInHand.isSimilar(ItemsClipboard.ITEM_GAME_LEAVE)) {
+        val user = UserManager.findByIdentifier(event.player.uniqueId) ?: return
+        val game = user.game ?: return
+
+        event.cancel()
+        game.removeHostage(user)
+        event.player.hardClean()
+        event.player.setItem(0, ItemsClipboard.ITEM_GAME_JOIN)
+        return
+      }
+    }
+
+    //
+    if (event.isCancelled) {
       return
     }
 
-    if (itemInHand.isSimilar(SELECT_PROFESSION_ITEM)) {
-      val user = UserManager.findByIdentifier(event.player.uniqueId) ?: return
-      event.isCancelled = true
-      createProfessionSelectionGui(user).open(player)
+    //
+    if (!itemInHand.isSimilar(ItemsClipboard.ITEM_WAND)) {
       return
     }
 
-    if (itemInHand.isSimilar(ITEM_GAME_LEAVE)) {
-      val user = UserManager.findByIdentifier(event.player.uniqueId) ?: return
-      val game = GameManager.findByUser(user) ?: return
-      event.isCancelled = true
-      game.removeHostage(user)
-      player.hardClean()
-      player.inventory.setItem(0, JOIN_GAME_ITEM)
-      return
-    }
-
-    event.item ?: return
-    if (!event.item.isSimilar(wand)) {
-      return
-    }
-
-    event.isCancelled = true
+    event.cancel()
 
     val block = event.clickedBlock
 
@@ -77,6 +88,7 @@ object PlayerInteractListener : Listener {
       return
     }
 
+    val player = event.player
     SelectedPositionStorage.selectedBlocks[player.uniqueId] = block.location
     player.sendMessage("Added block located in ${block.location} to temporary storage.")
   }

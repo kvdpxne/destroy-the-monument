@@ -1,8 +1,8 @@
 package me.kvdpxne.dtm.listener
 
 import me.kvdpxne.dtm.game.GameManager
-import me.kvdpxne.dtm.shared.hasInventory
-import me.kvdpxne.dtm.shared.isMonument
+import me.kvdpxne.dtm.shared.bukkit.hasInventory
+import me.kvdpxne.dtm.shared.bukkit.isMonument
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.Material
 import org.bukkit.event.EventHandler

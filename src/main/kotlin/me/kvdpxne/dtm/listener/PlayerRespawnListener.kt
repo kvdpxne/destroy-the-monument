@@ -3,7 +3,7 @@ package me.kvdpxne.dtm.listener
 import me.kvdpxne.dtm.DestroyTheMonument
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.toLocation
-import me.kvdpxne.dtm.shared.fillExperienceBar
+import me.kvdpxne.dtm.shared.bukkit.fillExperienceBar
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler

@@ -7,7 +7,7 @@ import me.kvdpxne.dtm.gui.slotItem
 import me.kvdpxne.dtm.gui.slotLeggings
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionBuilder
-import me.kvdpxne.dtm.shared.toBuilder
+import me.kvdpxne.dtm.shared.bukkit.toBuilder
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
 
