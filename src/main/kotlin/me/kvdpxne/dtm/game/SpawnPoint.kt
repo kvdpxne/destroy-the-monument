@@ -1,7 +1,6 @@
 package me.kvdpxne.dtm.game
 
 import java.util.UUID
-import me.kvdpxne.dtm.shared.Identity
 
 /**
  * @param team
@@ -13,7 +12,7 @@ import me.kvdpxne.dtm.shared.Identity
  * @param identifier
  */
 data class SpawnPoint(
-  var team: Identity,
+  var team: TeamIdentity,
   var x: Double,
   var y: Double,
   var z: Double,
@@ -25,7 +24,7 @@ data class SpawnPoint(
 
   init {
     // Checks if the given team identity can be used to create this object.
-    check(null != DefaultTeamColor.findByIdentity(this.team)) {
+    require(TeamService.existsTeamIdentityByIdentifier(this.team.identifier)) {
       "The given team identity cannot be used."
     }
   }

@@ -6,8 +6,6 @@ import me.kvdpxne.dtm.gui.slotHelmet
 import me.kvdpxne.dtm.gui.slotItem
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionBuilder
-import me.kvdpxne.dtm.profession.TOOL_AXE
-import me.kvdpxne.dtm.profession.TOOL_PICKAXE
 import me.kvdpxne.dtm.shared.asItem
 import me.kvdpxne.dtm.shared.toBuilder
 import org.bukkit.Material
@@ -51,4 +49,5 @@ fun createMedic(): Profession = ProfessionBuilder()
     slotItem(Material.WOOD, 30, 8)
   )
   .icon(Material.POTION)
+  .disabled()
   .build()

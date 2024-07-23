@@ -1,7 +1,6 @@
 package me.kvdpxne.dtm.data
 
 import java.util.UUID
-import me.kvdpxne.dtm.game.DefaultTeamColor
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.Team
 import org.ktorm.dsl.eq
@@ -25,16 +24,14 @@ object GameTeamsDao {
     .select()
     .where { GameTeamsTable.game eq identifier.toString() }
     .mapNotNull {
-      val team = TeamDao.findByIdentifier(
-        UUID.fromString(
-          it[GameTeamsTable.team]
-        )
+      val team = TeamIdentityDao.findByIdentifier(
+        it[GameTeamsTable.team]!!
       )
       Team(team!!)
     }
 
   fun insert(game: Game, team: Team) = database.insert(GameTeamsTable) {
     set(it.game, game.identifier.toString())
-    set(it.team, DefaultTeamColor.findByIdentity(team.identity)?.identifier.toString())
+    set(it.team, team.identity.identifier)
   }
 }

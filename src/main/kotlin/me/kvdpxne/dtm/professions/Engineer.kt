@@ -6,8 +6,6 @@ import me.kvdpxne.dtm.gui.slotHelmet
 import me.kvdpxne.dtm.gui.slotItem
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionBuilder
-import me.kvdpxne.dtm.profession.TOOL_AXE
-import me.kvdpxne.dtm.profession.TOOL_PICKAXE
 import me.kvdpxne.dtm.shared.toBuilder
 import org.bukkit.Material
 
@@ -35,4 +33,5 @@ fun createEngineer(): Profession = ProfessionBuilder()
     slotItem(Material.COBBLESTONE, 50, 8),
   )
   .icon(Material.COBBLESTONE)
+  .enabled()
   .build()

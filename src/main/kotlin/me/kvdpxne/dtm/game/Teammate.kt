@@ -3,15 +3,14 @@ package me.kvdpxne.dtm.game
 import fr.mrmicky.fastboard.FastBoard
 import me.kvdpxne.dtm.command.Communicative
 import me.kvdpxne.dtm.profession.Profession
-import me.kvdpxne.dtm.shared.Identity
 import me.kvdpxne.dtm.shared.QueuingPair
 import me.kvdpxne.dtm.shared.toQueuingPair
-import me.kvdpxne.dtm.statistics.Statistics
+import me.kvdpxne.dtm.statistics.BaseStatistics
+import me.kvdpxne.dtm.user.UserStatistics
 import me.kvdpxne.dtm.user.User
 
 class Teammate(
   val user: User,
-  var teamColor: Identity,
   val team: Team
 ): Communicative {
 
@@ -23,26 +22,29 @@ class Teammate(
   /**
    *
    */
-  val statistics: Statistics
+  val statistics: BaseStatistics
 
   /**
    *
    */
   var fastBoard: FastBoard?
 
+  val currentProfession: Profession
+    get() = this.professionQueuingPair.current
+
   /**
    *
    */
   init {
-    this.professionQueuingPair = this.user.profession.toQueuingPair()
-    this.statistics = Statistics()
+    this.professionQueuingPair = this.user.currentProfession!!.toQueuingPair()
+    this.statistics = BaseStatistics()
 
 
     this.fastBoard = null
   }
 
   /**
-   * Alias for [Statistics.addKills]
+   * Alias for [UserStatistics.addKills]
    *
    * @since 0.1
    */
@@ -52,7 +54,7 @@ class Teammate(
   }
 
   /**
-   * Alias for [Statistics.addAssists]
+   * Alias for [UserStatistics.addAssists]
    *
    * @since 0.1
    */
@@ -62,7 +64,7 @@ class Teammate(
   }
 
   /**
-   * Alias for [Statistics.addDeaths]
+   * Alias for [UserStatistics.addDeaths]
    *
    * @since 0.1
    */
@@ -72,7 +74,7 @@ class Teammate(
   }
 
   /**
-   * Alias for [Statistics.addDestroyedMonuments]
+   * Alias for [UserStatistics.addDestroyedMonuments]
    *
    * @since 0.1
    */

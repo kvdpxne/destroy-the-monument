@@ -1,6 +1,8 @@
 package me.kvdpxne.dtm
 
 import me.kvdpxne.dtm.command.CommandManager
+import me.kvdpxne.dtm.commands.createBaseCommand
+import me.kvdpxne.dtm.commands.createGlobalChatCommand
 import me.kvdpxne.dtm.game.ArenaManager
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.gui.GuiActionHandler
@@ -14,14 +16,13 @@ import me.kvdpxne.dtm.listener.PlayerFoodLevelChangeListener
 import me.kvdpxne.dtm.listener.PlayerInteractListener
 import me.kvdpxne.dtm.listener.PlayerItemConsumeListener
 import me.kvdpxne.dtm.listener.PlayerJoinListener
+import me.kvdpxne.dtm.listener.PlayerKickListener
 import me.kvdpxne.dtm.listener.PlayerPrepareItemEnchantListener
 import me.kvdpxne.dtm.listener.PlayerQuitListener
 import me.kvdpxne.dtm.listener.PlayerRespawnListener
 import me.kvdpxne.dtm.listener.PlayerToggleFlightListener
 import me.kvdpxne.dtm.listener.ProjectileHitListener
 import me.kvdpxne.dtm.listener.WeatherChangeListener
-import me.kvdpxne.dtm.listener.internal.GameStartListener
-import me.kvdpxne.dtm.listener.internal.GameStopListener
 import me.kvdpxne.dtm.profession.ProfessionManager
 import me.kvdpxne.dtm.shared.BukkitTextFormatter
 import me.kvdpxne.dtm.user.UserManager
@@ -90,6 +91,7 @@ class DestroyTheMonument : JavaPlugin() {
       PlayerInteractListener,
       PlayerItemConsumeListener,
       PlayerJoinListener,
+      PlayerKickListener,
       PlayerPrepareItemEnchantListener,
       PlayerQuitListener,
       PlayerRespawnListener,
@@ -98,10 +100,11 @@ class DestroyTheMonument : JavaPlugin() {
       WeatherChangeListener
     )
 
-    eventManager.registerListener(GameStartListener)
-    eventManager.registerListener(GameStopListener)
-
-    CommandManager.registerBuiltItCommands()
+    //
+    CommandManager.addCommands(
+      createBaseCommand(),
+      createGlobalChatCommand()
+    )
   }
 
   override fun onDisable() {

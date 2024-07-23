@@ -1,19 +1,18 @@
 package me.kvdpxne.dtm.shared
 
+import net.minecraft.server.v1_7_R4.EnumClientCommand
+import net.minecraft.server.v1_7_R4.NBTTagCompound
+import net.minecraft.server.v1_7_R4.NBTTagList
+import net.minecraft.server.v1_7_R4.PacketPlayInClientCommand
+import org.bukkit.craftbukkit.v1_7_R4.CraftWorld
+import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer
 import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftItemStack
-import org.bukkit.inventory.ItemStack
-import org.bukkit.scoreboard.Objective
-import org.bukkit.scoreboard.Score
-import org.bukkit.scoreboard.Scoreboard
-import org.bukkit.scoreboard.ScoreboardManager
-import org.bukkit.scoreboard.Team
 
-typealias BukkitScoreboard = Scoreboard
-typealias BukkitTeam = Team
-typealias BukkitScore = Score
-typealias BukkitScoreboardManager = ScoreboardManager
-typealias BukkitObjective = Objective
+typealias BukkitItemStack = CraftItemStack
+typealias BukkitPlayer = CraftPlayer
+typealias BukkitWorld = CraftWorld
 
-typealias BukkitItemStack = ItemStack
-typealias CraftBukkitItemStack = CraftItemStack
-typealias MinecraftItemStack = net.minecraft.server.v1_7_R4.ItemStack
+typealias MinecraftPacketPlayInClientCommand = PacketPlayInClientCommand
+typealias MinecraftNBTTagCompound = NBTTagCompound
+typealias MinecraftNBTTagList = NBTTagList
+typealias MinecraftEnumClientCommand = EnumClientCommand

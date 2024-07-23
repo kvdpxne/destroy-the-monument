@@ -14,5 +14,5 @@ package me.kvdpxne.dtm.command
  */
 typealias CommandHandler<T> = (
   performer: T,
-  parameters: Parameters
+  arguments: Arguments
 ) -> Unit

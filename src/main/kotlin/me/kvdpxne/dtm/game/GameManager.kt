@@ -9,6 +9,9 @@ object GameManager {
   var games: MutableMap<UUID, Game> = mutableMapOf()
     private set
 
+  val registeredGames: List<Game>
+    get() = this.games.values.toList()
+
   init {
     // TODO Delete in the future.
     // Information about games should be loaded into memory only when it is

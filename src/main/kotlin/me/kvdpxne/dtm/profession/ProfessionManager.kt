@@ -2,7 +2,6 @@ package me.kvdpxne.dtm.profession
 
 import io.github.oshai.kotlinlogging.KLogger
 import io.github.oshai.kotlinlogging.KotlinLogging
-import java.util.UUID
 import me.kvdpxne.dtm.professions.createArcher
 import me.kvdpxne.dtm.professions.createAssassin
 import me.kvdpxne.dtm.professions.createDefender
@@ -13,11 +12,20 @@ import me.kvdpxne.dtm.professions.createPyro
 import me.kvdpxne.dtm.professions.createScout
 import me.kvdpxne.dtm.professions.createSpecialist
 
-val professionMap: MutableMap<UUID, Profession> = mutableMapOf()
-
 private val logger: KLogger = KotlinLogging.logger {}
 
 object ProfessionManager : Iterable<Profession> {
+
+  /**
+   * @since 0.1.0
+   */
+  private val _professions: MutableMap<String, Profession> = mutableMapOf()
+
+  /**
+   * @since 0.1.0
+   */
+  val professions: List<Profession>
+    get() = this._professions.values.toList()
 
   /**
    * Returns a random profession object.
@@ -27,26 +35,40 @@ object ProfessionManager : Iterable<Profession> {
    * the collection of values.
    *
    * @return A random `Profession` object.
+   * @since 0.1.0
    */
-  fun getRandomProfession(): Profession {
-    return professionMap.values.random()
-  }
+  val randomProfession: Profession
+    get() = this._professions.values.random()
 
-  fun findByName(name: String, ignoreCase: Boolean = true): Profession? {
-    return professionMap.values.find {
+
+  /**
+   * @param name
+   * @param ignoreCase
+   *
+   * @return
+   * @since 0.1.0
+   */
+  fun findProfessionByName(
+    name: String,
+    ignoreCase: Boolean = true
+  ): Profession? {
+    return this._professions.values.find {
       it.name.equals(name, ignoreCase)
     }
   }
 
+  /**
+   * @since 0.1.0
+   */
   fun addProfession(
     profession: Profession
   ) {
     val identifier = profession.identifier
-    if (professionMap.contains(identifier)) {
+    if (this._professions.contains(identifier)) {
       return
     }
 
-    professionMap[identifier] = profession
+    this._professions[identifier] = profession
     logger.debug {
       "The profession \"$profession\" has been added and assigned to the " +
         "identifier \"$identifier\"."
@@ -86,10 +108,6 @@ object ProfessionManager : Iterable<Profession> {
    * Returns an iterator over the elements of this object.
    */
   override fun iterator(): Iterator<Profession> {
-    return professionMap.values.iterator()
-  }
-
-  override fun toString(): String {
-    return "ProfessionManager(professions=$professionMap)"
+    return this._professions.values.iterator()
   }
 }

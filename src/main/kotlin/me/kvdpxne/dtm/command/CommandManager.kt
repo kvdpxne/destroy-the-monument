@@ -1,74 +1,75 @@
 package me.kvdpxne.dtm.command
 
 import me.kvdpxne.dtm.command.bukkit.BukkitCommandMapAccessor
-import me.kvdpxne.dtm.commands.createHelpCommand
-import me.kvdpxne.dtm.commands.createJoinCommand
-import me.kvdpxne.dtm.commands.createKitCommand
-import me.kvdpxne.dtm.commands.createLeaveCommand
-import me.kvdpxne.dtm.commands.StartCommand
-import me.kvdpxne.dtm.commands.StopCommand
-import me.kvdpxne.dtm.commands.createAddArenaCommand
-import me.kvdpxne.dtm.commands.createAddMonumentCommand
-import me.kvdpxne.dtm.commands.createAddTeamCommand
-import me.kvdpxne.dtm.commands.createCreateArenaCommand
-import me.kvdpxne.dtm.commands.createCreateGameCommand
-import me.kvdpxne.dtm.commands.createCreateTeamCommand
-import me.kvdpxne.dtm.commands.createBaseCommand
-import me.kvdpxne.dtm.commands.createGlobalChatCommand
-import me.kvdpxne.dtm.commands.createSetArenaMapCommand
-import me.kvdpxne.dtm.commands.createSetSpawnPointCommand
-import me.kvdpxne.dtm.commands.createTeleportBackCommand
-import me.kvdpxne.dtm.commands.createTeleportCommand
-import me.kvdpxne.dtm.commands.createWandCommand
-
-val registeredCommandMap: MutableMap<Command, MutableList<Command>> = mutableMapOf()
 
 object CommandManager {
 
-  fun registerCommand(command: Command) {
-    var parent = command.parent
-    if (parent == null) {
-      parent = command
-    }
-    val ff = registeredCommandMap.getOrDefault(parent, mutableListOf())
-    ff.add(command)
-    registeredCommandMap[parent] = ff
-  }
+  /**
+   * @since 0.1.0
+   */
+  private val _commands: MutableSet<Command> = mutableSetOf()
 
-  fun registerCommands(commands: Array<out Command>) {
-    commands.forEach(::registerCommand)
-  }
+  /**
+   * @since 0.1.0
+   */
+  val commands: Set<Command>
+    get() = this._commands.toSet()
 
-  fun registerBuiltItCommands() {
-    // root
-    val parent = createBaseCommand()
+  /**
+   * @since 0.1.0
+   */
+  val size: Int
+    get() = this._commands.size
 
-    val it = mutableListOf(
-      createAddArenaCommand(),
-      createAddMonumentCommand(),
-      createAddTeamCommand(),
-      createCreateArenaCommand(),
-      createCreateGameCommand(),
-      createCreateTeamCommand(),
-      createHelpCommand(),
-      createJoinCommand(),
-      createKitCommand(),
-      createLeaveCommand(),
-      createSetArenaMapCommand(),
-      createSetSpawnPointCommand(),
-      StartCommand.createStartCommand(),
-      StopCommand.createStopCommand(),
-      createTeleportBackCommand(),
-      createTeleportCommand(),
-      createWandCommand()
-    ).onEach {
-      it.parent = parent
+  internal fun getSubCommand(
+    args: Array<out String>,
+    currentCommand: Pair<Command, Int>? = null,
+    idx: Int = 0
+  ): Pair<Command, Int>? {
+    // Return the last command when there are no more arguments
+    if (idx >= args.size) {
+      return currentCommand
     }
 
-    it.add(parent)
-    it.add(createGlobalChatCommand())
+    // If currentCommand is null, idx must be 0, so search in all commands
+    val commandSupplier = currentCommand?.first?.children?.asIterable() ?: commands
 
-    registerCommands(it.toTypedArray())
-    BukkitCommandMapAccessor.registerCommands(it.toTypedArray())
+    // Look if something matches the current index, if it does, look if there are further matches
+    commandSupplier
+      .firstOrNull { it.matches(args[idx]) }
+      ?.let { return getSubCommand(args, Pair(it, idx), idx + 1) }
+
+    // If no match was found, currentCommand is the subcommand that we searched for
+    return currentCommand
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun addCommand(command: Command){
+    if (this._commands.add(command)) {
+      BukkitCommandMapAccessor.registerCommands(command)
+    }
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun addCommands(vararg commands: Command) {
+    commands.forEach { this.addCommand(it) }
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun removeCommand(command: Command) {
+    this._commands.remove(command)
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun isEmpty(): Boolean {
+    return this._commands.isEmpty()
   }
 }

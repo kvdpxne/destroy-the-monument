@@ -3,17 +3,17 @@ package me.kvdpxne.dtm.scoreboard
 import fr.mrmicky.fastboard.FastBoard
 import me.kvdpxne.dtm.colorize
 import me.kvdpxne.dtm.colorizeAll
-import me.kvdpxne.dtm.shared.BukkitScoreboard
-import me.kvdpxne.dtm.shared.BukkitTeam
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
+import org.bukkit.scoreboard.Scoreboard
+import org.bukkit.scoreboard.Team
 
-fun createServerScoreboard(): BukkitScoreboard {
+fun createServerScoreboard(): Scoreboard {
   return Bukkit.getScoreboardManager().newScoreboard
 }
 
-fun createServerTeam(scoreboard: BukkitScoreboard, name: String, color: ChatColor): BukkitTeam {
+fun createServerTeam(scoreboard: Scoreboard, name: String, color: ChatColor): Team {
   val team = scoreboard.registerNewTeam(name)
 
   team.setAllowFriendlyFire(false)
@@ -81,4 +81,8 @@ fun updateKillCount(fastBoard: FastBoard, count: Int) {
 
 fun updateDeathCount(fastBoard: FastBoard, count: Int) {
   fastBoard.updateLine(11, "&7Smierci: &6&l$count".colorize())
+}
+
+fun updateCoinCount(fastBoard: FastBoard, count: Int) {
+  fastBoard.updateLine(14, "&6&l$count".colorize())
 }

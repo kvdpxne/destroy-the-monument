@@ -2,16 +2,11 @@ package me.kvdpxne.dtm.shared
 
 import me.kvdpxne.dtm.colorize
 import me.kvdpxne.dtm.colorizeAll
-import net.minecraft.server.v1_7_R4.NBTTagCompound
-import net.minecraft.server.v1_7_R4.NBTTagList
 import org.bukkit.Color
-import org.bukkit.DyeColor
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
-import org.bukkit.entity.Damageable
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.LeatherArmorMeta
-import org.bukkit.inventory.meta.Repairable
 
 object Attributes {
 
@@ -63,6 +58,10 @@ class ItemBuilder {
     return this;
   }
 
+  fun name(name: () -> String): ItemBuilder {
+    return this.name(name())
+  }
+
   fun lore(vararg lore: String): ItemBuilder {
     this.itemStack?.itemMeta = this.itemStack?.itemMeta.apply {
       this?.lore = arrayOf(*lore).colorizeAll()
@@ -89,13 +88,13 @@ class ItemBuilder {
       return this
     }
 
-    this.itemStack = CraftBukkitItemStack.asNMSCopy(this.itemStack).apply {
-      val base = getTag() ?: NBTTagCompound()
+    this.itemStack = BukkitItemStack.asNMSCopy(this.itemStack).apply {
+      val base = getTag() ?: MinecraftNBTTagCompound()
 
       base.setByte("Unbreakable", 1)
       setTag(base)
     }.let {
-      CraftBukkitItemStack.asCraftMirror(it)
+      BukkitItemStack.asCraftMirror(it)
     }
     return this
   }
@@ -105,12 +104,12 @@ class ItemBuilder {
     amount: Double,
     operation: Int = Attributes.FLAT
   ): ItemBuilder {
-    this.itemStack = CraftBukkitItemStack.asNMSCopy(itemStack).apply {
+    this.itemStack = BukkitItemStack.asNMSCopy(itemStack).apply {
 
-      val base = getTag() ?: NBTTagCompound()
-      val attributeModifiers = base["AttributeModifiers"]?.let { it as NBTTagList } ?: NBTTagList()
+      val base = getTag() ?: MinecraftNBTTagCompound()
+      val attributeModifiers = base["AttributeModifiers"]?.let { it as MinecraftNBTTagList } ?: MinecraftNBTTagList()
 
-      attributeModifiers.add(NBTTagCompound().apply {
+      attributeModifiers.add(MinecraftNBTTagCompound().apply {
         setString("AttributeName", name)
         setString("Name", name)
         setDouble("Amount", amount)
@@ -122,7 +121,7 @@ class ItemBuilder {
       base.set("AttributeModifiers", attributeModifiers)
       setTag(base)
     }.let {
-      CraftBukkitItemStack.asCraftMirror(it)
+      BukkitItemStack.asCraftMirror(it)
     }
     return this
   }

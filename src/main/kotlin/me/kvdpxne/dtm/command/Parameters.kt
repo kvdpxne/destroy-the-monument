@@ -1,34 +1,68 @@
 package me.kvdpxne.dtm.command
 
-class Parameters(arguments: Array<out String>) {
+import me.kvdpxne.dtm.game.ArenaManager
+import me.kvdpxne.dtm.game.GameManager
+import me.kvdpxne.dtm.user.UserManager
 
-  var arguments: Array<out String> = arguments
-    private set
-
-  fun length(): Int {
-    return arguments.size
-  }
-
-  fun asParameter(from: Int = 1): Parameters {
-    val size = length()
-    if (from > size) {
-      return this
+fun builderWorldNameParameter(
+  name: String = "MAP_ARENA"
+): ParameterBuilder<String> {
+  return ParameterBuilder<String>()
+    .name(name)
+    .validationBy(ParameterValidators.STRING_VALIDATOR)
+    .autocompletedWith { begin ->
+      //
+      emptyList()
     }
-    return Parameters(arguments.copyOfRange(from, size))
-  }
+}
 
-  /**
-   * @throws ArrayIndexOutOfBoundsException
-   */
-  fun asText(index: Int = 0): String {
-    return arguments[index]
-  }
+/**
+ * @since 0.1.0
+ */
+fun builderUserNameParameter(
+  name: String = "user_name"
+): ParameterBuilder<String> {
+  return ParameterBuilder<String>()
+    .name(name)
+    .validationBy(ParameterValidators.STRING_VALIDATOR)
+    .autocompletedWith { begin ->
+      //
+      UserManager.activeUsers
+        .filter { it.name.startsWith(begin, true) }
+        .map { it.name }
+    }
+}
 
-  fun asText(): String {
-    return this.arguments.joinToString(" ")
-  }
+/**
+ * @since 0.1.0
+ */
+fun builderArenaNameParameter(
+  name: String = "arena_name"
+): ParameterBuilder<String> {
+  return ParameterBuilder<String>()
+    .name(name)
+    .validationBy(ParameterValidators.STRING_VALIDATOR)
+    .autocompletedWith { begin ->
+      //
+      ArenaManager.registeredArenas
+        .filter { it.name.startsWith(begin) }
+        .map { it.name }
+    }
+}
 
-  fun isEmpty(): Boolean {
-    return 0 == length()
-  }
+/**
+ * @since 0.1.0
+ */
+fun builderGameNameParameter(
+  name: String = "game_name"
+): ParameterBuilder<String> {
+  return ParameterBuilder<String>()
+    .name(name)
+    .validationBy(ParameterValidators.STRING_VALIDATOR)
+    .autocompletedWith { begin ->
+      //
+      GameManager.registeredGames
+        .filter { it.name.startsWith(begin) }
+        .map { it.name }
+    }
 }

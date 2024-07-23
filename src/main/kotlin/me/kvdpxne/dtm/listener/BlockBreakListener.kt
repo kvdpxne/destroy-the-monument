@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.listener
 
 import me.kvdpxne.dtm.DestroyTheMonument
-import me.kvdpxne.dtm.game.DefaultTeamColor
+import me.kvdpxne.dtm.colorize
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.Team
 import me.kvdpxne.dtm.game.findMonument
@@ -13,7 +13,7 @@ import me.kvdpxne.dtm.shared.isRich
 import me.kvdpxne.dtm.shared.toBuilder
 import me.kvdpxne.dtm.tasks.GameStopTaskTimer
 import me.kvdpxne.dtm.user.UserManager
-import me.kvdpxne.dtm.user.UserPerformer
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -31,8 +31,8 @@ private val WON = Material.DIAMOND.toBuilder()
 object BlockBreakListener : Listener {
 
   private fun fs(team: Team, item: ItemStack) {
-    team.teammateMutableSet.forEach { teammate ->
-      val player = (teammate.user.performer as UserPerformer).getPlayer()!!
+    team.teammates.forEach { teammate ->
+      val player = teammate.user.performer.player!!
 
       player.hardClean()
 
@@ -99,17 +99,12 @@ object BlockBreakListener : Listener {
     // A monument that was destroyed by the user
     val monument = arena.findMonument(event.block.location) ?: return
 
-    //
-    if (monument.destroyed) {
-      return
-    }
-
     val teamIdentity = team.identity
     val monumentIdentity = monument.team
 
     if (teamIdentity == monumentIdentity) {
       event.isCancelled = true
-      user.sendMessage("&7You cannot destroy your team's monument!")
+      user.sendMessage("&6&lDTM &7> &fNie możesz zniszczyć monumentu swojej drużyny.")
       return
     }
 
@@ -125,34 +120,34 @@ object BlockBreakListener : Listener {
     //
     teammate.addDestroyedMonument()
 
-    if (attackedTeam.identity == DefaultTeamColor.RED) {
-      game.teams.forEach {
-        it.teammateMutableSet.forEach { teammate ->
-          updateRedMonumentCount(teammate.fastBoard!!, attackedTeam.health)
+    game.teams.forEach {
+      if (attackedTeam.identity == monumentIdentity) {
+        it.teammates.forEach {
+          updateRedMonumentCount(it.fastBoard!!, attackedTeam.health)
         }
+        return@forEach
       }
-    } else {
-      game.teams.forEach {
-        it.teammateMutableSet.forEach { teammate ->
-          updateBlueMonumentCount(teammate.fastBoard!!, attackedTeam.health)
-        }
+
+      it.teammates.forEach { teammate ->
+        updateBlueMonumentCount(teammate.fastBoard!!, attackedTeam.health)
       }
     }
 
-    (teamIdentity as DefaultTeamColor)
-    val coloredUser = teamIdentity.chatColor.toString() + user.name
-
-    (monumentIdentity as DefaultTeamColor)
-    val coloredMonument = monumentIdentity.chatColor.toString() + monumentIdentity.key
-
-    game.sendMessages(
-      "",
-      "&6&lDTM &7> &fGracz $coloredUser &fzniszczył monument drużyny $coloredMonument",
-      "&6&lDTM &7> &fPozostało &6${attackedTeam.health} &fmonumenty."
-    )
-
-    //
     if (0 < attackedTeam.health) {
+      val coloredUser = "${teamIdentity.colorInChat}${user.name}"
+      val coloredMonument = "${monumentIdentity.colorInChat}&l${monumentIdentity.name}".colorize().uppercase()
+
+      val end = when (attackedTeam.health) {
+        1 -> "&fPozostał &61 &fmonument."
+        in 2..4 -> "&fPozostały &6${attackedTeam.health} &fmonumenty."
+        else -> "&fPozostało &6${attackedTeam.health} &fmonumentów."
+      }
+
+      game.sendMessages(
+        "",
+        "&6&lDTM &7> &fGracz $coloredUser &fzniszczył monument drużyny $coloredMonument",
+        "&6&lDTM &7> $end"
+      )
       return
     }
 
@@ -165,13 +160,15 @@ object BlockBreakListener : Listener {
       this.fs(it, WON)
     }
 
+    Bukkit.getScheduler().cancelTask(game.timerTaskIdentifier)
     GameStopTaskTimer(game).runTaskLater(
       DestroyTheMonument.instance,
       20 * 20L
     )
     game.sendMessages(
-      "&7The game has ended.",
-      "&7In &620 &7seconds you will be moved to the lobby."
+      "",
+      "&6&lDTM &7> &fGra została zakończona.",
+      "&6&lDTM &7> &fZa &620 &fsekund zostaniesz przeniesiony do poczekalni.",
     )
   }
 }

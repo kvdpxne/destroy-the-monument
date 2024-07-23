@@ -8,12 +8,14 @@ import me.kvdpxne.dtm.DestroyTheMonument
 import me.kvdpxne.dtm.command.Communicative
 import me.kvdpxne.dtm.data.GameArenasDao
 import me.kvdpxne.dtm.data.GameTeamsDao
-import me.kvdpxne.dtm.event.GameStartEvent
-import me.kvdpxne.dtm.event.GameStopEvent
-import me.kvdpxne.dtm.eventManager
-import me.kvdpxne.dtm.shared.Identity
+import me.kvdpxne.dtm.scoreboard.createServerScoreboard
+import me.kvdpxne.dtm.scoreboard.createServerTeam
+import me.kvdpxne.dtm.scoreboard.initScoreboard
 import me.kvdpxne.dtm.shared.debug
+import me.kvdpxne.dtm.shared.fillExperienceBar
+import me.kvdpxne.dtm.shared.hardClean
 import me.kvdpxne.dtm.tasks.GameStartTaskTimer
+import me.kvdpxne.dtm.tasks.GameTimeUpdateTaskTimer
 import me.kvdpxne.dtm.user.User
 import org.bukkit.Bukkit
 
@@ -36,12 +38,12 @@ class Game(val identifier: UUID, var name: String) : Communicative {
   /**
    *
    */
-  val teamHealthMutableMap: MutableMap<Identity, Int>
+  val teamHealthMutableMap: MutableMap<TeamIdentity, Int>
 
   /**
    *
    */
-  val teamSizeMutableMap: MutableMap<Identity, Int>
+  val teamSizeMutableMap: MutableMap<TeamIdentity, Int>
 
   /**
    * The current arena where the game will be, is or was played.
@@ -100,9 +102,9 @@ class Game(val identifier: UUID, var name: String) : Communicative {
   /**
    *
    */
-  fun findTeam(identity: Identity): Team? {
+  fun findTeam(teamIdentity: TeamIdentity): Team? {
     return this.teams.find {
-      it.identity == identity
+      it.identity == teamIdentity
     }
   }
 
@@ -133,7 +135,7 @@ class Game(val identifier: UUID, var name: String) : Communicative {
   }
 
   /**
-   * @return The [Team] with fewer [Team.teammateMutableSet], or null if no team is
+   * @return The [Team] with fewer [Team.teammates], or null if no team is
    * assigned to the game.
    */
   fun findSmallerTeam(): Team? {
@@ -165,7 +167,7 @@ class Game(val identifier: UUID, var name: String) : Communicative {
    * @param identity
    * @param user
    */
-  fun isInTeam(identity: Identity, user: () -> User): Boolean {
+  fun isInTeam(identity: TeamIdentity, user: () -> User): Boolean {
     return this.teams.find {
       it.identity == identity
     }?.hasTeammate(user()) ?: false
@@ -219,13 +221,17 @@ class Game(val identifier: UUID, var name: String) : Communicative {
     return result
   }
 
-  fun addTeammate(identity: Identity, user: () -> User): Boolean {
-    // Team identity with which the team to which the given user is to be added
-    // is identified.
-    val teamIdentity = DefaultTeamColor.findByIdentity(identity) ?: return false
-    val team = findTeam(teamIdentity) ?: return false
+  fun addTeammate(
+    teamIdentity: TeamIdentity,
+    user: () -> User
+  ): Boolean {
+    //
+    val team = this.findTeam(teamIdentity) ?: return false
+
+    //
     val teammate = user()
 
+    //
     if (team.hasTeammate(teammate)) {
       return false
     }
@@ -238,7 +244,7 @@ class Game(val identifier: UUID, var name: String) : Communicative {
         return@forEach
       }
 
-      this.teamSizeMutableMap[identity] = team.size()
+      this.teamSizeMutableMap[teamIdentity] = team.size()
       ++spectators
     }
 
@@ -246,7 +252,7 @@ class Game(val identifier: UUID, var name: String) : Communicative {
       return false
     }
 
-    this.teamSizeMutableMap[identity] = team.size()
+    this.teamSizeMutableMap[teamIdentity] = team.size()
 
     logger.debug {
       "A new $teammate teammate has been added to the $team team in the " +
@@ -331,10 +337,9 @@ class Game(val identifier: UUID, var name: String) : Communicative {
    *
    */
   fun removeTeammate(
-    identity: Identity,
+    teamIdentity: TeamIdentity,
     user: () -> User
   ): Boolean {
-    val teamIdentity = DefaultTeamColor.findByIdentity(identity) ?: return false
     val team = findTeam(teamIdentity) ?: return false
     val teammate = user()
     return team.removeTeammate(teammate).also {
@@ -366,9 +371,78 @@ class Game(val identifier: UUID, var name: String) : Communicative {
     }
 
     //
+    val bukkitTeamScoreboard = createServerScoreboard()
+
     //
-    val event = GameStartEvent(this)
-    eventManager.callEvent(event)
+    val timeTask = GameTimeUpdateTaskTimer(this)
+
+
+    val teamsIdentity = teams.map { it.identity }.toTypedArray()
+
+    teams.forEach { team ->
+
+      val bukkitTeam = createServerTeam(
+        bukkitTeamScoreboard,
+        team.identity.name,
+        team.identity.colorInChat
+      )
+
+      team.health = arena.monuments.size
+
+      val location = arena.spawnPoints[team.identity]?.let {
+        val world = arena.map?.world ?: return@forEach
+        it.toLocation(world)
+      }
+
+      team.teammates.forEach { teammate ->
+        val profession = teammate.professionQueuingPair.current
+        val performer = teammate.user.performer
+
+        performer.player!!.run {
+          this.teleport(location)
+          this.hardClean()
+
+          scoreboard = bukkitTeamScoreboard
+          bukkitTeam.addPlayer(this)
+
+          val fastBoard = initScoreboard(
+            this,
+            teamSizeMutableMap[teamsIdentity[0]] ?: 0,
+            teamHealthMutableMap[teamsIdentity[1]] ?: 0,
+            teamSizeMutableMap[teamsIdentity[0]] ?: 0,
+            teamHealthMutableMap[teamsIdentity[1]] ?: 0,
+            teammate.user.wallet.coins
+          )
+
+          teammate.fastBoard = fastBoard
+          timeTask.playerMutableList += fastBoard
+
+          profession.equip(this, teammate.team.identity.dyeColor)
+          profession.ability?.let {
+            if (it.readyAfterDeath) {
+              it.markReady()
+              it.whenReady(this)
+
+              // Fill player exp bar after 200 ms
+              Bukkit.getScheduler().runTaskLaterAsynchronously(
+                DestroyTheMonument.instance,
+                { this.fillExperienceBar() },
+                4L
+              )
+              return
+            }
+
+            it.run(this, true)
+          }
+        }
+      }
+    }
+
+    timerTaskIdentifier = timeTask.runTaskTimerAsynchronously(
+      DestroyTheMonument.instance,
+      20L,
+      20L
+    ).taskId
   }
 
   /**
@@ -377,21 +451,38 @@ class Game(val identifier: UUID, var name: String) : Communicative {
   fun stop() {
     state = GameState.STOPPING
 
-
-    if (false == currentArena?.map?.unload()) {
-      return
-    }
-
-    currentArena?.restore()
-    currentArena = null
+    this.currentArena!!.map!!.unload()
+    this.currentArena = null
 
     if (timerTaskIdentifier >= 0) {
       Bukkit.getScheduler().cancelTask(timerTaskIdentifier)
       timerTaskIdentifier = -1
     }
 
-    val event = GameStopEvent(this)
-    eventManager.callEvent(event)
+    teams.forEach { team ->
+      team.teammates.forEach { teammate ->
+
+        val performer = teammate.user.performer
+
+        teammate.fastBoard!!.delete()
+        teammate.fastBoard = null
+
+        performer.player!!.run {
+          this.scoreboard.getPlayerTeam(this).removePlayer(this)
+          this.scoreboard = Bukkit.getScoreboardManager().mainScoreboard
+          this.hardClean()
+        }
+      }
+
+      // Clean
+      team.removeAllTeammates()
+    }
+
+    // TODO remove
+    this.teamHealthMutableMap.clear()
+    this.teamSizeMutableMap.clear()
+
+    this.spectators = this.hostages.size
 
     end = Instant.now()
     state = GameState.STOPPED

@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.listener
 
-import me.kvdpxne.dtm.data.UserDao
+import me.kvdpxne.dtm.data.DaoUser
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -12,12 +12,8 @@ object PlayerQuitListener : Listener {
   fun handlePlayerQuit(event: PlayerQuitEvent) {
     val player = event.player
 
-    UserManager.findByIdentifier(player.uniqueId).also {
-      if (null == it) {
-        return@also
-      }
-
-      UserDao.update(it)
+    UserManager.findByIdentifier(player.uniqueId)?.also {
+      DaoUser.update(it)
       UserManager.removeUser(it)
     }
   }

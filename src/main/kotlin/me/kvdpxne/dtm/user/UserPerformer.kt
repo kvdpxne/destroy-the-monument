@@ -3,7 +3,6 @@ package me.kvdpxne.dtm.user
 import java.lang.ref.Reference
 import java.lang.ref.WeakReference
 import java.util.UUID
-import kotlin.system.measureNanoTime
 import me.kvdpxne.dtm.colorize
 import me.kvdpxne.dtm.command.Performer
 import org.bukkit.Bukkit
@@ -21,25 +20,34 @@ open class UserPerformer(
     playerReference = WeakReference(Bukkit.getPlayer(identifier))
   }
 
-  fun getPlayer(): Player? {
-    var player = playerReference.get()
-    if (null == player) {
-      val temporaryPlayer = Bukkit.getPlayer(identifier)
+  val player: Player?
+    get() {
+      var player = this.playerReference.get()
+      if (null != player) {
+        return player
+      }
+
+      val temporaryPlayer = Bukkit.getPlayer(this.identifier)
       if (null == temporaryPlayer) {
-        playerReference = WeakReference(null)
+        this.playerReference = WeakReference(null)
         return null
       }
-      playerReference = WeakReference(temporaryPlayer)
-      player = playerReference.get()
+
+      this.playerReference = WeakReference(temporaryPlayer)
+      player = this.playerReference.get()
+      return player
     }
-    return player
-  }
+
+  val isOnline: Boolean
+    get() = this.player?.isOnline ?: false
 
   override fun hasPermission(permission: String): Boolean {
-    require(permission.isBlank()) { "?" }
-    return getPlayer()?.hasPermission(permission) ?: false
-  }
+    require(permission.isBlank()) {
+      ""
+    }
 
+    return this.player?.hasPermission(permission) ?: false
+  }
 
   /**
    *
@@ -47,7 +55,7 @@ open class UserPerformer(
   override fun sendMessage(
     message: String
   ) {
-    this.getPlayer()?.sendMessage(message.colorize())
+    this.player?.sendMessage(message.colorize())
   }
 
   /**
@@ -56,7 +64,7 @@ open class UserPerformer(
   override fun sendMessage(
     message: () -> String
   ) {
-    this.getPlayer()?.sendMessage(message().colorize())
+    this.player?.sendMessage(message().colorize())
   }
 
   /**
@@ -66,7 +74,7 @@ open class UserPerformer(
     vararg messageArray: String
   ) {
     if (1 < messageArray.size) {
-      val player = this.getPlayer() ?: return
+      val player = this.player ?: return
       //
       //
       messageArray.forEach { message ->

@@ -7,8 +7,6 @@ import me.kvdpxne.dtm.gui.slotItem
 import me.kvdpxne.dtm.gui.slotLeggings
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionBuilder
-import me.kvdpxne.dtm.profession.TOOL_AXE
-import me.kvdpxne.dtm.profession.TOOL_PICKAXE
 import me.kvdpxne.dtm.shared.toBuilder
 import org.bukkit.Material
 import org.bukkit.potion.PotionEffectType
@@ -39,4 +37,5 @@ fun createKnight(): Profession = ProfessionBuilder()
   )
   .icon(Material.IRON_SWORD)
   .effect(PotionEffectType.SLOW)
+  .enabled()
   .build()

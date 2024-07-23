@@ -2,22 +2,30 @@ package me.kvdpxne.dtm.gui
 
 import me.kvdpxne.dtm.colorize
 import me.kvdpxne.dtm.colorizeAll
-import me.kvdpxne.dtm.game.DefaultTeamColor
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
+import me.kvdpxne.dtm.listener.ITEM_GAME_LEAVE
+import me.kvdpxne.dtm.listener.SELECT_PROFESSION_ITEM
+import me.kvdpxne.dtm.listener.SELECT_TEAM_ITEM
 import me.kvdpxne.dtm.profession.ProfessionManager
+import me.kvdpxne.dtm.shared.hardClean
+import me.kvdpxne.dtm.shared.toBuilder
 import me.kvdpxne.dtm.user.User
 import org.bukkit.Material
 import org.bukkit.entity.Player
+import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemStack
 
 fun createTeamSelectionGui(game: Game, user: User) = Gui("Team selection", Rows.ONE).apply {
   val coloredWool = ItemStack(Material.WOOL)
 
+  val iterator = game.teams.iterator()
+
+  val red = iterator.next().identity
   setItem(0, coloredWool.apply {
     durability = 14
     itemMeta = itemMeta.apply {
-      val teamSize = game.findTeam(DefaultTeamColor.RED)?.size() ?: 0
+      val teamSize = game.findTeam(red)?.size() ?: 0
       displayName = "&c&lRED &r&8| &6$teamSize/unlimited".colorize()
       lore = arrayOf(
         "&7You will be added directly to",
@@ -25,17 +33,18 @@ fun createTeamSelectionGui(game: Game, user: User) = Gui("Team selection", Rows.
       ).colorizeAll()
     }
   }) {
-    game.addTeammate(DefaultTeamColor.RED) { user }
+    game.addTeammate(red) { user }
     with(it.whoClicked as Player) {
       closeInventory()
       game.sendMessage("&7> &f$displayName &7joined the &c&lRED &7team.")
     }
   }
 
+  val blue = iterator.next().identity
   setItem(8, coloredWool.apply {
     durability = 11
     itemMeta = itemMeta.apply {
-      val teamSize = game.findTeam(DefaultTeamColor.BLUE)?.size() ?: 0
+      val teamSize = game.findTeam(blue)?.size() ?: 0
       displayName = "&9&lBLUE &r&8| &6$teamSize/unlimited".colorize()
       lore = arrayOf(
         "&7You will be added directly to",
@@ -43,7 +52,7 @@ fun createTeamSelectionGui(game: Game, user: User) = Gui("Team selection", Rows.
       ).colorizeAll()
     }
   }) {
-    game.addTeammate(DefaultTeamColor.BLUE) { user }
+    game.addTeammate(blue) { user }
     with(it.whoClicked as Player) {
       closeInventory()
       game.sendMessage("&7> &f$displayName &7joined the &9&lBLUE &7team.")
@@ -63,13 +72,13 @@ fun createTeamSelectionGui(game: Game, user: User) = Gui("Team selection", Rows.
       game.teams.random().identity
     } else {
       game.findSmallerTeam()!!.identity
-    } as DefaultTeamColor
+    }
 
     game.addTeammate(name) { user }
     with(it.whoClicked as Player) {
       closeInventory()
 
-      game.sendMessage("&7> &f$displayName &7joined the ${name.chatColor}&l${name.key.uppercase()} &7team.")
+      game.sendMessage("&7> &f$displayName &7joined the ${name.colorInChat}&l${name.name.uppercase()} &7team.")
     }
   }
 }
@@ -77,75 +86,95 @@ fun createTeamSelectionGui(game: Game, user: User) = Gui("Team selection", Rows.
 fun createGameSelectionGui(user: User) = GameManager.games.let {
   Gui("Game selection", Rows.findRowBySize(it.size)).apply {
     it.onEachIndexed { index, (key, game) ->
-      setItem(index, ItemStack(Material.STAINED_CLAY).apply {
-        itemMeta = itemMeta.apply {
-          val hostagesCount = game.hostages.size
-          displayName = "&7> &f${game.name} &6$hostagesCount/unlimited".colorize()
-          lore = arrayOf(
-            "&7Join the game lobby to be able to",
-            "&7interact in the game.",
-            "",
-            "&7Current map: &6unknown", // TODO add selected map name
-            "&8Uid: $key"
-          ).colorizeAll()
-        }
-        durability = 5
-      }) { event ->
-        game.addHostage(user)
-        with(event.whoClicked as Player) {
-          closeInventory()
-          sendMessage("You have been added to the ${game.name} game.")
 
-          createTeamSelectionGui(game, user).open(this)
+      setItem(index, Material.STAINED_CLAY.toBuilder()
+        .damage(5)
+        .name {
+          val name = game.name
+          val hostagesCount = game.hostages.size
+
+          "&7> &f$name &6$hostagesCount/unlimited"
         }
+        .lore(
+          "&7Join the game lobby to be able to",
+          "&7interact in the game.",
+          "",
+          "&7Current map: &6unknown", // TODO add selected map name
+          "&8Uid: $key"
+        )
+        .build()
+      ) { event ->
+        game.addHostage(user)
+        user.sendMessage("&l&6DTM &7> &fDołączyłeś do gry &a${game.name}&f.")
+
+        val player = event.whoClicked as Player
+        player.closeInventory()
+        player.hardClean()
+
+        player.inventory.setItem(0, SELECT_TEAM_ITEM)
+        player.inventory.setItem(1, SELECT_PROFESSION_ITEM)
+        player.inventory.setItem(8, ITEM_GAME_LEAVE)
+
+        createTeamSelectionGui(game, user).open(player)
       }
     }
   }
 }
 
-fun createProfessionSelectionGui(user: User) = Gui("Choose your profession", Rows.TWO).apply {
-  val item = ItemStack(Material.STAINED_CLAY)
-  ProfessionManager.forEachIndexed { index, profession ->
+fun createProfessionSelectionGui(user: User): Gui {
 
-    if (user.profession == profession) {
-      item.itemMeta = item.itemMeta.apply {
-        displayName = "&a&lWYBRANO".colorize()
-      }
-      item.durability = 5
+  val gui = Gui("Choose your profession", Rows.TWO)
+  val itemBuilder = Material.STAINED_CLAY.toBuilder()
+
+  ProfessionManager.professions.forEachIndexed { index, profession ->
+
+    gui.setItem(index, if (user.currentProfession == profession) {
+      itemBuilder.damage(5)
+        .name("&a&lWYBRANO")
+        .build()
+    } else if (!profession.enabled) {
+      itemBuilder.damage(14)
+        .name("&c&lNIEDOSTĘPNA")
+        .build()
     } else {
-      val meta = item.itemMeta
-      meta.displayName = " "
-      item.itemMeta = meta
-      item.durability = 4
-    }
+      itemBuilder.damage(4)
+        .name("&6&lDOSTĘPNA")
+        .build()
+    })
 
-    setItem(index, item)
-
-    val professionItemIcon = profession.icon
-    val meta = professionItemIcon.itemMeta
-
-    meta.displayName = "&7${profession.displayName}".colorize()
-    professionItemIcon.itemMeta = meta
-
-    setItem(9 + index, professionItemIcon) { event ->
-      user.profession = profession
-
-      with(event.whoClicked as Player) {
-        event.isCancelled = true
-
-        closeInventory()
-        sendMessage("The ${profession.displayName} class was selected.")
+    gui.setItem(
+      9 + index,
+      profession.icon.toBuilder()
+        .name("&7${profession.displayName}")
+        .build()
+    ) { event: InventoryClickEvent ->
+      if (!profession.enabled) {
+        user.sendMessage("&6&lDTM &7> &cProfesja jest obecnie wyłączona lub niedostępna.")
+        return@setItem
       }
+
+      //
+      user.currentProfession = profession.clone()
+
+      event.isCancelled = true
+      event.whoClicked.closeInventory()
+
+      user.sendMessage("&6&lDTM &7> &fProfesja &a&l${profession.displayName} &fzostała wybrana.")
 
       val game = GameManager.findByUser(user) ?: return@setItem
       val team = game.findTeam(user) ?: return@setItem
       val teammate = team.findTeammate(user) ?: return@setItem
 
       teammate.professionQueuingPair.apply {
-        if (this.current != profession) {
-          this.next = profession
+        if (this.current == profession) {
+          return@apply
         }
+
+        this.next = profession.clone()
+        teammate.sendMessage("&6&lDTM &7> &fProfesja zostanie zmieniona po śmierci.")
       }
     }
   }
+
+  return gui
 }

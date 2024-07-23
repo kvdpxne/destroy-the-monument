@@ -6,8 +6,6 @@ import me.kvdpxne.dtm.gui.slotHelmet
 import me.kvdpxne.dtm.gui.slotItem
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionBuilder
-import me.kvdpxne.dtm.profession.TOOL_AXE
-import me.kvdpxne.dtm.profession.TOOL_PICKAXE
 import me.kvdpxne.dtm.shared.toBuilder
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
@@ -44,5 +42,6 @@ fun createArcher(): Profession = ProfessionBuilder()
     slotItem(Material.ARROW, 1, 17)
   )
   .icon(Material.BOW)
-  .ability(10)
+  .ability(40)
+  .enabled()
   .build()

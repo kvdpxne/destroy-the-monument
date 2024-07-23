@@ -1,11 +1,13 @@
 package me.kvdpxne.dtm.listener
 
+import me.kvdpxne.dtm.DestroyTheMonument
 import me.kvdpxne.dtm.colorize
-import me.kvdpxne.dtm.game.DefaultTeamColor
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.Teammate
+import me.kvdpxne.dtm.scoreboard.updateCoinCount
 import me.kvdpxne.dtm.scoreboard.updateDeathCount
 import me.kvdpxne.dtm.scoreboard.updateKillCount
+import me.kvdpxne.dtm.shared.respawn
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
@@ -19,20 +21,12 @@ object PlayerDeathListener : Listener {
   ): String {
     val profession = teammate.professionQueuingPair.current
 
-    profession.ability?.let {
-      if (0 > it.taskIdentifier) {
-        return@let
-      }
-
-      Bukkit.getScheduler().cancelTask(it.taskIdentifier)
-    }
-
     val professionName = profession.displayName
     val teammateName = teammate.user.name
 
-    val teamColor = teammate.teamColor as DefaultTeamColor
+    val teamColor = teammate.team.identity
     val professionColor = teamColor.professionColor
-    val teammateColor = teamColor.chatColor
+    val teammateColor = teamColor.colorInChat
 
     return "$professionColor&l$professionName $teammateColor$teammateName&r"
   }
@@ -73,6 +67,13 @@ object PlayerDeathListener : Listener {
 
     //
     val victimTeammate = game.findTeam(victimUser)!!.findTeammate(victimUser)!!
+    victimTeammate.currentProfession.ability?.cancelCooldown()
+
+    Bukkit.getScheduler().runTaskLater(
+      DestroyTheMonument.instance,
+      { victim.respawn() },
+      20L
+    )
 
     val murder = victim.killer
     if (null == murder) {
@@ -91,6 +92,9 @@ object PlayerDeathListener : Listener {
     // MURDER_KIT_NAME MURDER_USER_NAME ACTION VICTIM_KIT_NAME VICTIM_USER_NAME
     // Zwiadowca       currant          -->    Łucznik         strawberry
     event.deathMessage = "${this.formatTeammate(murderTeammate)} &6--> ${this.formatTeammate(victimTeammate)}".colorize()
+
+    murderUser.wallet.addCoins(20)
+    updateCoinCount(murderTeammate.fastBoard!!, murderUser.wallet.coins)
 
     this.addAndUpdateDeaths(victimTeammate)
     this.addAndUpdateKills(murderTeammate)
