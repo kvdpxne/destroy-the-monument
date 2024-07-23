@@ -2,8 +2,11 @@ package me.kvdpxne.dtm.user
 
 import java.util.UUID
 import me.kvdpxne.dtm.command.Communicative
+import me.kvdpxne.dtm.game.Game
+import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionManager
+import me.kvdpxne.dtm.shared.BaseMutable
 import me.kvdpxne.dtm.wallet.Wallet
 
 class User(
@@ -14,7 +17,7 @@ class User(
   val wallet     : Wallet                 = Wallet(),
       professions: Collection<Profession> = emptySet()
   // @formatter:on
-) : Communicative {
+) : BaseMutable(), Communicative {
 
   /**
    * @since 0.1.0
@@ -47,6 +50,9 @@ class User(
    */
   val availableProfessions: List<Profession>
     get() = this._availableProfessions.toList()
+
+  val game: Game?
+    get() = GameManager.findByUser(this)
 
   /**
    * @since 0.1.0

@@ -1,7 +1,6 @@
 package me.kvdpxne.dtm.game
 
 import java.util.UUID
-import me.kvdpxne.dtm.shared.Identity
 
 /**
  * @param team

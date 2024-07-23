@@ -2,7 +2,6 @@ package me.kvdpxne.dtm.command
 
 import me.kvdpxne.dtm.game.ArenaManager
 import me.kvdpxne.dtm.game.GameManager
-import me.kvdpxne.dtm.shared.WorldLoaderHelper
 import me.kvdpxne.dtm.user.UserManager
 
 fun builderWorldNameParameter(
@@ -28,7 +27,7 @@ fun builderUserNameParameter(
     .validationBy(ParameterValidators.STRING_VALIDATOR)
     .autocompletedWith { begin ->
       //
-      UserManager.users
+      UserManager.activeUsers
         .filter { it.name.startsWith(begin, true) }
         .map { it.name }
     }

@@ -4,7 +4,11 @@ import me.kvdpxne.dtm.colorize
 import me.kvdpxne.dtm.colorizeAll
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
+import me.kvdpxne.dtm.listener.ITEM_GAME_LEAVE
+import me.kvdpxne.dtm.listener.SELECT_PROFESSION_ITEM
+import me.kvdpxne.dtm.listener.SELECT_TEAM_ITEM
 import me.kvdpxne.dtm.profession.ProfessionManager
+import me.kvdpxne.dtm.shared.hardClean
 import me.kvdpxne.dtm.shared.toBuilder
 import me.kvdpxne.dtm.user.User
 import org.bukkit.Material
@@ -101,12 +105,17 @@ fun createGameSelectionGui(user: User) = GameManager.games.let {
         .build()
       ) { event ->
         game.addHostage(user)
-        with(event.whoClicked as Player) {
-          closeInventory()
-          sendMessage("You have been added to the ${game.name} game.")
+        user.sendMessage("&l&6DTM &7> &fDołączyłeś do gry &a${game.name}&f.")
 
-          createTeamSelectionGui(game, user).open(this)
-        }
+        val player = event.whoClicked as Player
+        player.closeInventory()
+        player.hardClean()
+
+        player.inventory.setItem(0, SELECT_TEAM_ITEM)
+        player.inventory.setItem(1, SELECT_PROFESSION_ITEM)
+        player.inventory.setItem(8, ITEM_GAME_LEAVE)
+
+        createTeamSelectionGui(game, user).open(player)
       }
     }
   }

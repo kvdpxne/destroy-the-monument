@@ -72,6 +72,16 @@ object DaoUser {
     updateUserWaller(user.wallet)
   }
 
+  fun updateUsers(users: Collection<User>) {
+    if (users.isEmpty()) {
+      return
+    }
+
+    users.asSequence()
+      .filter { it.wasChanged }
+      .forEach { update(it) }
+  }
+
   fun insert(user: User) {
     database.insert(TableUser) {
       set(it.identifier, user.identifier.toString())
@@ -86,7 +96,7 @@ object DaoUser {
     insertUserWallet(user.wallet)
   }
 
-  fun count(): Int {
+  fun countUsers(): Int {
     return database.from(TableUser)
       .select()
       .totalRecordsInAllPages

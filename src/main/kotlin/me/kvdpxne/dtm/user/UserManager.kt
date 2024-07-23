@@ -8,16 +8,28 @@ import me.kvdpxne.dtm.data.DaoUser
  */
 object UserManager {
 
-  private val identifierUserMap = mutableMapOf<UUID, User>()
+  /**
+   * @since 0.1.0
+   */
+  private val _activeUsers: MutableMap<UUID, User> = mutableMapOf()
 
-  val users: List<User>
-    get() = this.identifierUserMap.values.toList()
+  /**
+   * @since 0.1.0
+   */
+  val activeUsers: List<User>
+    get() = this._activeUsers.values.toList()
+
+  /**
+   * @since 0.1.0
+   */
+  val activeUsersCount: Int
+    get() = this._activeUsers.size
 
   /**
    * Tries to find a [User] by the given unique user identifier.
    */
   fun findByIdentifier(identifier: UUID): User? {
-    var user = identifierUserMap[identifier]
+    var user = _activeUsers[identifier]
     if (null != user) {
       return user
     }
@@ -35,7 +47,7 @@ object UserManager {
    * @since 0.1.0
    */
   fun findByName(name: String, ignoreCase: Boolean = true): User? {
-    return identifierUserMap.values.find {
+    return _activeUsers.values.find {
       it.name.equals(name, ignoreCase)
     }
   }
@@ -44,14 +56,14 @@ object UserManager {
    * @since 0.1.0
    */
   fun addUser(user: User) {
-    identifierUserMap[user.identifier] = user
+    _activeUsers[user.identifier] = user
   }
 
   /**
    * @since 0.1.0
    */
   fun removeUser(user: User) {
-    identifierUserMap.remove(user.identifier)
+    _activeUsers.remove(user.identifier)
   }
 
   /**
@@ -67,9 +79,9 @@ object UserManager {
   }
 
   /**
-   * @since 0.1.0
+   *
    */
-  fun count(): Int {
-    return identifierUserMap.size
+  fun updateActiveUsers() {
+    DaoUser.updateUsers(this._activeUsers.values)
   }
 }
