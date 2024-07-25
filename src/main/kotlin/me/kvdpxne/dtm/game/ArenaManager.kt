@@ -36,6 +36,18 @@ object ArenaManager {
     }
   }
 
+  fun findLoadedArenaByWorldIdentifier(identifier: UUID): Arena? {
+    return this._registeredArenas.values.find {
+      it.map?.identifier == identifier
+    }
+  }
+
+  fun isFs(identifier: UUID): Boolean {
+    return this._registeredArenas.values.any {
+      it.map?.identifier == identifier
+    }
+  }
+
   fun addArena(arena: Arena) {
     _registeredArenas[arena.identifier] = arena
   }

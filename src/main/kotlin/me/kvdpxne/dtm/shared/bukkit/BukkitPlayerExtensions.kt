@@ -1,8 +1,11 @@
 package me.kvdpxne.dtm.shared.bukkit
 
+import me.kvdpxne.dtm.shared.ItemsClipboard
 import me.kvdpxne.dtm.shared.minecraft.BukkitPlayer
 import me.kvdpxne.dtm.shared.minecraft.MinecraftEnumClientCommand
 import me.kvdpxne.dtm.shared.minecraft.MinecraftPacketPlayInClientCommand
+import me.kvdpxne.dtm.user.User
+import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Location
@@ -10,7 +13,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause
 import org.bukkit.inventory.ItemStack
 
-fun Player.hardClean() {
+fun Player.reset() {
   this.inventory.also {
     it.clear()
     it.armorContents = arrayOfNulls(it.armorContents.size)
@@ -47,17 +50,21 @@ fun Player.hardClean() {
   this.allowFlight = false
   this.flySpeed = 0.1F
   this.walkSpeed = 0.2F
-
-  //
-  if (this.isInsideVehicle) {
-    this.leaveVehicle()
-  }
 }
 
-fun Player.moveTo(location: Location) {
-  this.teleport(location, TeleportCause.PLUGIN)
+/**
+ * @since 0.1.0
+ */
+fun Player.moveTo(
+  location: Location,
+  cause: TeleportCause = TeleportCause.PLUGIN
+) {
+  this.teleport(location, cause)
 }
 
+/**
+ * @since 0.1.0
+ */
 fun Player.moveToDefaultSpawnPosition() {
   //
   val position = Bukkit.getWorlds().firstOrNull()?.spawnLocation
@@ -78,6 +85,22 @@ fun Player.setItem(
   if (force || null != this.inventory.getItem(index)) {
     this.inventory.setItem(index, itemStack)
   }
+}
+
+fun Player.fill(item: ItemStack) {
+  repeat(36) { i: Int ->
+    this.inventory.setItem(i, item)
+  }
+}
+
+fun Player.equipA() {
+  this.setItem(0, ItemsClipboard.ITEM_GAME_JOIN)
+}
+
+fun Player.equipB() {
+  this.setItem(0, ItemsClipboard.ITEM_TEAM_SELECT)
+  this.setItem(1, ItemsClipboard.ITEM_PROFESSION_SELECT)
+  this.setItem(8, ItemsClipboard.ITEM_GAME_LEAVE)
 }
 
 /**
@@ -108,4 +131,8 @@ fun Player.respawn() {
 
   val packet = MinecraftPacketPlayInClientCommand(MinecraftEnumClientCommand.PERFORM_RESPAWN)
   this.handle.playerConnection.a(packet)
+}
+
+fun Player.asUser(): User? {
+  return UserManager.findByIdentifier(this.uniqueId)
 }

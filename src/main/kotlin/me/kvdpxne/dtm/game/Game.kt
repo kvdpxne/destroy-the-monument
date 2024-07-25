@@ -11,9 +11,10 @@ import me.kvdpxne.dtm.data.GameTeamsDao
 import me.kvdpxne.dtm.scoreboard.createServerScoreboard
 import me.kvdpxne.dtm.scoreboard.createServerTeam
 import me.kvdpxne.dtm.scoreboard.initScoreboard
+import me.kvdpxne.dtm.shared.bukkit.equipB
 import me.kvdpxne.dtm.shared.debug
 import me.kvdpxne.dtm.shared.bukkit.fillExperienceBar
-import me.kvdpxne.dtm.shared.bukkit.hardClean
+import me.kvdpxne.dtm.shared.bukkit.reset
 import me.kvdpxne.dtm.tasks.GameStartTaskTimer
 import me.kvdpxne.dtm.tasks.GameTimeUpdateTaskTimer
 import me.kvdpxne.dtm.user.User
@@ -80,6 +81,9 @@ class Game(val identifier: UUID, var name: String) : Communicative {
    */
   var timerTaskIdentifier = -1
 
+  val isStarted: Boolean
+    get() = this.state.isStarted()
+
   /**
    *
    */
@@ -115,6 +119,14 @@ class Game(val identifier: UUID, var name: String) : Communicative {
     return this.teams.find {
       it.hasTeammate(user)
     }
+  }
+
+  fun findTeam2(user: User): Pair<Team, Teammate>? {
+    for (team in this.teams) {
+      val teammate: Teammate = team.findTeammate(user) ?: continue
+      return Pair(team, teammate)
+    }
+    return null
   }
 
   /**
@@ -389,7 +401,7 @@ class Game(val identifier: UUID, var name: String) : Communicative {
 
       team.health = arena.monuments.size
 
-      val location = arena.spawnPoints[team.identity]?.let {
+      val location = arena._spawnPoints[team.identity]?.let {
         val world = arena.map?.world ?: return@forEach
         it.toLocation(world)
       }
@@ -400,7 +412,7 @@ class Game(val identifier: UUID, var name: String) : Communicative {
 
         performer.player!!.run {
           this.teleport(location)
-          this.hardClean()
+          this.reset()
 
           scoreboard = bukkitTeamScoreboard
           bukkitTeam.addPlayer(this)
@@ -470,7 +482,9 @@ class Game(val identifier: UUID, var name: String) : Communicative {
         performer.player!!.run {
           this.scoreboard.getPlayerTeam(this).removePlayer(this)
           this.scoreboard = Bukkit.getScoreboardManager().mainScoreboard
-          this.hardClean()
+          this.reset()
+
+          this.equipB()
         }
       }
 

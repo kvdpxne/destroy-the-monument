@@ -4,6 +4,7 @@ import me.kvdpxne.dtm.DestroyTheMonument
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.toLocation
 import me.kvdpxne.dtm.shared.bukkit.fillExperienceBar
+import me.kvdpxne.dtm.shared.bukkit.runSynchronousDelayedTask
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
@@ -16,16 +17,31 @@ object PlayerRespawnListener : Listener {
   fun handlePlayerRespawn(event: PlayerRespawnEvent) {
     val player = event.player
 
+    //
     val user = UserManager.findByIdentifier(player.uniqueId) ?: return
-    val game = GameManager.findByUser(user) ?: return
+
+    //
+    val game = user.game ?: return
+
+    //
+    if (!game.isStarted) {
+      return
+    }
+
+    //
+    val arena = game.currentArena ?: return
+
+    //
+    if (!arena.isLoaded) {
+      return
+    }
+
+    //
     val team = game.findTeam(user) ?: return
 
-    val arena = game.currentArena
-    if (null != arena) {
-      val spawnPoint = arena.spawnPoints[team.identity] ?: return
-      val map = arena.map?.world!!
-      event.respawnLocation = spawnPoint.toLocation(map)
-    }
+    val spawnPoint = arena._spawnPoints[team.identity] ?: return
+    val map = arena.map?.world!!
+    event.respawnLocation = spawnPoint.toLocation(map)
 
     //
     val teammate = team.findTeammate(user) ?: return
@@ -56,10 +72,9 @@ object PlayerRespawnListener : Listener {
       }
     }
 
-    Bukkit.getScheduler().runTaskLater(
-      DestroyTheMonument.instance,
-      { player.noDamageTicks = 2 * 20 },
-      2L
-    )
+    //
+    runSynchronousDelayedTask(2L) {
+      player.noDamageTicks = 20 * 2
+    }
   }
 }

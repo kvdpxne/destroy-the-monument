@@ -96,7 +96,7 @@ object ArenaDao {
   }
 
   private fun insertSpawnPoints(arena: Arena) {
-    arena.spawnPoints.values.forEach {
+    arena._spawnPoints.values.forEach {
       ArenaSpawnPointsDao.insert(arena, it)
     }
   }

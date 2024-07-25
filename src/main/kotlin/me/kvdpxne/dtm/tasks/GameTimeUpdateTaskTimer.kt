@@ -4,6 +4,7 @@ import fr.mrmicky.fastboard.FastBoard
 import kotlin.time.Duration.Companion.seconds
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.scoreboard.updateScoreboardTime
+import me.kvdpxne.dtm.shared.bukkit.runSynchronousTask
 import org.bukkit.scheduler.BukkitRunnable
 
 class GameTimeUpdateTaskTimer(
@@ -67,7 +68,9 @@ class GameTimeUpdateTaskTimer(
     if (3600 <= this.secondsNumber) {
       this.cancel()
 
-      this.game.stop()
+      runSynchronousTask {
+        this.game.stop()
+      }
       return
     }
 

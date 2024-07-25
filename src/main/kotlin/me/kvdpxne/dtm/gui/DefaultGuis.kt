@@ -6,7 +6,7 @@ import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.profession.ProfessionManager
 import me.kvdpxne.dtm.shared.ItemsClipboard
-import me.kvdpxne.dtm.shared.bukkit.hardClean
+import me.kvdpxne.dtm.shared.bukkit.reset
 import me.kvdpxne.dtm.shared.bukkit.setItem
 import me.kvdpxne.dtm.shared.bukkit.toBuilder
 import me.kvdpxne.dtm.user.User
@@ -121,7 +121,7 @@ fun createGameSelectionGui(user: User) = GameManager.games.let {
 
         val player = event.whoClicked as Player
         player.closeInventory()
-        player.hardClean()
+        player.reset()
 
         player.setItem(0, ItemsClipboard.ITEM_TEAM_SELECT)
         player.setItem(1, ItemsClipboard.ITEM_PROFESSION_SELECT)

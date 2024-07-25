@@ -1,6 +1,7 @@
 package me.kvdpxne.dtm.listener
 
 import me.kvdpxne.dtm.game.GameManager
+import me.kvdpxne.dtm.shared.bukkit.cancel
 import me.kvdpxne.dtm.shared.bukkit.hasInventory
 import me.kvdpxne.dtm.shared.bukkit.isMonument
 import me.kvdpxne.dtm.user.UserManager
@@ -21,27 +22,51 @@ object BlockPlaceListener : Listener {
       return
     }
 
-    // The type of block that was placed
-    val type = event.block.type
-
-    // If the block type is not a block that has inventory or is a monument,
-    // then the block is allowed
-    if (type.hasInventory().not() && type.isMonument().not()) {
-      return
-    }
-
     // The user who placed the block
     val user = UserManager.findByIdentifier(event.player.uniqueId) ?: return
 
     // The game to which the user who placed the block belongs
     val game = GameManager.findByUser(user) ?: return
 
-    if (
-      game.state.isStarted().not() ||
-      null == game.currentArena ||
-      game.isInTeam(user).not() ||
-      game.isInArenaMap(user).not()
-    ) {
+    // The game should have a started state, and the user should be on a team
+    if (!game.state.isStarted() || !game.isInTeam(user)) {
+      return
+    }
+
+    // The current game arena should not be undefined
+    val arena = game.currentArena ?: return
+
+    // The user should be on the map of the current arena
+    if (!game.isInArenaMap(user)) {
+      return
+    }
+
+    //
+    val location = event.block.location
+
+    if (location.y > 84) {
+      event.cancel()
+      user.sendMessage("&6&lDTM &7> &cOsiągnełeś możliwy limit budowania na tej mapie.")
+      return
+    }
+
+    //
+    arena.revivalPositions.forEach {
+      if (!it.inSpawnRange(location.x, location.y, location.z)) {
+        return@forEach
+      }
+
+      event.cancel()
+      user.sendMessage("&6&lDTM &7> &cNie możesz stawiać bloków na spawnie.")
+      return
+    }
+
+    // The type of block that was placed
+    val type = event.block.type
+
+    // If the block type is not a block that has inventory or is a monument,
+    // then the block is allowed
+    if (!type.hasInventory() && !type.isMonument()) {
       return
     }
 

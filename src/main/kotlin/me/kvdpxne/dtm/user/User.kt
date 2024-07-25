@@ -6,24 +6,16 @@ import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionManager
-import me.kvdpxne.dtm.shared.ancillary.BaseMutable
 import me.kvdpxne.dtm.wallet.Wallet
 
 class User(
   // @formatter:off
-  val identifier : UUID,
-  var name       : String,
-  var statistics : UserStatistics         = UserStatistics(),
-  val wallet     : Wallet                 = Wallet(),
-      professions: Collection<Profession> = emptySet()
+  val name       : String,
+  statistics : UserStatistics = UserStatistics(),
+  wallet     : Wallet         = Wallet(),
+  identifier : UUID
   // @formatter:on
-) : BaseMutable(), Communicative {
-
-  /**
-   * @since 0.1.0
-   */
-  // available professions
-  private val _availableProfessions: MutableSet<Profession> = professions.toMutableSet()
+) : OfflineUser(statistics, wallet, identifier), Communicative {
 
   /**
    * @since 0.1.0
@@ -45,41 +37,9 @@ class User(
    */
   val performer: UserPerformer = UserPerformer(this.identifier, this.name, this)
 
-  /**
-   * @since 0.1.0
-   */
-  val availableProfessions: List<Profession>
-    get() = this._availableProfessions.toList()
-
   val game: Game?
     get() = GameManager.findByUser(this)
 
-  /**
-   * @since 0.1.0
-   */
-  fun addProfession(profession: Profession): Boolean {
-    return this._availableProfessions.add(profession)
-  }
-
-  /**
-   * @since 0.1.0
-   */
-  fun removeProfession(
-    profession: Profession
-  ): Boolean {
-    return this._availableProfessions.remove(profession)
-  }
-
-  /**
-   * @since 0.1.0
-   */
-  fun removeProfessionByIdentifier(
-    identifier: String
-  ): Boolean {
-    return this._availableProfessions.removeIf {
-      it.identifier.equals(identifier, true)
-    }
-  }
 
   /**
    * Alias for [UserPerformer.sendMessage]

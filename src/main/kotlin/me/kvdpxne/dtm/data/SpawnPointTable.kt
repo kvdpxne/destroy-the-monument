@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.data
 
 import java.util.UUID
-import me.kvdpxne.dtm.game.SpawnPoint
+import me.kvdpxne.dtm.game.RevivalPosition
 import org.ktorm.dsl.eq
 import org.ktorm.dsl.from
 import org.ktorm.dsl.insert
@@ -26,7 +26,7 @@ object SpawnPointTable : Table<Nothing>("spawn_point") {
 
 object SpawnPointDao {
 
-  fun findByIdentifier(identifier: UUID): SpawnPoint? {
+  fun findByIdentifier(identifier: UUID): RevivalPosition? {
     return database.from(SpawnPointTable)
       .select()
       .where {
@@ -37,7 +37,7 @@ object SpawnPointDao {
           it[SpawnPointTable.team]!!
         ) ?: return null
 
-        SpawnPoint(
+        RevivalPosition(
           team,
           it[SpawnPointTable.x]!!,
           it[SpawnPointTable.y]!!,
@@ -50,7 +50,7 @@ object SpawnPointDao {
       .firstOrNull()
   }
 
-  fun insert(spawnPoint: SpawnPoint) {
+  fun insert(spawnPoint: RevivalPosition) {
     database.insert(SpawnPointTable) {
       set(SpawnPointTable.identifier, spawnPoint.identifier.toString())
       set(SpawnPointTable.team, spawnPoint.team.identifier.toString())

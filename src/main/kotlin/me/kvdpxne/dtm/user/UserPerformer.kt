@@ -5,8 +5,10 @@ import java.lang.ref.WeakReference
 import java.util.UUID
 import me.kvdpxne.dtm.colorize
 import me.kvdpxne.dtm.command.Performer
+import me.kvdpxne.dtm.shared.ItemsClipboard
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import org.bukkit.inventory.PlayerInventory
 
 open class UserPerformer(
   val identifier: UUID,
@@ -41,9 +43,14 @@ open class UserPerformer(
   val isOnline: Boolean
     get() = this.player?.isOnline ?: false
 
+  /**
+   * @param permission
+   * @throws IllegalArgumentException
+   * @since 0.1.0
+   */
   override fun hasPermission(permission: String): Boolean {
     require(permission.isBlank()) {
-      ""
+      "The given \"permission\" must not be blank."
     }
 
     return this.player?.hasPermission(permission) ?: false

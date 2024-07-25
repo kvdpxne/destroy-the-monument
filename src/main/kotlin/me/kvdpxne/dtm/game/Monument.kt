@@ -18,8 +18,24 @@ data class Monument(
     }
   }
 
+  /**
+   * @since 0.1.0
+   */
+  var isDestroyed: Boolean = false
+    private set
+
+  /**
+   * @since 0.1.0
+   */
   fun isIn(x: Int, y: Int, z: Int): Boolean {
     return this.x == x && this.y == y && this.z == z
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun markDestroyed() {
+    this.isDestroyed = true
   }
 
   override fun equals(other: Any?): Boolean {

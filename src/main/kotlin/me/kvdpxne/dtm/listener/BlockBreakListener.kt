@@ -1,21 +1,28 @@
 package me.kvdpxne.dtm.listener
 
-import me.kvdpxne.dtm.DestroyTheMonument
 import me.kvdpxne.dtm.colorize
-import me.kvdpxne.dtm.game.GameManager
+import me.kvdpxne.dtm.game.Game
+import me.kvdpxne.dtm.game.RevivalPosition
 import me.kvdpxne.dtm.game.Team
+import me.kvdpxne.dtm.game.Teammate
 import me.kvdpxne.dtm.game.findMonument
 import me.kvdpxne.dtm.scoreboard.updateBlueMonumentCount
 import me.kvdpxne.dtm.scoreboard.updateRedMonumentCount
 import me.kvdpxne.dtm.shared.ItemsClipboard
-import me.kvdpxne.dtm.shared.bukkit.hardClean
+import me.kvdpxne.dtm.shared.bukkit.cancel
+import me.kvdpxne.dtm.shared.bukkit.cancelTask
+import me.kvdpxne.dtm.shared.bukkit.fill
+import me.kvdpxne.dtm.shared.bukkit.hasInventory
 import me.kvdpxne.dtm.shared.bukkit.isMonument
+import me.kvdpxne.dtm.shared.bukkit.isNature
 import me.kvdpxne.dtm.shared.bukkit.isRich
-import me.kvdpxne.dtm.shared.bukkit.toBuilder
-import me.kvdpxne.dtm.tasks.GameStopTaskTimer
+import me.kvdpxne.dtm.shared.bukkit.reset
+import me.kvdpxne.dtm.shared.bukkit.runSynchronousDelayedTask
+import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserManager
-import org.bukkit.Bukkit
 import org.bukkit.Material
+import org.bukkit.block.Block
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
@@ -23,18 +30,24 @@ import org.bukkit.inventory.ItemStack
 
 object BlockBreakListener : Listener {
 
-  private fun fs(team: Team, item: ItemStack) {
-    team.teammates.forEach { teammate ->
-      val player = teammate.user.performer.player!!
+  private fun updateTeammate(
+    team: Team,
+    item: ItemStack
+  ) {
+    team.teammates.forEach { teammate: Teammate ->
 
-      player.hardClean()
-
-      player.inventory.also { inventory ->
-        repeat(36) { i ->
-          inventory.setItem(i, item)
-        }
+      //
+      teammate.currentProfession.ability?.let {
+        cancelTask(it.taskIdentifier)
       }
 
+      val player = teammate.user.performer.player!!
+
+      //
+      player.reset()
+      player.fill(item)
+
+      //
       player.allowFlight = true
       player.isFlying = true
     }
@@ -56,61 +69,109 @@ object BlockBreakListener : Listener {
       return
     }
 
-    val type = event.block.type
+    // The object of the player who destroyed a block
+    val player: Player = event.player
 
-    val isRich = type.isRich()
-    val isMonument = type.isMonument()
+    // The user object obtained from the unique identifier of the player object
+    val user: User = UserManager.findByIdentifier(player.uniqueId) ?: return
 
-    if (isRich.not() && isMonument.not()) {
+    // The object of the game to which the user is assigned
+    val game: Game = user.game ?: return
+
+    // The game object must have a “started” state
+    if (!game.isStarted) {
       return
     }
 
-    // A user who destroyed a monument
-    val user = UserManager.findByIdentifier(event.player.uniqueId) ?: return
-
-    // A game in which the user destroyed a monument
-    val game = GameManager.findByUser(user) ?: return
-
-    // The team to which the user who destroyed the monument is assigned
-    val team = game.findTeam(user) ?: return
-
-    //
-    val teammate = team.findTeammate(user) ?: return
-
-    // An arena in which the game is played
+    // The currently assigned arena object for the game
     val arena = game.currentArena ?: return
 
-    if (game.state.isStarted().not() || game.isInArenaMap(user).not()) {
+    // The arena object must have a map loaded.
+    if (!arena.isLoaded) {
       return
     }
 
-    if (isRich) {
+    // The position object of the destroyed block
+    val location = event.block.location
+
+    // The position object of the destroyed block must not have a different map
+    // than the object of the currently loaded game arena
+    if (arena.map?.world != location.world) {
+      return
+    }
+
+    //
+    arena.revivalPositions.forEach { it: RevivalPosition ->
+      if (!it.inSpawnRange(location.x, location.y, location.z)) {
+        return@forEach
+      }
+
+      event.cancel()
+      user.sendMessage("&6&lDTM &7> &cNie możesz niszczyć bloków na spawnie.")
+      return
+    }
+
+    // The object of the destroyed block
+    val block: Block = event.block
+
+    //
+    if (block.hasInventory() || block.isRich() || block.isNature()) {
       this.disappearBlock(event)
       return
     }
 
-    // A monument that was destroyed by the user
-    val monument = arena.findMonument(event.block.location) ?: return
+    //
+    if (!block.isMonument()) {
+      return
+    }
 
-    val teamIdentity = team.identity
+    // A monument that was destroyed by the user
+    val monument = arena.findMonument(location) ?: return
+
+    //
+    if (monument.isDestroyed) {
+      return
+    }
+
+    //
+    val team: Team = game.findTeam(user) ?: return
+
+    //
+    val teammate: Teammate = team.findTeammate(user) ?: return
+
+    //
     val monumentIdentity = monument.team
 
-    if (teamIdentity == monumentIdentity) {
-      event.isCancelled = true
+    //
+    val teamIdentity = team.identity
+
+    //
+    if (monumentIdentity == teamIdentity) {
+      event.cancel()
       user.sendMessage("&6&lDTM &7> &fNie możesz zniszczyć monumentu swojej drużyny.")
       return
     }
 
+    //
     this.disappearBlock(event)
 
     // The team to which the destroyed monument belonged
     val attackedTeam = game.findTeam(monumentIdentity) ?: return
 
+    //
     if (!attackedTeam.dealDamage()) {
-      // TODO stop game
+      throw IllegalStateException(
+        """
+        Unexpectedly the health of the team: \"$attackedTeam\" is less than 0
+        and the game has not been completed.
+        """.trimIndent()
+      )
     }
 
-    //
+    // Marks an attacked monument as destroyed
+    monument.markDestroyed()
+
+    // Adds one destroyed monument to a teammate's statistics
     teammate.addDestroyedMonument()
 
     game.teams.forEach {
@@ -146,18 +207,21 @@ object BlockBreakListener : Listener {
 
     game.teams.forEach {
       if (attackedTeam == it) {
-        this.fs(it, ItemsClipboard.LOSE)
+        this.updateTeammate(it, ItemsClipboard.LOSE)
         return@forEach
       }
 
-      this.fs(it, ItemsClipboard.WON)
+      this.updateTeammate(it, ItemsClipboard.WON)
     }
 
-    Bukkit.getScheduler().cancelTask(game.timerTaskIdentifier)
-    GameStopTaskTimer(game).runTaskLater(
-      DestroyTheMonument.instance,
-      20 * 20L
-    )
+    // Creates and registers a synchronous delayed game completion task
+    runSynchronousDelayedTask(20 * 20L) {
+      game.stop()
+    }
+
+    // Cancels the task of the game arena timer
+    cancelTask(game.timerTaskIdentifier)
+
     game.sendMessages(
       "",
       "&6&lDTM &7> &fGra została zakończona.",

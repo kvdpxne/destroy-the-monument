@@ -30,15 +30,14 @@ internal fun toUser(
 
 
   return User(
-    identifier,
     name,
     statistics,
-    wallet
+    wallet,
+    identifier
   ).apply {
     ProfessionManager.findProfessionByName(profession)?.let {
       val profession1 = it.clone()
 
-      this.addProfession(profession1)
       this.currentProfession = profession1
     }
   }
@@ -78,7 +77,6 @@ object DaoUser {
     }
 
     users.asSequence()
-      .filter { it.wasChanged }
       .forEach { update(it) }
   }
 

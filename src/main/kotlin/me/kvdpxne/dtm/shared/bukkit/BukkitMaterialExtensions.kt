@@ -61,6 +61,28 @@ fun Material.isRich(): Boolean {
   }
 }
 
+fun Material.isNature(): Boolean {
+  return when (this) {
+    Material.SAPLING,
+    Material.LONG_GRASS,
+    Material.DEAD_BUSH,
+    Material.YELLOW_FLOWER,
+    Material.RED_ROSE,
+    Material.BROWN_MUSHROOM,
+    Material.RED_MUSHROOM,
+    Material.CACTUS,
+    Material.VINE,
+    Material.WATER_LILY,
+    Material.DOUBLE_PLANT,
+
+      //
+    Material.LEAVES,
+    Material.LEAVES_2 -> true
+
+    else -> false
+  }
+}
+
 fun Material.isMonument(): Boolean {
   return Material.OBSIDIAN == this
 }

@@ -11,8 +11,8 @@ fun Arena.findMonument(location: Location) = location.run {
 }
 
 fun Arena.setSpawnPoint(team: TeamIdentity, position: Location) {
-  val spawnPoint = SpawnPoint(team, position.x, position.y, position.z, position.pitch, position.yaw)
-  spawnPoints[team] = spawnPoint
+  val spawnPoint = RevivalPosition(team, position.x, position.y, position.z, position.pitch, position.yaw)
+  _spawnPoints[team] = spawnPoint
 
   SpawnPointDao.insert(spawnPoint)
   ArenaSpawnPointsDao.insert(this, spawnPoint)

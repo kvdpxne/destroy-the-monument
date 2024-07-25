@@ -5,6 +5,7 @@ import me.kvdpxne.dtm.command.CommandBuilder
 
 fun createBaseCommand(): Command {
   /* Usages:
+   * /dtm ability
    * /dtm arena
    * /dtm coins
    * /dtm game
@@ -20,6 +21,7 @@ fun createBaseCommand(): Command {
     .name("dtm")
     .hub()
     .children(
+      createAbilityCommand(),
       createArenaCommand(),
       createCoinsCommand(),
       createGameCommand(),

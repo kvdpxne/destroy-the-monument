@@ -16,17 +16,23 @@ class Arena(
    * Map of positions for each team where teammates will be spawned after death
    * or being moved to the arena map.
    */
-  val spawnPoints: MutableMap<TeamIdentity, SpawnPoint> = mutableMapOf()
+  val _spawnPoints: MutableMap<TeamIdentity, RevivalPosition> = mutableMapOf()
 
   /**
    *
    */
   val monuments: MutableMap<TeamIdentity, MutableSet<Monument>> = mutableMapOf()
 
+  val revivalPositions: List<RevivalPosition>
+    get() = this._spawnPoints.values.toList()
+
   /**
    *
    */
   var map: ArenaMap? = null
+
+  val isLoaded: Boolean
+    get() = null != this.map
 
   fun findMonument(x: Int, y: Int, z: Int): Monument? {
     for (monumentList in monuments.values) {
@@ -39,8 +45,8 @@ class Arena(
     return null
   }
 
-  fun setSpawnPoint(spawnPoint: SpawnPoint) {
-    spawnPoints[spawnPoint.team] = spawnPoint
+  fun setSpawnPoint(spawnPoint: RevivalPosition) {
+    _spawnPoints[spawnPoint.team] = spawnPoint
   }
 
   fun addMonument(monument: Monument): Boolean {

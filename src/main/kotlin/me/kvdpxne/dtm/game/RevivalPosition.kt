@@ -11,7 +11,7 @@ import java.util.UUID
  * @param yaw
  * @param identifier
  */
-data class SpawnPoint(
+data class RevivalPosition(
   var team: TeamIdentity,
   var x: Double,
   var y: Double,
@@ -29,11 +29,22 @@ data class SpawnPoint(
     }
   }
 
+  fun inSpawnRange(
+    x: Double,
+    y: Double,
+    z: Double,
+    extended: Double = 3.334
+  ): Boolean {
+    return this.x in x - extended..x + extended &&
+      this.y in y - extended..y + extended &&
+      this.z in z - extended..z + extended
+  }
+
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (javaClass != other?.javaClass) return false
 
-    other as SpawnPoint
+    other as RevivalPosition
 
     return identifier == other.identifier
   }

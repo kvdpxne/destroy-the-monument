@@ -6,9 +6,10 @@ import me.kvdpxne.dtm.gui.createTeamSelectionGui
 import me.kvdpxne.dtm.shared.ItemsClipboard
 import me.kvdpxne.dtm.shared.SelectedPositionStorage
 import me.kvdpxne.dtm.shared.bukkit.cancel
+import me.kvdpxne.dtm.shared.bukkit.equipA
 import me.kvdpxne.dtm.shared.bukkit.isNullOrTypeAir
 import me.kvdpxne.dtm.shared.bukkit.isRightClick
-import me.kvdpxne.dtm.shared.bukkit.hardClean
+import me.kvdpxne.dtm.shared.bukkit.reset
 import me.kvdpxne.dtm.shared.bukkit.setItem
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.Material
@@ -62,8 +63,9 @@ object PlayerInteractListener : Listener {
 
         event.cancel()
         game.removeHostage(user)
-        event.player.hardClean()
-        event.player.setItem(0, ItemsClipboard.ITEM_GAME_JOIN)
+        event.player.reset()
+        event.player.equipA()
+        event.player.updateInventory()
         return
       }
     }

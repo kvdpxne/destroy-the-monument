@@ -29,6 +29,8 @@ object ProjectileHitListener : Listener {
     //
     val game = GameManager.findByUser(user) ?: return
 
+    val arena = game.currentArena ?: return
+
     if (
       !game.state.isStarted() ||
       null == game.currentArena ||
@@ -62,7 +64,9 @@ object ProjectileHitListener : Listener {
         location.z,
         3.875F,
         false,
-        true
+        !arena.revivalPositions.any {
+          it.inSpawnRange(location.x, location.y, location.z, 10.0)
+        }
       )
     }
 

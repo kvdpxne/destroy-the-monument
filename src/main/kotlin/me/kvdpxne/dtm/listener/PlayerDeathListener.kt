@@ -51,14 +51,23 @@ object PlayerDeathListener : Listener {
 
     // TODO optimization needed
     val victimUser = UserManager.findByIdentifier(victim.uniqueId) ?: return
-    val game = GameManager.findByUser(victimUser) ?: return
+    val game = victimUser.game ?: return
 
-    if (
-      !game.state.isStarted() ||
-      null == game.currentArena ||
-      !game.isInTeam(victimUser) ||
-      !game.isInArenaMap(victimUser)
-    ) {
+    //
+    if (!game.isStarted) {
+      return
+    }
+
+    //
+    val arena = game.currentArena ?: return
+
+    //
+    if (!arena.isLoaded) {
+      return
+    }
+
+    //
+    if (!game.isInTeam(victimUser) || !game.isInArenaMap(victimUser)) {
       return
     }
 
