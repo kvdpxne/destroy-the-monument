@@ -8,6 +8,7 @@ import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionBuilder
 import me.kvdpxne.dtm.shared.bukkit.toBuilder
 import org.bukkit.Material
+import org.bukkit.inventory.ItemStack
 
 fun createEngineer(): Profession = ProfessionBuilder()
   .name("engineer")
@@ -33,5 +34,8 @@ fun createEngineer(): Profession = ProfessionBuilder()
     slotItem(Material.COBBLESTONE, 50, 8),
   )
   .icon(Material.COBBLESTONE)
+  .ability(20) {
+    it.inventory.addItem(ItemStack(Material.COBBLESTONE, 15))
+  }
   .enabled()
   .build()

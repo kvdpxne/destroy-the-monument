@@ -123,6 +123,10 @@ fun Player.resetExperienceBar() {
   this.exp = 0.0F
 }
 
+fun Player.resetExperienceBarLevel() {
+  this.level = 0
+}
+
 fun Player.respawn() {
   this as BukkitPlayer
   if (0.0 < this.health || !this.isOnline) {

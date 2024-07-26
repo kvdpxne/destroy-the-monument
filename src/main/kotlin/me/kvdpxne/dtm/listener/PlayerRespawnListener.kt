@@ -1,7 +1,6 @@
 package me.kvdpxne.dtm.listener
 
 import me.kvdpxne.dtm.DestroyTheMonument
-import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.toLocation
 import me.kvdpxne.dtm.shared.bukkit.fillExperienceBar
 import me.kvdpxne.dtm.shared.bukkit.runSynchronousDelayedTask
@@ -55,6 +54,9 @@ object PlayerRespawnListener : Listener {
       this.current.equip(player, teammate.team.identity.dyeColor)
 
       this.current.ability?.let {
+        //
+        it.cancelCooldown()
+
         if (it.readyAfterDeath) {
           it.markReady()
           it.whenReady(player)
@@ -68,7 +70,7 @@ object PlayerRespawnListener : Listener {
           return
         }
 
-        it.run(player, true)
+        it.renewDelayed(player, true)
       }
     }
 

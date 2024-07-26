@@ -20,6 +20,7 @@ import me.kvdpxne.dtm.shared.bukkit.reset
 import me.kvdpxne.dtm.shared.bukkit.runSynchronousDelayedTask
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserManager
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.entity.Player
@@ -118,6 +119,19 @@ object BlockBreakListener : Listener {
     if (block.hasInventory() || block.isRich() || block.isNature()) {
       this.disappearBlock(event)
       return
+    }
+
+    if (Material.GRASS == block.type || Material.DIRT == block.type || Material.SOUL_SAND == block.type) {
+      val upperBlock: Block = location.world.getBlockAt(
+        location.blockX,
+        location.blockY + 1,
+        location.blockZ
+      )
+
+      //
+      if (upperBlock.isNature()) {
+        upperBlock.type = Material.AIR
+      }
     }
 
     //

@@ -444,7 +444,7 @@ class Game(val identifier: UUID, var name: String) : Communicative {
               return
             }
 
-            it.run(this, true)
+            it.renewDelayed(this, true)
           }
         }
       }
@@ -473,6 +473,8 @@ class Game(val identifier: UUID, var name: String) : Communicative {
 
     teams.forEach { team ->
       team.teammates.forEach { teammate ->
+
+        teammate.currentProfession.ability?.cancelCooldown()
 
         val performer = teammate.user.performer
 

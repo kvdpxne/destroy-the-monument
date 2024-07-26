@@ -53,7 +53,7 @@ object PlayerToggleFlightListener : Listener {
       return
     }
 
-    if (!profession.ability?.ready!!) {
+    if (!profession.ability?.isReady!!) {
       return
     }
 
@@ -68,6 +68,6 @@ object PlayerToggleFlightListener : Listener {
     player.velocity = player.location.direction.multiply(0.995F).setY(1)
     player.fallDistance = 0.0F
 
-    profession.ability?.run(player)
+    profession.ability?.renewDelayed(player)
   }
 }

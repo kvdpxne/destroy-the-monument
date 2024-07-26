@@ -8,6 +8,7 @@ import me.kvdpxne.dtm.scoreboard.updateCoinCount
 import me.kvdpxne.dtm.scoreboard.updateDeathCount
 import me.kvdpxne.dtm.scoreboard.updateKillCount
 import me.kvdpxne.dtm.shared.bukkit.respawn
+import me.kvdpxne.dtm.shared.bukkit.runSynchronousDelayedTask
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
@@ -78,11 +79,10 @@ object PlayerDeathListener : Listener {
     val victimTeammate = game.findTeam(victimUser)!!.findTeammate(victimUser)!!
     victimTeammate.currentProfession.ability?.cancelCooldown()
 
-    Bukkit.getScheduler().runTaskLater(
-      DestroyTheMonument.instance,
-      { victim.respawn() },
-      20L
-    )
+    //
+    runSynchronousDelayedTask(20L) {
+      victim.respawn()
+    }
 
     val murder = victim.killer
     if (null == murder) {

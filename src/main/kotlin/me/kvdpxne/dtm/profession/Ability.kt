@@ -1,7 +1,11 @@
 package me.kvdpxne.dtm.profession
 
 import me.kvdpxne.dtm.DestroyTheMonument
+import me.kvdpxne.dtm.shared.bukkit.cancelTask
+import me.kvdpxne.dtm.shared.bukkit.fillExperienceBar
 import me.kvdpxne.dtm.shared.bukkit.resetExperienceBar
+import me.kvdpxne.dtm.shared.bukkit.resetExperienceBarLevel
+import me.kvdpxne.dtm.shared.bukkit.runAsynchronousRepeatingTask
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
@@ -14,18 +18,59 @@ class Ability(
   // @formatter:on
 ): Cloneable {
 
-  var ready: Boolean = true
+  /**
+   * @since 0.1.0
+   */
+  var isReady: Boolean = true
+    private set
+
+  /**
+   * @since 0.1.0
+   */
+  var isActive: Boolean = true
     private set
 
   var taskIdentifier = -1
     private set
 
+  /**
+   * @since 0.1.0
+   */
   fun markReady() {
-    this.ready = true
+    this.isReady = true
   }
 
-  fun run(player: Player, a: Boolean = false) {
-    this.ready = false
+  /**
+   * @since 0.1.0
+   */
+  fun markActive() {
+    this.isActive = true
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun cancelCooldown() {
+    if (0 > this.taskIdentifier) {
+      return
+    }
+
+    //
+    cancelTask(this.taskIdentifier)
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun renewDelayed(
+    player: Player,
+    a: Boolean = false
+  ) {
+    //
+    this.isReady = false
+
+    //
+    player.resetExperienceBarLevel()
     player.resetExperienceBar()
 
     val remainingSeconds = if (a) {
@@ -45,14 +90,21 @@ class Ability(
     ).taskId
   }
 
-  fun cancelCooldown() {
-    if (0 > this.taskIdentifier) {
-      return
-    }
+  /**
+   * @since 0.1.0
+   */
+  fun renew(player: Player) {
+    this.cancelCooldown()
 
-    Bukkit.getScheduler().cancelTask(this.taskIdentifier)
+    this.markReady()
+
+    player.resetExperienceBarLevel()
+    player.fillExperienceBar()
   }
 
+  /**
+   * @since 0.1.0
+   */
   public override fun clone(): Ability {
     return Ability(
       this.delay,
