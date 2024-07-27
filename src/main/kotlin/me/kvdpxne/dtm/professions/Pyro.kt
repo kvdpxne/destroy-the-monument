@@ -31,6 +31,7 @@ fun createPyro(): Profession = ProfessionBuilder()
       Material.BOW.toBuilder()
         .enchantment(Enchantment.ARROW_FIRE, 1)
         .enchantment(Enchantment.ARROW_INFINITE, 1)
+        .unbreakable()
         .build()
     }, index = 1),
 
