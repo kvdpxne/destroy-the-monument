@@ -1,5 +1,6 @@
 package me.kvdpxne.dtm.shared.bukkit
 
+import java.util.UUID
 import me.kvdpxne.dtm.colorize
 import me.kvdpxne.dtm.colorizeAll
 import me.kvdpxne.dtm.shared.minecraft.BukkitItemStack
@@ -10,6 +11,8 @@ import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.LeatherArmorMeta
+import org.bukkit.inventory.meta.PotionMeta
+import org.bukkit.potion.PotionEffect
 
 object Attributes {
 
@@ -20,116 +23,219 @@ object Attributes {
   const val MAX_HEALTH = "generic.maxHealth"
 
   // Operations
-  const val FLAT = 0
-  const val ADDITIVE = 1
-  const val MULTIPLICATIVE = 2
+  const val ADD = 0
+  const val MULTIPLY_BASE = 1
+  const val MULTIPLY = 2
 }
 
-class ItemBuilder {
+class ItemBuilder private constructor(private var itemStack: ItemStack) {
 
-  private var itemStack: ItemStack? = null
+  companion object {
 
+    /**
+     * @since 0.1.0
+     */
+    fun begin(itemStack: ItemStack): ItemBuilder {
+      return ItemBuilder(itemStack)
+    }
+  }
+
+  @Deprecated("")
   fun item(item: ItemStack): ItemBuilder {
     this.itemStack = item
     return this
   }
 
+  @Deprecated("")
   fun item(material: Material): ItemBuilder {
     this.itemStack = ItemStack(material)
     return this
   }
 
-  fun type(material: Material): ItemBuilder {
-    this.itemStack?.type = material
+  /**
+   * @since 0.1.0
+   */
+  fun type(
+    type: Material
+  ): ItemBuilder {
+    this.itemStack.type = type
     return this
   }
 
-  fun quantity(quantity: Int): ItemBuilder {
-    this.itemStack?.amount = quantity
-    return this
-  }
-
-  fun damage(durability: Int): ItemBuilder {
-    this.itemStack?.durability = durability.toShort()
-    return this
-  }
-
-  fun name(name: String): ItemBuilder {
-    this.itemStack?.itemMeta = this.itemStack?.itemMeta.apply {
-      this?.displayName = name.colorize()
+  /**
+   * @since 0.1.0
+   */
+  fun generation(
+    generation: Int
+  ): ItemBuilder {
+    if (0 < this.itemStack.type.maxDurability) {
+      throw IllegalArgumentException("This item has no other generations.")
     }
-    return this;
+
+    this.itemStack.durability = generation.toShort()
+    return this
   }
 
-  fun name(name: () -> String): ItemBuilder {
+  /**
+   * @since 0.1.0
+   */
+  fun amount(
+    amount: Int
+  ): ItemBuilder {
+    this.itemStack.amount = amount
+    return this
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun durability(
+    durability: Int
+  ): ItemBuilder {
+    if (0 >= this.itemStack.type.maxDurability) {
+      throw IllegalStateException("The item has no durability.")
+    }
+
+    this.itemStack.durability = durability.toShort()
+    return this
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun name(
+    name: String
+  ): ItemBuilder {
+    this.itemStack.itemMeta = this.itemStack.itemMeta.apply {
+      this.displayName = name.colorize()
+    }
+    return this
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun name(
+    name: () -> String
+  ): ItemBuilder {
     return this.name(name())
   }
 
-  fun lore(vararg lore: String): ItemBuilder {
-    this.itemStack?.itemMeta = this.itemStack?.itemMeta.apply {
-      this?.lore = arrayOf(*lore).colorizeAll()
+  /**
+   * @since 0.1.0
+   */
+  fun lore(
+    vararg lore: String
+  ): ItemBuilder {
+    this.itemStack.itemMeta = this.itemStack.itemMeta.apply {
+      this.lore = arrayOf(*lore).colorizeAll()
     }
     return this
   }
 
-  fun leather(color: Color): ItemBuilder {
-    val itemMeta = this.itemStack?.itemMeta
-    if (itemMeta is LeatherArmorMeta) {
-      itemMeta.color = color
-      this.itemStack?.itemMeta = itemMeta
+  /**
+   * @since 0.1.0
+   */
+  fun leather(
+    color: Color
+  ): ItemBuilder {
+    val itemMeta = this.itemStack.itemMeta
+    if (itemMeta !is LeatherArmorMeta) {
+      return this
+    }
+    itemMeta.color = color
+    this.itemStack.itemMeta = itemMeta
+    return this
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun potionEffect(
+    potionEffect: PotionEffect,
+    override: Boolean = true
+  ): ItemBuilder {
+    val itemMeta = this.itemStack.itemMeta
+    if (itemMeta !is PotionMeta) {
+      return this
+    }
+    itemMeta.addCustomEffect(potionEffect, override)
+    this.itemStack.itemMeta = itemMeta
+    return this
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun enchantment(
+    enchantment: Enchantment,
+    level: Int
+  ): ItemBuilder {
+    this.itemStack.addUnsafeEnchantment(enchantment, level)
+    return this
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun attribute(
+    name: String,
+    amount: Double,
+    operation: Int = Attributes.ADD
+  ): ItemBuilder {
+    this.itemStack = BukkitItemStack.asNMSCopy(this.itemStack).apply {
+      if (!this.hasTag()) {
+        this.tag = MinecraftNBTTagCompound()
+      }
+
+      if (!this.tag.hasKeyOfType("AttributeModifiers", 9)) {
+        this.tag.set("AttributeModifiers", MinecraftNBTTagList())
+      }
+
+      val attributeModifiers = this.tag.getList("AttributeModifiers", 10)
+
+      val newAttributeModifier = MinecraftNBTTagCompound().apply {
+        this.setString("AttributeName", name)
+        this.setString("Name", name)
+        this.setDouble("Amount", amount)
+        this.setInt("Operation", operation)
+
+        val uuid = UUID.randomUUID()
+        this.setLong("UUIDMost", uuid.mostSignificantBits)
+        this.setLong("UUIDLeast", uuid.leastSignificantBits)
+      }
+
+      attributeModifiers.add(newAttributeModifier)
+    }.let {
+      BukkitItemStack.asBukkitCopy(it)
     }
     return this
   }
 
-  fun enchantment(enchantment: Enchantment, level: Int): ItemBuilder {
-    this.itemStack?.addUnsafeEnchantment(enchantment, level)
-    return this
-  }
-
+  /**
+   * @since 0.1.0
+   */
   fun unbreakable(): ItemBuilder {
-    if (0.toShort() == this.itemStack?.type?.maxDurability) {
+    if (0.toShort() == this.itemStack.type.maxDurability) {
       return this
     }
 
     this.itemStack = BukkitItemStack.asNMSCopy(this.itemStack).apply {
-      val base = getTag() ?: MinecraftNBTTagCompound()
+      if (!this.hasTag()) {
+        this.tag = MinecraftNBTTagCompound()
+      }
 
-      base.setByte("Unbreakable", 1)
-      setTag(base)
+      this.tag.setByte("Unbreakable", 1.toByte())
     }.let {
-      BukkitItemStack.asCraftMirror(it)
+      BukkitItemStack.asBukkitCopy(it)
     }
     return this
   }
 
-  fun attribute(
-    name: String,
-    amount: Double,
-    operation: Int = Attributes.FLAT
-  ): ItemBuilder {
-    this.itemStack = BukkitItemStack.asNMSCopy(itemStack).apply {
-
-      val base = getTag() ?: MinecraftNBTTagCompound()
-      val attributeModifiers = base["AttributeModifiers"]?.let { it as MinecraftNBTTagList } ?: MinecraftNBTTagList()
-
-      attributeModifiers.add(MinecraftNBTTagCompound().apply {
-        setString("AttributeName", name)
-        setString("Name", name)
-        setDouble("Amount", amount)
-        setInt("Operation", operation)
-        setInt("UUIDLeast", (100_000..999_999).random())
-        setInt("UUIDMost", (10_000..99_999).random());
-      })
-
-      base.set("AttributeModifiers", attributeModifiers)
-      setTag(base)
-    }.let {
-      BukkitItemStack.asCraftMirror(it)
-    }
-    return this
-  }
-
+  /**
+   * @since 0.1.0
+   */
   fun build(): ItemStack {
-    return this.itemStack!!
+    return this.itemStack
   }
 }

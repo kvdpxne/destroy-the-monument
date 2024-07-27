@@ -1,6 +1,8 @@
 package me.kvdpxne.dtm.listener
 
 import me.kvdpxne.dtm.game.GameManager
+import me.kvdpxne.dtm.game.RevivalPosition
+import me.kvdpxne.dtm.shared.basics.isNear
 import me.kvdpxne.dtm.shared.bukkit.cancel
 import me.kvdpxne.dtm.shared.bukkit.hasInventory
 import me.kvdpxne.dtm.shared.bukkit.isMonument
@@ -51,14 +53,12 @@ object BlockPlaceListener : Listener {
     }
 
     //
-    arena.revivalPositions.forEach {
-      if (!it.inSpawnRange(location.x, location.y, location.z)) {
-        return@forEach
+    for (revivalPosition: RevivalPosition in arena.revivalPositions) {
+      if (revivalPosition.isNear(location, RevivalPosition.RADIUS_OF_BLOCK_INTERACTION)) {
+        event.cancel()
+        user.sendMessage("&6&lDTM &7> &cNie możesz stawiać bloków na spawnie.")
+        return
       }
-
-      event.cancel()
-      user.sendMessage("&6&lDTM &7> &cNie możesz stawiać bloków na spawnie.")
-      return
     }
 
     // The type of block that was placed

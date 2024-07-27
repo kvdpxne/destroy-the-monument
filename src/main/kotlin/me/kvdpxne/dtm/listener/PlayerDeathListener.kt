@@ -7,6 +7,7 @@ import me.kvdpxne.dtm.game.Teammate
 import me.kvdpxne.dtm.scoreboard.updateCoinCount
 import me.kvdpxne.dtm.scoreboard.updateDeathCount
 import me.kvdpxne.dtm.scoreboard.updateKillCount
+import me.kvdpxne.dtm.shared.bukkit.reset
 import me.kvdpxne.dtm.shared.bukkit.respawn
 import me.kvdpxne.dtm.shared.bukkit.runSynchronousDelayedTask
 import me.kvdpxne.dtm.user.UserManager
@@ -72,8 +73,12 @@ object PlayerDeathListener : Listener {
       return
     }
 
+    //
     event.drops.clear()
     event.droppedExp = 0
+
+    //
+    victim.reset()
 
     //
     val victimTeammate = game.findTeam(victimUser)!!.findTeammate(victimUser)!!

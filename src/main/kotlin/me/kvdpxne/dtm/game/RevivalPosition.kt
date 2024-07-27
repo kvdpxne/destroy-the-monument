@@ -1,6 +1,7 @@
 package me.kvdpxne.dtm.game
 
-import java.util.UUID
+import me.kvdpxne.dtm.shared.basics.BaseIdentifiableEntityPosition
+import me.kvdpxne.dtm.uid.Uid
 
 /**
  * @param team
@@ -11,23 +12,37 @@ import java.util.UUID
  * @param yaw
  * @param identifier
  */
-data class RevivalPosition(
+class RevivalPosition(
+  // @formatter:off
+  x: Double,
+  y: Double,
+  z: Double,
+  pitch: Float,
+  yaw: Float,
   var team: TeamIdentity,
-  var x: Double,
-  var y: Double,
-  var z: Double,
-  var pitch: Float,
-  var yaw: Float,
-  // An automatically generated unique object identifier.
-  val identifier: UUID = UUID.randomUUID()
-) {
+  identifier: String = Uid.next()
+  // @formatter:on
+) : BaseIdentifiableEntityPosition(x, y, z, pitch, yaw, identifier) {
 
-  init {
-    // Checks if the given team identity can be used to create this object.
-    require(TeamService.existsTeamIdentityByIdentifier(this.team.identifier)) {
-      "The given team identity cannot be used."
-    }
+  companion object {
+
+    /**
+     * @since 0.1.0
+     */
+    const val RADIUS_OF_BLOCK_INTERACTION = 3.874
+
+    /**
+     * @since 0.1.0
+     */
+    const val RADIUS_OF_EXPLOSION_INTERACTION = 11.941
   }
+
+//  init {
+//    // Checks if the given team identity can be used to create this object.
+//    require(TeamService.existsTeamIdentityByIdentifier(this.team.identifier)) {
+//      "The given team identity cannot be used."
+//    }
+//  }
 
   fun inSpawnRange(
     x: Double,

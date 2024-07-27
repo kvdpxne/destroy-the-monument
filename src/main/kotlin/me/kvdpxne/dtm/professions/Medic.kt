@@ -6,6 +6,8 @@ import me.kvdpxne.dtm.gui.slotHelmet
 import me.kvdpxne.dtm.gui.slotItem
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionBuilder
+import me.kvdpxne.dtm.shared.ItemsClipboard.ITEM_TOOL_AXE
+import me.kvdpxne.dtm.shared.ItemsClipboard.ITEM_TOOL_PICKAXE
 import me.kvdpxne.dtm.shared.bukkit.asItem
 import me.kvdpxne.dtm.shared.bukkit.toBuilder
 import org.bukkit.Material
@@ -30,8 +32,8 @@ fun createMedic(): Profession = ProfessionBuilder()
     }, index = 0),
 
     // Tools
-    slotItem(TOOL_AXE, index = 1),
-    slotItem(TOOL_PICKAXE, index = 2),
+    slotItem(ITEM_TOOL_AXE, index = 1),
+    slotItem(ITEM_TOOL_PICKAXE, index = 2),
 
     slotItem({
       val potion = Material.POTION.asItem()

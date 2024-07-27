@@ -9,6 +9,7 @@ import me.kvdpxne.dtm.gui.GuiActionHandler
 import me.kvdpxne.dtm.listener.BlockBreakListener
 import me.kvdpxne.dtm.listener.BlockPistonExtendListener
 import me.kvdpxne.dtm.listener.BlockPlaceListener
+import me.kvdpxne.dtm.listener.PlayerCraftItemListener
 import me.kvdpxne.dtm.listener.EntityDamageListener
 import me.kvdpxne.dtm.listener.EntityExplodeListener
 import me.kvdpxne.dtm.listener.PlayerChatListener
@@ -23,6 +24,7 @@ import me.kvdpxne.dtm.listener.PlayerPrepareItemEnchantListener
 import me.kvdpxne.dtm.listener.PlayerQuitListener
 import me.kvdpxne.dtm.listener.PlayerRespawnListener
 import me.kvdpxne.dtm.listener.PlayerToggleFlightListener
+import me.kvdpxne.dtm.listener.PlayerPrepareCraftItemListener
 import me.kvdpxne.dtm.listener.ProjectileHitListener
 import me.kvdpxne.dtm.listener.WeatherChangeListener
 import me.kvdpxne.dtm.profession.ProfessionManager
@@ -82,13 +84,15 @@ class DestroyTheMonument : JavaPlugin() {
       //
       GuiActionHandler,
 
-      EntityDamageListener,
-      EntityExplodeListener,
-
       BlockBreakListener,
       BlockPistonExtendListener,
       BlockPlaceListener,
+
+      EntityDamageListener,
+      EntityExplodeListener,
+
       PlayerChatListener,
+      PlayerCraftItemListener,
       PlayerDeathListener,
       PlayerDropItemListener,
       PlayerFoodLevelChangeListener,
@@ -96,11 +100,14 @@ class DestroyTheMonument : JavaPlugin() {
       PlayerItemConsumeListener,
       PlayerJoinListener,
       PlayerKickListener,
+      PlayerPrepareCraftItemListener,
       PlayerPrepareItemEnchantListener,
       PlayerQuitListener,
       PlayerRespawnListener,
       PlayerToggleFlightListener,
+
       ProjectileHitListener,
+
       WeatherChangeListener
     )
 

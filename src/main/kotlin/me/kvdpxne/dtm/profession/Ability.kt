@@ -13,10 +13,15 @@ class Ability(
   // @formatter:off
   val delay          : Int,
   val whenReady      : WhenAbilityReadyHandler = {},
+  val isActivatable  : Boolean                 = true,
   val readyAfterDeath: Boolean                 = false,
   val readyAfterKill : Boolean                 = false
   // @formatter:on
 ): Cloneable {
+
+  init {
+    println(isActivatable)
+  }
 
   /**
    * @since 0.1.0
@@ -30,6 +35,9 @@ class Ability(
   var isActive: Boolean = true
     private set
 
+  /**
+   * @since 0.1.0
+   */
   var taskIdentifier = -1
     private set
 
@@ -68,6 +76,7 @@ class Ability(
   ) {
     //
     this.isReady = false
+    this.isActive = false
 
     //
     player.resetExperienceBarLevel()
@@ -98,6 +107,10 @@ class Ability(
 
     this.markReady()
 
+    if (!this.isActivatable) {
+      this.whenReady(player)
+    }
+
     player.resetExperienceBarLevel()
     player.fillExperienceBar()
   }
@@ -109,6 +122,7 @@ class Ability(
     return Ability(
       this.delay,
       this.whenReady,
+      this.isActivatable,
       this.readyAfterDeath,
       this.readyAfterKill
     )

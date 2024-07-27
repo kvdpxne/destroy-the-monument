@@ -5,6 +5,8 @@ import me.kvdpxne.dtm.gui.slotHelmet
 import me.kvdpxne.dtm.gui.slotItem
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionBuilder
+import me.kvdpxne.dtm.shared.ItemsClipboard.ITEM_TOOL_AXE
+import me.kvdpxne.dtm.shared.ItemsClipboard.ITEM_TOOL_PICKAXE
 import me.kvdpxne.dtm.shared.bukkit.toBuilder
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
@@ -33,8 +35,8 @@ fun createPyro(): Profession = ProfessionBuilder()
     }, index = 1),
 
     // Tools
-    slotItem(TOOL_AXE, index = 2),
-    slotItem(TOOL_PICKAXE, index = 3),
+    slotItem(ITEM_TOOL_AXE, index = 2),
+    slotItem(ITEM_TOOL_PICKAXE, index = 3),
 
     slotItem(Material.POTION, 2, 7),
     slotItem(Material.WOOD, 20, 8),
@@ -42,6 +44,6 @@ fun createPyro(): Profession = ProfessionBuilder()
   )
   .icon(Material.FLINT_AND_STEEL)
   .effect(PotionEffectType.FIRE_RESISTANCE)
-  .ability(40)
+  .ability(40, true)
   .enabled()
   .build()

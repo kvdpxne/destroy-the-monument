@@ -4,6 +4,8 @@ import java.util.UUID
 import me.kvdpxne.dtm.command.Communicative
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
+import me.kvdpxne.dtm.game.Team
+import me.kvdpxne.dtm.game.Teammate
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionManager
 import me.kvdpxne.dtm.wallet.Wallet
@@ -40,6 +42,11 @@ class User(
   val game: Game?
     get() = GameManager.findByUser(this)
 
+  val team: Team?
+    get() = this.game?.findTeam(this)
+
+  val teammate: Teammate?
+    get() = this.game?.findTeammate(this)
 
   /**
    * Alias for [UserPerformer.sendMessage]

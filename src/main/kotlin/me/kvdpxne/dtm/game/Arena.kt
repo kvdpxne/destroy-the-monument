@@ -15,28 +15,66 @@ class Arena(
   /**
    * Map of positions for each team where teammates will be spawned after death
    * or being moved to the arena map.
+   *
+   * @since 0.1.0
    */
-  val _spawnPoints: MutableMap<TeamIdentity, RevivalPosition> = mutableMapOf()
+  val _revivalPositions: MutableMap<TeamIdentity, RevivalPosition>
 
   /**
-   *
+   * @since 0.1.0
    */
-  val monuments: MutableMap<TeamIdentity, MutableSet<Monument>> = mutableMapOf()
-
-  val revivalPositions: List<RevivalPosition>
-    get() = this._spawnPoints.values.toList()
+  val _monumentPositions: MutableMap<TeamIdentity, MutableSet<Monument>>
 
   /**
-   *
+   * @since 0.1.0
    */
   var map: ArenaMap? = null
 
+  /**
+   *
+   */
+  init {
+    this._revivalPositions = mutableMapOf()
+    this._monumentPositions = mutableMapOf()
+    this.map = null
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  val revivalPositions: List<RevivalPosition>
+    get() = this._revivalPositions.values.toList()
+
+  /**
+   * @since 0.1.0
+   */
+  val monumentPositions: List<Monument>
+    get() = this._monumentPositions.values.flatten()
+
+  /**
+   * @since 0.1.0
+   */
   val isLoaded: Boolean
     get() = null != this.map
 
-  fun findMonument(x: Int, y: Int, z: Int): Monument? {
-    for (monumentList in monuments.values) {
-      for (monument in monumentList) {
+  /**
+   * @since 0.1.0
+   */
+  fun findMonuments(team: TeamIdentity): Array<Monument> {
+    return this._monumentPositions[team]?.toTypedArray()
+      ?: emptyArray()
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun findMonument(
+    x: Int,
+    y: Int,
+    z: Int
+  ): Monument? {
+    for (monuments: MutableSet<Monument> in this._monumentPositions.values) {
+      for (monument: Monument in monuments) {
         if (monument.isIn(x, y, z)) {
           return monument
         }
@@ -45,13 +83,17 @@ class Arena(
     return null
   }
 
+  fun findRevivalPosition(team: TeamIdentity): RevivalPosition? {
+    return this._revivalPositions[team]
+  }
+
   fun setSpawnPoint(spawnPoint: RevivalPosition) {
-    _spawnPoints[spawnPoint.team] = spawnPoint
+    _revivalPositions[spawnPoint.team] = spawnPoint
   }
 
   fun addMonument(monument: Monument): Boolean {
     val team = monument.team
-    return monuments.getOrPut(team) {
+    return _monumentPositions.getOrPut(team) {
       // Creates new instances of the modified set, if one is not assigned to
       // the given team.
       mutableSetOf()

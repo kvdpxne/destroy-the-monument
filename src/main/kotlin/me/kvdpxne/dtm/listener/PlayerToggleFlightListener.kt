@@ -49,11 +49,13 @@ object PlayerToggleFlightListener : Listener {
     // Current profession
     val profession = teammate.professionQueuingPair.current
 
-    if (profession.name != "scout") {
+    if ("scout" != profession.name) {
       return
     }
 
-    if (!profession.ability?.isReady!!) {
+    val ability = profession.ability ?: return
+
+    if (!ability.isReady) {
       return
     }
 
@@ -68,6 +70,6 @@ object PlayerToggleFlightListener : Listener {
     player.velocity = player.location.direction.multiply(0.995F).setY(1)
     player.fallDistance = 0.0F
 
-    profession.ability?.renewDelayed(player)
+    ability.renewDelayed(player)
   }
 }

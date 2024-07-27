@@ -4,7 +4,7 @@ import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 
 fun ItemStack.toBuilder(): ItemBuilder {
-  return ItemBuilder().item(this)
+  return ItemBuilder.begin(this)
 }
 
 fun ItemStack?.isNullOrTypeAir(): Boolean {

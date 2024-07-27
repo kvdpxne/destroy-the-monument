@@ -20,7 +20,6 @@ import me.kvdpxne.dtm.shared.bukkit.reset
 import me.kvdpxne.dtm.shared.bukkit.runSynchronousDelayedTask
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserManager
-import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.entity.Player
@@ -102,14 +101,12 @@ object BlockBreakListener : Listener {
     }
 
     //
-    arena.revivalPositions.forEach { it: RevivalPosition ->
-      if (!it.inSpawnRange(location.x, location.y, location.z)) {
-        return@forEach
+    for (revivalPosition: RevivalPosition in arena.revivalPositions) {
+      if (revivalPosition.isNear(location.x, location.y, location.z, RevivalPosition.RADIUS_OF_BLOCK_INTERACTION)) {
+        event.cancel()
+        user.sendMessage("&6&lDTM &7> &cNie możesz niszczyć bloków na spawnie.")
+        return
       }
-
-      event.cancel()
-      user.sendMessage("&6&lDTM &7> &cNie możesz niszczyć bloków na spawnie.")
-      return
     }
 
     // The object of the destroyed block

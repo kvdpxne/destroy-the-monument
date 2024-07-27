@@ -2,6 +2,8 @@ package me.kvdpxne.dtm.listener
 
 import kotlin.random.Random
 import me.kvdpxne.dtm.game.GameManager
+import me.kvdpxne.dtm.game.RevivalPosition
+import me.kvdpxne.dtm.shared.basics.isNear
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.Location
 import org.bukkit.Material
@@ -132,29 +134,32 @@ object ProjectileHitListener : Listener {
     val profession = teammate.professionQueuingPair.current
 
     //
-    if (false == profession.ability?.isReady) {
+    val ability = profession.ability ?: return
+
+    //
+    if (!ability.isActive) {
       return
     }
 
-    if (profession.name == "archer") {
+    if ("archer" == profession.name) {
       val location = projectile.location
       this.createExplosion(
         location,
         3.975F,
         !arena.revivalPositions.any {
-          it.inSpawnRange(location.x, location.y, location.z, 14.5)
+          it.isNear(location, RevivalPosition.RADIUS_OF_EXPLOSION_INTERACTION + Math.PI)
         }
       )
-      profession.ability?.renewDelayed(shooter)
+      ability.renewDelayed(shooter)
       return
     }
 
-    if (profession.name == "pyro") {
+    if ("pyro" == profession.name) {
       this.createConflagration(
         projectile.location,
-        6
+        5
       )
-      profession.ability?.renewDelayed(shooter)
+      ability.renewDelayed(shooter)
       return
     }
   }

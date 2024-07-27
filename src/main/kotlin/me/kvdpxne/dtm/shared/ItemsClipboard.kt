@@ -1,7 +1,11 @@
 package me.kvdpxne.dtm.shared
 
+import me.kvdpxne.dtm.shared.bukkit.Attributes
+import me.kvdpxne.dtm.shared.bukkit.isTool
 import me.kvdpxne.dtm.shared.bukkit.toBuilder
 import org.bukkit.Material
+import org.bukkit.enchantments.Enchantment
+import org.bukkit.inventory.ItemStack
 
 /**
  * @since 0.1.0
@@ -39,11 +43,38 @@ object ItemsClipboard {
     .build()
 
    val LOSE = Material.DEAD_BUSH.toBuilder()
-    .name("&c&lPRZEGRALES")
+    .name("&c&lPRZEGRAŁEŚ")
     .build()
 
   val WON = Material.DIAMOND.toBuilder()
-    .name("&a&lWYGRALES")
+    .name("&a&lWYGRAŁEŚ")
+    .build()
+
+  val ITEM_TOOL_PICKAXE = Material.DIAMOND_PICKAXE.toBuilder()
+    .lore(
+      "",
+      "&7Narzędzia zadają &cZNACZNIE MNIEJ OBRAŻEŃ",
+      "&7niż twoja główna broń ponieważ powinny być",
+      "&7wykorzystywane do interakcji z mapą",
+      "&7areny i nie powinny być używane do",
+      "&7pojedynku między graczami."
+    )
+    .attribute(Attributes.ATTACK_DAMAGE, 1.25)
+    .unbreakable()
+    .build()
+
+  val ITEM_TOOL_AXE = Material.IRON_AXE.toBuilder()
+    .lore(
+      "",
+      "&7Narzędzia zadają &cZNACZNIE MNIEJ OBRAŻEŃ",
+      "&7niż twoja główna broń ponieważ powinny być",
+      "&7wykorzystywane do interakcji z mapą",
+      "&7areny i nie powinny być używane do",
+      "&7pojedynku między graczami."
+    )
+    .enchantment(Enchantment.DIG_SPEED, 1)
+    .attribute(Attributes.ATTACK_DAMAGE, 1.75)
+    .unbreakable()
     .build()
 
   val ITEM_WAND = Material.STICK.toBuilder()
@@ -58,4 +89,27 @@ object ItemsClipboard {
       "&flub edytowania map aren."
     )
     .build()
+
+  /**
+   * @since 0.1.0
+   */
+  fun makeTool(
+    type: Material
+  ): ItemStack {
+    if (!type.isTool()) {
+      throw IllegalArgumentException("The given type is not a tool.")
+    }
+
+    return type.toBuilder()
+      .lore(
+        "&7Narzędzia stworzone przy użyciu",
+        "&7Stołu rzemieślniczego są tak samo",
+        "&7niezniszczalnego jak narzędzia",
+        "&7podstawowe ale zadają tyle samo",
+        "&7obrażeń co uderzanie ręką."
+      )
+      .attribute(Attributes.ATTACK_DAMAGE, 0.0)
+      .unbreakable()
+      .build()
+  }
 }

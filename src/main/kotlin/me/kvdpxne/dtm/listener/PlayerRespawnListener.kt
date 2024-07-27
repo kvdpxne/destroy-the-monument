@@ -3,6 +3,7 @@ package me.kvdpxne.dtm.listener
 import me.kvdpxne.dtm.DestroyTheMonument
 import me.kvdpxne.dtm.game.toLocation
 import me.kvdpxne.dtm.shared.bukkit.fillExperienceBar
+import me.kvdpxne.dtm.shared.bukkit.reset
 import me.kvdpxne.dtm.shared.bukkit.runSynchronousDelayedTask
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.Bukkit
@@ -38,12 +39,15 @@ object PlayerRespawnListener : Listener {
     //
     val team = game.findTeam(user) ?: return
 
-    val spawnPoint = arena._spawnPoints[team.identity] ?: return
+    val spawnPoint = arena.findRevivalPosition(team.identity) ?: return
     val map = arena.map?.world!!
     event.respawnLocation = spawnPoint.toLocation(map)
 
     //
     val teammate = team.findTeammate(user) ?: return
+
+    //
+    player.reset()
 
     //
     teammate.professionQueuingPair.run {

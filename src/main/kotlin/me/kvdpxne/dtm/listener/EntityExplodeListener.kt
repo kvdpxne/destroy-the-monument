@@ -3,6 +3,8 @@ package me.kvdpxne.dtm.listener
 import me.kvdpxne.dtm.game.Arena
 import me.kvdpxne.dtm.game.ArenaManager
 import me.kvdpxne.dtm.game.RevivalPosition
+import me.kvdpxne.dtm.game.RevivalPosition.Companion.RADIUS_OF_EXPLOSION_INTERACTION
+import me.kvdpxne.dtm.shared.basics.isNear
 import me.kvdpxne.dtm.shared.bukkit.cancel
 import me.kvdpxne.dtm.shared.bukkit.hasInventory
 import me.kvdpxne.dtm.shared.bukkit.isNature
@@ -31,14 +33,14 @@ object EntityExplodeListener : Listener {
       return
     }
 
-    //
+    // The object of location an entity explosion
     val location: Location = event.location
 
     //
     val arena: Arena = ArenaManager.findLoadedArenaByWorldIdentifier(location.world.uid) ?: return
 
     for (revivalPosition: RevivalPosition in arena.revivalPositions) {
-      if (!revivalPosition.inSpawnRange(location.x, location.y, location.z, 10.0)) {
+      if (!revivalPosition.isNear(location, RADIUS_OF_EXPLOSION_INTERACTION)) {
         continue
       }
 

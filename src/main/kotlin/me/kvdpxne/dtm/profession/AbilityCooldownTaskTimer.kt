@@ -36,7 +36,10 @@ class AbilityCooldownTaskTimer(
 
       this.ability.let {
         it.markReady()
-        it.whenReady(this.target)
+
+        if (!it.isActivatable) {
+          it.whenReady(this.target)
+        }
       }
 
       this.target.fillExperienceBar()

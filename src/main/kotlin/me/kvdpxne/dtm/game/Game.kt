@@ -13,12 +13,12 @@ import me.kvdpxne.dtm.scoreboard.createServerTeam
 import me.kvdpxne.dtm.scoreboard.initScoreboard
 import me.kvdpxne.dtm.shared.bukkit.equipB
 import me.kvdpxne.dtm.shared.debug
-import me.kvdpxne.dtm.shared.bukkit.fillExperienceBar
 import me.kvdpxne.dtm.shared.bukkit.reset
 import me.kvdpxne.dtm.tasks.GameStartTaskTimer
 import me.kvdpxne.dtm.tasks.GameTimeUpdateTaskTimer
 import me.kvdpxne.dtm.user.User
 import org.bukkit.Bukkit
+import org.bukkit.Location
 
 val MIN_HOSTAGE_SIZE_ = 2
 
@@ -113,7 +113,7 @@ class Game(val identifier: UUID, var name: String) : Communicative {
   }
 
   /**
-   *
+   * @since 0.1.0
    */
   fun findTeam(user: User): Team? {
     return this.teams.find {
@@ -121,12 +121,15 @@ class Game(val identifier: UUID, var name: String) : Communicative {
     }
   }
 
-  fun findTeam2(user: User): Pair<Team, Teammate>? {
-    for (team in this.teams) {
-      val teammate: Teammate = team.findTeammate(user) ?: continue
-      return Pair(team, teammate)
+  /**
+   * @since 0.1.0
+   */
+  fun findTeammate(
+    user: User
+  ): Teammate? {
+    return this.teams.firstNotNullOfOrNull { team: Team ->
+      team.findTeammate(user)
     }
-    return null
   }
 
   /**
@@ -260,7 +263,8 @@ class Game(val identifier: UUID, var name: String) : Communicative {
       ++spectators
     }
 
-    if (team.addTeammate(teammate).not()) {
+    val teammate2 = teammate.toTeammate(team)
+    if (team.addTeammate(teammate2).not()) {
       return false
     }
 
@@ -285,6 +289,12 @@ class Game(val identifier: UUID, var name: String) : Communicative {
         20L
       )
     }
+
+    if (this.state.isStarted()) {
+      val arena = this.currentArena!!
+      this.fsf(teammate2, arena.findRevivalPosition(teammate2.team.identity)!!.toLocation(arena.map?.world!!))
+    }
+
     return true
   }
 
@@ -365,6 +375,16 @@ class Game(val identifier: UUID, var name: String) : Communicative {
     }
   }
 
+  fun fsf(teammate: Teammate, spawn: Location) {
+    val player = teammate.user.performer.player ?: throw IllegalStateException("Player not found")
+
+    player.teleport(spawn)
+    player.reset()
+
+    teammate.currentProfession.equip(player, teammate.team.identity.dyeColor)
+    teammate.currentProfession.ability?.renewDelayed(player, true)
+  }
+
   /**
    *
    */
@@ -377,7 +397,7 @@ class Game(val identifier: UUID, var name: String) : Communicative {
 
     this.teams.forEach { team ->
       val identity = team.identity
-      arena.monuments[identity]?.let {
+      arena._monumentPositions[identity]?.let {
         this.teamHealthMutableMap[identity] = it.size
       }
     }
@@ -399,54 +419,32 @@ class Game(val identifier: UUID, var name: String) : Communicative {
         team.identity.colorInChat
       )
 
-      team.health = arena.monuments.size
+      team.health = arena._monumentPositions.size
 
-      val location = arena._spawnPoints[team.identity]?.let {
+      val location = arena.findRevivalPosition(team.identity)?.let {
         val world = arena.map?.world ?: return@forEach
         it.toLocation(world)
       }
 
       team.teammates.forEach { teammate ->
-        val profession = teammate.professionQueuingPair.current
-        val performer = teammate.user.performer
+        val player = teammate.user.performer.player!!
 
-        performer.player!!.run {
-          this.teleport(location)
-          this.reset()
+        this.fsf(teammate, location!!)
 
-          scoreboard = bukkitTeamScoreboard
-          bukkitTeam.addPlayer(this)
+        player.scoreboard = bukkitTeamScoreboard
+        bukkitTeam.addPlayer(player)
 
-          val fastBoard = initScoreboard(
-            this,
-            teamSizeMutableMap[teamsIdentity[0]] ?: 0,
-            teamHealthMutableMap[teamsIdentity[1]] ?: 0,
-            teamSizeMutableMap[teamsIdentity[0]] ?: 0,
-            teamHealthMutableMap[teamsIdentity[1]] ?: 0,
-            teammate.user.wallet.coins
-          )
+        val fastBoard = initScoreboard(
+          player,
+          teamSizeMutableMap[teamsIdentity[0]] ?: 0,
+          teamHealthMutableMap[teamsIdentity[1]] ?: 0,
+          teamSizeMutableMap[teamsIdentity[0]] ?: 0,
+          teamHealthMutableMap[teamsIdentity[1]] ?: 0,
+          teammate.user.wallet.coins
+        )
 
-          teammate.fastBoard = fastBoard
-          timeTask.playerMutableList += fastBoard
-
-          profession.equip(this, teammate.team.identity.dyeColor)
-          profession.ability?.let {
-            if (it.readyAfterDeath) {
-              it.markReady()
-              it.whenReady(this)
-
-              // Fill player exp bar after 200 ms
-              Bukkit.getScheduler().runTaskLaterAsynchronously(
-                DestroyTheMonument.instance,
-                { this.fillExperienceBar() },
-                4L
-              )
-              return
-            }
-
-            it.renewDelayed(this, true)
-          }
-        }
+        teammate.fastBoard = fastBoard
+        timeTask.playerMutableList += fastBoard
       }
     }
 

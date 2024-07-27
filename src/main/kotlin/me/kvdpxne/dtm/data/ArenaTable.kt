@@ -90,13 +90,13 @@ object ArenaDao {
   }
 
   private fun insertMonuments(arena: Arena) {
-    arena.monuments.values.forEach {
+    arena._monumentPositions.values.forEach {
       ArenaMonumentsDao.insertAll(arena, it)
     }
   }
 
   private fun insertSpawnPoints(arena: Arena) {
-    arena._spawnPoints.values.forEach {
+    arena.revivalPositions.forEach {
       ArenaSpawnPointsDao.insert(arena, it)
     }
   }

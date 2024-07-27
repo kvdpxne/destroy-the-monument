@@ -70,8 +70,8 @@ class ProfessionBuilder {
     return this.effect(PotionEffect(type, Int.MAX_VALUE, level, ambient))
   }
 
-  fun ability(delay: Int, whenReady: WhenAbilityReadyHandler = {}): ProfessionBuilder {
-    this.ability = Ability(delay, whenReady)
+  fun ability(delay: Int, activatable: Boolean, whenReady: WhenAbilityReadyHandler = {}): ProfessionBuilder {
+    this.ability = Ability(delay, whenReady, isActivatable = activatable)
     return this
   }
 

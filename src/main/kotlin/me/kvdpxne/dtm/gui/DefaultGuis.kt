@@ -100,7 +100,7 @@ fun createGameSelectionGui(user: User) = GameManager.games.let {
     it.onEachIndexed { index, (key, game) ->
 
       setItem(index, Material.STAINED_CLAY.toBuilder()
-        .damage(5)
+        .generation(5)
         .name {
           val name = game.name
           val hostagesCount = game.hostages.size
@@ -117,7 +117,7 @@ fun createGameSelectionGui(user: User) = GameManager.games.let {
         .build()
       ) { event ->
         game.addHostage(user)
-        user.sendMessage("&l&6DTM &7> &fDołączyłeś do gry &a${game.name}&f.")
+        user.sendMessage("&6&lDTM &7> &fDołączyłeś do gry &a${game.name}&f.")
 
         val player = event.whoClicked as Player
         player.closeInventory()
@@ -141,15 +141,15 @@ fun createProfessionSelectionGui(user: User): Gui {
   ProfessionManager.professions.forEachIndexed { index, profession ->
 
     gui.setItem(index, if (user.currentProfession == profession) {
-      itemBuilder.damage(5)
+      itemBuilder.generation(5)
         .name("&a&lWYBRANO")
         .build()
     } else if (!profession.enabled) {
-      itemBuilder.damage(14)
+      itemBuilder.generation(14)
         .name("&c&lNIEDOSTĘPNA")
         .build()
     } else {
-      itemBuilder.damage(4)
+      itemBuilder.generation(4)
         .name("&6&lDOSTĘPNA")
         .build()
     })

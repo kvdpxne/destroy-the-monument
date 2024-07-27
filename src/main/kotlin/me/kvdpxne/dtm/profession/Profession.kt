@@ -37,7 +37,6 @@ class Profession(
           // TODO NBT problem
           // if item already has NBT defined and its itemMeta is edited NBT is lost
           .leather(dyeColor.color)
-          .unbreakable()
           .build()
       )
     }

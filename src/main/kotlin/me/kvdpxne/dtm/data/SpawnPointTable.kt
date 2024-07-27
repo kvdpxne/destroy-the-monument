@@ -38,13 +38,13 @@ object SpawnPointDao {
         ) ?: return null
 
         RevivalPosition(
-          team,
           it[SpawnPointTable.x]!!,
           it[SpawnPointTable.y]!!,
           it[SpawnPointTable.z]!!,
           it[SpawnPointTable.pitch]!!,
           it[SpawnPointTable.yaw]!!,
-          UUID.fromString(it[SpawnPointTable.identifier])
+          team,
+          UUID.fromString(it[SpawnPointTable.identifier]).toString()
         )
       }
       .firstOrNull()

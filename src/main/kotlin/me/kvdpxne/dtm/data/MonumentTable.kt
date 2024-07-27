@@ -36,11 +36,11 @@ object MonumentDao {
         ) ?: return null
 
         Monument(
-          team,
           it[MonumentTable.x]!!,
           it[MonumentTable.y]!!,
           it[MonumentTable.z]!!,
-          UUID.fromString(it[MonumentTable.identifier])
+          team,
+          UUID.fromString(it[MonumentTable.identifier]).toString()
         )
       }
       .firstOrNull()

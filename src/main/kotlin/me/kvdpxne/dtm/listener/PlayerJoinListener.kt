@@ -7,12 +7,13 @@ import me.kvdpxne.dtm.shared.bukkit.runSynchronousDelayedTask
 import me.kvdpxne.dtm.user.OfflineUserService
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 
 object PlayerJoinListener : Listener {
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.MONITOR)
   fun handlePlayerJoin(event: PlayerJoinEvent) {
     //
     val player = event.player

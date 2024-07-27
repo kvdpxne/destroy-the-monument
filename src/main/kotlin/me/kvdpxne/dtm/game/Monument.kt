@@ -1,35 +1,39 @@
 package me.kvdpxne.dtm.game
 
-import java.util.UUID
+import me.kvdpxne.dtm.shared.basics.BaseIdentifiableBlockPosition
+import me.kvdpxne.dtm.uid.Uid
 
-data class Monument(
-  var team: TeamIdentity,
-  var x: Int,
-  var y: Int,
-  var z: Int,
-  // An automatically generated unique object identifier.
-  val identifier: UUID = UUID.randomUUID()
-) {
+/**
+ * @param x
+ * @param y
+ * @param z
+ * @param team
+ * @param identifier
+ *
+ * @since 0.1.0
+ */
+class Monument(
+  // @formatter:off
+      x         : Int,
+      y         : Int,
+      z         : Int,
+  val team      : TeamIdentity,
+      identifier: String = Uid.next()
+  // @formatter:on
+) : BaseIdentifiableBlockPosition(x, y, z, identifier) {
 
-  init {
-    // Checks if the given team identity can be used to create this object.
-    require(TeamService.existsTeamIdentityByIdentifier(this.team.identifier)) {
-      "The given team identity cannot be used."
-    }
-  }
+//  init {
+//    // Checks if the given team identity can be used to create this object.
+//    require(TeamService.existsTeamIdentityByIdentifier(this.team.identifier)) {
+//      "The given team identity cannot be used."
+//    }
+//  }
 
   /**
    * @since 0.1.0
    */
   var isDestroyed: Boolean = false
     private set
-
-  /**
-   * @since 0.1.0
-   */
-  fun isIn(x: Int, y: Int, z: Int): Boolean {
-    return this.x == x && this.y == y && this.z == z
-  }
 
   /**
    * @since 0.1.0
@@ -41,17 +45,16 @@ data class Monument(
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (javaClass != other?.javaClass) return false
+    if (!super.equals(other)) return false
 
     other as Monument
 
-    return identifier == other.identifier
+    return team == other.team
   }
 
   override fun hashCode(): Int {
-    return identifier.hashCode()
-  }
-
-  override fun toString(): String {
-    return "Monument(team=$team, x=$x, y=$y, z=$z, identifier=$identifier)"
+    var result = super.hashCode()
+    result = 31 * result + team.hashCode()
+    return result
   }
 }

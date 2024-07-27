@@ -5,6 +5,8 @@ import me.kvdpxne.dtm.gui.slotHelmet
 import me.kvdpxne.dtm.gui.slotItem
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionBuilder
+import me.kvdpxne.dtm.shared.ItemsClipboard.ITEM_TOOL_AXE
+import me.kvdpxne.dtm.shared.ItemsClipboard.ITEM_TOOL_PICKAXE
 import me.kvdpxne.dtm.shared.bukkit.toBuilder
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
@@ -32,15 +34,15 @@ fun createScout(): Profession = ProfessionBuilder()
     }, index = 1),
 
     // Tools
-    slotItem(TOOL_AXE, index = 2),
-    slotItem(TOOL_PICKAXE, index = 3),
+    slotItem(ITEM_TOOL_AXE, index = 2),
+    slotItem(ITEM_TOOL_PICKAXE, index = 3),
 
     slotItem(Material.POTION, 2, 7),
     slotItem(Material.WOOD, 45, 8)
   )
   .icon(Material.FISHING_ROD)
   .effect(PotionEffectType.SPEED, 1)
-  .ability(30) {
+  .ability(30, false) {
     it.allowFlight = true
   }
   .enabled()
