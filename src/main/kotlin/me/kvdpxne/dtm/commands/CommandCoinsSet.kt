@@ -33,7 +33,7 @@ fun createCoinsSetCommand(): Command {
         }
 
         val oldValue = performer.user.wallet.coins
-        val newValue = arguments.asInt()
+        val newValue = arguments.asLong()
 
         performer.user.wallet.coins = newValue
         performer.sendMessage("&6&lDTM &7> &fZmieniono wartość portfela z &6$oldValue &fna &6$newValue.")
@@ -48,7 +48,7 @@ fun createCoinsSetCommand(): Command {
         }
 
         val oldValue = user.wallet.coins
-        val newValue = arguments.asInt()
+        val newValue = arguments.asLong()
 
         user.wallet.coins = newValue
         performer.sendMessage("&6&lDTM &7> &fZmieniono wartość portfela z &6$oldValue &fna &6$newValue &fu użytkownika &6${user.name}&f.")

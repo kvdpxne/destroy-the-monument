@@ -2,30 +2,42 @@ package me.kvdpxne.dtm.user
 
 import java.util.UUID
 import me.kvdpxne.dtm.command.Communicative
-import me.kvdpxne.dtm.game.Game
+import me.kvdpxne.dtm.game.temporary.Game
 import me.kvdpxne.dtm.game.GameManager
-import me.kvdpxne.dtm.game.Team
-import me.kvdpxne.dtm.game.Teammate
+import me.kvdpxne.dtm.game.temporary.Team
+import me.kvdpxne.dtm.game.temporary.Teammate
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionManager
-import me.kvdpxne.dtm.wallet.Wallet
 
+/**
+ * @param name
+ * @param statistics
+ * @param wallet
+ * @param identifier
+ *
+ * @since 0.1.0
+ */
 class User(
   // @formatter:off
   val name       : String,
-  statistics : UserStatistics = UserStatistics(),
-  wallet     : Wallet         = Wallet(),
-  identifier : UUID
+      statistics : UserStatistics = UserStatistics(),
+      wallet     : Wallet         = Wallet(),
+      identifier : UUID           = UUID.randomUUID()
   // @formatter:on
 ) : OfflineUser(statistics, wallet, identifier), Communicative {
 
   /**
    * @since 0.1.0
    */
+  val cache: UserCache = UserCache()
+
+  /**
+   * @since 0.1.0
+   */
   // current profession
-  var currentProfession: Profession? = ProfessionManager
+  var currentProfession: Profession = ProfessionManager
     .filter { it.enabled }
-    .randomOrNull()
+    .random()
 //    set(value) {
 //      if (!this._availableProfessions.contains(value)) {
 //        throw IllegalArgumentException("Profession $value is already in use.")
@@ -39,12 +51,21 @@ class User(
    */
   val performer: UserPerformer = UserPerformer(this.identifier, this.name, this)
 
+  /**
+   * @since 0.1.0
+   */
   val game: Game?
     get() = GameManager.findByUser(this)
 
+  /**
+   * @since 0.1.0
+   */
   val team: Team?
     get() = this.game?.findTeam(this)
 
+  /**
+   * @since 0.1.0
+   */
   val teammate: Teammate?
     get() = this.game?.findTeammate(this)
 
@@ -65,9 +86,9 @@ class User(
    * @since 0.1
    */
   override fun sendMessages(
-    vararg messageArray: String
+    vararg messages: String
   ) {
-    this.performer.sendMessages(*messageArray)
+    this.performer.sendMessages(*messages)
   }
 
   override fun equals(other: Any?): Boolean {

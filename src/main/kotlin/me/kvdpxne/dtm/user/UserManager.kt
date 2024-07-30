@@ -34,7 +34,7 @@ object UserManager {
       return user
     }
 
-    user = DaoUser.findByIdentifier(identifier)
+    user = DaoUser.findUserByIdentifierOrNull(identifier)
     if (null != user) {
       this.addUser(user)
       return user

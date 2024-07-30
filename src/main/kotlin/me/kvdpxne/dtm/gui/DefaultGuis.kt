@@ -2,13 +2,13 @@ package me.kvdpxne.dtm.gui
 
 import me.kvdpxne.dtm.colorize
 import me.kvdpxne.dtm.colorizeAll
-import me.kvdpxne.dtm.game.Game
+import me.kvdpxne.dtm.game.temporary.Game
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.profession.ProfessionManager
 import me.kvdpxne.dtm.shared.ItemsClipboard
-import me.kvdpxne.dtm.shared.bukkit.reset
-import me.kvdpxne.dtm.shared.bukkit.setItem
-import me.kvdpxne.dtm.shared.bukkit.toBuilder
+import me.kvdpxne.dtm.shared.minecraft.bukkit.reset
+import me.kvdpxne.dtm.shared.minecraft.bukkit.setItem
+import me.kvdpxne.dtm.shared.minecraft.bukkit.toBuilder
 import me.kvdpxne.dtm.user.User
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -25,7 +25,7 @@ fun createTeamSelectionGui(game: Game, user: User) = Gui("Team selection", Rows.
   setItem(0, coloredWool.apply {
     durability = 14
     itemMeta = itemMeta.apply {
-      val teamSize = game.findTeam(red)?.size() ?: 0
+      val teamSize = game.findTeamByIdentifier(red)?.size ?: 0
       displayName = "&c&lCzerwoni &r&8| &6$teamSize/bez limitu".colorize()
       lore = arrayOf(
         "&7Zostaniesz dodany bezpośrednio",
@@ -48,7 +48,7 @@ fun createTeamSelectionGui(game: Game, user: User) = Gui("Team selection", Rows.
   setItem(8, coloredWool.apply {
     durability = 11
     itemMeta = itemMeta.apply {
-      val teamSize = game.findTeam(blue)?.size() ?: 0
+      val teamSize = game.findTeamByIdentifier(blue)?.size ?: 0
       displayName = "&b&lNiebiescy &r&8| &6$teamSize/bez limitu".colorize()
       lore = arrayOf(
         "&7Zostaniesz dodany bezpośrednio",
@@ -69,10 +69,10 @@ fun createTeamSelectionGui(game: Game, user: User) = Gui("Team selection", Rows.
 
   setItem(4, ItemsClipboard.ITEM_TEAM_SELECT_RANDOM) {
 
-    val team = if (game.allTeamsAreSameSize()) {
-      game.teams.random().identity
+    val team = if (game.isTeamsSameSize) {
+      game.randomTeam.identity
     } else {
-      game.findSmallerTeam()!!.identity
+      game.smallestTeam.identity
     }
 
     game.addTeammate(team) { user }
@@ -103,7 +103,7 @@ fun createGameSelectionGui(user: User) = GameManager.games.let {
         .generation(5)
         .name {
           val name = game.name
-          val hostagesCount = game.hostages.size
+          val hostagesCount = game.numberOfHostages
 
           "&7> &f$name &6$hostagesCount/bez limitu"
         }

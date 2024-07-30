@@ -8,7 +8,9 @@ fun createGameListCommand(): Command {
   return CommandBuilder()
     .name("list")
     .handler<Performer> { performer, arguments ->
-
+      performer.sendMessages(
+        ""
+      )
     }
     .build()
 }

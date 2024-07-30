@@ -3,32 +3,32 @@ package me.kvdpxne.dtm
 import me.kvdpxne.dtm.command.CommandManager
 import me.kvdpxne.dtm.commands.createBaseCommand
 import me.kvdpxne.dtm.commands.createGlobalChatCommand
-import me.kvdpxne.dtm.game.ArenaManager
+import me.kvdpxne.dtm.game.ArenaService
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.gui.GuiActionHandler
-import me.kvdpxne.dtm.listener.BlockBreakListener
-import me.kvdpxne.dtm.listener.BlockPistonExtendListener
-import me.kvdpxne.dtm.listener.BlockPlaceListener
-import me.kvdpxne.dtm.listener.PlayerCraftItemListener
-import me.kvdpxne.dtm.listener.EntityDamageListener
-import me.kvdpxne.dtm.listener.EntityExplodeListener
-import me.kvdpxne.dtm.listener.PlayerChatListener
-import me.kvdpxne.dtm.listener.PlayerDeathListener
-import me.kvdpxne.dtm.listener.PlayerDropItemListener
-import me.kvdpxne.dtm.listener.PlayerFoodLevelChangeListener
-import me.kvdpxne.dtm.listener.PlayerInteractListener
-import me.kvdpxne.dtm.listener.PlayerItemConsumeListener
-import me.kvdpxne.dtm.listener.PlayerJoinListener
-import me.kvdpxne.dtm.listener.PlayerKickListener
-import me.kvdpxne.dtm.listener.PlayerPrepareItemEnchantListener
-import me.kvdpxne.dtm.listener.PlayerQuitListener
-import me.kvdpxne.dtm.listener.PlayerRespawnListener
-import me.kvdpxne.dtm.listener.PlayerToggleFlightListener
-import me.kvdpxne.dtm.listener.PlayerPrepareCraftItemListener
-import me.kvdpxne.dtm.listener.ProjectileHitListener
-import me.kvdpxne.dtm.listener.WeatherChangeListener
+import me.kvdpxne.dtm.listeners.BlockBreakListener
+import me.kvdpxne.dtm.listeners.BlockPistonExtendListener
+import me.kvdpxne.dtm.listeners.BlockPlaceListener
+import me.kvdpxne.dtm.listeners.PlayerCraftItemListener
+import me.kvdpxne.dtm.listeners.EntityDamageListener
+import me.kvdpxne.dtm.listeners.EntityExplodeListener
+import me.kvdpxne.dtm.listeners.PlayerChatListener
+import me.kvdpxne.dtm.listeners.PlayerDeathListener
+import me.kvdpxne.dtm.listeners.PlayerDropItemListener
+import me.kvdpxne.dtm.listeners.PlayerFoodLevelChangeListener
+import me.kvdpxne.dtm.listeners.PlayerInteractListener
+import me.kvdpxne.dtm.listeners.PlayerItemConsumeListener
+import me.kvdpxne.dtm.listeners.PlayerJoinListener
+import me.kvdpxne.dtm.listeners.PlayerKickListener
+import me.kvdpxne.dtm.listeners.PlayerPrepareItemEnchantListener
+import me.kvdpxne.dtm.listeners.PlayerQuitListener
+import me.kvdpxne.dtm.listeners.PlayerRespawnListener
+import me.kvdpxne.dtm.listeners.PlayerToggleFlightListener
+import me.kvdpxne.dtm.listeners.PlayerPrepareCraftItemListener
+import me.kvdpxne.dtm.listeners.ProjectileHitListener
+import me.kvdpxne.dtm.listeners.WeatherChangeListener
 import me.kvdpxne.dtm.profession.ProfessionManager
-import me.kvdpxne.dtm.shared.BukkitTextFormatter
+import me.kvdpxne.dtm.shared.minecraft.bukkit.BukkitTextFormatter
 import me.kvdpxne.dtm.user.UserManager
 import me.kvdpxne.thrivi.EventManager
 import org.bukkit.event.Listener
@@ -50,7 +50,7 @@ class DestroyTheMonument : JavaPlugin() {
 
     // Initialize
     GameManager
-    ArenaManager
+    ArenaService
     UserManager
 
     ProfessionManager.addBuiltInProfessions()

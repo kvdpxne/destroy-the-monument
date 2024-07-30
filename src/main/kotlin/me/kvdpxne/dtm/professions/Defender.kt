@@ -9,7 +9,7 @@ import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionBuilder
 import me.kvdpxne.dtm.shared.ItemsClipboard.ITEM_TOOL_AXE
 import me.kvdpxne.dtm.shared.ItemsClipboard.ITEM_TOOL_PICKAXE
-import me.kvdpxne.dtm.shared.bukkit.toBuilder
+import me.kvdpxne.dtm.shared.minecraft.bukkit.toBuilder
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.potion.PotionEffectType

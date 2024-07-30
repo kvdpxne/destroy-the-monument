@@ -27,6 +27,8 @@ dependencies {
   implementation(libraries.thrivi)
   implementation("fr.mrmicky:fastboard:2.1.2")
 
+  implementation("com.github.f4b6a3:ulid-creator:5.2.3")
+
   implementation("org.slf4j:slf4j-api:2.0.7")
   implementation("org.slf4j:slf4j-simple:2.0.7")
 
@@ -105,7 +107,8 @@ tasks {
       exec {
         workingDir = outputDirectory
         executable = "java"
-        args("-jar", fileName)
+        // Spigot with protocol hack
+        args("-jar", "spigot-1.7.10-SNAPSHOT-b1657.jar")
         standardInput = System.`in`
       }
     }

@@ -2,9 +2,9 @@ package me.kvdpxne.dtm.tasks
 
 import fr.mrmicky.fastboard.FastBoard
 import kotlin.time.Duration.Companion.seconds
-import me.kvdpxne.dtm.game.Game
+import me.kvdpxne.dtm.game.temporary.Game
 import me.kvdpxne.dtm.scoreboard.updateScoreboardTime
-import me.kvdpxne.dtm.shared.bukkit.runSynchronousTask
+import me.kvdpxne.dtm.shared.minecraft.bukkit.runSynchronousTask
 import org.bukkit.scheduler.BukkitRunnable
 
 class GameTimeUpdateTaskTimer(

@@ -1,6 +1,7 @@
 package me.kvdpxne.dtm.data
 
 import java.util.UUID
+import me.kvdpxne.dtm.data.source.database
 import me.kvdpxne.dtm.data.tables.TableUser
 import me.kvdpxne.dtm.profession.ProfessionManager
 import me.kvdpxne.dtm.user.User
@@ -13,90 +14,108 @@ import org.ktorm.dsl.select
 import org.ktorm.dsl.update
 import org.ktorm.dsl.where
 
-internal fun toUser(
-  row: QueryRowSet
-): User {
-
-  val identifier = UUID.fromString(row[TableUser.identifier]!!)
-  val name = row[TableUser.name]!!
-
-  val profession = row[TableUser.profession]!!
-
-  val statisticsIdentifier = row[TableUser.statisticsIdentifier]!!
-  val statistics = findUserStatisticsByIdentifier(statisticsIdentifier)!!
-
-  val walletIdentifier = row[TableUser.walletIdentifier]!!
-  val wallet = findUserWalletByIdentifier(walletIdentifier)!!
-
-
-  return User(
-    name,
-    statistics,
-    wallet,
-    identifier
-  ).apply {
-    ProfessionManager.findProfessionByName(profession)?.let {
-      val profession1 = it.clone()
-
-      this.currentProfession = profession1
-    }
-  }
-}
-
+/**
+ * @since 0.1.0
+ */
 object DaoUser {
 
-  fun findByIdentifier(identifier: UUID): User? {
+  /**
+   * @since 0.1.0
+   */
+  private fun toUser(
+    row: QueryRowSet
+  ): User {
+    //
+    val identifier = UUID.fromString(row[TableUser.identifier]!!)
+
+    //
+    val statisticsIdentifier = row[TableUser.statisticsIdentifier]!!
+    val statistics = DaoUserStatistics.findUserStatisticsByIdentifierOrNull(statisticsIdentifier)!!
+
+    //
+    val walletIdentifier = row[TableUser.walletIdentifier]!!
+    val wallet = DaoUserWallet.findUserWalletByIdentifierOrNull(walletIdentifier)!!
+
+    //
+    val name = row[TableUser.name]!!
+    val profession = row[TableUser.profession]!!
+
+    //
+    return User(
+      name,
+      statistics,
+      wallet,
+      identifier
+    ).apply {
+      ProfessionManager.findProfessionByName(profession)?.let {
+        // TODO KIT UPGRADES
+        this.currentProfession = it.clone()
+      }
+    }
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun findUserByIdentifierOrNull(
+    identifier: UUID
+  ): User? {
     return database.from(TableUser)
       .select()
-      .where { TableUser.identifier eq identifier.toString() }
-      .map { toUser(it) }
+      .where {
+        TableUser.identifier eq identifier.toString()
+      }
+      .map {
+        toUser(it)
+      }
       .firstOrNull()
   }
 
+  /**
+   * @since 0.1.0
+   */
+  fun insertUser(
+    user: User
+  ) {
+    database.insert(TableUser) {
+      set(it.identifier, user.identifier.toString())
+      set(it.statisticsIdentifier, user.statistics.identifier)
+      set(it.walletIdentifier, user.wallet.identifier)
+      set(it.name, user.name)
+      set(it.profession, user.currentProfession?.name)
+    }
 
-  fun update(user: User) {
+    DaoUserStatistics.insertUserStatistics(user.statistics)
+    DaoUserWallet.insertUserWallet(user.wallet)
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun updateUser(
+    user: User
+  ) {
     database.update(TableUser) {
       set(it.name, user.name)
       set(it.profession, user.currentProfession?.name)
 
-      set(it.statisticsIdentifier, user.statistics.identifier)
-      set(it.walletIdentifier, user.wallet.identifier)
-
       where {
-        TableUser.identifier eq user.identifier.toString()
+        it.identifier eq user.identifier.toString()
       }
     }
 
-    updateUserStatistics(user.statistics)
-    updateUserWaller(user.wallet)
+    DaoUserStatistics.updateUserStatistics(user.statistics)
+    DaoUserWallet.updateUserWallet(user.wallet)
   }
 
-  fun updateUsers(users: Collection<User>) {
-    if (users.isEmpty()) {
-      return
+  /**
+   * @since 0.1.0
+   */
+  fun updateUsers(
+    users: Collection<User>
+  ) {
+    users.forEach {
+      updateUser(it)
     }
-
-    users.asSequence()
-      .forEach { update(it) }
-  }
-
-  fun insert(user: User) {
-    database.insert(TableUser) {
-      set(it.identifier, user.identifier.toString())
-      set(it.name, user.name)
-      set(it.profession, user.currentProfession?.name)
-
-      set(it.statisticsIdentifier, user.statistics.identifier)
-      set(it.walletIdentifier, user.wallet.identifier)
-    }
-
-    insertUserStatistics(user.statistics)
-    insertUserWallet(user.wallet)
-  }
-
-  fun countUsers(): Int {
-    return database.from(TableUser)
-      .select()
-      .totalRecordsInAllPages
   }
 }

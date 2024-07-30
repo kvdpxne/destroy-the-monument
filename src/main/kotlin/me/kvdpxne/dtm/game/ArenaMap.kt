@@ -5,7 +5,18 @@ import me.kvdpxne.dtm.shared.WorldLoaderHelper
 import org.bukkit.Bukkit
 import org.bukkit.World
 
-data class ArenaMap(var identifier: UUID, var name: String) {
+/**
+ * @param name
+ * @param identifier
+ *
+ * @since 0.1.0
+ */
+class ArenaMap(
+  // @formatter:off
+  var name      : String,
+  var identifier: UUID
+  // @formatter:on
+) {
 
   var world: World? = null
     get() {

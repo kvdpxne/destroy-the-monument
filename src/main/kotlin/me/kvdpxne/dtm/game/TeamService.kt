@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.game
 
-import me.kvdpxne.dtm.data.TeamIdentityDao
+import me.kvdpxne.dtm.data.DaoTeam
 
 object TeamService {
 
@@ -12,7 +12,7 @@ object TeamService {
       return teamIdentity
     }
 
-    teamIdentity = TeamIdentityDao.findByIdentifier(identifier)
+    teamIdentity = DaoTeam.findTeamByIdentifier(identifier)
     if (null != teamIdentity) {
       return teamIdentity
     }
@@ -29,7 +29,7 @@ object TeamService {
       return teamIdentity
     }
 
-    teamIdentity = TeamIdentityDao.findByName(teamName)
+    teamIdentity = DaoTeam.findTeamByName(teamName)
     if (null != teamIdentity) {
       return teamIdentity
     }
@@ -49,6 +49,6 @@ object TeamService {
       return true
     }
 
-    return TeamIdentityDao.findByIdentifier(identifier) != null
+    return DaoTeam.findTeamByIdentifier(identifier) != null
   }
 }

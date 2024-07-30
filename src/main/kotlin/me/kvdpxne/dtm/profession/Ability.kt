@@ -1,11 +1,11 @@
 package me.kvdpxne.dtm.profession
 
 import me.kvdpxne.dtm.DestroyTheMonument
-import me.kvdpxne.dtm.shared.bukkit.cancelTask
-import me.kvdpxne.dtm.shared.bukkit.fillExperienceBar
-import me.kvdpxne.dtm.shared.bukkit.resetExperienceBar
-import me.kvdpxne.dtm.shared.bukkit.resetExperienceBarLevel
-import me.kvdpxne.dtm.shared.bukkit.runAsynchronousRepeatingTask
+import me.kvdpxne.dtm.shared.minecraft.bukkit.cancelTask
+import me.kvdpxne.dtm.shared.minecraft.bukkit.fillExperienceBar
+import me.kvdpxne.dtm.shared.minecraft.bukkit.resetExperienceBar
+import me.kvdpxne.dtm.shared.minecraft.bukkit.resetExperienceBarLevel
+import me.kvdpxne.dtm.shared.minecraft.bukkit.runAsynchronousRepeatingTask
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 

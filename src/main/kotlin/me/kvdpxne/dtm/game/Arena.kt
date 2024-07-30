@@ -1,16 +1,21 @@
 package me.kvdpxne.dtm.game
 
-import io.github.oshai.kotlinlogging.KLogger
-import io.github.oshai.kotlinlogging.KotlinLogging
-import java.util.UUID
-import me.kvdpxne.dtm.shared.debug
+import me.kvdpxne.dtm.shared.ancillary.AbstractIdentifiable
+import me.kvdpxne.dtm.shared.basics.position.BlockPosition
+import me.kvdpxne.dtm.uid.Uid
 
-private val logger: KLogger = KotlinLogging.logger { }
-
+/**
+ * @param name
+ * @param identifier
+ *
+ * @since 0.1.0
+ */
 class Arena(
-  val identifier: UUID = UUID.randomUUID(),
-  var name: String
-) {
+  // @formatter:off
+  val name      : String,
+      identifier: String = Uid.next()
+  // @formatter:on
+) : AbstractIdentifiable<String>(identifier) {
 
   /**
    * Map of positions for each team where teammates will be spawned after death
@@ -18,26 +23,17 @@ class Arena(
    *
    * @since 0.1.0
    */
-  val _revivalPositions: MutableMap<TeamIdentity, RevivalPosition>
+  private val _revivalPositions: MutableMap<String, RevivalPosition> = mutableMapOf()
 
   /**
    * @since 0.1.0
    */
-  val _monumentPositions: MutableMap<TeamIdentity, MutableSet<Monument>>
+  private val _monumentPositions: MutableMap<String, MutableSet<MonumentPosition>> = mutableMapOf()
 
   /**
    * @since 0.1.0
    */
   var map: ArenaMap? = null
-
-  /**
-   *
-   */
-  init {
-    this._revivalPositions = mutableMapOf()
-    this._monumentPositions = mutableMapOf()
-    this.map = null
-  }
 
   /**
    * @since 0.1.0
@@ -48,21 +44,33 @@ class Arena(
   /**
    * @since 0.1.0
    */
-  val monumentPositions: List<Monument>
-    get() = this._monumentPositions.values.flatten()
+  val monumentPositions: List<MonumentPosition>
+    get() = this._monumentPositions.values.flatten().toList()
 
   /**
    * @since 0.1.0
    */
   val isLoaded: Boolean
-    get() = null != this.map
+    get() = null != this.map?.world
 
   /**
    * @since 0.1.0
    */
-  fun findMonuments(team: TeamIdentity): Array<Monument> {
-    return this._monumentPositions[team]?.toTypedArray()
-      ?: emptyArray()
+  fun findRevivalPosition(
+    team: TeamIdentity
+  ): RevivalPosition? {
+    return this._revivalPositions[team.identifier]
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun findMonument(
+    blockPosition: BlockPosition
+  ): MonumentPosition? {
+    return this.monumentPositions.find {
+      it.isIn(blockPosition)
+    }
   }
 
   /**
@@ -72,9 +80,9 @@ class Arena(
     x: Int,
     y: Int,
     z: Int
-  ): Monument? {
-    for (monuments: MutableSet<Monument> in this._monumentPositions.values) {
-      for (monument: Monument in monuments) {
+  ): MonumentPosition? {
+    for (monuments: MutableSet<MonumentPosition> in this._monumentPositions.values) {
+      for (monument: MonumentPosition in monuments) {
         if (monument.isIn(x, y, z)) {
           return monument
         }
@@ -83,58 +91,23 @@ class Arena(
     return null
   }
 
-  fun findRevivalPosition(team: TeamIdentity): RevivalPosition? {
-    return this._revivalPositions[team]
-  }
-
-  fun setSpawnPoint(spawnPoint: RevivalPosition) {
-    _revivalPositions[spawnPoint.team] = spawnPoint
-  }
-
-  fun addMonument(monument: Monument): Boolean {
-    val team = monument.team
-    return _monumentPositions.getOrPut(team) {
-      // Creates new instances of the modified set, if one is not assigned to
-      // the given team.
-      mutableSetOf()
-    }.run {
-      add(monument)
-    }.also {
-      logger.debug(it) {
-        "Assigned a new monument to the $team team in the $this Arena."
-      }
-    }
-  }
-
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (javaClass != other?.javaClass) return false
+    if (!super.equals(other)) return false
 
     other as Arena
 
-    if (identifier != other.identifier) return false
-    if (name != other.name) return false
-    if (map != other.map) return false
-
-    return true
+    return map == other.map
   }
 
   override fun hashCode(): Int {
-    var result = identifier.hashCode()
-    result = 31 * result + name.hashCode()
-    result = 31 * result + (map?.hashCode() ?: 0)
+    var result = super.hashCode()
+    result = 31 * result + map.hashCode()
     return result
   }
 
   override fun toString(): String {
     return "Arena(identifier=$identifier, name='$name', map=$map)"
   }
-
-
-//  fun removeMonument(name: Identity, position: Location) {
-//    val monumentSet = monuments[name] ?: return
-//    monumentSet.remove(position)
-//  }
-
-
 }

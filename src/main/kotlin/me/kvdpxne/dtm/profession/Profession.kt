@@ -1,10 +1,12 @@
 package me.kvdpxne.dtm.profession
 
-import me.kvdpxne.dtm.DestroyTheMonument
 import me.kvdpxne.dtm.gui.SlotItem
-import me.kvdpxne.dtm.shared.bukkit.toBuilder
+import me.kvdpxne.dtm.shared.minecraft.bukkit.ItemBuilder
+import me.kvdpxne.dtm.shared.minecraft.bukkit.hasDurability
+import me.kvdpxne.dtm.shared.minecraft.bukkit.isLeatherArmor
+import me.kvdpxne.dtm.shared.minecraft.bukkit.runSynchronousDelayedTask
+import me.kvdpxne.dtm.shared.minecraft.bukkit.toBuilder
 import me.kvdpxne.dtm.uid.Uid
-import org.bukkit.Bukkit
 import org.bukkit.DyeColor
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -19,7 +21,7 @@ class Profession(
   var enabled    : Boolean       = true,
   var effect     : PotionEffect? = null,
   var ability    : Ability?      = null,
-  val identifier : String        = Uid.next()
+  val identifier : String        = Uid.uuid()
   // @formatter:on
 ) : Cloneable {
 
@@ -29,33 +31,44 @@ class Profession(
     }
   }
 
-  fun equip(player: Player, dyeColor: DyeColor) {
-    items.forEach {
-      player.inventory.setItem(
-        it.index,
-        it.item.toBuilder()
-          // TODO NBT problem
-          // if item already has NBT defined and its itemMeta is edited NBT is lost
-          .leather(dyeColor.color)
-          .build()
-      )
+  /**
+   * @since 0.1.0
+   */
+  private fun colourArmour(
+    item: SlotItem,
+    dyeColor: DyeColor
+  ): ItemStack {
+    if (!item.item.hasDurability()) {
+      return item.item
     }
 
-    this.addEffect(player)
+    val builder = item.item.toBuilder()
+    if (item.index in 36..39 && item.item.isLeatherArmor()) {
+      builder.leather(dyeColor.color)
+    }
+
+    return builder.unbreakable().build()
   }
 
-  fun addEffect(player: Player) {
-    if (null == this.effect) {
-      return
+  /**
+   * @since 0.1.0
+   */
+  fun equip(
+    player: Player,
+    dyeColor: DyeColor
+  ) {
+    if (null != this.effect) {
+      runSynchronousDelayedTask(4L) {
+        player.addPotionEffect(this.effect, true)
+      }
     }
 
-    Bukkit.getScheduler().runTaskLaterAsynchronously(
-      DestroyTheMonument.instance,
-      {
-        player.addPotionEffect(this.effect, true)
-      },
-      4L
-    )
+    this.items.forEach {
+      player.inventory.setItem(
+        it.index,
+        this.colourArmour(it, dyeColor)
+      )
+    }
   }
 
   public override fun clone(): Profession {

@@ -19,7 +19,6 @@ fun createArenaCommand(): Command {
       createArenaCreateCommand(),
       createArenaListCommand(),
       createArenaRemoveCommand(),
-
       createArenaMapCommand(),
     )
     .build()

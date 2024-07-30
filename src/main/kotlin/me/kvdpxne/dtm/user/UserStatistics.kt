@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.user
 
-import java.util.UUID
 import me.kvdpxne.dtm.statistics.BaseIdentifiableStatistics
+import me.kvdpxne.dtm.uid.Uid
 
 /**
  * A class representing statistics for a user in the game.
@@ -17,6 +17,7 @@ import me.kvdpxne.dtm.statistics.BaseIdentifiableStatistics
  * @param playedGames The initial number of played games (default 0).
  * @param gamesWon The initial number of games won (default 0).
  * @param gamesLost The initial number of games lost (default 0).
+ * @param identifier
  *
  * @since 0.1.0
  */
@@ -29,7 +30,7 @@ class UserStatistics(
   var playedGames       : Int = 0,
   var gamesWon          : Int = 0,
   var gamesLost         : Int = 0,
-      identifier        : String = UUID.randomUUID().toString(),
+      identifier        : String = Uid.next()
   // @formatter:on
 ): BaseIdentifiableStatistics(kills, assists, deaths, destroyedMonuments, identifier) {
 

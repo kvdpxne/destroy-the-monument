@@ -4,7 +4,7 @@ import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.command.builderGameNameParameter
-import me.kvdpxne.dtm.game.Game
+import me.kvdpxne.dtm.game.temporary.Game
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.user.UserPerformer
 

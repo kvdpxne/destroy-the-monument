@@ -18,7 +18,7 @@ fun createServerTeam(scoreboard: Scoreboard, name: String, color: ChatColor): Te
 
   team.setAllowFriendlyFire(false)
   team.setCanSeeFriendlyInvisibles(true)
-  team.prefix = "$color&l${name.uppercase()} &r".colorize()
+  team.prefix = "$color"
 
   return team
 }

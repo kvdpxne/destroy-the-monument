@@ -1,66 +1,73 @@
 package me.kvdpxne.dtm.game
 
-import java.util.UUID
-import me.kvdpxne.dtm.data.GameDao
+import io.github.oshai.kotlinlogging.KLogger
+import io.github.oshai.kotlinlogging.KotlinLogging
+import me.kvdpxne.dtm.data.DaoGame
+import me.kvdpxne.dtm.game.temporary.Game
 import me.kvdpxne.dtm.user.User
 
+/**
+ * @since 0.1.0
+ */
+private val logger: KLogger = KotlinLogging.logger { }
+
+/**
+ * @since 0.1.0
+ */
 object GameManager {
 
-  var games: MutableMap<UUID, Game> = mutableMapOf()
-    private set
-
-  val registeredGames: List<Game>
-    get() = this.games.values.toList()
+  /**
+   * @since 0.1.0
+   */
+  private val _games: MutableMap<String, Game> = mutableMapOf()
 
   init {
     // TODO Delete in the future.
     // Information about games should be loaded into memory only when it is
     // really needed and removed when it is no longer needed.
-    GameDao.findAll().forEach {
-      games[it.identifier] = it
+    DaoGame.findGames().forEach {
+      this._games[it.identifier] = it
     }
   }
 
   /**
+   * @since 0.1.0
+   */
+  val games: List<Game>
+    get() = this._games.values.toList()
+
+  /**
+   * @since 0.1.0
+   */
+  val size: Int
+    get() = this._games.size
+
+  /**
    * Tries to find a [Game] by [Game.identifier].
    */
-  fun findByIdentifier(identifier: UUID): Game? {
-    return games[identifier]
+  fun findGameByIdentifier(
+    identifier: String
+  ): Game? {
+    return this._games[identifier]
   }
 
   /**
    * Tries to find a [Game] by [Game.name].
    */
-  fun findByName(name: String, ignoreCase: Boolean = true): Game? {
-    return games.values.find {
-      it.name.equals(name, ignoreCase)
+  fun findGameByName(
+    name: String
+  ): Game? {
+    return this._games.values.find {
+      it.name.equals(name, true)
     }
   }
 
-//  fun findGameByArenaName(name: String, ignoreCase: Boolean = true): Game? {
-//    return games.values
-//      .find { it.arenas?.name.equals(name, ignoreCase) }
-//  }
-
+  /**
+   *
+   */
   fun findByUser(user: User): Game? {
-    return games.values.find {
+    return this._games.values.find {
       it.isInGame(user)
     }
-  }
-
-  fun createGame(name: String): Boolean {
-    require(name.isNotBlank()) {
-      "The name of the game must contain some characters and cannot be just" +
-        "whitespace."
-    }
-
-    if (null != findByName(name)) {
-      return false
-    }
-    val identifier = UUID.randomUUID()
-    val game = Game(identifier, name)
-    games[identifier] = game
-    GameDao.insert(game)
-    return true
   }
 }

@@ -5,10 +5,8 @@ import java.lang.ref.WeakReference
 import java.util.UUID
 import me.kvdpxne.dtm.colorize
 import me.kvdpxne.dtm.command.Performer
-import me.kvdpxne.dtm.shared.ItemsClipboard
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import org.bukkit.inventory.PlayerInventory
 
 open class UserPerformer(
   val identifier: UUID,
@@ -78,20 +76,20 @@ open class UserPerformer(
    *
    */
   override fun sendMessages(
-    vararg messageArray: String
+    vararg messages: String
   ) {
-    if (1 < messageArray.size) {
+    if (1 < messages.size) {
       val player = this.player ?: return
       //
       //
-      messageArray.forEach { message ->
+      messages.forEach { message ->
         player.sendMessage(message.colorize())
       }
       return
     }
 
-    if (1 == messageArray.size) {
-      this.sendMessage(messageArray[0])
+    if (1 == messages.size) {
+      this.sendMessage(messages[0])
       return
     }
   }

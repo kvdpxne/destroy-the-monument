@@ -14,7 +14,7 @@ object OfflineUserService {
   fun findUserByIdentifier(
     identifier: UUID
   ): User? {
-    return DaoUser.findByIdentifier(identifier)
+    return DaoUser.findUserByIdentifierOrNull(identifier)
   }
 
   /**
@@ -26,15 +26,8 @@ object OfflineUserService {
     }
 
     val user = User(name = name, identifier = identifier)
-    DaoUser.insert(user)
+    DaoUser.insertUser(user)
 
     return user
-  }
-
-  /**
-   * @since 0.1.0
-   */
-  fun countOfflineUsers(): Int {
-    return DaoUser.countUsers()
   }
 }

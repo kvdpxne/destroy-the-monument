@@ -5,15 +5,24 @@ import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.user.UserPerformer
 
 fun createAbilityRenewCommand(): Command {
+  // Usage: /dtm ability renew
   return CommandBuilder()
     .name("renew")
     .handler<UserPerformer> { performer, _ ->
-      val user = performer.user
-      val game = user.game ?: return@handler
-      val teammate = game.findTeam(user)?.findTeammate(user) ?: return@handler
+      val teammate = performer.user.teammate
+      if (null == teammate) {
+        performer.sendMessage("&cBłąd: &7Nie jesteś grze.")
+        return@handler
+      }
 
-      teammate.currentProfession.ability?.renew(performer.player!!)
-      performer.sendMessage("Umiejętność została odnowiona")
+      val ability = teammate.currentProfession.ability
+      if (null == ability) {
+        performer.sendMessage("&cBłąd: &7Twoja profesja nie posiada umiejętności.")
+        return@handler
+      }
+
+      ability.renew(performer.player!!)
+      performer.sendMessage("&6&lDTM &7> &aUmiejętność została odnowiona")
     }
     .build()
 }

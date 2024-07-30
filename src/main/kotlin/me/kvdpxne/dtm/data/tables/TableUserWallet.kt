@@ -2,13 +2,13 @@ package me.kvdpxne.dtm.data.tables
 
 import org.ktorm.schema.Table
 import org.ktorm.schema.float
-import org.ktorm.schema.int
-import org.ktorm.schema.varchar
+import org.ktorm.schema.long
+import org.ktorm.schema.text
 
 object TableUserWallet : Table<Nothing>("user_wallet") {
 
-  val coins = int("coins")
+  val coins = long("coins")
   val multiplier = float("multiplier")
 
-  val identifier = varchar("identifier").primaryKey()
+  val identifier = text("identifier").primaryKey()
 }

@@ -27,11 +27,10 @@ fun createGlobalChatCommand(): Command {
         return@handler
       }
 
-      game.hostages.values.forEach {
-        it.performer.sendMessage(
-          "&7[&6G&7] &6${performer.name}&7: &f${arguments.asFullText()}"
-        )
-      }
+      val name = performer.name
+      val textLine = arguments.asFullText()
+
+      game.sendMessage("&7[&6G&7] &6$name&7: &f$textLine")
     }
     .build()
 }

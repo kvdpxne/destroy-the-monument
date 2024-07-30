@@ -5,13 +5,13 @@ import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.ParameterBuilder
 import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.command.builderArenaNameParameter
-import me.kvdpxne.dtm.data.ArenaDao
-import me.kvdpxne.dtm.game.ArenaManager
+import me.kvdpxne.dtm.data.DaoArena
 import me.kvdpxne.dtm.game.ArenaMap
+import me.kvdpxne.dtm.game.ArenaService
 import me.kvdpxne.dtm.shared.WorldLoaderHelper
-import me.kvdpxne.dtm.user.UserPerformer
 
 fun createArenaMapSetCommand(): Command {
+  // Usage: /dtm arena map set <ARENA_NAME> <MAP_NAME>
   return CommandBuilder()
     .name("set")
     .parameter(
@@ -26,25 +26,25 @@ fun createArenaMapSetCommand(): Command {
         .build()
     )
     .handler<Performer> { performer, arguments ->
-      val arena = arguments.asFoundArena()
+      val arenaName = arguments.asText()
+      val arena = ArenaService.findArenaByName(arenaName)
 
       if (null == arena) {
-        performer.sendMessage("An game named ${arguments.asText()} does not exist.")
+        performer.sendMessage("&cBłąd: &7Arena o nazwie: &c$arenaName &7nie istnieje.")
         return@handler
       }
 
-      val name = arguments.asText(1)
+      val mapName = arguments.asText(1)
+      val map = WorldLoaderHelper.getWorld(mapName)
 
-      WorldLoaderHelper.getWorld(name).let {
-        if (null == it) {
-          performer.sendMessage("World named \"$name\" does not exist.")
-          return@handler
-        }
-
-        arena.map = ArenaMap(it.uid, it.name)
-        ArenaDao.update(arena)
-        performer.sendMessage("Success!")
+      if (null == map) {
+        performer.sendMessage("&cBŁĄD: &7Mapa o nazwie &c$mapName &7nie istnieje.")
+        return@handler
       }
+
+      arena.map = ArenaMap(map.name, map.uid)
+      DaoArena.updateArena(arena)
+      performer.sendMessage("&6&lDTM &7> &7Przypisano mapę o nazwię &a$mapName &7do areny o nazwie: &a$arenaName&7.")
     }
     .build()
 }

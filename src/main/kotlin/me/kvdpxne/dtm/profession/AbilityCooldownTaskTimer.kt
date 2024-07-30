@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.profession
 
-import me.kvdpxne.dtm.shared.bukkit.fillExperienceBar
+import me.kvdpxne.dtm.shared.minecraft.bukkit.fillExperienceBar
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
 

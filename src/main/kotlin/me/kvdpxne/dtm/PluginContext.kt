@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm
 
 import me.kvdpxne.dtm.PluginContext.textFormatter
-import me.kvdpxne.dtm.shared.TextFormatter
+import me.kvdpxne.dtm.shared.minecraft.TextFormatter
 
 object PluginContext {
 

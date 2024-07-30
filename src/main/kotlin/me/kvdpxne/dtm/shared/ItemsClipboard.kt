@@ -1,8 +1,8 @@
 package me.kvdpxne.dtm.shared
 
-import me.kvdpxne.dtm.shared.bukkit.Attributes
-import me.kvdpxne.dtm.shared.bukkit.isTool
-import me.kvdpxne.dtm.shared.bukkit.toBuilder
+import me.kvdpxne.dtm.shared.minecraft.bukkit.Attributes
+import me.kvdpxne.dtm.shared.minecraft.bukkit.isTool
+import me.kvdpxne.dtm.shared.minecraft.bukkit.toBuilder
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.ItemStack

@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.statistics
 
-import java.util.UUID
+import me.kvdpxne.dtm.uid.Uid
 
 /**
  * A concrete base class for representing basic player statistics with a unique
@@ -29,7 +29,7 @@ open class BaseIdentifiableStatistics(
    assists           : Int    = 0,
    deaths            : Int    = 0,
    destroyedMonuments: Int    = 0,
-   identifier        : String = UUID.randomUUID().toString()
+   identifier        : String = Uid.next()
   // @formatter:on
 ) : BaseStatistics(kills, assists, deaths, destroyedMonuments),
   IdentifiableStatistics {

@@ -1,8 +1,8 @@
 package me.kvdpxne.dtm.command
 
 import me.kvdpxne.dtm.game.Arena
-import me.kvdpxne.dtm.game.ArenaManager
-import me.kvdpxne.dtm.game.Game
+import me.kvdpxne.dtm.game.ArenaService
+import me.kvdpxne.dtm.game.temporary.Game
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserManager
@@ -183,7 +183,7 @@ class Arguments(
     index: Int = 0
   ): Arena? {
     val arenaName = this.asText(index)
-    val arena = ArenaManager.findArenaByName(arenaName, true)
+    val arena = ArenaService.findArenaByName(arenaName)
 
     return arena
   }
@@ -192,7 +192,7 @@ class Arguments(
     index: Int = 0
   ): Game? {
     val gameName = this.asText(index)
-    val game = GameManager.findByName(gameName, true)
+    val game = GameManager.findGameByName(gameName)
 
     return game
   }

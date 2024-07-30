@@ -43,7 +43,6 @@ abstract class AbstractIdentifiable<T : Serializable>(
     }
 
     other as AbstractIdentifiable<*>
-
     return this.identifier == other.identifier
   }
 

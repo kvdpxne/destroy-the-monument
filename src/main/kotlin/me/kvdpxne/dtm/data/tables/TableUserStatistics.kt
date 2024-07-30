@@ -2,7 +2,7 @@ package me.kvdpxne.dtm.data.tables
 
 import org.ktorm.schema.Table
 import org.ktorm.schema.int
-import org.ktorm.schema.varchar
+import org.ktorm.schema.text
 
 object TableUserStatistics : Table<Nothing>("user_statistics") {
 
@@ -14,5 +14,5 @@ object TableUserStatistics : Table<Nothing>("user_statistics") {
   val gamesWon = int("games_won")
   val gamesLost = int("games_lost")
 
-  val identifier = varchar("identifier").primaryKey()
+  val identifier = text("identifier").primaryKey()
 }
