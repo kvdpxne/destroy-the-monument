@@ -1,10 +1,10 @@
 package me.kvdpxne.dtm.listeners
 
 import me.kvdpxne.dtm.colorize
-import me.kvdpxne.dtm.game.temporary.Game
+import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.RevivalPosition
-import me.kvdpxne.dtm.game.temporary.Team
-import me.kvdpxne.dtm.game.temporary.Teammate
+import me.kvdpxne.dtm.game.Team
+import me.kvdpxne.dtm.game.Teammate
 import me.kvdpxne.dtm.game.findMonument
 import me.kvdpxne.dtm.scoreboard.updateBlueMonumentCount
 import me.kvdpxne.dtm.scoreboard.updateRedMonumentCount
@@ -145,16 +145,16 @@ object BlockBreakListener : Listener {
     }
 
     //
-    val team: Team = game.findTeam(user) ?: return
+    val victimTeam: Team = user.team ?: return
 
     //
-    val teammate: Teammate = team.findTeammate(user) ?: return
+    val teammate: Teammate = user.teammate ?: return
 
     //
     val monumentIdentity = monument.team
 
     //
-    val teamIdentity = team.identity
+    val teamIdentity = victimTeam.identity
 
     //
     if (monumentIdentity == teamIdentity) {

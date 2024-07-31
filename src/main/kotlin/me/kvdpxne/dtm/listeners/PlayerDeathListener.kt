@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.listeners
 
 import me.kvdpxne.dtm.colorize
-import me.kvdpxne.dtm.game.temporary.Teammate
+import me.kvdpxne.dtm.game.Teammate
 import me.kvdpxne.dtm.scoreboard.updateCoinCount
 import me.kvdpxne.dtm.scoreboard.updateDeathCount
 import me.kvdpxne.dtm.scoreboard.updateKillCount
@@ -32,16 +32,12 @@ object PlayerDeathListener : Listener {
 
   private fun addAndUpdateKills(teammate: Teammate) {
     teammate.addKill()
-    teammate.fastBoard?.let {
-      updateKillCount(it, teammate.statistics.kills)
-    }
+    updateKillCount(teammate.fastBoard, teammate.statistics.kills)
   }
 
   private fun addAndUpdateDeaths(teammate: Teammate) {
     teammate.addDeath()
-    teammate.fastBoard?.let {
-      updateDeathCount(it, teammate.statistics.deaths)
-    }
+    updateDeathCount(teammate.fastBoard, teammate.statistics.deaths)
   }
 
   @EventHandler
@@ -66,16 +62,13 @@ object PlayerDeathListener : Listener {
     }
 
     //
-    if (!game.isInTeam(victimUser) || !game.isInArenaMap(victimUser)) {
+    if (!game.isInTeam(victimUser) || !game.isInArena(victimUser)) {
       return
     }
 
     //
     event.drops.clear()
     event.droppedExp = 0
-
-    //
-    victim.reset()
 
     //
     val victimTeammate = game.findTeam(victimUser)!!.findTeammate(victimUser)!!
@@ -105,7 +98,7 @@ object PlayerDeathListener : Listener {
     event.deathMessage = "${this.formatTeammate(murderTeammate)} &6--> ${this.formatTeammate(victimTeammate)}".colorize()
 
     murderUser.wallet.addCoins(20)
-    updateCoinCount(murderTeammate.fastBoard!!, murderUser.wallet.coins)
+    updateCoinCount(murderTeammate.fastBoard, murderUser.wallet.coins)
 
     this.addAndUpdateDeaths(victimTeammate)
     this.addAndUpdateKills(murderTeammate)

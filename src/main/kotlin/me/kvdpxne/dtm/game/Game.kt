@@ -1,15 +1,13 @@
-package me.kvdpxne.dtm.game.temporary
+package me.kvdpxne.dtm.game
 
 import io.github.oshai.kotlinlogging.KLogger
 import io.github.oshai.kotlinlogging.KotlinLogging
 import java.util.UUID
 import me.kvdpxne.dtm.DestroyTheMonument
 import me.kvdpxne.dtm.command.Communicative
-import me.kvdpxne.dtm.game.Arena
-import me.kvdpxne.dtm.game.GameStates
-import me.kvdpxne.dtm.game.TeamIdentity
 import me.kvdpxne.dtm.scoreboard.createServerScoreboard
 import me.kvdpxne.dtm.scoreboard.createServerTeam
+import me.kvdpxne.dtm.scoreboard.initScoreboard
 import me.kvdpxne.dtm.shared.ancillary.AbstractIdentifiable
 import me.kvdpxne.dtm.shared.minecraft.bukkit.cancelTask
 import me.kvdpxne.dtm.shared.minecraft.bukkit.equipB
@@ -223,6 +221,10 @@ class Game(
   private fun shouldMoveTeammate(
     teammate: Teammate
   ) {
+    if (!this.isRunning) {
+      return
+    }
+
     val team = teammate.team
     val arena = this.nextArena()
 
@@ -538,8 +540,6 @@ class Game(
   }
 
   fun fsf(teammate: Teammate, spawn: Location) {
-    val bukkitTeamScoreboard = createServerScoreboard()
-
     val player = teammate.user.performer.player ?: throw IllegalStateException("Player not found")
 
     player.teleport(spawn)
@@ -548,6 +548,8 @@ class Game(
     teammate.currentProfession.equip(player, teammate.team.identity.dyeColor)
     teammate.currentProfession.ability?.renewDelayed(player, true)
   }
+
+  var timerTask: GameTimeUpdateTaskTimer? = null
 
   /**
    *
@@ -561,18 +563,28 @@ class Game(
       "Cannot start game because it is currently stopping."
     }
 
-    this.state = GameStates.RUNNING
-
+    //
     val arena = this.nextArena()
 
     //
     val bukkitTeamScoreboard = createServerScoreboard()
 
     //
-    val timeTask = GameTimeUpdateTaskTimer(this)
+    this.timerTask = GameTimeUpdateTaskTimer(this)
 
+    //
+    val signedTeams = this.teams
 
-    _teams.values.forEach { team ->
+    //
+    for (team: Team in signedTeams) {
+      team.health = arena.monumentPositions.size / 2 // TODO stupid
+    }
+
+    //
+    //
+    val teamPair = Pair(signedTeams[0], signedTeams[1])
+
+    for (team: Team in signedTeams) {
 
       val bukkitTeam = createServerTeam(
         bukkitTeamScoreboard,
@@ -580,36 +592,50 @@ class Game(
         team.identity.colorInChat
       )
 
-      // TODO precise
-      team.health = arena.monumentPositions.size / 2
-
       val location = arena.findRevivalPosition(team.identity)?.let {
-        val world = arena.map?.world ?: return@forEach
+        val world = arena.map?.world!!
         it.toLocation(world)
       }
 
-      team._teammates.forEach { teammate ->
+      for (teammate: Teammate in team.teammates) {
         val player = teammate.user.performer.player!!
 
         this.fsf(teammate, location!!)
 
         player.scoreboard = bukkitTeamScoreboard
         bukkitTeam.addPlayer(player)
+
+        val fastBoard = initScoreboard(
+          player,
+          teamPair.second.size,
+          teamPair.second.health,
+          teamPair.first.size,
+          teamPair.first.health,
+          teammate.user.wallet.coins
+        )
+
+        teammate.fastBoard = fastBoard
+        timerTask!!.playerMutableList += fastBoard
       }
     }
 
-    timerTaskIdentifier = timeTask.runTaskTimerAsynchronously(
-      DestroyTheMonument.instance,
-      20L,
-      20L
-    ).taskId
+    if (null != this.timerTask) {
+      this.timerTaskIdentifier = this.timerTask!!.runTaskTimerAsynchronously(
+        DestroyTheMonument.instance,
+        20L,
+        20L
+      ).taskId
+    }
+
+    //
+    this.state = GameStates.RUNNING
   }
 
   /**
    * @since 0.1.0
    */
   fun stop() {
-    check(!this.isRunning) {
+    check(this.isRunning) {
       "Game cannot be stopped because it is not currently running."
     }
 
@@ -627,6 +653,7 @@ class Game(
       it._teammates.forEach {
 
         it.currentProfession.ability?.cancelCooldown()
+        it.fastBoard.delete()
 
         val player = it.user.performer.player!!
 
@@ -634,7 +661,6 @@ class Game(
         player.scoreboard = Bukkit.getScoreboardManager().mainScoreboard
 
         player.reset()
-
         player.equipB()
       }
 
@@ -643,6 +669,9 @@ class Game(
 
     try {
       this.currentArena!!.map!!.unload()
+      this.currentArena!!.monumentPositions.forEach {
+        it.restore()
+      }
       this.currentArena = null
     } catch (exception: Exception) {
       exception.printStackTrace()

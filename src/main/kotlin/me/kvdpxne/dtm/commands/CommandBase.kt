@@ -29,6 +29,7 @@ fun createBaseCommand(): Command {
       createJoinCommand(),
       createKitCommand(),
       createLeaveCommand(),
+      createTeamCommand(),
       createTeleportCommand(),
       createTeleportBackCommand(),
       createVersionCommand(),

@@ -1,9 +1,8 @@
-package me.kvdpxne.dtm.game.temporary
+package me.kvdpxne.dtm.game
 
 import io.github.oshai.kotlinlogging.KLogger
 import io.github.oshai.kotlinlogging.KotlinLogging
 import me.kvdpxne.dtm.command.Communicative
-import me.kvdpxne.dtm.game.TeamIdentity
 import me.kvdpxne.dtm.user.User
 
 private val logger: KLogger = KotlinLogging.logger { }

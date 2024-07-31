@@ -9,7 +9,9 @@ import org.bukkit.event.entity.FoodLevelChangeEvent
 object PlayerFoodLevelChangeListener : Listener {
 
   @EventHandler
-  fun handlePlayerFoodLevelChange(event: FoodLevelChangeEvent) {
+  fun handlePlayerFoodLevelChange(
+    event: FoodLevelChangeEvent
+  ) {
     if (event.isCancelled) {
       return
     }

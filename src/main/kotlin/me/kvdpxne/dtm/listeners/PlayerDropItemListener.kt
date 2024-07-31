@@ -51,7 +51,7 @@ object PlayerDropItemListener : Listener {
 
     // If the arena is not loaded or the user is not on the arena map, then the
     // plugin should not overwrite the event of the player dropping the item
-    if (!arena.isLoaded || !game.isInArenaMap(user)) {
+    if (!arena.isLoaded || !game.isInArena(user)) {
       return
     }
 

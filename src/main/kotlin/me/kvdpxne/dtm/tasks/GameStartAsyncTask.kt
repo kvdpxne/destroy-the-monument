@@ -1,8 +1,8 @@
 package me.kvdpxne.dtm.tasks
 
 import me.kvdpxne.dtm.game.GameStates
-import me.kvdpxne.dtm.game.temporary.Game
-import me.kvdpxne.dtm.game.temporary.MIN_HOSTAGE_SIZE_
+import me.kvdpxne.dtm.game.Game
+import me.kvdpxne.dtm.game.MIN_HOSTAGE_SIZE_
 import me.kvdpxne.dtm.shared.basics.task.AbstractAsynchronousTask
 import me.kvdpxne.dtm.shared.minecraft.bukkit.runSynchronousTask
 

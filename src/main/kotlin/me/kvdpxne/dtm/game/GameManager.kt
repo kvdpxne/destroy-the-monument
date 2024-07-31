@@ -2,8 +2,6 @@ package me.kvdpxne.dtm.game
 
 import io.github.oshai.kotlinlogging.KLogger
 import io.github.oshai.kotlinlogging.KotlinLogging
-import me.kvdpxne.dtm.data.DaoGame
-import me.kvdpxne.dtm.game.temporary.Game
 import me.kvdpxne.dtm.user.User
 
 /**
@@ -25,8 +23,8 @@ object GameManager {
     // TODO Delete in the future.
     // Information about games should be loaded into memory only when it is
     // really needed and removed when it is no longer needed.
-    DaoGame.findGames().forEach {
-      this._games[it.identifier] = it
+    for (game: Game in GameService.findGames()) {
+      this._games[game.identifier] = game
     }
   }
 

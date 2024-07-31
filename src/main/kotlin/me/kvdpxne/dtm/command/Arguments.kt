@@ -2,7 +2,7 @@ package me.kvdpxne.dtm.command
 
 import me.kvdpxne.dtm.game.Arena
 import me.kvdpxne.dtm.game.ArenaService
-import me.kvdpxne.dtm.game.temporary.Game
+import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserManager

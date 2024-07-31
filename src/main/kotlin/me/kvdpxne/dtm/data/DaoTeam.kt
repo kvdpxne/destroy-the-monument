@@ -3,6 +3,7 @@ package me.kvdpxne.dtm.data
 import me.kvdpxne.dtm.data.source.database
 import me.kvdpxne.dtm.data.tables.TableTeam
 import me.kvdpxne.dtm.game.TeamIdentity
+import me.kvdpxne.dtm.game.TeamColors
 import org.ktorm.dsl.QueryRowSet
 import org.ktorm.dsl.eq
 import org.ktorm.dsl.from
@@ -26,17 +27,16 @@ object DaoTeam {
     val identifier = row[TableTeam.identifier]!!
 
     //
+    val colorName = row[TableTeam.name]!!
+    val color = TeamColors.findTeamColorByName(colorName)!!
+
+    //
     val name = row[TableTeam.name]!!
-    val colorInChat = row[TableTeam.colorInChat]!!
-    val professionColor = row[TableTeam.professionColor]!!
-    val dyeColor = row[TableTeam.dyeColor]!!
 
     //
     return TeamIdentity(
       name,
-      colorInChat,
-      professionColor,
-      dyeColor,
+      color,
       identifier
     )
   }
@@ -84,9 +84,6 @@ object DaoTeam {
     database.insert(TableTeam) {
       set(it.identifier, teamIdentity.identifier)
       set(it.name, teamIdentity.name)
-      set(it.colorInChat, teamIdentity.colorInChat)
-      set(it.professionColor, teamIdentity.professionColor)
-      set(it.dyeColor, teamIdentity.dyeColor)
     }
   }
 }

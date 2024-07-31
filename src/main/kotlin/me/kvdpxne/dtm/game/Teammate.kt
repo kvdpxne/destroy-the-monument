@@ -1,4 +1,4 @@
-package me.kvdpxne.dtm.game.temporary
+package me.kvdpxne.dtm.game
 
 import fr.mrmicky.fastboard.FastBoard
 import me.kvdpxne.dtm.command.Communicative
@@ -29,7 +29,7 @@ class Teammate(
   /**
    * @since 0.1.0
    */
-  var fastBoard: FastBoard? = null
+  var fastBoard: FastBoard = FastBoard(this.user.performer.player)
 
   /**
    * @since 0.1.0

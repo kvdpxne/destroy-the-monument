@@ -31,8 +31,13 @@ object DaoArena {
     val identifier = row[TableArena.identifier]!!
 
     //
-    val mapIdentifier = row[TableArena.mapIdentifier]!!.toUuid()
-    val mapName = row[TableArena.mapName]!!
+    val mapIdentifier = row[TableArena.mapIdentifier]
+    val mapName = row[TableArena.mapName]
+
+    //
+    val fs1 = DaoArenaPositionMonument.findArenaPositionMonumentByArenaIdentifier(identifier)
+    val fs2 = DaoArenaPositionRevival.findArenaPositionRevivalByArenaIdentifier(identifier)
+
 
     //
     val name = row[TableArena.name]!!
@@ -42,9 +47,16 @@ object DaoArena {
       name,
       identifier
     ).apply {
+      fs1.forEach { this.addPositionMonument(it) }
+      fs2.forEach { this.addRevivalPosition(it) }
+
+      if (mapIdentifier == null || mapName == null) {
+        return@apply
+      }
+
       this.map = ArenaMap(
         mapName,
-        mapIdentifier
+        mapIdentifier.toUuid()
       )
     }
   }

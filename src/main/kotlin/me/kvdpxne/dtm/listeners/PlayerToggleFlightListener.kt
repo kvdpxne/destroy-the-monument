@@ -36,7 +36,7 @@ object PlayerToggleFlightListener : Listener {
       game.isRunning.not() ||
       null == game.currentArena ||
       game.isInTeam(user).not() ||
-      game.isInArenaMap(user).not()
+      game.isInArena(user).not()
     ) {
       return
     }

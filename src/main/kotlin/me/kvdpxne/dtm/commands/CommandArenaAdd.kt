@@ -5,6 +5,7 @@ import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.command.builderArenaNameParameter
 import me.kvdpxne.dtm.command.builderGameNameParameter
+import me.kvdpxne.dtm.data.DaoGameArena
 
 fun createArenaAddCommand(): Command {
   // Usage: /dtm arena add <ARENA_NAME> <GAME_NAME>
@@ -35,7 +36,7 @@ fun createArenaAddCommand(): Command {
         return@handler
       }
 
-      game.addArena(arena)
+      DaoGameArena.insertGameArena(game.identifier, arena.identifier)
       performer.sendMessage("Success")
     }
     .build()

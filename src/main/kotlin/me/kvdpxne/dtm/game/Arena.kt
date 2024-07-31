@@ -23,12 +23,12 @@ class Arena(
    *
    * @since 0.1.0
    */
-  private val _revivalPositions: MutableMap<String, RevivalPosition> = mutableMapOf()
+  val _revivalPositions: MutableMap<String, RevivalPosition> = mutableMapOf()
 
   /**
    * @since 0.1.0
    */
-  private val _monumentPositions: MutableMap<String, MutableSet<MonumentPosition>> = mutableMapOf()
+  val _monumentPositions: MutableMap<String, MutableSet<MonumentPosition>> = mutableMapOf()
 
   /**
    * @since 0.1.0
@@ -62,6 +62,12 @@ class Arena(
     return this._revivalPositions[team.identifier]
   }
 
+  fun findPositionMonument(
+    identifier: String
+  ): Set<MonumentPosition>? {
+    return this._monumentPositions[identifier]
+  }
+
   /**
    * @since 0.1.0
    */
@@ -89,6 +95,20 @@ class Arena(
       }
     }
     return null
+  }
+
+  fun addPositionMonument(
+    position: MonumentPosition
+  ) {
+    val fs = this._monumentPositions[position.team.identifier] ?: mutableSetOf()
+    fs.add(position)
+    this._monumentPositions[position.team.identifier] = fs
+  }
+
+  fun addRevivalPosition(
+    position: RevivalPosition
+  ) {
+    this._revivalPositions[position.team.identifier] = position
   }
 
   override fun equals(other: Any?): Boolean {

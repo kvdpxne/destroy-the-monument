@@ -1,10 +1,14 @@
 package me.kvdpxne.dtm.game
 
+import me.kvdpxne.dtm.data.DaoGame
 import me.kvdpxne.dtm.data.DaoGameArena
 import me.kvdpxne.dtm.data.DaoGameTeam
-import me.kvdpxne.dtm.game.temporary.Game
 
 object GameService {
+
+  fun findGames(): List<Game> {
+    return DaoGame.findGames()
+  }
 
   fun findGameArenaByGameIdentifier(
     identifier: String
@@ -19,6 +23,6 @@ object GameService {
   }
 
   fun insertGame(game: Game) {
-
+    DaoGame.insertGame(game)
   }
 }

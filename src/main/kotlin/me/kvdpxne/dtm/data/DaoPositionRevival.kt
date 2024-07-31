@@ -27,8 +27,8 @@ object DaoPositionRevival {
     val identifier = row[TablePositionRevival.identifier]!!
 
     //
-    val teamIdentityIdentifier = row[TablePositionRevival.teamIdentityIdentifier]!!
-    val teamIdentity = DaoTeam.findTeamByIdentifier(teamIdentityIdentifier)!!
+    val teamIdentifier = row[TablePositionRevival.teamIdentifier]!!
+    val teamIdentity = DaoTeam.findTeamByIdentifier(teamIdentifier)!!
 
     //
     val x = row[TablePositionRevival.x]!!
@@ -74,7 +74,7 @@ object DaoPositionRevival {
   ) {
     database.insert(TablePositionRevival) {
       set(it.identifier, revivalPosition.identifier)
-      set(it.teamIdentityIdentifier, revivalPosition.team.identifier)
+      set(it.teamIdentifier, revivalPosition.team.identifier)
       set(it.x, revivalPosition.x)
       set(it.y, revivalPosition.y)
       set(it.z, revivalPosition.z)

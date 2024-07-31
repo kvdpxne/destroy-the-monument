@@ -22,7 +22,7 @@ object PlayerPrepareItemEnchantListener : Listener {
     if (game.isRunning &&
       null != game.currentArena &&
       game.isInTeam(user) &&
-      game.isInArenaMap(user)
+      game.isInArena(user)
     ) {
       event.isCancelled = true
     }

@@ -1,7 +1,8 @@
 package me.kvdpxne.dtm.listeners
 
-import me.kvdpxne.dtm.game.GameManager
-import me.kvdpxne.dtm.game.temporary.Teammate
+import me.kvdpxne.dtm.game.Teammate
+import me.kvdpxne.dtm.shared.minecraft.bukkit.cancel
+import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -29,24 +30,46 @@ object PlayerChatListener : Listener {
     }
 
     //
-    val user = UserManager.findByIdentifier(event.player.uniqueId) ?: return
+    val player = event.player
 
     //
-    val game = GameManager.findByUser(user) ?: return
+    val user = UserManager.findByIdentifier(player.uniqueId) ?: return
 
-    if (
-      !game.isRunning ||
-      null == game.currentArena ||
-      !game.isInTeam(user) ||
-      !game.isInArenaMap(user)
-    ) {
+    //
+    val game = user.game ?: return
+
+    //
+    if (!game.isRunning || !game.isStopping) {
       return
     }
 
-    val team = game.findTeam(user)!!
-    val teammate = team.findTeammate(user)!!
+    //
+    val arena = game.currentArena ?: return
 
-    event.isCancelled = true
+    //
+    if (!arena.isLoaded) {
+      return
+    }
+
+    //
+    if (!game.isInArena(user)) {
+      for (hostage: User in game.hostages) {
+        if (null != hostage.team || null != hostage.teammate) {
+          continue
+        }
+
+        event.format = "&f%s&7: &f%s"
+      }
+      return
+    }
+
+    //
+    val team = user.team ?: return
+
+    //
+    val teammate = user.teammate ?: return
+
+    event.cancel()
 
     team.sendMessage("${this.formatTeammate(teammate)}&7: &f${event.message}")
   }

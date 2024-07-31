@@ -2,7 +2,7 @@ package me.kvdpxne.dtm.data
 
 import me.kvdpxne.dtm.data.source.database
 import me.kvdpxne.dtm.data.tables.TableGame
-import me.kvdpxne.dtm.game.temporary.Game
+import me.kvdpxne.dtm.game.Game
 import org.ktorm.dsl.QueryRowSet
 import org.ktorm.dsl.eq
 import org.ktorm.dsl.from

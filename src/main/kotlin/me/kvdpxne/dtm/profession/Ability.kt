@@ -19,10 +19,6 @@ class Ability(
   // @formatter:on
 ): Cloneable {
 
-  init {
-    println(isActivatable)
-  }
-
   /**
    * @since 0.1.0
    */

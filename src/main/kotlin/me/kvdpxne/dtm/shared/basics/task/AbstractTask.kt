@@ -1,5 +1,6 @@
 package me.kvdpxne.dtm.shared.basics.task
 
+import java.util.logging.Logger
 import me.kvdpxne.dtm.shared.minecraft.bukkit.cancelTask
 
 /**
@@ -41,7 +42,7 @@ abstract class AbstractTask : Task, Runnable {
     try {
       this.execute()
     } catch (exception: Exception) {
-      GlobalLogger.error("An error occurred while handling concurrent request", exception)
+      Logger.getAnonymousLogger().severe("An error occurred while handling concurrent request")
     }
   }
 

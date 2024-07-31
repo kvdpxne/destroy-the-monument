@@ -29,7 +29,7 @@ fun initScoreboard(
   redMonumentCount: Int,
   bluePlayerCount: Int,
   blueMonumentCount: Int,
-  coins: Int
+  coins: Long
 ): FastBoard {
   return FastBoard(player).apply {
     this.updateTitle("&c&lD&f&lT&9&lM".colorize())
@@ -83,6 +83,6 @@ fun updateDeathCount(fastBoard: FastBoard, count: Int) {
   fastBoard.updateLine(11, "&7Smierci: &6&l$count".colorize())
 }
 
-fun updateCoinCount(fastBoard: FastBoard, count: Int) {
+fun updateCoinCount(fastBoard: FastBoard, count: Long) {
   fastBoard.updateLine(14, "&6&l$count".colorize())
 }

@@ -12,7 +12,7 @@ object TablePositionRevival : Table<Nothing>("position_revival") {
   val z = double("z")
   val pitch = float("pitch")
   val yaw = float("yaw")
-  val teamIdentityIdentifier = text("team_identity_identifier")
+  val teamIdentifier = text("team_identifier")
 
   val identifier = text("identifier").primaryKey()
 }

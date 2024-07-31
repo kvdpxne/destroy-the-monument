@@ -2,10 +2,10 @@ package me.kvdpxne.dtm.user
 
 import java.util.UUID
 import me.kvdpxne.dtm.command.Communicative
-import me.kvdpxne.dtm.game.temporary.Game
+import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
-import me.kvdpxne.dtm.game.temporary.Team
-import me.kvdpxne.dtm.game.temporary.Teammate
+import me.kvdpxne.dtm.game.Team
+import me.kvdpxne.dtm.game.Teammate
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionManager
 

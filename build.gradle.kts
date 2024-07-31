@@ -120,7 +120,7 @@ tasks {
 
     dependsOn(shadowJar)
 
-    val outputDirectory = file("run/plugins")
+    val outputDirectory = file("run/plugins/update")
     val target = shadowJar.get().archiveFile.get().asFile
 
     doLast {

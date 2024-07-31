@@ -39,7 +39,7 @@ object BlockPlaceListener : Listener {
     val arena = game.currentArena ?: return
 
     // The user should be on the map of the current arena
-    if (!game.isInArenaMap(user)) {
+    if (!game.isInArena(user)) {
       return
     }
 

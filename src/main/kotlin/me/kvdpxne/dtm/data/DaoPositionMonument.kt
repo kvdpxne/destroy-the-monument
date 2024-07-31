@@ -27,7 +27,7 @@ object DaoPositionMonument {
     val identifier = row[TablePositionMonument.identifier]!!
 
     //
-    val teamIdentityIdentifier = row[TablePositionMonument.teamIdentityIdentifier]!!
+    val teamIdentityIdentifier = row[TablePositionMonument.teamIdentifier]!!
     val teamIdentity = DaoTeam.findTeamByIdentifier(teamIdentityIdentifier)!!
 
     //
@@ -71,7 +71,7 @@ object DaoPositionMonument {
   ) {
     database.insert(TablePositionMonument) {
       set(it.identifier, monument.identifier)
-      set(it.teamIdentityIdentifier, monument.team.identifier)
+      set(it.teamIdentifier, monument.team.identifier)
       set(it.x, monument.x)
       set(it.y, monument.y)
       set(it.z, monument.z)

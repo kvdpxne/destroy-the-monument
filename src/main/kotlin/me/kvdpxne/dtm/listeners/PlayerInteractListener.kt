@@ -12,7 +12,6 @@ import me.kvdpxne.dtm.shared.minecraft.bukkit.isRightClick
 import me.kvdpxne.dtm.shared.minecraft.bukkit.reset
 import me.kvdpxne.dtm.shared.minecraft.bukkit.toBlockPosition
 import me.kvdpxne.dtm.user.UserManager
-import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerInteractEvent
@@ -32,40 +31,56 @@ object PlayerInteractListener : Listener {
       return
     }
 
+    val player = event.player
+
     if (event.action.isRightClick()) {
 
       if (itemInHand.isSimilar(ItemsClipboard.ITEM_GAME_JOIN)) {
-        val user = UserManager.findByIdentifier(event.player.uniqueId) ?: return
+        val user = UserManager.findByIdentifier(player.uniqueId) ?: return
         event.cancel()
-        createGameSelectionGui(user).open(event.player)
+        createGameSelectionGui(user).open(player)
         return
       }
 
       if (itemInHand.isSimilar(ItemsClipboard.ITEM_TEAM_SELECT)) {
-        val user = UserManager.findByIdentifier(event.player.uniqueId) ?: return
-        val game = user.game ?: return
+        val user = UserManager.findByIdentifier(player.uniqueId) ?: return
+        val game = user.game
+
+        if (null == game) {
+          event.cancel()
+          createGameSelectionGui(user).open(player)
+          return
+        }
 
         event.cancel()
-        createTeamSelectionGui(game, user).open(event.player)
+        createTeamSelectionGui(game, user).open(player)
         return
       }
 
       if (itemInHand.isSimilar(ItemsClipboard.ITEM_PROFESSION_SELECT)) {
-        val user = UserManager.findByIdentifier(event.player.uniqueId) ?: return
+        val user = UserManager.findByIdentifier(player.uniqueId) ?: return
         event.cancel()
-        createProfessionSelectionGui(user).open(event.player)
+        createProfessionSelectionGui(user).open(player)
         return
       }
 
       if (itemInHand.isSimilar(ItemsClipboard.ITEM_GAME_LEAVE)) {
-        val user = UserManager.findByIdentifier(event.player.uniqueId) ?: return
-        val game = user.game ?: return
+        val user = UserManager.findByIdentifier(player.uniqueId) ?: return
+        val game = user.game
+
+        if (null == game) {
+          event.cancel()
+          player.reset()
+          player.equipA()
+          player.updateInventory()
+          return
+        }
 
         event.cancel()
         game.removeHostage(user)
-        event.player.reset()
-        event.player.equipA()
-        event.player.updateInventory()
+        player.reset()
+        player.equipA()
+        player.updateInventory()
         return
       }
     }
@@ -86,11 +101,9 @@ object PlayerInteractListener : Listener {
 
     // At this stage of the project, the block type of monument must always be
     // obsidian.
-    if (block.isMonument()) {
+    if (!block.isMonument()) {
       return
     }
-
-    val player = event.player
 
     //
     val user = UserManager.findByIdentifier(player.uniqueId) ?: return

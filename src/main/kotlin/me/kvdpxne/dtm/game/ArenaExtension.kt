@@ -9,9 +9,9 @@ fun Arena.findMonument(
   location: Location,
   sameWorld: Boolean = false
 ): MonumentPosition? {
-  if (sameWorld && location.world.uid != this.map?.identifier) {
-    return null
-  }
+//  if (sameWorld && location.world.uid != this.map?.identifier) {
+//    return null
+//  }
 
   return this.findMonument(
     location.blockX,

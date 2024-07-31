@@ -9,7 +9,7 @@ object TablePositionMonument : Table<Nothing>("position_monument") {
   val x = int("x")
   val y = int("y")
   val z = int("z")
-  val teamIdentityIdentifier = text("team_identity_identifier")
+  val teamIdentifier = text("team_identifier")
 
   val identifier = text("identifier").primaryKey()
 }

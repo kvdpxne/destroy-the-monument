@@ -2,6 +2,9 @@ package me.kvdpxne.dtm.commands
 
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
+import me.kvdpxne.dtm.command.ParameterBuilder
+import me.kvdpxne.dtm.command.ParameterValidators
+import me.kvdpxne.dtm.data.DaoTeam
 import me.kvdpxne.dtm.game.ArenaService
 import me.kvdpxne.dtm.game.MonumentPosition
 import me.kvdpxne.dtm.game.TeamService
@@ -11,6 +14,20 @@ fun createArenaMapMonumentAddCommand(): Command {
   // Usage: /dtm arena map monument add <ARENA_NAME> <TEAM_IDENTITY>
   return CommandBuilder()
     .name("add")
+    .parameter(
+      ParameterBuilder<String>()
+        .name("ARENA_NAME")
+        .validationBy(ParameterValidators.STRING_VALIDATOR)
+        .required()
+        .build()
+    )
+    .parameter(
+      ParameterBuilder<String>()
+        .name("TEAM_NAME")
+        .validationBy(ParameterValidators.STRING_VALIDATOR)
+        .required()
+        .build()
+    )
     .handler<UserPerformer> { performer, parameter ->
 
       val arenaName = parameter.asText()
@@ -22,7 +39,7 @@ fun createArenaMapMonumentAddCommand(): Command {
       }
 
       val teamName = parameter.asText(1)
-      val team = TeamService.findTeamIdentity(teamName)
+      val team = DaoTeam.findTeamByName(teamName)
 
       if (null == team) {
         performer.sendMessage("&cBłąd: &7Drużyna o nazwie: &c$teamName &7nie istnieje.")

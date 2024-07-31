@@ -8,6 +8,8 @@ import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionBuilder
 import me.kvdpxne.dtm.shared.ItemsClipboard.ITEM_TOOL_AXE
 import me.kvdpxne.dtm.shared.ItemsClipboard.ITEM_TOOL_PICKAXE
+import me.kvdpxne.dtm.shared.indexOfSecond
+import me.kvdpxne.dtm.shared.minecraft.bukkit.isNullOrTypeAir
 import me.kvdpxne.dtm.shared.minecraft.bukkit.toBuilder
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
@@ -37,7 +39,37 @@ fun createEngineer(): Profession = ProfessionBuilder()
   )
   .icon(Material.COBBLESTONE)
   .ability(20, true) {
-    it.inventory.addItem(ItemStack(Material.COBBLESTONE, 15))
+
+    val inventory = it.inventory
+    val index = inventory.contents.indexOfFirst {
+      null != it && it.type == Material.COBBLESTONE && 64 > it.amount
+    }
+
+    if (-1 != index) {
+      val itemStack = inventory.contents[index]
+      val amount = itemStack.amount
+
+      val sum = amount + 15
+      if (64 == sum) {
+        inventory.setItem(index, ItemStack(Material.COBBLESTONE, sum))
+        return@ability
+      }
+
+      if (64 < sum) {
+        val diff = sum - 64
+        inventory.setItem(index, ItemStack(Material.COBBLESTONE, 64))
+        val nextIndex = inventory.contents.indexOfSecond { it.isNullOrTypeAir() }
+        inventory.setItem(nextIndex, ItemStack(Material.COBBLESTONE, diff))
+        return@ability
+      }
+
+
+      inventory.setItem(index, ItemStack(Material.COBBLESTONE, sum))
+      return@ability
+    }
+
+    val nextIndex = inventory.contents.indexOfSecond { it.isNullOrTypeAir() }
+    inventory.setItem(nextIndex, ItemStack(Material.COBBLESTONE, 15))
   }
   .enabled()
   .build()
