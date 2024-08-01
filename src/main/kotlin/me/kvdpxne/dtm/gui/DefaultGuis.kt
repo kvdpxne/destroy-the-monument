@@ -1,7 +1,5 @@
 package me.kvdpxne.dtm.gui
 
-import me.kvdpxne.dtm.colorize
-import me.kvdpxne.dtm.colorizeAll
 import me.kvdpxne.dtm.data.DaoGameArena
 import me.kvdpxne.dtm.data.DaoGameTeam
 import me.kvdpxne.dtm.game.Game
@@ -16,107 +14,92 @@ import me.kvdpxne.dtm.user.User
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.inventory.ItemStack
 
-fun createTeamSelectionGui(game: Game, user: User): Gui {
-  return Gui("Team selection", Rows.ONE).apply {
+fun createTeamSelectionGui(
+  game: Game,
+  user: User
+): Gui {
 
-    val iterator = game.teams.iterator()
+  //
+  val gui = Gui("Wybierz drużynę", Rows.ONE)
 
-    //
-    val firstTeam = iterator.next()
+  //
+  val teams = game.teams
 
-    setItem(
-      0,
+  //
+  val arrangement = GuiArrangement.SINGLE
+
+  //
+  if (teams.size > arrangement.size) {
+    throw IllegalArgumentException("There is more than one team selected.")
+  }
+
+  //
+  val iterator: IntIterator = arrangement.iterator()
+
+  for (team: Team in teams) {
+
+    val identity = team.identity
+
+    val name = identity.name
+    val color = identity.colorInChat
+
+    gui.setItem(
+      iterator.next(),
       Material.WOOL.toBuilder()
-        .generation(14)
+        .generation(identity.dyeColor.woolData.toInt())
         .name {
-          val teamSize = firstTeam.size
-          val teamColor = firstTeam.identity.colorInChat
-          val teamName = if (firstTeam.identity.name.equals("blue", true)) {
-            "Niebieskich"
-          } else {
-            "Czerwonych"
-          }
-          "$teamColor&l$teamName &8| &6$teamSize/bez limitu".colorize()
+          "$color&l$name &8| &6${team.size}/bez limitu"
         }
         .lore(
           "&7Zostaniesz dodany bezpośrednio",
-          "&7do drużyny &c&lCzerwonych&7."
+          "&7do drużyny $color&l$name&7."
         )
         .build()
-    ) {
-      game.addTeammate(firstTeam.identity, user)
-
-      val player = it.whoClicked as Player
-      player.closeInventory()
+    ) { event: InventoryClickEvent ->
+      //
+      game.addTeammate(identity, user)
 
       game.sendMessage {
-        val displayName = player.displayName
-        "&6&lDTM &7> &fGracz &6$displayName &fdołączył do drużyny &c&lCzerwonych&f."
-      }
-    }
-
-    val secondTeam = iterator.next()
-
-    setItem(
-      8,
-      Material.WOOL.toBuilder()
-        .generation(11)
-        .name {
-          val teamSize = secondTeam.size
-          val teamColor = secondTeam.identity.colorInChat
-          val teamName = if (secondTeam.identity.name.equals("blue", true)) {
-            "Niebieskich"
-          } else {
-            "Czerwonych"
-          }
-          "$teamColor&l$teamName &8| &6$teamSize/bez limitu".colorize()
-        }
-        .lore(
-          "&7Zostaniesz dodany bezpośrednio",
-          "&7do drużyny &b&lNiebieskich&7."
-        )
-        .build()
-    ) {
-      game.addTeammate(secondTeam.identity, user)
-
-      val player = it.whoClicked as Player
-      player.closeInventory()
-
-      game.sendMessage {
-        val displayName = player.displayName
-        "&6&lDTM &7> &fGracz &6$displayName &fdołączył do drużyny &b&lNiebieskich&f."
-      }
-    }
-
-    setItem(4, ItemsClipboard.ITEM_TEAM_SELECT_RANDOM) {
-
-      val team = if (game.isTeamsSameSize) {
-        game.randomTeam.identity
-      } else {
-        game.smallestTeam.identity
+        val displayName = user.performer.player?.displayName
+        "&6&lDTM &7> &fGracz &6$displayName &fdołączył do drużyny $color&l$name&f."
       }
 
-      game.addTeammate(team, user)
-
-      val player = it.whoClicked as Player
-      player.closeInventory()
-
-      game.sendMessage {
-        val displayName = player.displayName
-        val teamColor = team.colorInChat
-
-        val teamName = if (team.name.equals("blue", true)) {
-          "Niebieskich"
-        } else {
-          "Czerwonych"
-        }
-
-        "&6&lDTM &7> &fGracz &6$displayName &fdołączył do drużyny $teamColor&l$teamName&f."
-      }
+      event.whoClicked.closeInventory()
     }
   }
+
+  gui.setItem(
+    4,
+    ItemsClipboard.ITEM_TEAM_SELECT_RANDOM
+  ) { event: InventoryClickEvent ->
+    //
+    val team = if (game.isTeamsSameSize) {
+      game.randomTeam.identity
+    } else {
+      game.smallestTeam.identity
+    }
+
+    game.addTeammate(team, user)
+
+    val player = event.whoClicked as Player
+    player.closeInventory()
+
+    game.sendMessage {
+      val displayName = player.displayName
+      val teamColor = team.colorInChat
+
+      val teamName = if (team.name.equals("blue", true)) {
+        "Niebieskich"
+      } else {
+        "Czerwonych"
+      }
+
+      "&6&lDTM &7> &fGracz &6$displayName &fdołączył do drużyny $teamColor&l$teamName&f."
+    }
+  }
+
+  return gui
 }
 
 fun createGameSelectionGui(user: User) = GameManager.games.let {
@@ -171,19 +154,21 @@ fun createProfessionSelectionGui(user: User): Gui {
 
   ProfessionManager.professions.forEachIndexed { index, profession ->
 
-    gui.setItem(index, if (user.currentProfession == profession) {
-      itemBuilder.generation(5)
-        .name("&a&lWYBRANO")
-        .build()
-    } else if (!profession.enabled) {
-      itemBuilder.generation(14)
-        .name("&c&lNIEDOSTĘPNA")
-        .build()
-    } else {
-      itemBuilder.generation(4)
-        .name("&6&lDOSTĘPNA")
-        .build()
-    })
+    gui.setItem(
+      index, if (user.currentProfession == profession) {
+        itemBuilder.generation(5)
+          .name("&a&lWYBRANO")
+          .build()
+      } else if (!profession.enabled) {
+        itemBuilder.generation(14)
+          .name("&c&lNIEDOSTĘPNA")
+          .build()
+      } else {
+        itemBuilder.generation(4)
+          .name("&6&lDOSTĘPNA")
+          .build()
+      }
+    )
 
     gui.setItem(
       9 + index,
