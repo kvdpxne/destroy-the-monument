@@ -2,7 +2,9 @@ package me.kvdpxne.dtm.data
 
 import me.kvdpxne.dtm.data.source.database
 import me.kvdpxne.dtm.data.tables.TablePositionMonument
+import me.kvdpxne.dtm.game.BaseMonumentPosition
 import me.kvdpxne.dtm.game.MonumentPosition
+import me.kvdpxne.dtm.game.Team
 import org.ktorm.dsl.QueryRowSet
 import org.ktorm.dsl.delete
 import org.ktorm.dsl.eq
@@ -20,15 +22,15 @@ object DaoPositionMonument {
   /**
    * @since 0.1.0
    */
-  private fun toPositionMonument(
+  private fun <T : Team> toPositionMonument(
     row: QueryRowSet
-  ): MonumentPosition {
+  ): MonumentPosition<T> {
     //
     val identifier = row[TablePositionMonument.identifier]!!
 
     //
     val teamIdentityIdentifier = row[TablePositionMonument.teamIdentifier]!!
-    val teamIdentity = DaoTeam.findTeamByIdentifier(teamIdentityIdentifier)!!
+    val teamIdentity = DaoTeam.findTeamByIdentifier(teamIdentityIdentifier)!! as T
 
     //
     val x = row[TablePositionMonument.x]!!
@@ -36,7 +38,7 @@ object DaoPositionMonument {
     val z = row[TablePositionMonument.z]!!
 
     //
-    return MonumentPosition(
+    return BaseMonumentPosition(
       x,
       y,
       z,
@@ -48,9 +50,9 @@ object DaoPositionMonument {
   /**
    * @since 0.1.0
    */
-  fun findPositionMonumentByIdentifierOrNull(
+  fun <T : Team> findPositionMonumentByIdentifierOrNull(
     identifier: String
-  ): MonumentPosition? {
+  ): MonumentPosition<T>? {
     return database.from(TablePositionMonument)
       .select()
       .where {
@@ -58,7 +60,7 @@ object DaoPositionMonument {
         TablePositionMonument.identifier eq identifier
       }
       .map {
-        toPositionMonument(it)
+        this.toPositionMonument<T>(it)
       }
       .firstOrNull()
   }
@@ -67,7 +69,7 @@ object DaoPositionMonument {
    * @since 0.1.0
    */
   fun insertPositionMonument(
-    monument: MonumentPosition
+    monument: MonumentPosition<*>
   ) {
     database.insert(TablePositionMonument) {
       set(it.identifier, monument.identifier)

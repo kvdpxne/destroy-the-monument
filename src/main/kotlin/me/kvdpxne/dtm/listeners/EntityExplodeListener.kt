@@ -1,11 +1,11 @@
 package me.kvdpxne.dtm.listeners
 
+import me.kvdpxne.dtm.configuration.Configuration
 import me.kvdpxne.dtm.game.Arena
-import me.kvdpxne.dtm.game.GameManager
-import me.kvdpxne.dtm.game.RevivalPosition
-import me.kvdpxne.dtm.game.RevivalPosition.Companion.RADIUS_OF_EXPLOSION_INTERACTION
 import me.kvdpxne.dtm.game.Game
-import me.kvdpxne.dtm.shared.basics.isNear
+import me.kvdpxne.dtm.game.GameManager
+import me.kvdpxne.dtm.game.LocalGame
+import me.kvdpxne.dtm.game.RevivalPosition
 import me.kvdpxne.dtm.shared.minecraft.bukkit.cancel
 import me.kvdpxne.dtm.shared.minecraft.bukkit.hasInventory
 import me.kvdpxne.dtm.shared.minecraft.bukkit.isNature
@@ -40,14 +40,18 @@ object EntityExplodeListener : Listener {
     // The object of location an entity explosion
     val location: Location = event.location
 
-    for (game: Game in GameManager.games) {
+    for (game: Game<*> in GameManager.games) {
+      if (game !is LocalGame) {
+        continue
+      }
+
       if (!game.isRunning && !game.isStopping) {
         continue
       }
 
       //
       val arena: Arena = game.currentArena
-        ?: throw IllegalStateException("No arena found for ${game.name}")
+        ?: throw IllegalStateException("No arena found for $game")
 
       //
       val world: World = arena.map?.world
@@ -58,8 +62,14 @@ object EntityExplodeListener : Listener {
         return
       }
 
-      for (revivalPosition: RevivalPosition in arena.revivalPositions) {
-        if (!revivalPosition.isNear(location, RADIUS_OF_EXPLOSION_INTERACTION)) {
+      for (revivalPosition: RevivalPosition<*> in arena.revivalPositions) {
+        if (!revivalPosition.isNear(
+            location.x,
+            location.y,
+            location.z,
+            Configuration.RADIUS_OF_EXPLOSION_INTERACTION
+          )
+        ) {
           continue
         }
 

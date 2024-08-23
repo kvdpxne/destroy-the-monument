@@ -2,8 +2,8 @@ package me.kvdpxne.dtm.data
 
 import me.kvdpxne.dtm.data.source.database
 import me.kvdpxne.dtm.data.tables.TableArena
-import me.kvdpxne.dtm.game.Arena
-import me.kvdpxne.dtm.game.ArenaMap
+import me.kvdpxne.dtm.game.BaseArena
+import me.kvdpxne.dtm.game.BaseArenaMap
 import me.kvdpxne.dtm.uid.toUuid
 import org.ktorm.dsl.QueryRowSet
 import org.ktorm.dsl.eq
@@ -26,7 +26,7 @@ object DaoArena {
    */
   private fun toArena(
     row: QueryRowSet
-  ): Arena {
+  ): BaseArena {
     //
     val identifier = row[TableArena.identifier]!!
 
@@ -43,7 +43,7 @@ object DaoArena {
     val name = row[TableArena.name]!!
 
     //
-    return Arena(
+    return BaseArena(
       name,
       identifier
     ).apply {
@@ -54,9 +54,9 @@ object DaoArena {
         return@apply
       }
 
-      this.map = ArenaMap(
+      this.map = BaseArenaMap(
         mapName,
-        mapIdentifier.toUuid()
+        mapIdentifier
       )
     }
   }
@@ -64,7 +64,7 @@ object DaoArena {
   /**
    * @since 0.1.0
    */
-  fun findArenas(): List<Arena> {
+  fun findArenas(): List<BaseArena> {
     return database.from(TableArena)
       .select()
       .mapNotNull {
@@ -78,7 +78,7 @@ object DaoArena {
    */
   fun findArenaByIdentifierOrNull(
     identifier: String
-  ): Arena? {
+  ): BaseArena? {
     return database.from(TableArena)
       .select()
       .where {
@@ -95,7 +95,7 @@ object DaoArena {
    */
   fun findArenaByNameOrNull(
     name: String
-  ): Arena? {
+  ): BaseArena? {
     return database.from(TableArena)
       .select()
       .where {
@@ -111,7 +111,7 @@ object DaoArena {
    * @since 0.1.0
    */
   fun insertArena(
-    arena: Arena
+    arena: BaseArena
   ) {
     database.insert(TableArena) {
       set(it.identifier, arena.identifier)
@@ -124,7 +124,7 @@ object DaoArena {
   /**
    * @since 0.1.0
    */
-  fun updateArena(arena: Arena) {
+  fun updateArena(arena: BaseArena) {
     database.update(TableArena) {
       set(it.name, arena.name)
       set(it.mapIdentifier, arena.map?.identifier.toString())

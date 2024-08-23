@@ -3,26 +3,42 @@ package me.kvdpxne.dtm.game
 import me.kvdpxne.dtm.data.DaoGame
 import me.kvdpxne.dtm.data.DaoGameArena
 import me.kvdpxne.dtm.data.DaoGameTeam
+import me.kvdpxne.dtm.game.Game
 
+/**
+ * @since 0.1.0
+ */
 object GameService {
 
-  fun findGames(): List<Game> {
+  /**
+   * @since 0.1.0
+   */
+  fun findGames(): List<Game<Team>> {
     return DaoGame.findGames()
   }
 
-  fun findGameArenaByGameIdentifier(
+  /**
+   * @since 0.1.0
+   */
+  fun findGameArenasByGameIdentifier(
     identifier: String
   ): List<Arena> {
     return DaoGameArena.findGameArenaByGameIdentifier(identifier)
   }
 
-  fun findGameTeamByGameIdentifier(
+  /**
+   * @since 0.1.0
+   */
+  fun findGameTeamsByGameIdentifier(
     identifier: String
-  ): List<TeamIdentity> {
+  ): List<Team> {
     return DaoGameTeam.findGameTeamByGameIdentifier(identifier)
   }
 
-  fun insertGame(game: Game) {
+  /**
+   * @since 0.1.0
+   */
+  fun insertGame(game: Game<*>) {
     DaoGame.insertGame(game)
   }
 }

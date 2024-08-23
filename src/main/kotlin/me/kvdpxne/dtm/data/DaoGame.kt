@@ -2,7 +2,9 @@ package me.kvdpxne.dtm.data
 
 import me.kvdpxne.dtm.data.source.database
 import me.kvdpxne.dtm.data.tables.TableGame
+import me.kvdpxne.dtm.game.BaseGame
 import me.kvdpxne.dtm.game.Game
+import me.kvdpxne.dtm.game.Team
 import org.ktorm.dsl.QueryRowSet
 import org.ktorm.dsl.eq
 import org.ktorm.dsl.from
@@ -20,29 +22,30 @@ object DaoGame {
   /**
    * @since 0.1.0
    */
-  private fun toGame(
+  private fun <T : Team> toGame(
     row: QueryRowSet
-  ): Game {
+  ): Game<T> {
     //
     val identifier = row[TableGame.identifier]!!
 
     //
     val name = row[TableGame.name]!!
 
-    return Game(
+    return BaseGame(
       name,
-      identifier
+      name,
+      identifier =identifier
     )
   }
 
   /**
    * @since 0.1.0
    */
-  fun findGames(): List<Game> {
+  fun <T : Team> findGames(): List<Game<T>> {
     return database.from(TableGame)
       .select()
       .mapNotNull {
-        toGame(it)
+        this.toGame<T>(it)
       }
       .toList()
   }
@@ -50,16 +53,16 @@ object DaoGame {
   /**
    * @since 0.1.0
    */
-  fun findGameByIdentifierOrNull(
+  fun <T : Team> findGameByIdentifierOrNull(
     identifier: String
-  ): Game? {
+  ): Game<T>? {
     return database.from(TableGame)
       .select()
       .where {
         TableGame.identifier eq identifier
       }
       .map {
-        toGame(it)
+        this.toGame<T>(it)
       }
       .firstOrNull()
   }
@@ -68,7 +71,7 @@ object DaoGame {
    * @since 0.1.0
    */
   fun insertGame(
-    game: Game
+    game: Game<*>
   ) {
     database.insert(TableGame) {
       set(it.identifier, game.identifier)

@@ -1,133 +1,71 @@
 package me.kvdpxne.dtm.game
 
-import me.kvdpxne.dtm.shared.ancillary.AbstractIdentifiable
+import me.kvdpxne.dtm.shared.ancillary.Identifiable
 import me.kvdpxne.dtm.shared.basics.position.BlockPosition
-import me.kvdpxne.dtm.uid.Uid
 
 /**
- * @param name
- * @param identifier
- *
  * @since 0.1.0
  */
-class Arena(
-  // @formatter:off
-  val name      : String,
-      identifier: String = Uid.next()
-  // @formatter:on
-) : AbstractIdentifiable<String>(identifier) {
-
-  /**
-   * Map of positions for each team where teammates will be spawned after death
-   * or being moved to the arena map.
-   *
-   * @since 0.1.0
-   */
-  val _revivalPositions: MutableMap<String, RevivalPosition> = mutableMapOf()
+interface Arena : Identifiable<String> {
 
   /**
    * @since 0.1.0
    */
-  val _monumentPositions: MutableMap<String, MutableSet<MonumentPosition>> = mutableMapOf()
+  override val identifier: String
 
   /**
    * @since 0.1.0
    */
-  var map: ArenaMap? = null
+  val name: String
 
   /**
    * @since 0.1.0
    */
-  val revivalPositions: List<RevivalPosition>
-    get() = this._revivalPositions.values.toList()
+  val revivalPositions: List<RevivalPosition<out Team>>
 
   /**
    * @since 0.1.0
    */
-  val monumentPositions: List<MonumentPosition>
-    get() = this._monumentPositions.values.flatten().toList()
+  val monumentPositions: List<MonumentPosition<out Team>>
 
   /**
    * @since 0.1.0
    */
-  val isLoaded: Boolean
-    get() = null != this.map?.world
+  val map: ArenaMap?
 
   /**
    * @since 0.1.0
    */
-  fun findRevivalPosition(
-    team: TeamIdentity
-  ): RevivalPosition? {
-    return this._revivalPositions[team.identifier]
-  }
-
-  fun findPositionMonument(
-    identifier: String
-  ): Set<MonumentPosition>? {
-    return this._monumentPositions[identifier]
-  }
+  fun getRevivalPosition(
+    team: Team
+  ): RevivalPosition<out Team>?
 
   /**
    * @since 0.1.0
    */
-  fun findMonument(
-    blockPosition: BlockPosition
-  ): MonumentPosition? {
-    return this.monumentPositions.find {
-      it.isIn(blockPosition)
-    }
-  }
+  fun getMonumentPositions(
+    team: Team
+  ): List<MonumentPosition<out Team>>
 
   /**
    * @since 0.1.0
    */
-  fun findMonument(
+  fun getMonumentPosition(
     x: Int,
     y: Int,
     z: Int
-  ): MonumentPosition? {
-    for (monuments: MutableSet<MonumentPosition> in this._monumentPositions.values) {
-      for (monument: MonumentPosition in monuments) {
-        if (monument.isIn(x, y, z)) {
-          return monument
-        }
-      }
-    }
-    return null
-  }
+  ): MonumentPosition<out Team>?
 
-  fun addPositionMonument(
-    position: MonumentPosition
-  ) {
-    val fs = this._monumentPositions[position.team.identifier] ?: mutableSetOf()
-    fs.add(position)
-    this._monumentPositions[position.team.identifier] = fs
-  }
-
-  fun addRevivalPosition(
-    position: RevivalPosition
-  ) {
-    this._revivalPositions[position.team.identifier] = position
-  }
-
-  override fun equals(other: Any?): Boolean {
-    if (this === other) return true
-    if (javaClass != other?.javaClass) return false
-    if (!super.equals(other)) return false
-
-    other as Arena
-
-    return map == other.map
-  }
-
-  override fun hashCode(): Int {
-    var result = super.hashCode()
-    result = 31 * result + map.hashCode()
-    return result
-  }
-
-  override fun toString(): String {
-    return "Arena(identifier=$identifier, name='$name', map=$map)"
+  /**
+   * @since 0.1.0
+   */
+  fun getMonumentPosition(
+    position: BlockPosition
+  ): MonumentPosition<out Team>? {
+    return this.getMonumentPosition(
+      position.x,
+      position.y,
+      position.z
+    )
   }
 }

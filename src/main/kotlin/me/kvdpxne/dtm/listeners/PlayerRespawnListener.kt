@@ -1,27 +1,43 @@
 package me.kvdpxne.dtm.listeners
 
-import me.kvdpxne.dtm.DestroyTheMonument
-import me.kvdpxne.dtm.shared.minecraft.bukkit.fillExperienceBar
+import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.game.LocalGame
+import me.kvdpxne.dtm.game.LocalTeam
+import me.kvdpxne.dtm.game.Teammate
+import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.shared.minecraft.bukkit.reset
 import me.kvdpxne.dtm.shared.minecraft.bukkit.runSynchronousDelayedTask
 import me.kvdpxne.dtm.shared.minecraft.bukkit.toLocation
+import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserManager
-import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerRespawnEvent
 
+/**
+ * @since 0.1.0
+ */
 object PlayerRespawnListener : Listener {
 
-  @EventHandler
-  fun handlePlayerRespawn(event: PlayerRespawnEvent) {
+  /**
+   * @since 0.1.0
+   */
+  @EventHandler(
+    priority = EventPriority.HIGHEST
+  )
+  fun handlePlayerRespawn(
+    event: PlayerRespawnEvent
+  ) {
+    // Obiekt gracza, który się odrodził.
     val player = event.player
 
-    //
-    val user = UserManager.findByIdentifier(player.uniqueId) ?: return
+    // Obiekt użytkownika pozyskany z unikatowego identyfikatora obiektu
+    // gracza, który się odrodził.
+    val user: User = UserManager.findByIdentifier(player.uniqueId) ?: return
 
-    //
-    val game = user.game ?: return
+    // Obiekt lokalnej gry, do której jest przypisany obiekt użytkownika.
+    val game: LocalGame = user.game ?: return
 
     //
     if (!game.isRunning) {
@@ -32,55 +48,46 @@ object PlayerRespawnListener : Listener {
     val arena = game.currentArena ?: return
 
     //
-    if (!arena.isLoaded) {
+    if (false == arena.map?.isLoaded) {
       return
     }
 
     //
-    val team = game.findTeam(user) ?: return
+    val team: LocalTeam = game.findTeamByHostage(user) ?: return
 
-    val spawnPoint = arena.findRevivalPosition(team.identity) ?: return
+    val spawnPoint = arena.getRevivalPosition(team) ?: return
     val map = arena.map?.world!!
     event.respawnLocation = spawnPoint.toLocation(map)
 
     //
-    val teammate = team.findTeammate(user) ?: return
+    val teammate: Teammate = team.getTeammate(user) ?: return
 
     //
     player.reset()
 
     //
-    teammate.professionQueuingPair.run {
-      if (this.hasNext()) {
-        this.shift()
-      }
+    if (teammate.hasNextProfession) {
+      teammate.shiftProfession()
+    }
 
-      this.current.equip(player, teammate.team.identity.dyeColor)
+    //
+    val profession: Profession = teammate.currentProfession
 
-      this.current.ability?.let {
-        //
-        it.cancelCooldown()
+    //
+    profession.equip(player, team.dyeColor)
 
-        if (it.readyAfterDeath) {
-          it.markReady()
-          it.whenReady(player)
+    //
+    profession.ability?.let {
+      //
+      it.cancelCooldown()
 
-          // Fill player exp bar after 200 ms
-          Bukkit.getScheduler().runTaskLaterAsynchronously(
-            DestroyTheMonument.instance,
-            { player.fillExperienceBar() },
-            4L
-          )
-          return
-        }
-
-        it.renewDelayed(player, true)
-      }
+      //
+      it.renewDelayed(player, true)
     }
 
     //
     runSynchronousDelayedTask(2L) {
-      player.noDamageTicks = 20 * 2
+      player.noDamageTicks = 20 * Configuration.REVIVAL_PLAYER_PROTECTION_DELAY
     }
   }
 }

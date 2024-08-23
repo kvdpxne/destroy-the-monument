@@ -1,6 +1,5 @@
 package me.kvdpxne.dtm.command
 
-import me.kvdpxne.dtm.game.ArenaService
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.user.UserManager
 
@@ -44,7 +43,7 @@ fun builderArenaNameParameter(
     .validationBy(ParameterValidators.STRING_VALIDATOR)
     .autocompletedWith { begin ->
       //
-      ArenaService.findArenas()
+      me.kvdpxne.dtm.game.ArenaService.findArenas()
         .filter { it.name.startsWith(begin) }
         .map { it.name }
     }

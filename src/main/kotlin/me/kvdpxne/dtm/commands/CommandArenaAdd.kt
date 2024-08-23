@@ -6,6 +6,8 @@ import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.command.builderArenaNameParameter
 import me.kvdpxne.dtm.command.builderGameNameParameter
 import me.kvdpxne.dtm.data.DaoGameArena
+import me.kvdpxne.dtm.game.LocalGame
+import me.kvdpxne.dtm.game.LocalTeam
 
 fun createArenaAddCommand(): Command {
   // Usage: /dtm arena add <ARENA_NAME> <GAME_NAME>
@@ -29,7 +31,7 @@ fun createArenaAddCommand(): Command {
         return@handler
       }
 
-      val game = arguments.asFoundGame(1)
+      val game = arguments.asFoundGame<LocalTeam, LocalGame>(1)
 
       if (null == game) {
         performer.sendMessage("An game named ${arguments.asText(1)}does not exist.")

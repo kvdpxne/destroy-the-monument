@@ -6,8 +6,7 @@ import me.kvdpxne.dtm.command.ParameterBuilder
 import me.kvdpxne.dtm.command.ParameterValidators
 import me.kvdpxne.dtm.data.DaoTeam
 import me.kvdpxne.dtm.game.ArenaService
-import me.kvdpxne.dtm.game.RevivalPosition
-import me.kvdpxne.dtm.game.TeamService
+import me.kvdpxne.dtm.game.BaseRevivalPosition
 import me.kvdpxne.dtm.user.UserPerformer
 
 fun createArenaMapRevivalSetCommand(): Command {
@@ -53,7 +52,7 @@ fun createArenaMapRevivalSetCommand(): Command {
       ArenaService.insertArenaRevivalPosition(
         arena,
         //
-        RevivalPosition(
+        BaseRevivalPosition(
           location.x,
           location.y,
           location.z,

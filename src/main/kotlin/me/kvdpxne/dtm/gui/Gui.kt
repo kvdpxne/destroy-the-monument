@@ -10,6 +10,13 @@ open class Gui(displayName: String, rows: Rows) {
   private val holder = GuiHolder()
   val inventory = Bukkit.createInventory(holder, rows.size, displayName)
 
+  companion object {
+
+    fun withDecimal(displayName: String, rows: Int): Gui {
+      return Gui(displayName, Rows.findRowBySize(rows))
+    }
+  }
+
   init {
     holder.inventory = this.inventory
   }

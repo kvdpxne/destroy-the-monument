@@ -1,6 +1,7 @@
 package me.kvdpxne.dtm.listeners
 
 import me.kvdpxne.dtm.game.GameManager
+import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -17,7 +18,7 @@ object PlayerPrepareItemEnchantListener : Listener {
     val player = event.enchanter
 
     val user = UserManager.findByIdentifier(player.uniqueId) ?: return
-    val game = GameManager.findByUser(user) ?: return
+    val game: LocalGame = user.game ?: return
 
     if (game.isRunning &&
       null != game.currentArena &&

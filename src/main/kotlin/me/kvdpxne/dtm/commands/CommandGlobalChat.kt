@@ -5,6 +5,7 @@ import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.ParameterBuilder
 import me.kvdpxne.dtm.command.ParameterValidators
 import me.kvdpxne.dtm.game.GameManager
+import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.user.UserPerformer
 
 fun createGlobalChatCommand(): Command {
@@ -21,7 +22,7 @@ fun createGlobalChatCommand(): Command {
         .build()
     )
     .handler<UserPerformer> { performer, arguments ->
-      val game = GameManager.findByUser(performer.user)
+      val game = performer.user.game
       if (null == game) {
         performer.sendMessage("You're not in any game.")
         return@handler
@@ -30,7 +31,7 @@ fun createGlobalChatCommand(): Command {
       val name = performer.name
       val textLine = arguments.asFullText()
 
-      game.sendMessage("&7[&6G&7] &6$name&7: &f$textLine")
+      (game as LocalGame).sendMessage("&7[&6G&7] &6$name&7: &f$textLine")
     }
     .build()
 }

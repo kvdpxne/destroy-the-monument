@@ -35,6 +35,11 @@ object GameStates {
   const val RUNNING = 0
 
   /**
+   * @since 0.1.0
+   */
+  const val ENDING = 4
+
+  /**
    * Represents the state where the game is shutting down. Processes like
    * saving data or cleaning up resources might occur here.
    *

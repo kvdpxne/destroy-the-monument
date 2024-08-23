@@ -9,7 +9,9 @@ fun createVersionCommand(): Command {
     .name("version")
     .aliases("ver", "v")
     .handler<Performer> { performer, arguments ->
-
+      performer.sendMessages(
+        "v0.1.0"
+      )
     }
     .build()
 }

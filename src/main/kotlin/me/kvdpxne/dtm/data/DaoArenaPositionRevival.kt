@@ -3,6 +3,7 @@ package me.kvdpxne.dtm.data
 import me.kvdpxne.dtm.data.source.database
 import me.kvdpxne.dtm.data.tables.TableArenaPositionRevival
 import me.kvdpxne.dtm.game.RevivalPosition
+import me.kvdpxne.dtm.game.Team
 import org.ktorm.dsl.delete
 import org.ktorm.dsl.eq
 import org.ktorm.dsl.from
@@ -21,14 +22,14 @@ object DaoArenaPositionRevival {
    */
   fun findArenaPositionRevivalByArenaIdentifier(
     identifier: String
-  ): List<RevivalPosition> {
+  ): List<RevivalPosition<*>> {
     return database.from(TableArenaPositionRevival)
       .select()
       .where {
         TableArenaPositionRevival.arenaIdentifier eq identifier
       }
       .mapNotNull {
-        DaoPositionRevival.findPositionRevivalByIdentifierOrNull(
+        DaoPositionRevival.findPositionRevivalByIdentifierOrNull<Team>(
           it[TableArenaPositionRevival.positionRevivalIdentifier]!!
         )
       }

@@ -2,13 +2,13 @@ package me.kvdpxne.dtm.tasks
 
 import fr.mrmicky.fastboard.FastBoard
 import kotlin.time.Duration.Companion.seconds
-import me.kvdpxne.dtm.game.Game
+import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.scoreboard.updateScoreboardTime
 import me.kvdpxne.dtm.shared.minecraft.bukkit.runSynchronousTask
 import org.bukkit.scheduler.BukkitRunnable
 
 class GameTimeUpdateTaskTimer(
-  private val game: Game,
+  private val game: LocalGame,
 ): BukkitRunnable() {
 
   val playerMutableList = mutableListOf<FastBoard>()

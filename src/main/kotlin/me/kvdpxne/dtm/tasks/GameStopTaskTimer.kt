@@ -1,10 +1,10 @@
 package me.kvdpxne.dtm.tasks
 
-import me.kvdpxne.dtm.game.Game
+import me.kvdpxne.dtm.game.LocalGame
 import org.bukkit.scheduler.BukkitRunnable
 
 class GameStopTaskTimer(
-  private val game: Game
+  private val game: LocalGame
 ) : BukkitRunnable() {
 
   override fun run() {

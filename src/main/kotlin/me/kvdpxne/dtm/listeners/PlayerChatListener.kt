@@ -1,9 +1,12 @@
 package me.kvdpxne.dtm.listeners
 
+import me.kvdpxne.dtm.game.LocalGame
+import me.kvdpxne.dtm.game.LocalTeam
 import me.kvdpxne.dtm.game.Teammate
 import me.kvdpxne.dtm.shared.minecraft.bukkit.cancel
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserManager
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.AsyncPlayerChatEvent
@@ -13,10 +16,10 @@ object PlayerChatListener : Listener {
   private fun formatTeammate(
     teammate: Teammate
   ): String {
-    val professionName = teammate.professionQueuingPair.current.displayName
+    val professionName = teammate.currentProfession.displayName
     val teammateName = teammate.user.name
 
-    val teamColor = teammate.team.identity
+    val teamColor = teammate.team
     val professionColor = teamColor.professionColor
     val teammateColor = teamColor.colorInChat
 
@@ -24,19 +27,21 @@ object PlayerChatListener : Listener {
   }
 
   @EventHandler
-  fun handlePlayerChat(event: AsyncPlayerChatEvent) {
+  fun handlePlayerChat(
+    event: AsyncPlayerChatEvent
+  ) {
     if (event.isCancelled) {
       return
     }
 
     //
-    val player = event.player
+    val player: Player = event.player
 
     //
-    val user = UserManager.findByIdentifier(player.uniqueId) ?: return
+    val user: User = UserManager.findByIdentifier(player.uniqueId) ?: return
 
     //
-    val game = user.game ?: return
+    val game: LocalGame = user.game ?: return
 
     //
     if (!game.isRunning || !game.isStopping) {
@@ -47,7 +52,7 @@ object PlayerChatListener : Listener {
     val arena = game.currentArena ?: return
 
     //
-    if (!arena.isLoaded) {
+    if (false == arena.map?.isLoaded) {
       return
     }
 
@@ -64,7 +69,7 @@ object PlayerChatListener : Listener {
     }
 
     //
-    val team = user.team ?: return
+    val team: LocalTeam = user.team ?: return
 
     //
     val teammate = user.teammate ?: return

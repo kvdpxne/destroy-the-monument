@@ -1,16 +1,27 @@
 package me.kvdpxne.dtm.listeners
 
-import me.kvdpxne.dtm.game.GameManager
+import me.kvdpxne.dtm.game.LocalGame
+import me.kvdpxne.dtm.game.LocalTeam
+import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.GameMode
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerToggleFlightEvent
 
+/**
+ * @since 0.1.0
+ */
 object PlayerToggleFlightListener : Listener {
 
+  /**
+   * @since 0.1.0
+   */
   @EventHandler
-  fun handlePlayerToggleFlight(event: PlayerToggleFlightEvent) {
+  fun handlePlayerToggleFlight(
+    event: PlayerToggleFlightEvent
+  ) {
     if (event.isCancelled) {
       return
     }
@@ -24,13 +35,13 @@ object PlayerToggleFlightListener : Listener {
     }
 
     //
-    val player = event.player
+    val player: Player = event.player
 
     //
-    val user = UserManager.findByIdentifier(player.uniqueId) ?: return
+    val user: User = UserManager.findByIdentifier(player.uniqueId) ?: return
 
     //
-    val game = GameManager.findByUser(user) ?: return
+    val game: LocalGame = user.game ?: return
 
     if (
       game.isRunning.not() ||
@@ -42,12 +53,12 @@ object PlayerToggleFlightListener : Listener {
     }
 
     //
-    val team = game.findTeam(user) ?: return
+    val team: LocalTeam = game.findTeamByHostage(user) ?: return
 
-    val teammate = team.findTeammate(user) ?: return
+    val teammate = team.getTeammate(user) ?: return
 
     // Current profession
-    val profession = teammate.professionQueuingPair.current
+    val profession = teammate.currentProfession
 
     if ("scout" != profession.name) {
       return

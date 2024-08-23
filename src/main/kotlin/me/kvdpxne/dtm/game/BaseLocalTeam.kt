@@ -1,0 +1,146 @@
+package me.kvdpxne.dtm.game
+
+import me.kvdpxne.dtm.shared.debug.Debug
+import me.kvdpxne.dtm.user.User
+
+class BaseLocalTeam(
+  // @formatter:off
+  name      : String,
+  color     : TeamColor,
+  identifier: String,
+  teammates : MutableSet<Teammate>
+  // @formatter:on
+) : BaseTeam(name, color, identifier), LocalTeam {
+
+  // TODO should be mutable map
+  private val _teammates: MutableSet<Teammate> = teammates
+
+  override val teammates: List<Teammate>
+    get() = this._teammates.toList()
+
+  override var health: Int = -1
+
+  override val size: Int
+    get() = this._teammates.size
+
+  override fun hasTeammate(
+    user: User
+  ): Boolean {
+    return this._teammates.any {
+      it.user == user
+    }
+  }
+
+  override fun getTeammate(
+    user: User
+  ): Teammate? {
+    return this._teammates.find {
+      it.user == user
+    }
+  }
+
+  override fun addTeammate(
+    teammate: Teammate
+  ): Boolean {
+    return this._teammates.add(teammate).also {
+      if (!it) {
+        return@also
+      }
+
+      Debug.log {
+        "A new $teammate teammate has been added to the $this team."
+      }
+    }
+  }
+
+  override fun removeTeammate(
+    user: User
+  ): Boolean {
+    return getTeammate(user)?.let {
+      removeTeammate(it)
+    } ?: false
+  }
+
+  override fun removeTeammate(
+    teammate: Teammate
+  ): Boolean {
+    return this._teammates.remove(teammate).also {
+      if (!it) {
+        return@also
+      }
+
+      Debug.log {
+        "Removed $teammate user from $this team."
+      }
+    }
+  }
+
+  override fun removeTeammates() {
+    this._teammates.clear()
+
+    Debug.log {
+      "All teammates were removed in the $this team."
+    }
+  }
+
+  override fun injure(): Boolean {
+    if (0 >= this.health) {
+      return false
+    }
+
+    --this.health
+    return true
+  }
+
+  /**
+   * Alias for [BaseTeammate.sendMessage]
+   *
+   * @since 0.1
+   */
+  override fun sendMessage(
+    message: String
+  ) {
+    this._teammates.forEach { teammate: Teammate ->
+      teammate.sendMessage(message)
+    }
+  }
+
+  /**
+   * Alias for [BaseTeammate.sendMessage]
+   *
+   * @since 0.1
+   */
+  override fun sendMessage(
+    message: () -> String
+  ) {
+    if (this._teammates.isEmpty()) {
+      return
+    }
+
+    val body = message()
+    this._teammates.forEach { teammate: Teammate ->
+      teammate.sendMessage(body)
+    }
+  }
+
+  /**
+   * Alias for [BaseTeammate.sendMessages]
+   *
+   * @since 0.1
+   */
+  override fun sendMessages(
+    vararg messages: String
+  ) {
+    if (this._teammates.isEmpty() || messages.isEmpty()) {
+      return
+    }
+
+    this._teammates.forEach { teammate: Teammate ->
+      teammate.sendMessages(*messages)
+    }
+  }
+
+  override fun toLocalTeam(): LocalTeam {
+    return this
+  }
+}

@@ -13,9 +13,7 @@ fun createJoinCommand(): Command {
     .handler<UserPerformer> { performer, _ ->
       val player = performer.player ?: return@handler
 
-      val game = GameManager.games.find {
-        it.isInGame(performer.user)
-      }
+      val game = performer.user.game
 
       if (null != game) {
         createTeamSelectionGui(game, performer.user).open(player)

@@ -1,9 +1,14 @@
 package me.kvdpxne.dtm.listeners
 
+import me.kvdpxne.dtm.game.LocalGame
+import me.kvdpxne.dtm.game.LocalTeam
+import me.kvdpxne.dtm.game.Teammate
 import me.kvdpxne.dtm.gui.createProfessionSelectionGui
 import me.kvdpxne.dtm.shared.minecraft.bukkit.cancel
 import me.kvdpxne.dtm.shared.minecraft.bukkit.resetExperienceBar
+import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserManager
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerDropItemEvent
@@ -25,13 +30,13 @@ object PlayerDropItemListener : Listener {
     }
 
     // The object of the player who dropped the item
-    val player = event.player
+    val player: Player = event.player
 
     // The user object obtained from the unique identifier of the player object
-    val user = UserManager.findByIdentifier(player.uniqueId) ?: return
+    val user: User = UserManager.findByIdentifier(player.uniqueId) ?: return
 
     // The object of the game to which the user is assigned
-    val game = user.game ?: return
+    val game: LocalGame = user.game ?: return
 
     //
     if (player.isSneaking) {
@@ -51,12 +56,12 @@ object PlayerDropItemListener : Listener {
 
     // If the arena is not loaded or the user is not on the arena map, then the
     // plugin should not overwrite the event of the player dropping the item
-    if (!arena.isLoaded || !game.isInArena(user)) {
+    if (false == arena.map?.isLoaded || !game.isInArena(user)) {
       return
     }
 
     // Converted the user object to an object of a teammate who is in a team
-    val teammate = game.findTeammate(user) ?: return
+    val teammate: Teammate = game.findTeammateByHostage(user) ?: return
 
     // Cancels further execution of the event
     event.cancel()

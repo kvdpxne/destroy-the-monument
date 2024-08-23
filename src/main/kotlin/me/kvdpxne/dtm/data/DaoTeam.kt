@@ -2,7 +2,8 @@ package me.kvdpxne.dtm.data
 
 import me.kvdpxne.dtm.data.source.database
 import me.kvdpxne.dtm.data.tables.TableTeam
-import me.kvdpxne.dtm.game.TeamIdentity
+import me.kvdpxne.dtm.game.BaseTeam
+import me.kvdpxne.dtm.game.Team
 import me.kvdpxne.dtm.game.TeamColors
 import org.ktorm.dsl.QueryRowSet
 import org.ktorm.dsl.eq
@@ -22,7 +23,7 @@ object DaoTeam {
    */
   private fun toTeam(
     row: QueryRowSet
-  ): TeamIdentity {
+  ): Team {
     //
     val identifier = row[TableTeam.identifier]!!
 
@@ -34,7 +35,7 @@ object DaoTeam {
     val name = row[TableTeam.name]!!
 
     //
-    return TeamIdentity(
+    return BaseTeam(
       name,
       color,
       identifier
@@ -46,7 +47,7 @@ object DaoTeam {
    */
   fun findTeamByIdentifier(
     identifier: String
-  ): TeamIdentity? {
+  ): Team? {
     return database.from(TableTeam)
       .select()
       .where {
@@ -63,7 +64,7 @@ object DaoTeam {
    */
   fun findTeamByName(
     name: String
-  ): TeamIdentity? {
+  ): Team? {
     return database.from(TableTeam)
       .select()
       .where {
@@ -79,7 +80,7 @@ object DaoTeam {
    * @since 0.1.0
    */
   fun insertTeam(
-    teamIdentity: TeamIdentity
+    teamIdentity: Team
   ) {
     database.insert(TableTeam) {
       set(it.identifier, teamIdentity.identifier)

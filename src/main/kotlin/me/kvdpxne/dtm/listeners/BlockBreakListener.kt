@@ -1,11 +1,13 @@
 package me.kvdpxne.dtm.listeners
 
 import me.kvdpxne.dtm.colorize
-import me.kvdpxne.dtm.game.Game
+import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.game.Arena
+import me.kvdpxne.dtm.game.LocalGame
+import me.kvdpxne.dtm.game.LocalTeam
 import me.kvdpxne.dtm.game.RevivalPosition
 import me.kvdpxne.dtm.game.Team
 import me.kvdpxne.dtm.game.Teammate
-import me.kvdpxne.dtm.game.findMonument
 import me.kvdpxne.dtm.scoreboard.updateBlueMonumentCount
 import me.kvdpxne.dtm.scoreboard.updateRedMonumentCount
 import me.kvdpxne.dtm.shared.ItemsClipboard
@@ -24,17 +26,24 @@ import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.inventory.ItemStack
 
+/**
+ * @since 0.1.0
+ */
 object BlockBreakListener : Listener {
 
+  /**
+   * @since 0.1.0
+   */
   private fun updateTeammate(
-    team: Team,
+    team: LocalTeam,
     item: ItemStack
   ) {
-    team._teammates.forEach { teammate: Teammate ->
+    team.teammates.forEach { teammate: Teammate ->
 
       //
       teammate.currentProfession.ability?.let {
@@ -63,20 +72,28 @@ object BlockBreakListener : Listener {
     event.block.type = Material.AIR
   }
 
-  @EventHandler
-  fun handleBlockBreak(event: BlockBreakEvent) {
+  /**
+   * @since 0.1.0
+   */
+  @EventHandler(
+    priority = EventPriority.HIGH
+  )
+  fun handleBlockBreak(
+    event: BlockBreakEvent
+  ) {
     if (event.isCancelled) {
       return
     }
 
-    // The object of the player who destroyed a block
+    // Obiekt gracza, który zniszczył blok.
     val player: Player = event.player
 
-    // The user object obtained from the unique identifier of the player object
+    // Obiekt użytkownika, pozyskany z unikatowego identyfikatora gracza,
+    // który zniszczył blok.
     val user: User = UserManager.findByIdentifier(player.uniqueId) ?: return
 
-    // The object of the game to which the user is assigned
-    val game: Game = user.game ?: return
+    // Obiekt lokalnej gry, do której jest przypisany obiekt użytkownika.
+    val game: LocalGame = user.game ?: return
 
     // The game object must have a “started” state
     if (!game.isRunning) {
@@ -84,10 +101,10 @@ object BlockBreakListener : Listener {
     }
 
     // The currently assigned arena object for the game
-    val arena = game.currentArena ?: return
+    val arena: Arena = game.currentArena ?: return
 
     // The arena object must have a map loaded.
-    if (!arena.isLoaded) {
+    if (false == arena.map?.isLoaded) {
       return
     }
 
@@ -101,12 +118,21 @@ object BlockBreakListener : Listener {
     }
 
     //
-    for (revivalPosition: RevivalPosition in arena.revivalPositions) {
-      if (revivalPosition.isNear(location.x, location.y, location.z, RevivalPosition.RADIUS_OF_BLOCK_INTERACTION)) {
-        event.cancel()
-        user.sendMessage("&6&lDTM &7> &cNie możesz niszczyć bloków na spawnie.")
-        return
+    for (revivalPosition: RevivalPosition<*> in arena.revivalPositions) {
+      if (!revivalPosition.isNear(
+          location.x,
+          location.y,
+          location.z,
+          Configuration.RADIUS_OF_BLOCK_INTERACTION
+        )
+      ) {
+        continue
       }
+      event.cancel()
+      user.sendMessage { configuration: Configuration ->
+        configuration.SPAWN_BLOCK_BREAK_DENIED_MESSAGE
+      }
+      return
     }
 
     // The object of the destroyed block
@@ -118,12 +144,15 @@ object BlockBreakListener : Listener {
       return
     }
 
+    //
+    val x: Int = location.blockX
+    val y: Int = location.blockY
+    val z: Int = location.blockZ
+
     if (Material.GRASS == block.type || Material.DIRT == block.type || Material.SOUL_SAND == block.type) {
-      val upperBlock: Block = location.world.getBlockAt(
-        location.blockX,
-        location.blockY + 1,
-        location.blockZ
-      )
+
+      //
+      val upperBlock: Block = location.world.getBlockAt(x, y + 1, z)
 
       //
       if (upperBlock.isNature()) {
@@ -137,7 +166,7 @@ object BlockBreakListener : Listener {
     }
 
     // A monument that was destroyed by the user
-    val monument = arena.findMonument(location) ?: return
+    val monument = arena.getMonumentPosition(x, y, z) ?: return
 
     //
     if (monument.isDestroyed) {
@@ -151,13 +180,10 @@ object BlockBreakListener : Listener {
     val teammate: Teammate = user.teammate ?: return
 
     //
-    val monumentIdentity = monument.team
+    val monumentBelongs = monument.team
 
     //
-    val teamIdentity = victimTeam.identity
-
-    //
-    if (monumentIdentity == teamIdentity) {
+    if (monumentBelongs == victimTeam) {
       event.cancel()
       user.sendMessage("&6&lDTM &7> &fNie możesz zniszczyć monumentu swojej drużyny.")
       return
@@ -167,10 +193,10 @@ object BlockBreakListener : Listener {
     this.disappearBlock(event)
 
     // The team to which the destroyed monument belonged
-    val attackedTeam = game.findTeamByIdentifier(monumentIdentity) ?: return
+    val attackedTeam = game.findTeamByIdentifier(monumentBelongs.identifier) ?: return
 
     //
-    if (!attackedTeam.dealDamage()) {
+    if (!attackedTeam.injure()) {
       throw IllegalStateException(
         """
         Unexpectedly the health of the team: \"$attackedTeam\" is less than 0
@@ -185,22 +211,22 @@ object BlockBreakListener : Listener {
     // Adds one destroyed monument to a teammate's statistics
     teammate.addDestroyedMonument()
 
-    game.teams.forEach {
-      if (attackedTeam.identity == monumentIdentity) {
-        it._teammates.forEach {
-          updateRedMonumentCount(it.fastBoard!!, attackedTeam.health)
+    for (team: LocalTeam in game.teams) {
+      if (attackedTeam == monumentBelongs) {
+        for (teammate: Teammate in team.teammates) {
+          updateRedMonumentCount(teammate.fastBoard, attackedTeam.health)
         }
-        return@forEach
+        continue
       }
 
-      it._teammates.forEach { teammate ->
-        updateBlueMonumentCount(teammate.fastBoard!!, attackedTeam.health)
+      for (teammate: Teammate in team.teammates) {
+        updateBlueMonumentCount(teammate.fastBoard, attackedTeam.health)
       }
     }
 
     if (0 < attackedTeam.health) {
-      val coloredUser = "${teamIdentity.colorInChat}${user.name}"
-      val coloredMonument = "${monumentIdentity.colorInChat}&l${monumentIdentity.name}".colorize().uppercase()
+      val coloredUser = "${attackedTeam.colorInChat}${user.name}"
+      val coloredMonument = "${monumentBelongs.colorInChat}&l${monumentBelongs.name}".colorize().uppercase()
 
       val end = when (attackedTeam.health) {
         1 -> "&fPozostał &61 &fmonument."

@@ -6,8 +6,7 @@ import me.kvdpxne.dtm.command.ParameterBuilder
 import me.kvdpxne.dtm.command.ParameterValidators
 import me.kvdpxne.dtm.data.DaoTeam
 import me.kvdpxne.dtm.game.ArenaService
-import me.kvdpxne.dtm.game.MonumentPosition
-import me.kvdpxne.dtm.game.TeamService
+import me.kvdpxne.dtm.game.BaseMonumentPosition
 import me.kvdpxne.dtm.user.UserPerformer
 
 fun createArenaMapMonumentAddCommand(): Command {
@@ -31,7 +30,7 @@ fun createArenaMapMonumentAddCommand(): Command {
     .handler<UserPerformer> { performer, parameter ->
 
       val arenaName = parameter.asText()
-      val arena = ArenaService.findArenaByName(arenaName)
+      val arena = me.kvdpxne.dtm.game.ArenaService.findArenaByName(arenaName)
 
       if (null == arena) {
         performer.sendMessage("&cBłąd: &7Arena o nazwie: &c$arenaName &7nie istnieje.")
@@ -59,7 +58,7 @@ fun createArenaMapMonumentAddCommand(): Command {
       //
       ArenaService.insertArenaMonumentPosition(
         arena,
-        MonumentPosition(
+        BaseMonumentPosition(
           position.x,
           position.y,
           position.z,
@@ -68,7 +67,7 @@ fun createArenaMapMonumentAddCommand(): Command {
       )
 
       performer.sendMessage("&6&lDTM &7> &7Dodano nowy blok monumentu dla" +
-        "drużyny ${team.displayName()} &7na arenie o nazwie &a${arenaName}&7."
+        "drużyny ${team.displayName} &7na arenie o nazwie &a${arenaName}&7."
       )
     }
     .build()

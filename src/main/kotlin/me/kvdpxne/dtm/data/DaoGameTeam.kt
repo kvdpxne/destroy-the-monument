@@ -2,7 +2,7 @@ package me.kvdpxne.dtm.data
 
 import me.kvdpxne.dtm.data.source.database
 import me.kvdpxne.dtm.data.tables.TableGameTeam
-import me.kvdpxne.dtm.game.TeamIdentity
+import me.kvdpxne.dtm.game.Team
 import org.ktorm.dsl.eq
 import org.ktorm.dsl.from
 import org.ktorm.dsl.insert
@@ -20,7 +20,7 @@ object DaoGameTeam {
    */
   fun findGameTeamByGameIdentifier(
     identifier: String
-  ): List<TeamIdentity> {
+  ): List<Team> {
     return database.from(TableGameTeam)
       .select()
       .where {

@@ -4,9 +4,11 @@ import me.kvdpxne.dtm.data.DaoGameArena
 import me.kvdpxne.dtm.data.DaoGameTeam
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
-import me.kvdpxne.dtm.game.Team
+import me.kvdpxne.dtm.game.LocalGame
+import me.kvdpxne.dtm.game.LocalTeam
 import me.kvdpxne.dtm.profession.ProfessionManager
 import me.kvdpxne.dtm.shared.ItemsClipboard
+import me.kvdpxne.dtm.shared.minecraft.bukkit.ItemBuilder
 import me.kvdpxne.dtm.shared.minecraft.bukkit.equipB
 import me.kvdpxne.dtm.shared.minecraft.bukkit.reset
 import me.kvdpxne.dtm.shared.minecraft.bukkit.toBuilder
@@ -14,9 +16,10 @@ import me.kvdpxne.dtm.user.User
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.inventory.ItemStack
 
 fun createTeamSelectionGui(
-  game: Game,
+  game: LocalGame,
   user: User
 ): Gui {
 
@@ -37,17 +40,15 @@ fun createTeamSelectionGui(
   //
   val iterator: IntIterator = arrangement.iterator()
 
-  for (team: Team in teams) {
+  for (team: LocalTeam in teams) {
 
-    val identity = team.identity
-
-    val name = identity.name
-    val color = identity.colorInChat
+    val name = team.name
+    val color = team.colorInChat
 
     gui.setItem(
       iterator.next(),
       Material.WOOL.toBuilder()
-        .generation(identity.dyeColor.woolData.toInt())
+        .generation(team.dyeColor.woolData.toInt())
         .name {
           "$color&l$name &8| &6${team.size}/bez limitu"
         }
@@ -58,7 +59,7 @@ fun createTeamSelectionGui(
         .build()
     ) { event: InventoryClickEvent ->
       //
-      game.addTeammate(identity, user)
+      game.addTeammate(team, user)
 
       game.sendMessage {
         val displayName = user.performer.player?.displayName
@@ -75,9 +76,9 @@ fun createTeamSelectionGui(
   ) { event: InventoryClickEvent ->
     //
     val team = if (game.isTeamsSameSize) {
-      game.randomTeam.identity
+      game.randomTeam
     } else {
-      game.smallestTeam.identity
+      game.smallestTeam
     }
 
     game.addTeammate(team, user)
@@ -102,49 +103,61 @@ fun createTeamSelectionGui(
   return gui
 }
 
-fun createGameSelectionGui(user: User) = GameManager.games.let {
-  Gui("Game selection", Rows.findRowBySize(it.size)).apply {
-    it.onEachIndexed { index, game ->
+fun createGameSelectionGui(user: User): Gui {
+  // Lista dostępnych obiektów gier
+  val games: List<Game<*>> = GameManager.games
 
-      setItem(index, Material.STAINED_CLAY.toBuilder()
-        .generation(5)
-        .name {
-          val name = game.name
-          val hostagesCount = game.numberOfHostages
+  //
+  val gui: Gui = Gui.withDecimal(
+    "Game selection",
+    games.size
+  )
 
-          "&7> &f$name &6$hostagesCount/bez limitu"
-        }
-        .lore(
-          "&7Join the game lobby to be able to",
-          "&7interact in the game.",
-          "",
-          "&7Current map: &6${game.currentArena?.name ?: "unknown"}",
-          "&8Uid: ${game.identifier}"
-        )
-        .build()
-      ) { event ->
-        game.addHostage(user)
+  //
+  val itemBuilder: ItemBuilder = Material.STAINED_CLAY.toBuilder()
+    .generation(5)
 
-        DaoGameTeam.findGameTeamByGameIdentifier(game.identifier).forEach {
-          game.addTeam(Team(it, game))
-        }
+  //
+  games.forEachIndexed { index: Int, game: Game<*> ->
 
-        DaoGameArena.findGameArenaByGameIdentifier(game.identifier).forEach {
-          game.addArena(it)
-        }
+    if (game !is LocalGame) {
+      return@forEachIndexed
+    }
 
-        user.sendMessage("&6&lDTM &7> &fDołączyłeś do gry &a${game.name}&f.")
+    //
+    val item: ItemStack = itemBuilder
+      .name {
+        val name = game.name
+        val hostagesCount = game.numberOfHostages
 
-        val player = event.whoClicked as Player
-        player.closeInventory()
-        player.reset()
-
-        player.equipB()
-
-        createTeamSelectionGui(game, user).open(player)
+        "&7> &f$name &6$hostagesCount/bez limitu"
       }
+      .lore(
+        "&7Join the game lobby to be able to",
+        "&7interact in the game.",
+        "",
+        "&7Current map: &6${game.currentArena?.name ?: "unknown"}",
+        "&8Uid: ${game.identifier}"
+      )
+      .build()
+
+    //
+    gui.setItem(index, item) { event: InventoryClickEvent ->
+      game.addHostage(user)
+
+      user.sendMessage("&6&lDTM &7> &fDołączyłeś do gry &a${game.name}&f.")
+
+      val player = event.whoClicked as Player
+      player.closeInventory()
+      player.reset()
+
+      player.equipB()
+
+      createTeamSelectionGui(game, user).open(player)
     }
   }
+
+  return gui
 }
 
 fun createProfessionSelectionGui(user: User): Gui {
@@ -189,18 +202,14 @@ fun createProfessionSelectionGui(user: User): Gui {
 
       user.sendMessage("&6&lDTM &7> &fProfesja &a&l${profession.displayName} &fzostała wybrana.")
 
-      val game = GameManager.findByUser(user) ?: return@setItem
-      val team = game.findTeam(user) ?: return@setItem
-      val teammate = team.findTeammate(user) ?: return@setItem
+      val teammate = user.teammate ?: return@setItem
 
-      teammate.professionQueuingPair.apply {
-        if (this.current == profession) {
-          return@apply
-        }
-
-        this.next = profession.clone()
-        teammate.sendMessage("&6&lDTM &7> &fProfesja zostanie zmieniona po śmierci.")
+      if (teammate.currentProfession == profession) {
+        return@setItem
       }
+
+      teammate.addProfession(profession.clone())
+      teammate.sendMessage("&6&lDTM &7> &fProfesja zostanie zmieniona po śmierci.")
     }
   }
 

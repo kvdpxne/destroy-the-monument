@@ -23,7 +23,7 @@ dependencyResolutionManagement {
     mavenLocal()
 
     maven {
-      url = uri("https://jitpack.io")
+      url = uri("https://jitpack.io/")
       content {
         includeGroupAndSubgroups("com.github.kvdpxne")
       }

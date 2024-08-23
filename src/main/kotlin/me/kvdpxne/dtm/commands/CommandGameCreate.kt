@@ -4,8 +4,9 @@ import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.ParameterBuilder
 import me.kvdpxne.dtm.command.ParameterValidators
+import me.kvdpxne.dtm.game.BaseGame
 import me.kvdpxne.dtm.game.GameService
-import me.kvdpxne.dtm.game.Game
+import me.kvdpxne.dtm.game.Team
 import me.kvdpxne.dtm.user.UserPerformer
 
 fun createGameCreateCommand(): Command {
@@ -21,7 +22,7 @@ fun createGameCreateCommand(): Command {
     )
     .handler<UserPerformer> { performer, arguments ->
       val gameName = arguments.asText()
-      val game = Game(gameName)
+      val game = BaseGame<Team>(gameName, gameName)
 
       GameService.insertGame(game)
       performer.sendMessage("Success")

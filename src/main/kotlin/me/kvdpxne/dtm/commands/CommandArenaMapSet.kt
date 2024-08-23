@@ -6,8 +6,7 @@ import me.kvdpxne.dtm.command.ParameterBuilder
 import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.command.builderArenaNameParameter
 import me.kvdpxne.dtm.data.DaoArena
-import me.kvdpxne.dtm.game.ArenaMap
-import me.kvdpxne.dtm.game.ArenaService
+import me.kvdpxne.dtm.game.BaseArenaMap
 import me.kvdpxne.dtm.shared.WorldLoaderHelper
 
 fun createArenaMapSetCommand(): Command {
@@ -27,7 +26,7 @@ fun createArenaMapSetCommand(): Command {
     )
     .handler<Performer> { performer, arguments ->
       val arenaName = arguments.asText()
-      val arena = ArenaService.findArenaByName(arenaName)
+      val arena = me.kvdpxne.dtm.game.ArenaService.findArenaByName(arenaName)
 
       if (null == arena) {
         performer.sendMessage("&cBłąd: &7Arena o nazwie: &c$arenaName &7nie istnieje.")
@@ -42,7 +41,7 @@ fun createArenaMapSetCommand(): Command {
         return@handler
       }
 
-      arena.map = ArenaMap(map.name, map.uid)
+      arena.map = BaseArenaMap(map.name, map.uid.toString())
       DaoArena.updateArena(arena)
       performer.sendMessage("&6&lDTM &7> &7Przypisano mapę o nazwię &a$mapName &7do areny o nazwie: &a$arenaName&7.")
     }

@@ -1,19 +1,18 @@
 package me.kvdpxne.dtm.tasks
 
-import me.kvdpxne.dtm.game.GameStates
-import me.kvdpxne.dtm.game.Game
-import me.kvdpxne.dtm.game.MIN_HOSTAGE_SIZE_
+import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.shared.basics.task.AbstractAsynchronousTask
 import me.kvdpxne.dtm.shared.minecraft.bukkit.runSynchronousTask
 
 class GameStartAsyncTask(
-  private val game: Game,
+  private val game: LocalGame,
   private var remainingSeconds: Int = 30
 ) : AbstractAsynchronousTask() {
 
   override fun execute() {
-    if (MIN_HOSTAGE_SIZE_ > this.game.numberOfHostagesEnrolled) {
-      this.game.state = GameStates.INITIALIZED
+    if (Configuration.MIN_TEAMMATES_SIZE > this.game.numberOfHostagesEnrolled) {
+      this.game.setAsInitialized()
       this.cancel()
 
       this.game.sendMessages(

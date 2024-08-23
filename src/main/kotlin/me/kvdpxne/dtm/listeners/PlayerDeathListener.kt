@@ -1,64 +1,118 @@
 package me.kvdpxne.dtm.listeners
 
 import me.kvdpxne.dtm.colorize
+import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.game.Arena
+import me.kvdpxne.dtm.game.ArenaException
+import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.game.Teammate
 import me.kvdpxne.dtm.scoreboard.updateCoinCount
 import me.kvdpxne.dtm.scoreboard.updateDeathCount
 import me.kvdpxne.dtm.scoreboard.updateKillCount
-import me.kvdpxne.dtm.shared.minecraft.bukkit.reset
 import me.kvdpxne.dtm.shared.minecraft.bukkit.respawn
 import me.kvdpxne.dtm.shared.minecraft.bukkit.runSynchronousDelayedTask
+import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserManager
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.PlayerDeathEvent
 
 object PlayerDeathListener : Listener {
 
+  /**
+   * @since 0.1.0
+   */
   private fun formatTeammate(
     teammate: Teammate
   ): String {
-    val profession = teammate.professionQueuingPair.current
+    val profession = teammate.currentProfession
 
     val professionName = profession.displayName
     val teammateName = teammate.user.name
 
-    val teamColor = teammate.team.identity
+    val teamColor = teammate.team
     val professionColor = teamColor.professionColor
     val teammateColor = teamColor.colorInChat
 
     return "$professionColor&l$professionName $teammateColor$teammateName&r"
   }
 
+  /**
+   * @since 0.1.0
+   */
+  private fun createTeammateSuicideMessage(
+    teammate: Teammate
+  ): String {
+    return "${this.formatTeammate(teammate)} &6umarł".colorize()
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  private fun createTeammateKillMessage(
+    victim: Teammate,
+    killer: Teammate
+  ): String {
+    return "${this.formatTeammate(killer)} &6--> ${this.formatTeammate(victim)}"
+      .colorize()
+  }
+
+  /**
+   * @since 0.1.0
+   */
   private fun addAndUpdateKills(teammate: Teammate) {
     teammate.addKill()
     updateKillCount(teammate.fastBoard, teammate.statistics.kills)
   }
 
+  /**
+   * @since 0.1.0
+   */
   private fun addAndUpdateDeaths(teammate: Teammate) {
     teammate.addDeath()
     updateDeathCount(teammate.fastBoard, teammate.statistics.deaths)
   }
 
-  @EventHandler
-  fun handlePlayerDeath(event: PlayerDeathEvent) {
-    val victim = event.entity
+  /**
+   * @since 0.1.0
+   */
+  @EventHandler(
+    priority = EventPriority.HIGHEST
+  )
+  fun handlePlayerDeath(
+    event: PlayerDeathEvent
+  ) {
+    // Obiekt gracza, który umarł
+    val victim: Player = event.entity
 
-    // TODO optimization needed
-    val victimUser = UserManager.findByIdentifier(victim.uniqueId) ?: return
-    val game = victimUser.game ?: return
+    // Obiekt użytkownika uzyskany na podstawie unikatowego identyfikatora
+    // obiektu gracza, który umarł.
+    val victimUser: User = UserManager.findByIdentifier(victim.uniqueId)
+      ?: return
 
-    //
+    // Obiekt lokalnej gry, do której jest przypisany obiekt użytkownika,
+    // który umarł.
+    val game: LocalGame = victimUser.game ?: return
+
+    // Jeżeli obiekt lokalnej gry nie ma stanu "URUCHOMIONEJ" to plugin nie
+    // powinien ingerować w wydarzenie śmierci.
     if (!game.isRunning) {
       return
     }
 
-    //
-    val arena = game.currentArena ?: return
+    // Obiekt areny, na której odbywa się rozgrywka w obiekcie lokalnej gry.
+    val arena: Arena = game.currentArena ?: return
 
     //
-    if (!arena.isLoaded) {
-      return
+    if (false == arena.map?.isLoaded) {
+      throw ArenaException(
+        """
+          Object of LocalGame: $game has a RUNNING stat when the map arena
+          $arena is not loaded.
+        """.trimIndent()
+      )
     }
 
     //
@@ -66,41 +120,59 @@ object PlayerDeathListener : Listener {
       return
     }
 
-    //
+    // Usuwa wszelkie byty, które może upuścić gracz po swojej śmierci.
     event.drops.clear()
     event.droppedExp = 0
 
-    //
-    val victimTeammate = game.findTeam(victimUser)!!.findTeammate(victimUser)!!
-    victimTeammate.currentProfession.ability?.cancelCooldown()
-
-    //
-    runSynchronousDelayedTask(20L) {
+    // Uruchamia opóźnione o X milisekund synchroniczne zadanie odrodzenia
+    // obiektu gracza, który umarł.
+    runSynchronousDelayedTask(Configuration.REVIVAL_PLAYER_DELAY) {
       victim.respawn()
     }
 
-    val murder = victim.killer
-    if (null == murder) {
+    // Obiekt drużynowego uzyskany na podstawie użytkownika, który jest
+    // przypisany do obiektu lokalnej gry.
+    val victimTeammate: Teammate = game.findTeammateByHostage(victimUser)
+      ?: return
+
+    // Anuluje czas odnowienie umiejętności obecnej profesji, która jest
+    // przypisana do drużynowego, który zginął.
+    victimTeammate.currentProfession.ability?.cancelCooldown()
+
+    // Obiekt gracza, który jest zabójcą
+    val killer: Player = victim.killer
+
+    // Jeżeli obiekt gracza, który jest zabójcą nie istnieje to obiekt gracza,
+    // który jest ofiarą popełnij samobójstwo.
+    if (null == killer) {
       // VICTIM_KIT_NAME VICTIM_USER_NAME ACTION
       // Zwiadowca       currant          zginął
-      event.deathMessage = "${this.formatTeammate(victimTeammate)} &6died".colorize()
+      event.deathMessage = this.createTeammateSuicideMessage(victimTeammate)
 
       //
       this.addAndUpdateDeaths(victimTeammate)
       return
     }
 
-    val murderUser = UserManager.findByIdentifier(murder.uniqueId)!!
-    val murderTeammate = game.findTeam(murderUser)!!.findTeammate(murderUser)!!
+    //
+    val killerUser: User = UserManager.findByIdentifier(killer.uniqueId)
+      ?: return
+
+    //
+    val killerTeammate: Teammate = game.findTeammateByHostage(killerUser)
+      ?: return
 
     // MURDER_KIT_NAME MURDER_USER_NAME ACTION VICTIM_KIT_NAME VICTIM_USER_NAME
     // Zwiadowca       currant          -->    Łucznik         strawberry
-    event.deathMessage = "${this.formatTeammate(murderTeammate)} &6--> ${this.formatTeammate(victimTeammate)}".colorize()
+    event.deathMessage = this.createTeammateKillMessage(
+      victimTeammate,
+      killerTeammate
+    )
 
-    murderUser.wallet.addCoins(20)
-    updateCoinCount(murderTeammate.fastBoard, murderUser.wallet.coins)
+    killerUser.wallet.addCoins(20)
+    updateCoinCount(killerTeammate.fastBoard, killerUser.wallet.coins)
 
     this.addAndUpdateDeaths(victimTeammate)
-    this.addAndUpdateKills(murderTeammate)
+    this.addAndUpdateKills(killerTeammate)
   }
 }

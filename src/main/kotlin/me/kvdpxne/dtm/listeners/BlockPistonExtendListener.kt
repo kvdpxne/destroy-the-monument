@@ -1,7 +1,8 @@
 package me.kvdpxne.dtm.listeners
 
-import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.Game
+import me.kvdpxne.dtm.game.GameManager
+import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.shared.minecraft.bukkit.cancel
 import org.bukkit.World
 import org.bukkit.event.EventHandler
@@ -28,10 +29,14 @@ object BlockPistonExtendListener : Listener {
     }
 
     //
-    val world = event.block.location
+    val world: World = event.block.location.world
 
     //
-    for (game: Game in GameManager.games) {
+    for (game: Game<*> in GameManager.games) {
+      if (game !is LocalGame) {
+        continue
+      }
+
       if (!game.isRunning && !game.isStopping) {
         continue
       }

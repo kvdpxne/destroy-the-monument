@@ -6,11 +6,13 @@ import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.command.builderGameNameParameter
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
+import me.kvdpxne.dtm.game.LocalGame
+import me.kvdpxne.dtm.game.LocalTeam
 import me.kvdpxne.dtm.user.UserPerformer
 
 object CommandGameStart {
 
-  private fun startGame(game: Game?, user: Performer) {
+  private fun startGame(game: LocalGame?, user: Performer) {
     if (null == game) {
       user.sendMessage("No found game.")
       user.sendMessage("Usage: /dtm start <GAME_NAME>")
@@ -39,12 +41,12 @@ object CommandGameStart {
             return@handler
           }
 
-          val game = GameManager.findByUser(performer.user)
-          startGame(game, performer)
+          val game = performer.user.game
+          startGame(game as LocalGame, performer)
           return@handler
         }
 
-        val game = arguments.asFoundGame()
+        val game = arguments.asFoundGame<LocalTeam, LocalGame>()
         startGame(game, performer)
       }
       .build()

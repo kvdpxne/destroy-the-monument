@@ -5,7 +5,7 @@ import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.ParameterBuilder
 import me.kvdpxne.dtm.command.ParameterValidators
 import me.kvdpxne.dtm.data.DaoTeam
-import me.kvdpxne.dtm.game.TeamIdentity
+import me.kvdpxne.dtm.game.BaseTeam
 import me.kvdpxne.dtm.game.TeamColors
 import me.kvdpxne.dtm.user.UserPerformer
 
@@ -34,7 +34,7 @@ fun createTeamCreateCommand(): Command {
         return@handler
       }
 
-      val team = TeamIdentity(name, color)
+      val team = BaseTeam(name, color)
       DaoTeam.insertTeam(team)
 
       performer.sendMessage(name)

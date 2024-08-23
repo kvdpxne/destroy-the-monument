@@ -3,8 +3,7 @@ package me.kvdpxne.dtm.commands
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.ParameterBuilder
-import me.kvdpxne.dtm.game.Arena
-import me.kvdpxne.dtm.game.ArenaService
+import me.kvdpxne.dtm.game.BaseArena
 import me.kvdpxne.dtm.user.UserPerformer
 
 fun createArenaCreateCommand(): Command {
@@ -19,9 +18,9 @@ fun createArenaCreateCommand(): Command {
     )
     .handler<UserPerformer> { performer, arguments ->
       val arenaName = arguments.asText()
-      val arena = Arena(arenaName)
+      val arena = BaseArena(arenaName)
 
-      ArenaService.insertArena(arena)
+      me.kvdpxne.dtm.game.ArenaService.insertArena(arena)
 
       performer.sendMessages(
         "&6&lDTM &7> &7Utworzono nową arenę o nazwie: &a$arenaName",

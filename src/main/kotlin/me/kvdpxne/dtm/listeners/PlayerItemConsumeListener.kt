@@ -25,7 +25,7 @@ object PlayerItemConsumeListener : Listener {
     val player = event.player
 
     val user = UserManager.findByIdentifier(player.uniqueId) ?: return
-    GameManager.findByUser(user) ?: return
+    user.game ?: return
 
     player.fireTicks = 0
     player.addPotionEffect(PotionEffect(PotionEffectType.FIRE_RESISTANCE, 20 * 3, 0))

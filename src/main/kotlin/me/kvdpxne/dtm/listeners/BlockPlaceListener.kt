@@ -1,21 +1,34 @@
 package me.kvdpxne.dtm.listeners
 
-import me.kvdpxne.dtm.game.GameManager
+import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.game.RevivalPosition
-import me.kvdpxne.dtm.shared.basics.isNear
 import me.kvdpxne.dtm.shared.minecraft.bukkit.cancel
 import me.kvdpxne.dtm.shared.minecraft.bukkit.hasInventory
 import me.kvdpxne.dtm.shared.minecraft.bukkit.isMonument
+import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.Material
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockPlaceEvent
 
+/**
+ * @since 0.1.0
+ */
 object BlockPlaceListener : Listener {
 
-  @EventHandler
-  fun handleBlockPlace(event: BlockPlaceEvent) {
+  /**
+   * @since 0.1.0
+   */
+  @EventHandler(
+    priority = EventPriority.HIGH
+  )
+  fun handleBlockPlace(
+    event: BlockPlaceEvent
+  ) {
     if (event.isCancelled) {
       return
     }
@@ -24,11 +37,15 @@ object BlockPlaceListener : Listener {
       return
     }
 
-    // The user who placed the block
-    val user = UserManager.findByIdentifier(event.player.uniqueId) ?: return
+    // Obiekt gracza, który postawił jakiś blok
+    val player: Player = event.player
+
+    // Obiekt użytkownika uzyskany na podstawie unikatowego identyfikatora
+    // gracza, który postawił jakiś blok
+    val user: User = UserManager.findByIdentifier(player.uniqueId) ?: return
 
     // The game to which the user who placed the block belongs
-    val game = GameManager.findByUser(user) ?: return
+    val game: LocalGame = user.game ?: return
 
     // The game should have a started state, and the user should be on a team
     if (!game.isRunning || !game.isInTeam(user)) {
@@ -46,19 +63,29 @@ object BlockPlaceListener : Listener {
     //
     val location = event.block.location
 
-    if (location.y > 84) {
+    if (84 < location.y) {
       event.cancel()
-      user.sendMessage("&6&lDTM &7> &cOsiągnełeś możliwy limit budowania na tej mapie.")
+      user.sendMessage { configuration: Configuration ->
+        configuration.BUILD_HEIGHT_LIMIT_MESSAGE
+      }
       return
     }
 
-    //
-    for (revivalPosition: RevivalPosition in arena.revivalPositions) {
-      if (revivalPosition.isNear(location, RevivalPosition.RADIUS_OF_BLOCK_INTERACTION)) {
-        event.cancel()
-        user.sendMessage("&6&lDTM &7> &cNie możesz stawiać bloków na spawnie.")
-        return
+    for (revivalPosition: RevivalPosition<*> in arena.revivalPositions) {
+      if (!revivalPosition.isNear(
+          location.x,
+          location.y,
+          location.z,
+          Configuration.RADIUS_OF_BLOCK_INTERACTION
+        )
+      ) {
+        continue
       }
+      event.cancel()
+      user.sendMessage { configuration: Configuration ->
+        configuration.SPAWN_BLOCK_PLACEMENT_DENIED_MESSAGE
+      }
+      return
     }
 
     // The type of block that was placed

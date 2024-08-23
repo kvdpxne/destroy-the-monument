@@ -1,14 +1,21 @@
 package me.kvdpxne.dtm.listeners
 
 import kotlin.random.Random
-import me.kvdpxne.dtm.game.GameManager
-import me.kvdpxne.dtm.game.RevivalPosition
+import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.game.Arena
+import me.kvdpxne.dtm.game.LocalGame
+import me.kvdpxne.dtm.game.LocalTeam
+import me.kvdpxne.dtm.game.Teammate
+import me.kvdpxne.dtm.profession.Ability
+import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.shared.basics.isNear
+import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.entity.Arrow
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -95,26 +102,28 @@ object ProjectileHitListener : Listener {
   }
 
   @EventHandler
-  fun handleProjectileHit(event: ProjectileHitEvent) {
+  fun handleProjectileHit(
+    event: ProjectileHitEvent
+  ) {
     val projectile = event.entity
     if (projectile !is Arrow) {
       return
     }
 
     @Suppress("DEPRECATION")
-    val shooter = projectile.shooter
+    val shooter: LivingEntity = projectile.shooter
     if (shooter !is Player) {
       return
     }
 
     //
-    val user = UserManager.findByIdentifier(shooter.uniqueId) ?: return
+    val user: User = UserManager.findByIdentifier(shooter.uniqueId) ?: return
 
     //
-    val game = GameManager.findByUser(user) ?: return
+    val game: LocalGame = user.game ?: return
 
     //
-    val arena = game.currentArena ?: return
+    val arena: Arena = game.currentArena ?: return
 
     //
     if (!game.isRunning) {
@@ -122,16 +131,16 @@ object ProjectileHitListener : Listener {
     }
 
     //
-    val team = game.findTeam(user) ?: return
+    val team: LocalTeam = game.findTeamByHostage(user) ?: return
 
     //
-    val teammate = team.findTeammate(user) ?: return
+    val teammate: Teammate = team.getTeammate(user) ?: return
 
     // Current profession
-    val profession = teammate.professionQueuingPair.current
+    val profession: Profession = teammate.currentProfession
 
     //
-    val ability = profession.ability ?: return
+    val ability: Ability = profession.ability ?: return
 
     //
     if (!ability.isActive) {
@@ -144,7 +153,7 @@ object ProjectileHitListener : Listener {
         location,
         3.975F,
         !arena.revivalPositions.any {
-          it.isNear(location, RevivalPosition.RADIUS_OF_EXPLOSION_INTERACTION + Math.PI)
+          it.isNear(location, Configuration.RADIUS_OF_EXPLOSION_INTERACTION + Math.PI)
         }
       )
       ability.renewDelayed(shooter)

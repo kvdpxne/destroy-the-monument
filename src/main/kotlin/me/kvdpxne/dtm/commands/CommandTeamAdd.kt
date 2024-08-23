@@ -29,7 +29,7 @@ fun createTeamAddCommand(): Command {
     )
     .handler<UserPerformer> { performer, parameter ->
       val gameName = parameter.asText()
-      val game = GameManager.findGameByName(gameName)
+      val game = performer.user.game
 
       if (null == game) {
         performer.sendMessage("An game named $gameName does not exist.")
@@ -37,7 +37,7 @@ fun createTeamAddCommand(): Command {
       }
 
       val teamName = parameter.asText(1)
-      val team = TeamService.findTeamIdentityByName(teamName)
+      val team = TeamService.findTeamByName(teamName)
 
       if (null == team) {
         performer.sendMessage("An team named $teamName does not exist.")

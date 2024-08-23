@@ -1,6 +1,5 @@
 package me.kvdpxne.dtm.listeners
 
-import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -19,7 +18,7 @@ object PlayerFoodLevelChangeListener : Listener {
     val player = event.entity
 
     val user = UserManager.findByIdentifier(player.uniqueId) ?: return
-    GameManager.findByUser(user) ?: return
+    user.game ?: return
 
     event.isCancelled = true
   }

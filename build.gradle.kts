@@ -11,13 +11,13 @@ description = "A simple game of destroying the monument of the opposing team."
 group = "me.kvdpxne"
 version = "0.1.0"
 
-val targetJavaVersion = 8
+val targetJavaVersion = 21
 
 // Filename with the extension.
 val fileName = "craftbukkit-1.7.10.jar"
 
 dependencies {
-  compileOnly(files("libraries/$fileName"))
+  shadow(files("libraries/$fileName"))
 
   implementation(libraries.kotlin.logging)
 
@@ -29,6 +29,9 @@ dependencies {
 
   implementation("com.github.f4b6a3:ulid-creator:5.2.3")
 
+  implementation(libraries.bundles.disco)
+  implementation(libraries.notchity)
+
   implementation("org.slf4j:slf4j-api:2.0.7")
   implementation("org.slf4j:slf4j-simple:2.0.7")
 
@@ -37,8 +40,10 @@ dependencies {
 
 java {
   val javaVersion = JavaVersion.toVersion(targetJavaVersion)
+
   sourceCompatibility = javaVersion
   targetCompatibility = javaVersion
+
   if (JavaVersion.current() < javaVersion) {
     toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
   }
@@ -57,7 +62,7 @@ tasks {
   }
 
   withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.jvmTarget = "21"
   }
 
   processResources {

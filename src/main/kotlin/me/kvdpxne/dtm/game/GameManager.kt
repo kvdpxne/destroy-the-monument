@@ -1,13 +1,6 @@
 package me.kvdpxne.dtm.game
 
-import io.github.oshai.kotlinlogging.KLogger
-import io.github.oshai.kotlinlogging.KotlinLogging
 import me.kvdpxne.dtm.user.User
-
-/**
- * @since 0.1.0
- */
-private val logger: KLogger = KotlinLogging.logger { }
 
 /**
  * @since 0.1.0
@@ -17,13 +10,13 @@ object GameManager {
   /**
    * @since 0.1.0
    */
-  private val _games: MutableMap<String, Game> = mutableMapOf()
+  private val _games: MutableMap<String, Game<out Team>> = mutableMapOf()
 
   init {
     // TODO Delete in the future.
     // Information about games should be loaded into memory only when it is
     // really needed and removed when it is no longer needed.
-    for (game: Game in GameService.findGames()) {
+    for (game: Game<*> in GameService.findGames()) {
       this._games[game.identifier] = game
     }
   }
@@ -31,7 +24,7 @@ object GameManager {
   /**
    * @since 0.1.0
    */
-  val games: List<Game>
+  val games: List<Game<*>>
     get() = this._games.values.toList()
 
   /**
@@ -45,27 +38,30 @@ object GameManager {
    */
   fun findGameByIdentifier(
     identifier: String
-  ): Game? {
+  ): Game<*>? {
     return this._games[identifier]
   }
 
   /**
    * Tries to find a [Game] by [Game.name].
    */
-  fun findGameByName(
+  fun <T: Team, G : Game<T>> findGameByName(
     name: String
-  ): Game? {
+  ): G? {
     return this._games.values.find {
       it.name.equals(name, true)
-    }
+    } as G
   }
 
   /**
    *
    */
-  fun findByUser(user: User): Game? {
+  fun <T: Team, G : Game<T>> findByUser(user: User): G? {
     return this._games.values.find {
-      it.isInGame(user)
-    }
+      if (it is LocalGame) {
+        return@find it.isInGame(user)
+      }
+      return@find false
+    } as G
   }
 }

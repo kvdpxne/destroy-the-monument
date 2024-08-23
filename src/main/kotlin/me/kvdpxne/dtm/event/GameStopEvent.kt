@@ -1,5 +1,5 @@
 package me.kvdpxne.dtm.event
 
-import me.kvdpxne.dtm.game.Game
+import me.kvdpxne.dtm.game.LocalGame
 
-class GameStopEvent(game: Game): GameEvent(game)
+class GameStopEvent(game: LocalGame): GameEvent(game)
