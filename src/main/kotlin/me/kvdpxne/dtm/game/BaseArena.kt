@@ -124,6 +124,10 @@ class BaseArena(
   }
 
   override fun toString(): String {
-    return "Arena(identifier=$identifier, name='$name', map=$map)"
+    return "Arena{" +
+      "name=\"${this.name}\", " +
+      "map=\"${this.map}\", " +
+      "identifier=\"${this.identifier}\"" +
+      "}"
   }
 }

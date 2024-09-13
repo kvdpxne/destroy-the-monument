@@ -31,10 +31,18 @@ object DaoGame {
     //
     val name = row[TableGame.name]!!
 
+    val teams = DaoGameTeam.findGameTeamByGameIdentifier(identifier)
+      .associateBy { it.identifier } as Map<String, T>
+
+    val arenas = DaoGameArena.findGameArenaByGameIdentifier(identifier)
+      .associateBy { it.identifier }
+
     return BaseGame(
       name,
       name,
-      identifier =identifier
+      teams,
+      arenas,
+      identifier = identifier
     )
   }
 

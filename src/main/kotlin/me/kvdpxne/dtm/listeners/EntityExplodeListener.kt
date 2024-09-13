@@ -8,7 +8,7 @@ import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.game.RevivalPosition
 import me.kvdpxne.dtm.shared.minecraft.bukkit.cancel
 import me.kvdpxne.dtm.shared.minecraft.bukkit.hasInventory
-import me.kvdpxne.dtm.shared.minecraft.bukkit.isNature
+import me.kvdpxne.dtm.shared.minecraft.bukkit.isPlant
 import me.kvdpxne.dtm.shared.minecraft.bukkit.isRich
 import org.bukkit.Location
 import org.bukkit.Material
@@ -78,7 +78,7 @@ object EntityExplodeListener : Listener {
       }
 
       for (block: Block in event.blockList()) {
-        if (!block.hasInventory() && !block.isRich() && !block.isNature()) {
+        if (!block.hasInventory() && !block.isRich() && !block.isPlant()) {
           continue
         }
 

@@ -17,7 +17,7 @@ object GameManager {
     // Information about games should be loaded into memory only when it is
     // really needed and removed when it is no longer needed.
     for (game: Game<*> in GameService.findGames()) {
-      this._games[game.identifier] = game
+      this._games[game.identifier] = game.toLocalGame()
     }
   }
 
@@ -62,6 +62,6 @@ object GameManager {
         return@find it.isInGame(user)
       }
       return@find false
-    } as G
+    } as G?
   }
 }

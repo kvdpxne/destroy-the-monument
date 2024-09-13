@@ -25,4 +25,29 @@ open class BaseTeam(
       mutableSetOf()
     )
   }
+
+  override fun equals(
+    other: Any?
+  ): Boolean {
+    if (this === other) {
+      return true
+    }
+
+    if (other !is Team) {
+      return false
+    }
+
+    return super.equals(other)
+  }
+
+  override fun hashCode(): Int {
+    return super.hashCode()
+  }
+
+  override fun toString(): String {
+    return "Team{" +
+      "name=\"${this.name}\", " +
+      "identifier=\"${this.identifier}\"" +
+      "}"
+  }
 }

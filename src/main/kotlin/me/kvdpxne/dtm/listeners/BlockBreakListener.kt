@@ -5,26 +5,28 @@ import me.kvdpxne.dtm.configuration.Configuration
 import me.kvdpxne.dtm.game.Arena
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.game.LocalTeam
+import me.kvdpxne.dtm.game.MonumentPosition
 import me.kvdpxne.dtm.game.RevivalPosition
 import me.kvdpxne.dtm.game.Team
 import me.kvdpxne.dtm.game.Teammate
-import me.kvdpxne.dtm.scoreboard.updateBlueMonumentCount
-import me.kvdpxne.dtm.scoreboard.updateRedMonumentCount
+import me.kvdpxne.dtm.scoreboard.updateSecondMonumentCounter
+import me.kvdpxne.dtm.scoreboard.updateFirstMonumentCounter
 import me.kvdpxne.dtm.shared.ItemsClipboard
+import me.kvdpxne.dtm.shared.minecraft.bukkit.asUser
 import me.kvdpxne.dtm.shared.minecraft.bukkit.cancel
 import me.kvdpxne.dtm.shared.minecraft.bukkit.cancelTask
+import me.kvdpxne.dtm.shared.minecraft.bukkit.disappear
 import me.kvdpxne.dtm.shared.minecraft.bukkit.fill
 import me.kvdpxne.dtm.shared.minecraft.bukkit.hasInventory
 import me.kvdpxne.dtm.shared.minecraft.bukkit.isMonument
-import me.kvdpxne.dtm.shared.minecraft.bukkit.isNature
+import me.kvdpxne.dtm.shared.minecraft.bukkit.isPlant
 import me.kvdpxne.dtm.shared.minecraft.bukkit.isRich
 import me.kvdpxne.dtm.shared.minecraft.bukkit.reset
 import me.kvdpxne.dtm.shared.minecraft.bukkit.runSynchronousDelayedTask
 import me.kvdpxne.dtm.user.User
-import me.kvdpxne.dtm.user.UserManager
-import org.bukkit.Material
+import org.bukkit.Location
 import org.bukkit.block.Block
-import org.bukkit.entity.Player
+import org.bukkit.block.BlockFace
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -63,16 +65,6 @@ object BlockBreakListener : Listener {
   }
 
   /**
-   * Cancels a block break event and replaces the broken block with air.
-   *
-   * @param event The `BlockBreakEvent` representing the block being broken.
-   */
-  private fun disappearBlock(event: BlockBreakEvent) {
-    event.isCancelled = true
-    event.block.type = Material.AIR
-  }
-
-  /**
    * @since 0.1.0
    */
   @EventHandler(
@@ -85,184 +77,189 @@ object BlockBreakListener : Listener {
       return
     }
 
-    // Obiekt gracza, który zniszczył blok.
-    val player: Player = event.player
-
     // Obiekt użytkownika, pozyskany z unikatowego identyfikatora gracza,
     // który zniszczył blok.
-    val user: User = UserManager.findByIdentifier(player.uniqueId) ?: return
+    val user: User = event.player.asUser() ?: return
 
     // Obiekt lokalnej gry, do której jest przypisany obiekt użytkownika.
     val game: LocalGame = user.game ?: return
 
-    // The game object must have a “started” state
-    if (!game.isRunning) {
+    // Obiekt lokalnej gry musi mieć stan DZIAŁAJĄCY i obiekt użytkownika musi
+    // być przypisany do jakiejś drużyny w obiekcie lokalnej gry.
+    if (!game.isRunning || !game.isInTeam(user)) {
       return
     }
 
-    // The currently assigned arena object for the game
+    // Obiekt areny, która jest obecnie przypisana do obiektu lokalnej gry.
     val arena: Arena = game.currentArena ?: return
 
-    // The arena object must have a map loaded.
+    // Obiekt areny musi posiadać załadowaną mapę.
     if (false == arena.map?.isLoaded) {
       return
     }
 
-    // The position object of the destroyed block
-    val location = event.block.location
+    // Obiekt lokalizacji zniszczonego obiektu bloku.
+    val location: Location = event.block.location
 
-    // The position object of the destroyed block must not have a different map
-    // than the object of the currently loaded game arena
+    // Obiekt pozycji zniszczonego bloku musi posiadać identyczny obiekt świata
+    // co obiekt areny przypisany do obiektu lokalnej gry.
     if (arena.map?.world != location.world) {
       return
     }
 
-    //
     for (revivalPosition: RevivalPosition<*> in arena.revivalPositions) {
-      if (!revivalPosition.isNear(
+      if (revivalPosition.isNear(
           location.x,
           location.y,
           location.z,
           Configuration.RADIUS_OF_BLOCK_INTERACTION
         )
       ) {
-        continue
+        event.cancel()
+        user.sendConfiguredMessage { configuration: Configuration ->
+          configuration.SPAWN_BLOCK_BREAK_DENIED_MESSAGE
+        }
+        return
       }
-      event.cancel()
-      user.sendMessage { configuration: Configuration ->
-        configuration.SPAWN_BLOCK_BREAK_DENIED_MESSAGE
-      }
-      return
     }
 
-    // The object of the destroyed block
+    // Obiekt bloku, który został zniszczony.
     val block: Block = event.block
 
     //
-    if (block.hasInventory() || block.isRich() || block.isNature()) {
-      this.disappearBlock(event)
+    if (block.hasInventory() || block.isRich() || block.isPlant()) {
+      event.cancel()
+      block.disappear()
       return
     }
 
-    //
-    val x: Int = location.blockX
-    val y: Int = location.blockY
-    val z: Int = location.blockZ
+    if (Configuration.BLOCK_PLAT_DROPS) {
+      // Obiekt bloku, który znajduje się na osi Y + 1 od osi Y obiektu bloku,
+      // który został zniszczony.
+      val upperBlock: Block = block.getRelative(BlockFace.UP)
 
-    if (Material.GRASS == block.type || Material.DIRT == block.type || Material.SOUL_SAND == block.type) {
-
-      //
-      val upperBlock: Block = location.world.getBlockAt(x, y + 1, z)
-
-      //
-      if (upperBlock.isNature()) {
-        upperBlock.type = Material.AIR
+      // Jeżeli obiekt bloku jest typu ROŚLINA to po zniszczeniu bloku, na
+      // którym rośnie, ROŚLINA zostanie usunięta.
+      if (upperBlock.isPlant()) {
+        upperBlock.disappear()
       }
     }
 
-    //
+    // Jeżeli zniszczony obiekt bloku nie jest typu MONUMENT
     if (!block.isMonument()) {
       return
     }
 
-    // A monument that was destroyed by the user
-    val monument = arena.getMonumentPosition(x, y, z) ?: return
+    // Obiekt pozycji monumentu, pozyskany z osi zniszczonego bloku, który
+    // został zniszczony przez gracza.
+    val monumentPosition: MonumentPosition<*> = arena.getMonumentPosition(
+      location.blockX,
+      location.blockY,
+      location.blockZ
+    ) ?: return
 
-    //
-    if (monument.isDestroyed) {
+    // Jeżeli obiekt monumentu
+    if (monumentPosition.isDestroyed) {
       return
     }
 
-    //
-    val victimTeam: Team = user.team ?: return
+    // Obiekt lokalnej drużyny, która zniszczyła obiekt bloku, który jest
+    // monumentem.
+    val killerTeam: LocalTeam = game.findTeamByHostage(user) ?: return
+
+    // Obiekt drużyny, do której należy zniszczony przez gracza obiekt bloku,
+    // który jest monumentem.
+    val monumentBelongs: Team = monumentPosition.team
 
     //
-    val teammate: Teammate = user.teammate ?: return
-
-    //
-    val monumentBelongs = monument.team
-
-    //
-    if (monumentBelongs == victimTeam) {
+    if (killerTeam == monumentBelongs) {
       event.cancel()
-      user.sendMessage("&6&lDTM &7> &fNie możesz zniszczyć monumentu swojej drużyny.")
+      user.sendConfiguredMessage { configuration: Configuration ->
+        configuration.FSF
+      }
       return
     }
 
-    //
-    this.disappearBlock(event)
+    // Przerywa dalsze wykonywanie zdarzenia i usuwa zniszczony blok przed
+    // jego faktycznym zniszczeniem.
+    event.cancel()
+    block.disappear()
 
-    // The team to which the destroyed monument belonged
-    val attackedTeam = game.findTeamByIdentifier(monumentBelongs.identifier) ?: return
+    // Obiekt lokalnej drużyny, do której należy zniszczony obiekt bloku, który
+    // jest monumentem.
+    val victimTeam: LocalTeam = game.findTeamByIdentifier(
+      monumentBelongs.identifier
+    ) ?: return
 
     //
-    if (!attackedTeam.injure()) {
+    if (!victimTeam.injure()) {
       throw IllegalStateException(
         """
-        Unexpectedly the health of the team: \"$attackedTeam\" is less than 0
+        Unexpectedly the health of the team: \"$victimTeam\" is less than 0
         and the game has not been completed.
         """.trimIndent()
       )
     }
 
     // Marks an attacked monument as destroyed
-    monument.destroy()
+    monumentPosition.destroy()
 
     // Adds one destroyed monument to a teammate's statistics
-    teammate.addDestroyedMonument()
+    killerTeam.getTeammate(user)?.addDestroyedMonument()
 
+    // Update monument counters
     for (team: LocalTeam in game.teams) {
-      if (attackedTeam == monumentBelongs) {
-        for (teammate: Teammate in team.teammates) {
-          updateRedMonumentCount(teammate.fastBoard, attackedTeam.health)
-        }
-        continue
-      }
-
       for (teammate: Teammate in team.teammates) {
-        updateBlueMonumentCount(teammate.fastBoard, attackedTeam.health)
+        if (victimTeam == monumentBelongs) {
+          updateFirstMonumentCounter(teammate.fastBoard, victimTeam.health)
+          continue
+        }
+        updateSecondMonumentCounter(teammate.fastBoard, victimTeam.health)
       }
     }
 
-    if (0 < attackedTeam.health) {
-      val coloredUser = "${attackedTeam.colorInChat}${user.name}"
+    game.sendMessages {
+      val coloredUser = "${killerTeam.colorInChat}${user.name}"
       val coloredMonument = "${monumentBelongs.colorInChat}&l${monumentBelongs.name}".colorize().uppercase()
 
-      val end = when (attackedTeam.health) {
+      val end = when (victimTeam.health) {
         1 -> "&fPozostał &61 &fmonument."
-        in 2..4 -> "&fPozostały &6${attackedTeam.health} &fmonumenty."
-        else -> "&fPozostało &6${attackedTeam.health} &fmonumentów."
+        in 2..4 -> "&fPozostały &6${victimTeam.health} &fmonumenty."
+        else -> "&fPozostało &6${victimTeam.health} &fmonumentów."
       }
 
-      game.sendMessages(
+      arrayOf(
         "",
         "&6&lDTM &7> &fGracz $coloredUser &fzniszczył monument drużyny $coloredMonument",
         "&6&lDTM &7> $end"
       )
+    }
+
+    //
+    if (0 < victimTeam.health) {
       return
     }
 
-    game.teams.forEach {
-      if (attackedTeam == it) {
+    //
+    for (it in game.teams) {
+      if (victimTeam == it) {
         this.updateTeammate(it, ItemsClipboard.LOSE)
-        return@forEach
+        continue
       }
 
       this.updateTeammate(it, ItemsClipboard.WON)
     }
 
     // Creates and registers a synchronous delayed game completion task
-    runSynchronousDelayedTask(20 * 20L) {
+    runSynchronousDelayedTask(Configuration.GAME_END_DELAY * 20L) {
       game.stop()
     }
 
     // Cancels the task of the game arena timer
     cancelTask(game.timerTaskIdentifier)
 
-    game.sendMessages(
-      "",
-      "&6&lDTM &7> &fGra została zakończona.",
-      "&6&lDTM &7> &fZa &620 &fsekund zostaniesz przeniesiony do poczekalni.",
-    )
+    game.sendConfiguredMessages { configuration: Configuration ->
+      configuration.GAME_END_MESSAGE
+    }
   }
 }

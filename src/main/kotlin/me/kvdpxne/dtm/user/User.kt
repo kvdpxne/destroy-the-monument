@@ -2,7 +2,6 @@ package me.kvdpxne.dtm.user
 
 import java.util.UUID
 import me.kvdpxne.dtm.command.Communicative
-import me.kvdpxne.dtm.configuration.Configuration
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.game.LocalTeam
@@ -71,7 +70,7 @@ class User(
     get() = this.game?.findTeammateByHostage(this)
 
   /**
-   * Alias for [UserPerformer.sendMessage]
+   * Alias for [UserPerformer.sendConfiguredMessage]
    *
    * @since 0.1
    */
@@ -82,7 +81,7 @@ class User(
   }
 
   /**
-   * Alias for [UserPerformer.sendMessages]
+   * Alias for [UserPerformer.sendConfiguredMessages]
    *
    * @since 0.1
    */
@@ -90,10 +89,6 @@ class User(
     vararg messages: String
   ) {
     this.performer.sendMessages(*messages)
-  }
-
-  fun sendMessage(servedMessage: (Configuration) -> String) {
-    this.sendMessage(servedMessage(Configuration))
   }
 
   override fun equals(other: Any?): Boolean {

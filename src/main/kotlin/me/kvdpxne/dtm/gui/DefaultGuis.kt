@@ -1,7 +1,5 @@
 package me.kvdpxne.dtm.gui
 
-import me.kvdpxne.dtm.data.DaoGameArena
-import me.kvdpxne.dtm.data.DaoGameTeam
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.LocalGame
@@ -27,19 +25,25 @@ fun createTeamSelectionGui(
   val gui = Gui("Wybierz drużynę", Rows.ONE)
 
   //
-  val teams = game.teams
+  val teams: Collection<LocalTeam> = game.teams
 
   //
-  val arrangement = GuiArrangement.SINGLE
+  check(!teams.isEmpty()) {
+    "There is no teams."
+  }
 
   //
-  if (teams.size > arrangement.size) {
-    throw IllegalArgumentException("There is more than one team selected.")
+  val arrangement: IntArray = GuiArrangement.SINGLE
+
+  //
+  check(teams.size <= arrangement.size) {
+    "There is more than one team selected."
   }
 
   //
   val iterator: IntIterator = arrangement.iterator()
 
+  //
   for (team: LocalTeam in teams) {
 
     val name = team.name
@@ -86,7 +90,7 @@ fun createTeamSelectionGui(
     val player = event.whoClicked as Player
     player.closeInventory()
 
-    game.sendMessage {
+    game.sendConfiguredMessage {
       val displayName = player.displayName
       val teamColor = team.colorInChat
 

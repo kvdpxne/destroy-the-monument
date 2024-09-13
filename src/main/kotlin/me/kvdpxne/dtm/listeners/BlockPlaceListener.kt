@@ -65,27 +65,26 @@ object BlockPlaceListener : Listener {
 
     if (84 < location.y) {
       event.cancel()
-      user.sendMessage { configuration: Configuration ->
+      user.sendConfiguredMessage { configuration: Configuration ->
         configuration.BUILD_HEIGHT_LIMIT_MESSAGE
       }
       return
     }
 
     for (revivalPosition: RevivalPosition<*> in arena.revivalPositions) {
-      if (!revivalPosition.isNear(
+      if (revivalPosition.isNear(
           location.x,
           location.y,
           location.z,
           Configuration.RADIUS_OF_BLOCK_INTERACTION
         )
       ) {
-        continue
+        event.cancel()
+        user.sendConfiguredMessage { configuration: Configuration ->
+          configuration.SPAWN_BLOCK_PLACEMENT_DENIED_MESSAGE
+        }
+        return
       }
-      event.cancel()
-      user.sendMessage { configuration: Configuration ->
-        configuration.SPAWN_BLOCK_PLACEMENT_DENIED_MESSAGE
-      }
-      return
     }
 
     // The type of block that was placed

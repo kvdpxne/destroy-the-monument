@@ -156,7 +156,8 @@ class BaseLocalGame(
    */
   private fun shouldStart() {
     if (!this.isInitialized ||
-      Configuration.MIN_TEAMMATES_SIZE > this.numberOfHostagesEnrolled) {
+      Configuration.MIN_TEAMMATES_SIZE > this.numberOfHostagesEnrolled
+    ) {
       return
     }
 
@@ -530,7 +531,7 @@ class BaseLocalGame(
   }
 
   /**
-   * Alias for [User.sendMessage]
+   * Alias for [User.sendConfiguredMessage]
    */
   override fun sendMessage(
     message: String
@@ -545,7 +546,7 @@ class BaseLocalGame(
   }
 
   /**
-   * Alias for [User.sendMessage]
+   * Alias for [User.sendConfiguredMessage]
    */
   override fun sendMessage(
     message: () -> String
@@ -561,7 +562,7 @@ class BaseLocalGame(
   }
 
   /**
-   * Alias for [User.sendMessages]
+   * Alias for [User.sendConfiguredMessages]
    */
   override fun sendMessages(
     vararg messages: String
@@ -573,5 +574,18 @@ class BaseLocalGame(
     this._hostages.values.forEach { user: User ->
       user.sendMessages(*messages)
     }
+  }
+
+  override fun toString(): String {
+    return "LocalGame{" +
+      "name=\"${this.name}\", " +
+      "displayName=\"${this.displayName}\", " +
+      "teams=\"${this._teams.values}\", " +
+      "arenas=\"${this._arenas.values}\", " +
+      "currentArena=\"${this.currentArena}\", " +
+      "hostages=\"${this._hostages.values}\", " +
+      "state=\"${this.state}\", " +
+      "identifier=\"${this.identifier}\"" +
+      "}"
   }
 }

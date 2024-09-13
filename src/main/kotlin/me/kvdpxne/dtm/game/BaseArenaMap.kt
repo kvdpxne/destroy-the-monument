@@ -1,6 +1,5 @@
 package me.kvdpxne.dtm.game
 
-import java.util.UUID
 import me.kvdpxne.dtm.shared.WorldLoaderHelper
 import org.bukkit.Bukkit
 import org.bukkit.World
@@ -78,6 +77,9 @@ class BaseArenaMap(
 
 
   override fun toString(): String {
-    return "ArenaMap(identifier=$identifier, name='$name')"
+    return "ArenaMap{" +
+      "name=\"${this.name}\", " +
+      "identifier=\"${this.identifier}\"" +
+      "}"
   }
 }

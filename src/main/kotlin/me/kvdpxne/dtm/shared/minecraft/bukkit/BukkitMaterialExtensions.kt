@@ -1,5 +1,6 @@
 package me.kvdpxne.dtm.shared.minecraft.bukkit
 
+import me.kvdpxne.dtm.configuration.Configuration
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 
@@ -77,7 +78,7 @@ fun Material.isIngot(): Boolean {
   }
 }
 
-fun Material.isNature(): Boolean {
+fun Material.isPlant(): Boolean {
   return when (this) {
     Material.SAPLING,
     Material.LONG_GRASS,
@@ -186,5 +187,5 @@ fun Material.isArmor(): Boolean {
 }
 
 fun Material.isMonument(): Boolean {
-  return Material.OBSIDIAN == this
+  return Configuration.MONUMENT_TYPE == this
 }

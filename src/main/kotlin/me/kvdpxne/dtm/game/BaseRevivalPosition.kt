@@ -59,16 +59,14 @@ class BaseRevivalPosition<T : Team>(
   }
 
   override fun toString(): String {
-    return """
-      RevivalPosition(
-      x="${this.x}"
-      y="${this.y}"
-      z="${this.z}"
-      pitch="${this.pitch}"
-      yaw="${this.yaw}"
-      team="${this.team}"
-      identifier="${this.identifier}"
-      )
-    """.trimIndent()
+    return "RevivalPosition{" +
+      "x=\"${this.x}\", " +
+      "y=\"${this.y}\", " +
+      "z=\"${this.z}\", " +
+      "pitch=\"${this.pitch}\", " +
+      "yaw=\"${this.yaw}\", " +
+      "team=\"${this.team}\", " +
+      "identifier=\"${this.identifier}\"" +
+      "}"
   }
 }

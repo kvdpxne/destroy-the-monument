@@ -38,10 +38,6 @@ abstract class AbstractIdentifiable<T : Serializable>(
       return true
     }
 
-    if (this.javaClass != other?.javaClass) {
-      return false
-    }
-
     other as AbstractIdentifiable<*>
     return this.identifier == other.identifier
   }

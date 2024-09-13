@@ -1,6 +1,7 @@
 package me.kvdpxne.dtm.command.bukkit
 
 import me.kvdpxne.dtm.command.CommandExecutor
+import me.kvdpxne.dtm.command.CommandManager
 import me.kvdpxne.dtm.command.ExecutionPlaceType
 import me.kvdpxne.dtm.command.ExecutionPlaceType.EVERYWHERE
 import me.kvdpxne.dtm.command.ExecutionPlaceType.IN_CONSOLE
@@ -87,8 +88,10 @@ class BukkitCommandHandler(
     sender: CommandSender,
     alias: String,
     args: Array<out String>
-  ): MutableList<String> {
-
+  ): List<String> {
+    if (1 == args.size) {
+      return CommandManager.names
+    }
 
 
     return super.tabComplete(sender, alias, args)

@@ -1,12 +1,20 @@
 package me.kvdpxne.dtm.configuration
 
+import org.bukkit.Material
+
 object Configuration {
 
+  val MONUMENT_TYPE = Material.OBSIDIAN
+
   const val REVIVAL_PLAYER_DELAY = 22L
+
+  const val GAME_END_DELAY = 20
 
   const val REVIVAL_PLAYER_PROTECTION_DELAY = 3
 
   const val MIN_TEAMMATES_SIZE = 2
+
+  var BLOCK_PLAT_DROPS = true
 
   /**
    * @since 0.1.0
@@ -23,4 +31,12 @@ object Configuration {
   const val SPAWN_BLOCK_PLACEMENT_DENIED_MESSAGE = "&6&lDTM &7> &cNie możesz stawiać bloków na spawnie."
 
   const val BUILD_HEIGHT_LIMIT_MESSAGE = "&6&lDTM &7> &cOsiągnełeś możliwy limit budowania na tej mapie."
+
+  const val FSF = "&6&lDTM &7> &fNie możesz zniszczyć monumentu swojej drużyny."
+
+  val GAME_END_MESSAGE = arrayOf(
+    "",
+    "&6&lDTM &7> &fGra została zakończona.",
+    "&6&lDTM &7> &fZa &6$GAME_END_DELAY &fsekund zostaniesz przeniesiony do poczekalni.",
+  )
 }

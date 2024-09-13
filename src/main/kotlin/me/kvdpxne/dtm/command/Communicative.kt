@@ -1,5 +1,7 @@
 package me.kvdpxne.dtm.command
 
+import me.kvdpxne.dtm.configuration.Configuration
+
 /**
  * Defines an object capable of sending messages to a performer.
  *
@@ -32,4 +34,16 @@ interface Communicative {
    * @param messages The messages to send.
    */
   fun sendMessages(vararg messages: String)
+
+  fun sendMessages(messages: () -> Array<out String>) {
+    this.sendMessages(*messages())
+  }
+
+  fun sendConfiguredMessage(servedMessage: (Configuration) -> String) {
+    this.sendMessage(servedMessage(Configuration))
+  }
+
+  fun sendConfiguredMessages(servedMessages: (Configuration) -> Array<out String>) {
+    this.sendMessages(*servedMessages(Configuration))
+  }
 }

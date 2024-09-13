@@ -9,11 +9,16 @@ object CommandManager {
    */
   private val _commands: MutableSet<Command> = mutableSetOf()
 
+  private var _names: MutableList<String> = mutableListOf()
+
   /**
    * @since 0.1.0
    */
   val commands: Set<Command>
     get() = this._commands.toSet()
+
+  val names: List<String>
+    get() = this._names.toList()
 
   /**
    * @since 0.1.0
@@ -32,7 +37,8 @@ object CommandManager {
     }
 
     // If currentCommand is null, idx must be 0, so search in all commands
-    val commandSupplier = currentCommand?.first?.children?.asIterable() ?: commands
+    val commandSupplier = currentCommand?.first?.children?.asIterable()
+      ?: this._commands
 
     // Look if something matches the current index, if it does, look if there are further matches
     commandSupplier
@@ -46,9 +52,10 @@ object CommandManager {
   /**
    * @since 0.1.0
    */
-  fun addCommand(command: Command){
+  fun addCommand(command: Command) {
     if (this._commands.add(command)) {
       BukkitCommandMapAccessor.registerCommands(command)
+      this._names.add(command.name)
     }
   }
 
@@ -63,7 +70,9 @@ object CommandManager {
    * @since 0.1.0
    */
   fun removeCommand(command: Command) {
-    this._commands.remove(command)
+    if (this._commands.remove(command)) {
+      this._names.remove(command.name)
+    }
   }
 
   /**

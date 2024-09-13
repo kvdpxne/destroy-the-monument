@@ -45,4 +45,6 @@ interface Team : Identifiable<String>, Nameable {
    * @since 0.1.0
    */
   fun toLocalTeam(): LocalTeam
+
+
 }

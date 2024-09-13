@@ -63,7 +63,7 @@ fun updateRedPlayerCount(fastBoard: FastBoard, count: Int) {
   fastBoard.updateLine(3, "&7- Gracze: &6&l$count".colorize())
 }
 
-fun updateRedMonumentCount(fastBoard: FastBoard, count: Int) {
+fun updateFirstMonumentCounter(fastBoard: FastBoard, count: Int) {
   fastBoard.updateLine(4, "&7- Monumenty: &6&l$count".colorize())
 }
 
@@ -71,7 +71,7 @@ fun updateBluePlayerCount(fastBoard: FastBoard, count: Int) {
   fastBoard.updateLine(7, "&7- Gracze: &6&l$count".colorize())
 }
 
-fun updateBlueMonumentCount(fastBoard: FastBoard, count: Int) {
+fun updateSecondMonumentCounter(fastBoard: FastBoard, count: Int) {
   fastBoard.updateLine(8, "&7- Monumenty: &6&l$count".colorize())
 }
 

@@ -140,7 +140,7 @@ object PlayerDeathListener : Listener {
     victimTeammate.currentProfession.ability?.cancelCooldown()
 
     // Obiekt gracza, który jest zabójcą
-    val killer: Player = victim.killer
+    val killer: Player? = victim.killer
 
     // Jeżeli obiekt gracza, który jest zabójcą nie istnieje to obiekt gracza,
     // który jest ofiarą popełnij samobójstwo.

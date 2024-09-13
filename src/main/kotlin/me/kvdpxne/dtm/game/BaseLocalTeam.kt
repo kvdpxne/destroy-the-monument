@@ -93,7 +93,7 @@ class BaseLocalTeam(
   }
 
   /**
-   * Alias for [BaseTeammate.sendMessage]
+   * Alias for [BaseTeammate.sendConfiguredMessage]
    *
    * @since 0.1
    */
@@ -106,7 +106,7 @@ class BaseLocalTeam(
   }
 
   /**
-   * Alias for [BaseTeammate.sendMessage]
+   * Alias for [BaseTeammate.sendConfiguredMessage]
    *
    * @since 0.1
    */
@@ -124,7 +124,7 @@ class BaseLocalTeam(
   }
 
   /**
-   * Alias for [BaseTeammate.sendMessages]
+   * Alias for [BaseTeammate.sendConfiguredMessages]
    *
    * @since 0.1
    */
@@ -142,5 +142,14 @@ class BaseLocalTeam(
 
   override fun toLocalTeam(): LocalTeam {
     return this
+  }
+
+  override fun toString(): String {
+    return "LocalTeam{" +
+      "name=\"${this.name}\", " +
+      "teammates=\"${this._teammates}\", " +
+      "health=\"${this.health}\", " +
+      "identifier=\"${this.identifier}\"" +
+      "}"
   }
 }

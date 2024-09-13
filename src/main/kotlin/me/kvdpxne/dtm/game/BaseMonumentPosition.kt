@@ -98,16 +98,12 @@ class BaseMonumentPosition<T : Team>(
    * @since 0.1.0
    */
   override fun toString(): String {
-    return """
-      MonumentPosition(
-      x="${this.x}"
-      y="${this.y}"
-      z="${this.z}"
-      team="${this.team}"
-      identifier="${this.identifier}"
-      )
-    """.trimIndent()
+    return "MonumentPosition{" +
+      "x=\"${this.x}\", " +
+      "y=\"${this.y}\", " +
+      "z=\"${this.z}\", " +
+      "team=\"${this.team}\", " +
+      "identifier=\"${this.identifier}\"" +
+      "}"
   }
-
-
 }

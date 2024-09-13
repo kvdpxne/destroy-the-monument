@@ -112,4 +112,32 @@ open class BaseGame<T : Team>(
       arenas = this._arenas.toMap()
     )
   }
+
+  override fun equals(
+    other: Any?
+  ): Boolean {
+    if (this === other) {
+      return true
+    }
+
+    if (other !is Game<*>) {
+      return false
+    }
+
+    return super.equals(other)
+  }
+
+  override fun hashCode(): Int {
+    return super.hashCode()
+  }
+
+  override fun toString(): String {
+    return "Game{" +
+      "name=\"${this.name}\", " +
+      "displayName=\"${this.displayName}\", " +
+      "teams=\"${this._teams.values}\", " +
+      "arenas=\"${this._arenas.values}\", " +
+      "identifier=\"${this.identifier}\"" +
+      "}"
+  }
 }
