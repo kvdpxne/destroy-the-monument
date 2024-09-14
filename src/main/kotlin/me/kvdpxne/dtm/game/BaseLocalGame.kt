@@ -36,29 +36,37 @@ class BaseLocalGame(
 ), LocalGame {
 
   /**
-   *
+   * @since 0.1.0
    */
-  val _hostages: MutableMap<UUID, User> = mutableMapOf()
+  private val _hostages: MutableMap<UUID, User> = mutableMapOf()
 
-  var _currentArena: Arena? = null
+  private var _currentArena: Arena? = null
 
-  var _state: Int = GameStates.INITIALIZED
+  private var _state: Int = GameStates.INITIALIZED
 
   /**
    * Number of users present in the game but not currently playing.
    *
    * @since 0.1.0
    */
-  var spectators: Int = 0
+  private var spectators: Int = 0
+
+  var timerTask: GameTimeUpdateTaskTimer? = null
 
   /**
    * @since 0.1.0
    */
   override var timerTaskIdentifier: Int = -1
 
+  /**
+   * @since 0.1.0
+   */
   override val currentArena: Arena?
     get() = this._currentArena
 
+  /**
+   * @since 0.1.0
+   */
   override val state: Int
     get() = this._state
 
@@ -198,10 +206,32 @@ class BaseLocalGame(
     val player = teammate.user.performer.player!!
     this.fsf(teammate, location!!)
 
+    //
+    val signedTeams = this.teams
+
+    //
+    //
+    val teamPair = Pair(signedTeams.first(), signedTeams.last())
+
+    val fastBoard = initScoreboard(
+      player,
+      teamPair.second.size,
+      teamPair.second.health,
+      teamPair.first.size,
+      teamPair.first.health,
+      teammate.user.wallet.coins
+    )
+
+    teammate.fastBoard = fastBoard
+    timerTask!!.playerMutableList += fastBoard
+
     player.scoreboard = bukkitTeamScoreboard
     bukkitTeam.addPlayer(player)
   }
 
+  /**
+   * @since 0.1.0
+   */
   override fun findHostageByIdentifier(
     identifier: String
   ): User? {
@@ -214,17 +244,24 @@ class BaseLocalGame(
   override fun findTeamByHostage(
     hostage: User
   ): LocalTeam? {
-    return this._teams.values.find { team: LocalTeam ->
-      team.hasTeammate(hostage)
+    for (localTeam: LocalTeam in this._teams.values) {
+      if (localTeam.hasTeammate(hostage)) {
+        return localTeam
+      }
     }
+    return null
   }
 
-  override fun findTeammateByHostage(hostage: User): Teammate? {
-    for (team: LocalTeam in this._teams.values) {
-      for (teammate: Teammate in team.teammates) {
-        if (teammate.user == hostage) {
-          return teammate
-        }
+  /**
+   * @since 0.1.0
+   */
+  override fun findTeammateByHostage(
+    hostage: User
+  ): Teammate? {
+    for (localTeam: LocalTeam in this._teams.values) {
+      val teammate: Teammate? = localTeam.getTeammate(hostage)
+      if (null != teammate) {
+        return teammate
       }
     }
     return null
@@ -304,16 +341,14 @@ class BaseLocalGame(
     team: LocalTeam,
     user: User
   ): Boolean {
-    //
-    val team: LocalTeam = this.findTeamByIdentifier(team.identifier) ?: return false
-
-    //
+    // Przekazany obiekt użytkownika nie zostanie dodany do przekazanego
+    // obiektu drużyny, jeżeli jest już do niej przypisany.
     if (team.hasTeammate(user)) {
       return false
     }
 
     //
-    val teammate = BaseTeammate(this, team, user)
+    val teammate: Teammate = BaseTeammate(this, team, user)
 
     //
     this._teams.values.forEach {
@@ -371,9 +406,6 @@ class BaseLocalGame(
     team: LocalTeam,
     user: User
   ): Boolean {
-    //
-    val team = this.findTeamByIdentifier(team.identifier) ?: return false
-
     if (!team.removeTeammate(user)) {
       return false
     }
@@ -391,8 +423,6 @@ class BaseLocalGame(
     teammate.currentProfession.equip(player, teammate.team.dyeColor)
     teammate.currentProfession.ability?.renewDelayed(player, true)
   }
-
-  var timerTask: GameTimeUpdateTaskTimer? = null
 
   /**
    *

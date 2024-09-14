@@ -1,6 +1,8 @@
 package me.kvdpxne.dtm.shared.minecraft.bukkit
 
 import me.kvdpxne.dtm.shared.ItemsClipboard
+import me.kvdpxne.dtm.shared.LobbyWorldHolder
+import me.kvdpxne.dtm.shared.debug.Debug
 import me.kvdpxne.dtm.shared.minecraft.BukkitPlayer
 import me.kvdpxne.dtm.shared.minecraft.MinecraftEnumClientCommand
 import me.kvdpxne.dtm.shared.minecraft.MinecraftPacketPlayInClientCommand
@@ -9,6 +11,7 @@ import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Location
+import org.bukkit.World
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause
 import org.bukkit.inventory.ItemStack
@@ -65,13 +68,24 @@ fun Player.moveTo(
 /**
  * @since 0.1.0
  */
-fun Player.moveToDefaultSpawnPosition() {
+fun Player.moveToLobby() {
   //
-  val position = Bukkit.getWorlds().firstOrNull()?.spawnLocation
-    ?: this.world.spawnLocation
+  var world: World? = LobbyWorldHolder.lobbyWorld
+
+  if (null == world) {
+    //
+    world = Bukkit.getWorlds().firstOrNull()
+      // Prawdopodobnie
+      //
+      ?: throw NullPointerException("The world is not loaded!")
+
+    Debug.log {
+      "No lobby world found."
+    }
+  }
 
   //
-  this.moveTo(position)
+  this.moveTo(world.spawnLocation)
 }
 
 /**

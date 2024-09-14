@@ -50,4 +50,29 @@ class QueuingPair<T>(current: T, next: T? = null) {
     this.current = this.next!!
     this.next = null
   }
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
+
+    other as QueuingPair<*>
+
+    if (current != other.current) return false
+    if (next != other.next) return false
+
+    return true
+  }
+
+  override fun hashCode(): Int {
+    var result = current?.hashCode() ?: 0
+    result = 31 * result + (next?.hashCode() ?: 0)
+    return result
+  }
+
+  override fun toString(): String {
+    return "QueuingPair{" +
+      "current=\"${this.current}\", " +
+      "next=\"${this.next }\"" +
+      "}"
+  }
 }

@@ -1,13 +1,12 @@
 package me.kvdpxne.dtm.listeners
 
 import me.kvdpxne.dtm.game.LocalGame
-import me.kvdpxne.dtm.game.LocalTeam
 import me.kvdpxne.dtm.game.Teammate
 import me.kvdpxne.dtm.gui.createProfessionSelectionGui
+import me.kvdpxne.dtm.shared.minecraft.bukkit.asUser
 import me.kvdpxne.dtm.shared.minecraft.bukkit.cancel
 import me.kvdpxne.dtm.shared.minecraft.bukkit.resetExperienceBar
 import me.kvdpxne.dtm.user.User
-import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -32,8 +31,13 @@ object PlayerDropItemListener : Listener {
     // The object of the player who dropped the item
     val player: Player = event.player
 
+    if (player.world.name.equals("lobby", ignoreCase = true)) {
+      event.cancel()
+      return
+    }
+
     // The user object obtained from the unique identifier of the player object
-    val user: User = UserManager.findByIdentifier(player.uniqueId) ?: return
+    val user: User = player.asUser() ?: return
 
     // The object of the game to which the user is assigned
     val game: LocalGame = user.game ?: return

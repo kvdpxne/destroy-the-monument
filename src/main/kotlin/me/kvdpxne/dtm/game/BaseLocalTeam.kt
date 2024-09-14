@@ -56,6 +56,12 @@ class BaseLocalTeam(
   override fun removeTeammate(
     user: User
   ): Boolean {
+    //
+//    val wasRemoved: Boolean = this._teammates.removeIf { teammate: Teammate ->
+//      teammate.user == user
+//    }
+
+
     return getTeammate(user)?.let {
       removeTeammate(it)
     } ?: false

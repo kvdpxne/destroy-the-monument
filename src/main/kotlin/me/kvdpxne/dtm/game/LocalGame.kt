@@ -163,6 +163,11 @@ interface LocalGame : Game<LocalTeam>, Communicative {
    */
   fun removeTeammate(team: LocalTeam, user: User): Boolean
 
+//  /**
+//   * @since 0.1.0
+//   */
+//  fun removeTeammate(teammate: Teammate): Boolean
+
   /**
    * @since 0.1.0
    */

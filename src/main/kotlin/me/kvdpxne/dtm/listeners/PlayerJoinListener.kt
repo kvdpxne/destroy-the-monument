@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.listeners
 
 import me.kvdpxne.dtm.shared.minecraft.bukkit.equipA
-import me.kvdpxne.dtm.shared.minecraft.bukkit.moveToDefaultSpawnPosition
+import me.kvdpxne.dtm.shared.minecraft.bukkit.moveToLobby
 import me.kvdpxne.dtm.shared.minecraft.bukkit.reset
 import me.kvdpxne.dtm.shared.minecraft.bukkit.runSynchronousDelayedTask
 import me.kvdpxne.dtm.user.OfflineUserService
@@ -32,7 +32,7 @@ object PlayerJoinListener : Listener {
     // Registers and asynchronously executes after 50 ms
     runSynchronousDelayedTask(1L) {
       player.leaveVehicle()
-      player.moveToDefaultSpawnPosition()
+      player.moveToLobby()
     }
 
     // Resets all available player statistics

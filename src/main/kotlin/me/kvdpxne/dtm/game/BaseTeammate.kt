@@ -4,15 +4,18 @@ import fr.mrmicky.fastboard.FastBoard
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.shared.collections.QueuingPair
 import me.kvdpxne.dtm.shared.collections.toQueuingPair
-import me.kvdpxne.dtm.shared.debug.Debug
+import me.kvdpxne.dtm.shared.minecraft.bukkit.equipB
+import me.kvdpxne.dtm.shared.minecraft.bukkit.moveToLobby
+import me.kvdpxne.dtm.shared.minecraft.bukkit.reset
 import me.kvdpxne.dtm.statistics.BaseStatistics
 import me.kvdpxne.dtm.user.User
+import org.bukkit.Bukkit
 
 /**
  * @since 0.1.0
  */
 class BaseTeammate(
-  override val game: Game<LocalTeam>,
+  override val game: LocalGame,
   override val team: LocalTeam,
   override val user: User,
 ) : Teammate {
@@ -51,5 +54,29 @@ class BaseTeammate(
 
   override fun addProfession(profession: Profession) {
     this.professionQueuingPair.next = profession
+  }
+
+  override fun leave() {
+    (this.game as BaseLocalGame).timerTask?.playerMutableList?.remove(this.fastBoard)
+    this.currentProfession.ability?.cancelCooldown()
+    this.fastBoard.delete()
+    this.game.removeTeammate(this.team, this.user)
+
+    val player = this.user.performer.player ?: return
+
+    player.scoreboard.getPlayerTeam(player).removePlayer(player)
+    player.scoreboard = Bukkit.getScoreboardManager().mainScoreboard
+
+    player.reset()
+    player.moveToLobby()
+    player.equipB()
+  }
+
+  override fun toString(): String {
+    return "Teammate{" +
+      "user=\"${this.user}\", " +
+      "professionQueuingPair=\"${this.professionQueuingPair}\", " +
+      "statistics=\"${this.statistics}\"" +
+      "}"
   }
 }

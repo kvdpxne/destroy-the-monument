@@ -16,6 +16,8 @@ object Configuration {
 
   var BLOCK_PLAT_DROPS = true
 
+  const val LOBBY_WORLD_NAME = "lobby"
+
   /**
    * @since 0.1.0
    */

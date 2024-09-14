@@ -17,7 +17,7 @@ interface Teammate : Communicative {
   /**
    * @since 0.1.0
    */
-  val game: Game<LocalTeam>
+  val game: LocalGame
 
   /**
    * @since 0.1.0
@@ -29,6 +29,9 @@ interface Teammate : Communicative {
    */
   val statistics: BaseStatistics
 
+  /**
+   * @since 0.1.0
+   */
   var fastBoard: FastBoard
 
   /**
@@ -41,11 +44,20 @@ interface Teammate : Communicative {
    */
   val nextProfession: Profession?
 
+  /**
+   * @since 0.1.0
+   */
   val hasNextProfession: Boolean
-  get() = null != this.nextProfession
+    get() = null != this.nextProfession
 
+  /**
+   * @since 0.1.0
+   */
   fun shiftProfession()
 
+  /**
+   * @since 0.1.0
+   */
   fun addProfession(profession: Profession)
 
   /**
@@ -87,6 +99,11 @@ interface Teammate : Communicative {
     this.user.statistics.addDestroyedMonuments()
     this.statistics.addDestroyedMonuments()
   }
+
+  /**
+   * @since 0.1.0
+   */
+  fun leave()
 
   /**
    * Alias for [UserStatistics.addDestroyedMonuments]
