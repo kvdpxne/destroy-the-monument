@@ -13,6 +13,7 @@ fun createBaseCommand(): Command {
    * /dtm join <GAME_NAME|TEAM_NAME>
    * /dtm kit
    * /dtm leave
+   * /dtm position
    * /dtm teleport <MAP_NAME>
    * /dtm teleportBack
    * /dtm wand
@@ -29,6 +30,7 @@ fun createBaseCommand(): Command {
       createJoinCommand(),
       createKitCommand(),
       createLeaveCommand(),
+      createPositionCommand(),
       createTeamCommand(),
       createTeleportCommand(),
       createTeleportBackCommand(),
