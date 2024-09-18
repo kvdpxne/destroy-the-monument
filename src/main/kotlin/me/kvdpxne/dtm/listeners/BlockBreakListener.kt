@@ -9,10 +9,9 @@ import me.kvdpxne.dtm.game.MonumentPosition
 import me.kvdpxne.dtm.game.RevivalPosition
 import me.kvdpxne.dtm.game.Team
 import me.kvdpxne.dtm.game.Teammate
-import me.kvdpxne.dtm.scoreboard.updateSecondMonumentCounter
 import me.kvdpxne.dtm.scoreboard.updateFirstMonumentCounter
+import me.kvdpxne.dtm.scoreboard.updateSecondMonumentCounter
 import me.kvdpxne.dtm.shared.ItemsClipboard
-import me.kvdpxne.dtm.shared.minecraft.bukkit.asUser
 import me.kvdpxne.dtm.shared.minecraft.bukkit.cancel
 import me.kvdpxne.dtm.shared.minecraft.bukkit.cancelTask
 import me.kvdpxne.dtm.shared.minecraft.bukkit.disappear
@@ -21,9 +20,10 @@ import me.kvdpxne.dtm.shared.minecraft.bukkit.hasInventory
 import me.kvdpxne.dtm.shared.minecraft.bukkit.isMonument
 import me.kvdpxne.dtm.shared.minecraft.bukkit.isPlant
 import me.kvdpxne.dtm.shared.minecraft.bukkit.isRich
+import me.kvdpxne.dtm.shared.minecraft.bukkit.localUser
 import me.kvdpxne.dtm.shared.minecraft.bukkit.reset
 import me.kvdpxne.dtm.shared.minecraft.bukkit.runSynchronousDelayedTask
-import me.kvdpxne.dtm.user.User
+import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.Location
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
@@ -79,7 +79,7 @@ object BlockBreakListener : Listener {
 
     // Obiekt użytkownika, pozyskany z unikatowego identyfikatora gracza,
     // który zniszczył blok.
-    val user: User = event.player.asUser() ?: return
+    val user: LocalUser = event.player.localUser ?: return
 
     // Obiekt lokalnej gry, do której jest przypisany obiekt użytkownika.
     val game: LocalGame = user.game ?: return

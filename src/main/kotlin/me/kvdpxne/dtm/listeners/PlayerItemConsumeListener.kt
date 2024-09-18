@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.listeners
 
 import me.kvdpxne.dtm.game.GameManager
-import me.kvdpxne.dtm.user.UserManager
+import me.kvdpxne.dtm.shared.minecraft.bukkit.localUser
 import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -24,7 +24,7 @@ object PlayerItemConsumeListener : Listener {
 
     val player = event.player
 
-    val user = UserManager.findByIdentifier(player.uniqueId) ?: return
+    val user = player.localUser ?: return
     user.game ?: return
 
     player.fireTicks = 0

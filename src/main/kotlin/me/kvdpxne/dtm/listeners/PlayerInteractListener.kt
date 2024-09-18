@@ -9,9 +9,9 @@ import me.kvdpxne.dtm.shared.minecraft.bukkit.equipA
 import me.kvdpxne.dtm.shared.minecraft.bukkit.isMonument
 import me.kvdpxne.dtm.shared.minecraft.bukkit.isNullOrTypeAir
 import me.kvdpxne.dtm.shared.minecraft.bukkit.isRightClick
+import me.kvdpxne.dtm.shared.minecraft.bukkit.localUser
 import me.kvdpxne.dtm.shared.minecraft.bukkit.reset
 import me.kvdpxne.dtm.shared.minecraft.bukkit.toBlockPosition
-import me.kvdpxne.dtm.user.UserManager
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerInteractEvent
@@ -36,14 +36,14 @@ object PlayerInteractListener : Listener {
     if (event.action.isRightClick()) {
 
       if (itemInHand.isSimilar(ItemsClipboard.ITEM_GAME_JOIN)) {
-        val user = UserManager.findByIdentifier(player.uniqueId) ?: return
+        val user = player.localUser ?: return
         event.cancel()
         createGameSelectionGui(user).open(player)
         return
       }
 
       if (itemInHand.isSimilar(ItemsClipboard.ITEM_TEAM_SELECT)) {
-        val user = UserManager.findByIdentifier(player.uniqueId) ?: return
+        val user = player.localUser ?: return
         val game = user.game
 
         if (null == game) {
@@ -58,14 +58,14 @@ object PlayerInteractListener : Listener {
       }
 
       if (itemInHand.isSimilar(ItemsClipboard.ITEM_PROFESSION_SELECT)) {
-        val user = UserManager.findByIdentifier(player.uniqueId) ?: return
+        val user = player.localUser ?: return
         event.cancel()
         createProfessionSelectionGui(user).open(player)
         return
       }
 
       if (itemInHand.isSimilar(ItemsClipboard.ITEM_GAME_LEAVE)) {
-        val user = UserManager.findByIdentifier(player.uniqueId) ?: return
+        val user = player.localUser ?: return
         val game = user.game
 
         if (null == game) {
@@ -106,7 +106,7 @@ object PlayerInteractListener : Listener {
     }
 
     //
-    val user = UserManager.findByIdentifier(player.uniqueId) ?: return
+    val user = player.localUser ?: return
 
     //
     user.cache.selectedMonumentPosition = block.location.toBlockPosition()

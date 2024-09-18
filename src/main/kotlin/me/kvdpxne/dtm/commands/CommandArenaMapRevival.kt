@@ -2,14 +2,14 @@ package me.kvdpxne.dtm.commands
 
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
+import me.kvdpxne.dtm.command.Performer
 
-fun createArenaMapRevivalCommand(): Command {
+fun createArenaMapRevivalCommand(): Command<Performer> {
   /* Usages:
    * /dtm arena map spawn list <ARENA_NAME>
    * /dtm arena map spawn set <ARENA_NAME> <TEAM_NAME>
    */
-  return CommandBuilder()
-    .name("revival")
+  return CommandBuilder.begin<Performer>("revival")
     .aliases("spawn", "respawn")
     .hub()
     .children(

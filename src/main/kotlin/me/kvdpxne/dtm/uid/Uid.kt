@@ -17,20 +17,6 @@ import java.util.UUID
 object Uid {
 
   /**
-   * Generates a new universally unique identifier (UUID) as a string.
-   *
-   * This method leverages the `java.util.UUID` class to create a new `UUID`
-   * and returns its string representation.
-   *
-   * @return A newly generated `UUID` in string format.
-   *
-   * @since 0.1.0
-   */
-  fun uuid(): String {
-    return UUID.randomUUID().toString()
-  }
-
-  /**
    * Generates a new Universally Unique Lexicographically Sortable Identifier
    * (ULID).
    *
@@ -83,6 +69,12 @@ object Uid {
 fun String.toUuid(): UUID {
   return UUID.fromString(this)
 }
+
+val UUID.ulid: String
+  get() = Ulid.from(this).toLowerCase()
+
+val Ulid.uuid: UUID
+  get() = this.toUuid()
 
 /**
  * @since 0.1.0

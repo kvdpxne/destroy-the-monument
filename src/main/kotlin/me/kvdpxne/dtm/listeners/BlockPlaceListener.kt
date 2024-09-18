@@ -6,8 +6,8 @@ import me.kvdpxne.dtm.game.RevivalPosition
 import me.kvdpxne.dtm.shared.minecraft.bukkit.cancel
 import me.kvdpxne.dtm.shared.minecraft.bukkit.hasInventory
 import me.kvdpxne.dtm.shared.minecraft.bukkit.isMonument
-import me.kvdpxne.dtm.user.User
-import me.kvdpxne.dtm.user.UserManager
+import me.kvdpxne.dtm.shared.minecraft.bukkit.localUser
+import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -37,12 +37,9 @@ object BlockPlaceListener : Listener {
       return
     }
 
-    // Obiekt gracza, który postawił jakiś blok
-    val player: Player = event.player
-
     // Obiekt użytkownika uzyskany na podstawie unikatowego identyfikatora
     // gracza, który postawił jakiś blok
-    val user: User = UserManager.findByIdentifier(player.uniqueId) ?: return
+    val user: LocalUser = event.player.localUser ?: return
 
     // The game to which the user who placed the block belongs
     val game: LocalGame = user.game ?: return

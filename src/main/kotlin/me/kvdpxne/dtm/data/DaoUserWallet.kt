@@ -2,7 +2,8 @@ package me.kvdpxne.dtm.data
 
 import me.kvdpxne.dtm.data.source.database
 import me.kvdpxne.dtm.data.tables.TableUserWallet
-import me.kvdpxne.dtm.user.Wallet
+import me.kvdpxne.dtm.wallet.Wallet
+import me.kvdpxne.dtm.wallet.WalletImpl
 import org.ktorm.dsl.QueryRowSet
 import org.ktorm.dsl.eq
 import org.ktorm.dsl.from
@@ -31,7 +32,7 @@ object DaoUserWallet {
     val multiplier = row[TableUserWallet.multiplier]!!
 
     //
-    return Wallet(
+    return WalletImpl(
       coins,
       multiplier,
       identifier

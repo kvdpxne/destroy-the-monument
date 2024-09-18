@@ -3,13 +3,12 @@ package me.kvdpxne.dtm.commands
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.gui.createProfessionSelectionGui
-import me.kvdpxne.dtm.user.UserPerformer
+import me.kvdpxne.dtm.user.LocalUserPerformer
 
-fun createKitCommand(): Command {
-  return CommandBuilder()
-    .name("kit")
+fun createKitCommand(): Command<LocalUserPerformer> {
+  return CommandBuilder.begin<LocalUserPerformer>("kit")
     .aliases("kits", "class", "classes", "profession", "professions")
-    .handler<UserPerformer> { performer, _ ->
+    .handler { performer, _ ->
       performer.player?.let {
         createProfessionSelectionGui(performer.user).open(it)
       }

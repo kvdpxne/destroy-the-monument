@@ -2,7 +2,7 @@ package me.kvdpxne.dtm.data
 
 import me.kvdpxne.dtm.data.source.database
 import me.kvdpxne.dtm.data.tables.TableGame
-import me.kvdpxne.dtm.game.BaseGame
+import me.kvdpxne.dtm.game.GameImpl
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.Team
 import org.ktorm.dsl.QueryRowSet
@@ -37,7 +37,7 @@ object DaoGame {
     val arenas = DaoGameArena.findGameArenaByGameIdentifier(identifier)
       .associateBy { it.identifier }
 
-    return BaseGame(
+    return GameImpl(
       name,
       name,
       teams,
@@ -68,6 +68,18 @@ object DaoGame {
       .select()
       .where {
         TableGame.identifier eq identifier
+      }
+      .map {
+        this.toGame<T>(it)
+      }
+      .firstOrNull()
+  }
+
+  fun <T : Team> findGameByNameOrNull(name: String): Game<T>? {
+    return database.from(TableGame)
+      .select()
+      .where {
+        TableGame.name eq name.lowercase()
       }
       .map {
         this.toGame<T>(it)

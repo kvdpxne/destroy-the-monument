@@ -5,11 +5,11 @@ import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.game.LocalTeam
 import me.kvdpxne.dtm.game.Teammate
 import me.kvdpxne.dtm.profession.Profession
+import me.kvdpxne.dtm.shared.minecraft.bukkit.localUser
 import me.kvdpxne.dtm.shared.minecraft.bukkit.reset
 import me.kvdpxne.dtm.shared.minecraft.bukkit.runSynchronousDelayedTask
 import me.kvdpxne.dtm.shared.minecraft.bukkit.toLocation
-import me.kvdpxne.dtm.user.User
-import me.kvdpxne.dtm.user.UserManager
+import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -34,7 +34,7 @@ object PlayerRespawnListener : Listener {
 
     // Obiekt użytkownika pozyskany z unikatowego identyfikatora obiektu
     // gracza, który się odrodził.
-    val user: User = UserManager.findByIdentifier(player.uniqueId) ?: return
+    val user: LocalUser = event.player.localUser ?: return
 
     // Obiekt lokalnej gry, do której jest przypisany obiekt użytkownika.
     val game: LocalGame = user.game ?: return

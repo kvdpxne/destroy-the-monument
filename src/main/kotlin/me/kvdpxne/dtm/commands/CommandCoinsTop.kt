@@ -4,11 +4,10 @@ import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.Performer
 
-fun createCoinsTopCommand(): Command {
+fun createCoinsTopCommand(): Command<Performer> {
   // Usage: /dtm coins top
-  return CommandBuilder()
-    .name("top")
-    .handler<Performer> { performer, arguments ->
+  return CommandBuilder.begin<Performer>("top")
+    .handler { performer, _ ->
 
     }
     .build()

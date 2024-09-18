@@ -3,6 +3,7 @@ package me.kvdpxne.dtm.data
 import me.kvdpxne.dtm.data.source.database
 import me.kvdpxne.dtm.data.tables.TableUserStatistics
 import me.kvdpxne.dtm.user.UserStatistics
+import me.kvdpxne.dtm.user.UserStatisticsImpl
 import org.ktorm.dsl.QueryRowSet
 import org.ktorm.dsl.eq
 import org.ktorm.dsl.from
@@ -36,7 +37,7 @@ object DaoUserStatistics {
     val gamesLost = row[TableUserStatistics.gamesLost]!!
 
     //
-    return UserStatistics(
+    return UserStatisticsImpl(
       kills,
       assists,
       deaths,

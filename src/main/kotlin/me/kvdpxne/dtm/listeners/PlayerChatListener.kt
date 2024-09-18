@@ -4,8 +4,8 @@ import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.game.LocalTeam
 import me.kvdpxne.dtm.game.Teammate
 import me.kvdpxne.dtm.shared.minecraft.bukkit.cancel
-import me.kvdpxne.dtm.user.User
-import me.kvdpxne.dtm.user.UserManager
+import me.kvdpxne.dtm.shared.minecraft.bukkit.localUser
+import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -35,10 +35,7 @@ object PlayerChatListener : Listener {
     }
 
     //
-    val player: Player = event.player
-
-    //
-    val user: User = UserManager.findByIdentifier(player.uniqueId) ?: return
+    val user: LocalUser = event.player.localUser ?: return
 
     //
     val game: LocalGame = user.game ?: return
@@ -58,7 +55,7 @@ object PlayerChatListener : Listener {
 
     //
     if (!game.isInArena(user)) {
-      for (hostage: User in game.hostages) {
+      for (hostage: LocalUser in game.hostages) {
         if (null != hostage.team || null != hostage.teammate) {
           continue
         }

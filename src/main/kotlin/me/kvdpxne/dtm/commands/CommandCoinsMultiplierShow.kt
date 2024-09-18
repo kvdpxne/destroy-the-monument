@@ -2,33 +2,36 @@ package me.kvdpxne.dtm.commands
 
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
+import me.kvdpxne.dtm.command.CommandException
+import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
-import me.kvdpxne.dtm.command.builderUserNameParameter
-import me.kvdpxne.dtm.user.UserPerformer
+import me.kvdpxne.dtm.user.LocalUserPerformer
+import me.kvdpxne.dtm.user.User
+import me.kvdpxne.dtm.user.UserService
 
-fun createCoinsMultiplierShowCommand(): Command {
+fun createCoinsMultiplierShowCommand(): Command<Performer> {
   // Usage: /dtm coins multiplier show [USER_NAME]
-  return CommandBuilder()
-    .name("show")
+  return CommandBuilder.begin<Performer>("show")
     .parameter(
-      builderUserNameParameter()
+      Parameters.userNameParameter()
         .optional()
         .build()
     )
-    .handler<Performer> { performer, arguments ->
-      if (1 == arguments.size) {
-        val user = arguments.asFoundUser(1)
-        if (null == user) {
-          performer.sendMessage("Nie znaleziono użytkownika.")
-          return@handler
-        }
+    .handler { performer, parameters ->
+      if (1 == parameters.size) {
+        //
+        val userName: String = parameters[0] as String
+
+        //
+        val user: User = UserService.findUserByName(userName)
+          ?: throw CommandException("Nie znaleziono użytkownika.")
 
         val multiplier = user.wallet.multiplier
         performer.sendMessage("&6&lDTM &7> &fMnożnik: &6$multiplier")
         return@handler
       }
 
-      if (performer !is UserPerformer) {
+      if (performer !is LocalUserPerformer) {
         performer.sendMessage("Komenda nie może zostać użyta w konsoli.")
         return@handler
       }

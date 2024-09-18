@@ -21,7 +21,7 @@ class Profession(
   var enabled    : Boolean       = true,
   var effect     : PotionEffect? = null,
   var ability    : Ability?      = null,
-  val identifier : String        = Uid.uuid()
+  val identifier : String        = Uid.next()
   // @formatter:on
 ) : Cloneable {
 

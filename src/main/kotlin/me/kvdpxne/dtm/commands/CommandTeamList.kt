@@ -4,10 +4,9 @@ import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.Performer
 
-fun createTeamListCommand(): Command {
-  return CommandBuilder()
-    .name("list")
-    .handler<Performer> { performer, arguments ->
+fun createTeamListCommand(): Command<Performer> {
+  return CommandBuilder.begin<Performer>("list")
+    .handler { performer, parameters ->
 
     }
     .build()

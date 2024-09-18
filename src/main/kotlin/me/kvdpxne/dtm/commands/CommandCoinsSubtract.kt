@@ -2,45 +2,49 @@ package me.kvdpxne.dtm.commands
 
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
+import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.command.ParameterBuilder
 import me.kvdpxne.dtm.command.ParameterValidators
+import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
-import me.kvdpxne.dtm.user.UserPerformer
+import me.kvdpxne.dtm.user.LocalUserPerformer
+import me.kvdpxne.dtm.user.User
+import me.kvdpxne.dtm.user.UserService
 
-fun createCoinsSubtractCommand(): Command {
+fun createCoinsSubtractCommand(): Command<Performer> {
   // Usage: /dtm coins subtract <VALUE> [USER_NAME]
-  return CommandBuilder()
-    .name("subtract")
+  return CommandBuilder.begin<Performer>("subtract")
     .parameter(
-      ParameterBuilder<Int>()
-        .name("value")
-        .validationBy(ParameterValidators.POSITIVE_INTEGER_VALIDATOR)
+      ParameterBuilder.begin<Long>("VALUE")
+        .validatorHandler(ParameterValidators.POSITIVE_LONG_VALIDATOR)
         .required()
         .build()
     )
-    .handler<Performer> { performer, arguments ->
-      if (1 == arguments.size) {
+    .parameter(
+      Parameters.userNameParameter()
+        .optional()
+        .build()
+    )
+    .handler { performer, parameters ->
+      val value: Long = parameters[0] as Long
 
-        if (performer !is UserPerformer) {
-          performer.sendMessage("Komenda nie może zostać użyta w konsoli.")
-          return@handler
+      if (1 == parameters.size) {
+
+        if (performer !is LocalUserPerformer) {
+          throw CommandException("Komenda nie może zostać użyta w konsoli.")
         }
 
-        val value = arguments.asInt()
         performer.user.wallet.subtractCoins(value)
         performer.sendMessage("&6&lDTM &7> &fZ twojego portfela zostało odjęte &6$value &fmonet.")
         return@handler
       }
 
-      if (2 == arguments.size) {
+      if (2 == parameters.size) {
 
-        val user = arguments.asFoundUser(1)
-        if (null == user) {
-          performer.sendMessage("Nie znaleziono użytkownika.")
-          return@handler
-        }
+        val userName: String = parameters[0] as String
+        val user: User = UserService.findUserByName(userName)
+          ?: throw CommandException("Nie znaleziono użytkownika.")
 
-        val value = arguments.asInt()
         user.wallet.subtractCoins(value)
         performer.sendMessage("&6&lDTM &7> &fZ portfela użytkownika &6${user.name} &fzostało odjęte &6$value &fmonet.")
         return@handler

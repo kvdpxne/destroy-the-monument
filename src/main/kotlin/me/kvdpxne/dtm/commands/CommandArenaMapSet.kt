@@ -2,48 +2,48 @@ package me.kvdpxne.dtm.commands
 
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
-import me.kvdpxne.dtm.command.ParameterBuilder
+import me.kvdpxne.dtm.command.CommandException
+import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
-import me.kvdpxne.dtm.command.builderArenaNameParameter
 import me.kvdpxne.dtm.data.DaoArena
-import me.kvdpxne.dtm.game.BaseArenaMap
+import me.kvdpxne.dtm.game.Arena
+import me.kvdpxne.dtm.game.ArenaService
+import me.kvdpxne.dtm.game.ArenaImpl
+import me.kvdpxne.dtm.game.ArenaMapImpl
 import me.kvdpxne.dtm.shared.WorldLoaderHelper
+import org.bukkit.World
 
-fun createArenaMapSetCommand(): Command {
+fun createArenaMapSetCommand(): Command<Performer> {
   // Usage: /dtm arena map set <ARENA_NAME> <MAP_NAME>
-  return CommandBuilder()
-    .name("set")
+  return CommandBuilder.begin<Performer>("set")
     .parameter(
-      builderArenaNameParameter()
+      Parameters.arenaNameParameter()
         .required()
         .build()
     )
     .parameter(
-      ParameterBuilder<String>()
-        .name("map_name")
+      Parameters.arenaWorldNameParameter()
         .required()
         .build()
     )
-    .handler<Performer> { performer, arguments ->
-      val arenaName = arguments.asText()
-      val arena = me.kvdpxne.dtm.game.ArenaService.findArenaByName(arenaName)
+    .handler { performer, parameters ->
+      //
+      val arenaName: String = parameters[0] as String
 
-      if (null == arena) {
-        performer.sendMessage("&cBłąd: &7Arena o nazwie: &c$arenaName &7nie istnieje.")
-        return@handler
-      }
+      //
+      val arena: Arena = ArenaService.findArenaByName(arenaName)
+        ?: throw CommandException("&cBłąd: &7Arena o nazwie: &c$arenaName &7nie istnieje.")
 
-      val mapName = arguments.asText(1)
-      val map = WorldLoaderHelper.getWorld(mapName)
+      //
+      val worldName: String = parameters[1] as String
 
-      if (null == map) {
-        performer.sendMessage("&cBŁĄD: &7Mapa o nazwie &c$mapName &7nie istnieje.")
-        return@handler
-      }
+      //
+      val world: World = WorldLoaderHelper.getWorld(worldName)
+        ?: throw CommandException("&cBŁĄD: &7Mapa o nazwie &c$worldName &7nie istnieje.")
 
-      arena.map = BaseArenaMap(map.name, map.uid.toString())
+      (arena as ArenaImpl).map = ArenaMapImpl(world.name, world.uid.toString())
       DaoArena.updateArena(arena)
-      performer.sendMessage("&6&lDTM &7> &7Przypisano mapę o nazwię &a$mapName &7do areny o nazwie: &a$arenaName&7.")
+      performer.sendMessage("&6&lDTM &7> &7Przypisano mapę o nazwię &a$worldName &7do areny o nazwie: &a$arenaName&7.")
     }
     .build()
 }

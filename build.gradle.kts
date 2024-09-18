@@ -19,8 +19,6 @@ val fileName = "craftbukkit-1.7.10.jar"
 dependencies {
   shadow(files("libraries/$fileName"))
 
-  implementation(libraries.kotlin.logging)
-
   implementation(libraries.sqlite)
   implementation(libraries.ktorm)
 
@@ -31,9 +29,6 @@ dependencies {
 
   implementation(libraries.bundles.disco)
   implementation(libraries.notchity)
-
-  implementation("org.slf4j:slf4j-api:2.0.7")
-  implementation("org.slf4j:slf4j-simple:2.0.7")
 
   testImplementation(kotlin("test"))
 }

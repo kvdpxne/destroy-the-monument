@@ -31,7 +31,7 @@ open class BaseIdentifiableStatistics(
    destroyedMonuments: Int    = 0,
    identifier        : String = Uid.next()
   // @formatter:on
-) : BaseStatistics(kills, assists, deaths, destroyedMonuments),
+) : StatisticsImpl(kills, assists, deaths, destroyedMonuments),
   IdentifiableStatistics {
 
   /**

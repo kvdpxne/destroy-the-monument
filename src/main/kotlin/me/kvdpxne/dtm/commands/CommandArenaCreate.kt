@@ -2,25 +2,29 @@ package me.kvdpxne.dtm.commands
 
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
-import me.kvdpxne.dtm.command.ParameterBuilder
-import me.kvdpxne.dtm.game.BaseArena
-import me.kvdpxne.dtm.user.UserPerformer
+import me.kvdpxne.dtm.command.Parameters
+import me.kvdpxne.dtm.command.Performer
+import me.kvdpxne.dtm.game.Arena
+import me.kvdpxne.dtm.game.ArenaService
+import me.kvdpxne.dtm.game.ArenaImpl
 
-fun createArenaCreateCommand(): Command {
+fun createArenaCreateCommand(): Command<Performer> {
   // Usage: /dtm arena create <ARENA_NAME>
-  return CommandBuilder()
-    .name("create")
+  return CommandBuilder.begin<Performer>("create")
     .parameter(
-      ParameterBuilder<String>()
-        .name("arena_name")
+      Parameters.arenaNameParameter()
         .required()
         .build()
     )
-    .handler<UserPerformer> { performer, arguments ->
-      val arenaName = arguments.asText()
-      val arena = BaseArena(arenaName)
+    .handler { performer, parameters ->
+      // Nazwa areny.
+      val arenaName: String = parameters[0] as String
 
-      me.kvdpxne.dtm.game.ArenaService.insertArena(arena)
+      // Nowo utworzony obiekt areny.
+      val arena: Arena = ArenaImpl(arenaName)
+
+      //
+      ArenaService.insertArena(arena)
 
       performer.sendMessages(
         "&6&lDTM &7> &7Utworzono nową arenę o nazwie: &a$arenaName",

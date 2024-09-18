@@ -1,7 +1,5 @@
 package me.kvdpxne.dtm.profession
 
-import io.github.oshai.kotlinlogging.KLogger
-import io.github.oshai.kotlinlogging.KotlinLogging
 import me.kvdpxne.dtm.professions.createArcher
 import me.kvdpxne.dtm.professions.createAssassin
 import me.kvdpxne.dtm.professions.createDefender
@@ -11,8 +9,7 @@ import me.kvdpxne.dtm.professions.createMedic
 import me.kvdpxne.dtm.professions.createPyro
 import me.kvdpxne.dtm.professions.createScout
 import me.kvdpxne.dtm.professions.createSpecialist
-
-private val logger: KLogger = KotlinLogging.logger {}
+import me.kvdpxne.dtm.shared.debug.Debug
 
 object ProfessionManager : Iterable<Profession> {
 
@@ -38,8 +35,7 @@ object ProfessionManager : Iterable<Profession> {
    * @since 0.1.0
    */
   val randomProfession: Profession
-    get() = this._professions.values.random()
-
+    get() = this._professions.values.filter { it.enabled }.random()
 
   /**
    * @param name
@@ -69,7 +65,7 @@ object ProfessionManager : Iterable<Profession> {
     }
 
     this._professions[identifier] = profession
-    logger.debug {
+    Debug.log {
       "The profession \"$profession\" has been added and assigned to the " +
         "identifier \"$identifier\"."
     }
@@ -99,7 +95,7 @@ object ProfessionManager : Iterable<Profession> {
       createSpecialist()
     )
 
-    logger.info {
+    Debug.log {
       "All built-in professions have been added"
     }
   }

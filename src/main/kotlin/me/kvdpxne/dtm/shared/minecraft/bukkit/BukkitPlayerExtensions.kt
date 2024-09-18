@@ -1,13 +1,13 @@
 package me.kvdpxne.dtm.shared.minecraft.bukkit
 
 import me.kvdpxne.dtm.shared.ItemsClipboard
-import me.kvdpxne.dtm.shared.LobbyWorldHolder
+import me.kvdpxne.dtm.shared.WorldsHolder
 import me.kvdpxne.dtm.shared.debug.Debug
 import me.kvdpxne.dtm.shared.minecraft.BukkitPlayer
 import me.kvdpxne.dtm.shared.minecraft.MinecraftEnumClientCommand
 import me.kvdpxne.dtm.shared.minecraft.MinecraftPacketPlayInClientCommand
-import me.kvdpxne.dtm.user.User
-import me.kvdpxne.dtm.user.UserManager
+import me.kvdpxne.dtm.user.LocalUser
+import me.kvdpxne.dtm.user.LocalUserManager
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Location
@@ -70,7 +70,7 @@ fun Player.moveTo(
  */
 fun Player.moveToLobby() {
   //
-  var world: World? = LobbyWorldHolder.lobbyWorld
+  var world: World? = WorldsHolder.lobbyWorld
 
   if (null == world) {
     //
@@ -151,6 +151,5 @@ fun Player.respawn() {
   this.handle.playerConnection.a(packet)
 }
 
-fun Player.asUser(): User? {
-  return UserManager.findByIdentifier(this.uniqueId)
-}
+val Player.localUser: LocalUser?
+  get() = LocalUserManager.findUserByIdentifier(this.uniqueId.toString())

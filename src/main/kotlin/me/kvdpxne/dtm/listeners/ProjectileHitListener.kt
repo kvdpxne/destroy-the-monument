@@ -8,9 +8,8 @@ import me.kvdpxne.dtm.game.LocalTeam
 import me.kvdpxne.dtm.game.Teammate
 import me.kvdpxne.dtm.profession.Ability
 import me.kvdpxne.dtm.profession.Profession
-import me.kvdpxne.dtm.shared.basics.isNear
-import me.kvdpxne.dtm.user.User
-import me.kvdpxne.dtm.user.UserManager
+import me.kvdpxne.dtm.shared.minecraft.bukkit.localUser
+import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.Block
@@ -117,7 +116,7 @@ object ProjectileHitListener : Listener {
     }
 
     //
-    val user: User = UserManager.findByIdentifier(shooter.uniqueId) ?: return
+    val user: LocalUser = shooter.localUser ?: return
 
     //
     val game: LocalGame = user.game ?: return
@@ -153,7 +152,12 @@ object ProjectileHitListener : Listener {
         location,
         3.975F,
         !arena.revivalPositions.any {
-          it.isNear(location, Configuration.RADIUS_OF_EXPLOSION_INTERACTION + Math.PI)
+          it.isNear(
+            location.x,
+            location.y,
+            location.z,
+            Configuration.RADIUS_OF_EXPLOSION_INTERACTION + Math.PI
+          )
         }
       )
       ability.renewDelayed(shooter)

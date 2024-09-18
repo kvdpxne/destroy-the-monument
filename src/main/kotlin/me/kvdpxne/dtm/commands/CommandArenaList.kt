@@ -5,11 +5,10 @@ import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.game.ArenaService
 
-fun createArenaListCommand(): Command {
+fun createArenaListCommand(): Command<Performer> {
   // Usage: /dtm arena list
-  return CommandBuilder()
-    .name("list")
-    .handler<Performer> { performer, _ ->
+  return CommandBuilder.begin<Performer>("list")
+    .handler { performer, _ ->
       performer.sendMessages(
         "&6&lDTM &7> &7Lista dostępnych aren:",
         *ArenaService.findArenas()

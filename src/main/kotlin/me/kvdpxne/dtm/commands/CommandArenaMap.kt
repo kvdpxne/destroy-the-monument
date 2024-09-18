@@ -2,16 +2,16 @@ package me.kvdpxne.dtm.commands
 
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
+import me.kvdpxne.dtm.command.Performer
 
-fun createArenaMapCommand(): Command {
+fun createArenaMapCommand(): Command<Performer> {
   /* Usages:
    * /dtm arena map list
    * /dtm arena map monument
    * /dtm arena map revival
    * /dtm arena map set <ARENA_NAME> <MAP_NAME>
    */
-  return CommandBuilder()
-    .name("map")
+  return CommandBuilder.begin<Performer>("map")
     .hub()
     .children(
       createArenaMapListCommand(),

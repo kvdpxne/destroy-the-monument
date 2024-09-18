@@ -2,7 +2,7 @@ package me.kvdpxne.dtm.data
 
 import me.kvdpxne.dtm.data.source.database
 import me.kvdpxne.dtm.data.tables.TableTeam
-import me.kvdpxne.dtm.game.BaseTeam
+import me.kvdpxne.dtm.game.TeamImpl
 import me.kvdpxne.dtm.game.Team
 import me.kvdpxne.dtm.game.TeamColors
 import org.ktorm.dsl.QueryRowSet
@@ -35,7 +35,7 @@ object DaoTeam {
     val name = row[TableTeam.name]!!
 
     //
-    return BaseTeam(
+    return TeamImpl(
       name,
       color,
       identifier

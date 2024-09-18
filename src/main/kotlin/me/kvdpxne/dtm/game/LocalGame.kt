@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.game
 
-import me.kvdpxne.dtm.command.Communicative
-import me.kvdpxne.dtm.user.User
+import me.kvdpxne.dtm.shared.ancillary.Communicative
+import me.kvdpxne.dtm.user.LocalUser
 
 /**
  * @since 0.1.0
@@ -11,7 +11,7 @@ interface LocalGame : Game<LocalTeam>, Communicative {
   /**
    * @since 0.1.0
    */
-  val hostages: List<User>
+  val hostages: List<LocalUser>
 
   /**
    * @since 0.1.0
@@ -112,56 +112,56 @@ interface LocalGame : Game<LocalTeam>, Communicative {
    */
   fun findHostageByIdentifier(
     identifier: String
-  ): User?
+  ): LocalUser?
 
   /**
    * @since 0.1.0
    */
   fun findTeamByHostage(
-    hostage: User
+    hostage: LocalUser
   ): LocalTeam?
 
   /**
    * @since 0.1.0
    */
   fun findTeammateByHostage(
-    hostage: User
+    hostage: LocalUser
   ): Teammate?
 
   /**
    * @since 0.1.0
    */
-  fun isInGame(user: User): Boolean
+  fun isInGame(user: LocalUser): Boolean
 
   /**
    * @since 0.1.0
    */
-  fun isInTeam(user: User): Boolean
+  fun isInTeam(user: LocalUser): Boolean
 
   /**
    * @since 0.1.0
    */
-  fun isInArena(user: User): Boolean
+  fun isInArena(user: LocalUser): Boolean
 
   /**
    * @since 0.1.0
    */
-  fun addHostage(user: User): Boolean
+  fun addHostage(user: LocalUser): Boolean
 
   /**
    * @since 0.1.0
    */
-  fun addTeammate(team: LocalTeam, user: User): Boolean
+  fun addTeammate(team: LocalTeam, user: LocalUser): Boolean
 
   /**
    * @since 0.1.0
    */
-  fun removeHostage(user: User): Boolean
+  fun removeHostage(user: LocalUser): Boolean
 
   /**
    * @since 0.1.0
    */
-  fun removeTeammate(team: LocalTeam, user: User): Boolean
+  fun removeTeammate(team: LocalTeam, user: LocalUser): Boolean
 
 //  /**
 //   * @since 0.1.0

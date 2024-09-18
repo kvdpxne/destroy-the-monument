@@ -2,8 +2,9 @@ package me.kvdpxne.dtm.commands
 
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
+import me.kvdpxne.dtm.command.Performer
 
-fun createBaseCommand(): Command {
+fun createBaseCommand(): Command<Performer> {
   /* Usages:
    * /dtm ability
    * /dtm arena
@@ -18,8 +19,7 @@ fun createBaseCommand(): Command {
    * /dtm teleportBack
    * /dtm wand
    */
-  return CommandBuilder()
-    .name("dtm")
+  return CommandBuilder.begin<Performer>("dtm")
     .hub()
     .children(
       createAbilityCommand(),

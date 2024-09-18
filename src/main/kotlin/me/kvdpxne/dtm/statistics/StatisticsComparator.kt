@@ -60,7 +60,7 @@ object StatisticsComparator {
       }
 
       // Then handle BaseStatistics objects
-      if (a is BaseStatistics && b is BaseStatistics) {
+      if (a is StatisticsImpl && b is StatisticsImpl) {
         return@Comparator when (type) {
           0 -> b.kills - a.kills
           1 -> b.deaths - a.deaths

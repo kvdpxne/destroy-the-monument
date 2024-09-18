@@ -1,36 +1,23 @@
 package me.kvdpxne.dtm.command
 
-import me.kvdpxne.dtm.command.bukkit.BukkitCommandMapAccessor
+object CommandManager : Iterable<Command<Performer>> {
 
-object CommandManager {
+  private val _commands: MutableMap<String, Command<Performer>> = mutableMapOf()
 
-  /**
-   * @since 0.1.0
-   */
-  private val _commands: MutableSet<Command> = mutableSetOf()
-
-  private var _names: MutableList<String> = mutableListOf()
-
-  /**
-   * @since 0.1.0
-   */
-  val commands: Set<Command>
-    get() = this._commands.toSet()
+  val commands: List<Command<Performer>>
+    get() = this._commands.values.toList()
 
   val names: List<String>
-    get() = this._names.toList()
+    get() = this._commands.keys.toList()
 
-  /**
-   * @since 0.1.0
-   */
   val size: Int
     get() = this._commands.size
 
   internal fun getSubCommand(
     args: Array<out String>,
-    currentCommand: Pair<Command, Int>? = null,
+    currentCommand: Pair<Command<Performer>, Int>? = null,
     idx: Int = 0
-  ): Pair<Command, Int>? {
+  ): Pair<Command<Performer>, Int>? {
     // Return the last command when there are no more arguments
     if (idx >= args.size) {
       return currentCommand
@@ -38,7 +25,7 @@ object CommandManager {
 
     // If currentCommand is null, idx must be 0, so search in all commands
     val commandSupplier = currentCommand?.first?.children?.asIterable()
-      ?: this._commands
+      ?: this._commands.values
 
     // Look if something matches the current index, if it does, look if there are further matches
     commandSupplier
@@ -52,33 +39,38 @@ object CommandManager {
   /**
    * @since 0.1.0
    */
-  fun addCommand(command: Command) {
-    if (this._commands.add(command)) {
-      BukkitCommandMapAccessor.registerCommands(command)
-      this._names.add(command.name)
+  fun addCommand(
+    command: Command<*>
+  ) {
+    @Suppress("UNCHECKED_CAST")
+    command as Command<Performer>
+
+    this._commands[command.name.lowercase()] = command
+    BukkitCommandHandler(command).register()
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun addCommands(
+    vararg commands: Command<*>
+  ) {
+    for (command: Command<*> in commands) {
+      this.addCommand(command)
     }
   }
 
-  /**
-   * @since 0.1.0
-   */
-  fun addCommands(vararg commands: Command) {
-    commands.forEach { this.addCommand(it) }
+  fun removeCommand(
+    command: Command<Performer>
+  ) {
+    this._commands.remove(command.name.lowercase())
+    // TODO unregister
   }
 
   /**
-   * @since 0.1.0
+   *
    */
-  fun removeCommand(command: Command) {
-    if (this._commands.remove(command)) {
-      this._names.remove(command.name)
-    }
-  }
-
-  /**
-   * @since 0.1.0
-   */
-  fun isEmpty(): Boolean {
-    return this._commands.isEmpty()
+  override fun iterator(): Iterator<Command<Performer>> {
+    return this._commands.values.iterator()
   }
 }

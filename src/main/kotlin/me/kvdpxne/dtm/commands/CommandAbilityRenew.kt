@@ -2,27 +2,25 @@ package me.kvdpxne.dtm.commands
 
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
-import me.kvdpxne.dtm.user.UserPerformer
+import me.kvdpxne.dtm.command.CommandException
+import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.game.Teammate
+import me.kvdpxne.dtm.profession.Ability
+import me.kvdpxne.dtm.user.LocalUserPerformer
 
-fun createAbilityRenewCommand(): Command {
+fun createAbilityRenewCommand(): Command<LocalUserPerformer> {
   // Usage: /dtm ability renew
-  return CommandBuilder()
-    .name("renew")
-    .handler<UserPerformer> { performer, _ ->
-      val teammate = performer.user.teammate
-      if (null == teammate) {
-        performer.sendMessage("&cBłąd: &7Nie jesteś grze.")
-        return@handler
-      }
+  return CommandBuilder.begin<LocalUserPerformer>("renew")
+    .handler { performer, _ ->
+      val teammate: Teammate = performer.user.teammate
+        ?: throw CommandException(Configuration.NO_IN_GAME_MESSAGE)
 
-      val ability = teammate.currentProfession.ability
-      if (null == ability) {
-        performer.sendMessage("&cBłąd: &7Twoja profesja nie posiada umiejętności.")
-        return@handler
-      }
+      //
+      val ability: Ability = teammate.currentProfession.ability
+        ?: throw CommandException(Configuration.NO_ABILIT_TO_FILL_MESSAGE)
 
       ability.renew(performer.player!!)
-      performer.sendMessage("&6&lDTM &7> &aUmiejętność została odnowiona")
+      performer.sendMessage(Configuration.REFIL_ABILITY_MESSAGE)
     }
     .build()
 }

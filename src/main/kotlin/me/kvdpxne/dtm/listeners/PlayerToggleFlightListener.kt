@@ -2,8 +2,8 @@ package me.kvdpxne.dtm.listeners
 
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.game.LocalTeam
-import me.kvdpxne.dtm.user.User
-import me.kvdpxne.dtm.user.UserManager
+import me.kvdpxne.dtm.shared.minecraft.bukkit.localUser
+import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.GameMode
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -38,7 +38,7 @@ object PlayerToggleFlightListener : Listener {
     val player: Player = event.player
 
     //
-    val user: User = UserManager.findByIdentifier(player.uniqueId) ?: return
+    val user: LocalUser = event.player.localUser ?: return
 
     //
     val game: LocalGame = user.game ?: return

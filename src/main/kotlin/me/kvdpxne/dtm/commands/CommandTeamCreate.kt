@@ -2,42 +2,36 @@ package me.kvdpxne.dtm.commands
 
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
-import me.kvdpxne.dtm.command.ParameterBuilder
-import me.kvdpxne.dtm.command.ParameterValidators
+import me.kvdpxne.dtm.command.Parameters
+import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.data.DaoTeam
-import me.kvdpxne.dtm.game.BaseTeam
+import me.kvdpxne.dtm.game.TeamImpl
 import me.kvdpxne.dtm.game.TeamColors
-import me.kvdpxne.dtm.user.UserPerformer
 
-fun createTeamCreateCommand(): Command {
+fun createTeamCreateCommand(): Command<Performer> {
   // Usage: /dtm team create <TEAM_NAME>
-  return CommandBuilder()
-    .name("create")
+  return CommandBuilder.begin<Performer>("create")
     .parameter(
-      ParameterBuilder<String>()
-        .name("TEAM_NAME")
-        .validationBy(ParameterValidators.STRING_VALIDATOR)
+      Parameters.teamNameParameter()
         .required()
         .build()
     )
-    .handler<UserPerformer> { performer, parameter ->
-      if (parameter.isEmpty()) {
-        performer.sendMessage("Usage: /dtm team create <TEAM_NAME>")
-        return@handler
-      }
+    .handler { performer, parameters ->
+      //
+      val teamName: String = parameters[0] as String
 
-      val name = parameter.asText()
-      val color = TeamColors.findTeamColorByName(name)
+      //
+      val color = TeamColors.findTeamColorByName(teamName)
 
       if (null == color) {
-        performer.sendMessage("Team name does not exist: $name")
+        performer.sendMessage("Team name does not exist: $teamName")
         return@handler
       }
 
-      val team = BaseTeam(name, color)
+      val team = TeamImpl(teamName, color)
       DaoTeam.insertTeam(team)
 
-      performer.sendMessage(name)
+      performer.sendMessage(teamName)
     }
     .build()
 }

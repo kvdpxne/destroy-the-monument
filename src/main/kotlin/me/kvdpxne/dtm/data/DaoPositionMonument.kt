@@ -2,13 +2,17 @@ package me.kvdpxne.dtm.data
 
 import me.kvdpxne.dtm.data.source.database
 import me.kvdpxne.dtm.data.tables.TablePositionMonument
-import me.kvdpxne.dtm.game.BaseMonumentPosition
+import me.kvdpxne.dtm.data.tables.TableTeam
+import me.kvdpxne.dtm.game.MonumentPositionImpl
+import me.kvdpxne.dtm.game.TeamImpl
 import me.kvdpxne.dtm.game.MonumentPosition
 import me.kvdpxne.dtm.game.Team
+import me.kvdpxne.dtm.game.TeamColors
 import org.ktorm.dsl.QueryRowSet
 import org.ktorm.dsl.delete
 import org.ktorm.dsl.eq
 import org.ktorm.dsl.from
+import org.ktorm.dsl.innerJoin
 import org.ktorm.dsl.insert
 import org.ktorm.dsl.map
 import org.ktorm.dsl.select
@@ -29,8 +33,8 @@ object DaoPositionMonument {
     val identifier = row[TablePositionMonument.identifier]!!
 
     //
-    val teamIdentityIdentifier = row[TablePositionMonument.teamIdentifier]!!
-    val teamIdentity = DaoTeam.findTeamByIdentifier(teamIdentityIdentifier)!! as T
+    val teamIdentifier = row[TablePositionMonument.teamIdentifier]!!
+    val name = row[TableTeam.name]!!
 
     //
     val x = row[TablePositionMonument.x]!!
@@ -38,11 +42,15 @@ object DaoPositionMonument {
     val z = row[TablePositionMonument.z]!!
 
     //
-    return BaseMonumentPosition(
+    return MonumentPositionImpl(
       x,
       y,
       z,
-      teamIdentity,
+      TeamImpl(
+        name,
+        TeamColors.findTeamColorByName(name)!!,
+        teamIdentifier
+      ) as T,
       identifier
     )
   }
@@ -54,7 +62,18 @@ object DaoPositionMonument {
     identifier: String
   ): MonumentPosition<T>? {
     return database.from(TablePositionMonument)
-      .select()
+      .innerJoin(
+        TableTeam,
+        TablePositionMonument.teamIdentifier eq TableTeam.identifier
+      )
+      .select(
+        TablePositionMonument.identifier,
+        TablePositionMonument.x,
+        TablePositionMonument.y,
+        TablePositionMonument.z,
+        TablePositionMonument.teamIdentifier,
+        TableTeam.name
+      )
       .where {
         //
         TablePositionMonument.identifier eq identifier

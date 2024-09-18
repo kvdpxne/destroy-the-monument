@@ -2,14 +2,13 @@ package me.kvdpxne.dtm.commands
 
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
-import me.kvdpxne.dtm.user.UserPerformer
+import me.kvdpxne.dtm.user.LocalUserPerformer
 import org.bukkit.Location
 
-fun createPositionCommand(): Command {
-  return CommandBuilder()
-    .name("position")
+fun createPositionCommand(): Command<LocalUserPerformer> {
+  return CommandBuilder.begin<LocalUserPerformer>("position")
     .aliases("pos", "location", "loc")
-    .handler<UserPerformer> { performer, _ ->
+    .handler { performer, _ ->
       val location: Location = performer.player?.location ?: return@handler
       performer.sendMessages(
         "world: ${location.world.name}",

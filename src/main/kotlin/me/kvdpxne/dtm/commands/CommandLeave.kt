@@ -5,12 +5,11 @@ import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.shared.minecraft.bukkit.equipA
 import me.kvdpxne.dtm.shared.minecraft.bukkit.moveToLobby
 import me.kvdpxne.dtm.shared.minecraft.bukkit.reset
-import me.kvdpxne.dtm.user.UserPerformer
+import me.kvdpxne.dtm.user.LocalUserPerformer
 
-fun createLeaveCommand(): Command {
-  return CommandBuilder()
-    .name("leave")
-    .handler<UserPerformer> { performer, _ ->
+fun createLeaveCommand(): Command<LocalUserPerformer> {
+  return CommandBuilder.begin<LocalUserPerformer>("leave")
+    .handler { performer, _ ->
       val game = performer.user.game
 
       if (null == game) {

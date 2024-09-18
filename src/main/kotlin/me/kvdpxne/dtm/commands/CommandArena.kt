@@ -2,8 +2,9 @@ package me.kvdpxne.dtm.commands
 
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
+import me.kvdpxne.dtm.command.Performer
 
-fun createArenaCommand(): Command {
+fun createArenaCommand(): Command<Performer> {
   /* Usages:
    * /dtm arena add <ARENA_NAME> <GAME_NAME>
    * /dtm arena create <ARENA_NAME>
@@ -11,8 +12,7 @@ fun createArenaCommand(): Command {
    * /dtm arena remove <ARENA_NAME>
    * /dtm arena map
    **/
-  return CommandBuilder()
-    .name("arena")
+  return CommandBuilder.begin<Performer>("arena")
     .hub()
     .children(
       createArenaAddCommand(),

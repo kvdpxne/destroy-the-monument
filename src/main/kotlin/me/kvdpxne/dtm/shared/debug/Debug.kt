@@ -23,14 +23,14 @@ object Debug {
    *
    * @since 0.1.0
    */
-  private var _printInConsole: Boolean = true
+  private var _printInConsole: Boolean = false
 
   /**
    * Whether to print debug messages in-game to OP players.
    *
    * @since 0.1.0
    */
-  private var _printInGame: Boolean = true
+  private var _printInGame: Boolean = false
 
   /**
    * Gets whether debug messages are printed to the console.

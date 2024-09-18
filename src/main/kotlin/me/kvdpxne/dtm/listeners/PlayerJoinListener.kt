@@ -1,11 +1,13 @@
 package me.kvdpxne.dtm.listeners
 
 import me.kvdpxne.dtm.shared.minecraft.bukkit.equipA
+import me.kvdpxne.dtm.shared.minecraft.bukkit.localUser
 import me.kvdpxne.dtm.shared.minecraft.bukkit.moveToLobby
 import me.kvdpxne.dtm.shared.minecraft.bukkit.reset
 import me.kvdpxne.dtm.shared.minecraft.bukkit.runSynchronousDelayedTask
-import me.kvdpxne.dtm.user.OfflineUserService
-import me.kvdpxne.dtm.user.UserManager
+import me.kvdpxne.dtm.user.LocalUser
+import me.kvdpxne.dtm.user.LocalUserManager
+import me.kvdpxne.dtm.user.UserService
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -22,12 +24,10 @@ object PlayerJoinListener : Listener {
     val identifier = player.uniqueId
     val name = player.name
 
-    //
-    val user = OfflineUserService.findUserByIdentifier(identifier)
-      ?: OfflineUserService.createUser(identifier, name)
+    val user = UserService.findUserByIdentifier(identifier.toString())
+      ?: UserService.createUser(identifier.toString(), name)
 
-    //
-    UserManager.addUser(user)
+    LocalUserManager.addUser(user)
 
     // Registers and asynchronously executes after 50 ms
     runSynchronousDelayedTask(1L) {

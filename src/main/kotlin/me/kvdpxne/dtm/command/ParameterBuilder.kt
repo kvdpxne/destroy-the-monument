@@ -2,24 +2,48 @@ package me.kvdpxne.dtm.command
 
 import me.kvdpxne.dtm.shared.ancillary.Buildable
 
-class ParameterBuilder<T> : Buildable<Parameter<T>> {
+/**
+ * @since 0.1.0
+ */
+class ParameterBuilder<T> private constructor(
+  private val name: String
+) : Buildable<Parameter<T>> {
 
   // @formatter:off
-  private var name    : String?  = null
-  private var required: Boolean? = null
-  private var varargs : Boolean = false
-
-  private var validator: ParameterValidatorHandler<T>? = null
-  private var autoCompletionHandler: AutoCompletionHandler? = null
+  private var required         : Boolean?
+  private var varargs          : Boolean
+  private var validatorHandler : ParameterValidatorHandler<T>?
+  private var suggestionHandler: SuggestionHandler?
   // @formatter:on
 
-  fun name(name: String): ParameterBuilder<T> {
-    this.name = name
-    return this
+  init {
+    //
+    this.required = null
+    this.varargs = false
+    this.validatorHandler = null
+    this.suggestionHandler = null
+  }
+
+  companion object {
+
+    /**
+     * @throws IllegalArgumentException
+     *
+     * @since 0.1.0
+     */
+    fun <T> begin(
+      name: String
+    ): ParameterBuilder<T> {
+      require(name.isNotEmpty()) {
+        "name must not be empty"
+      }
+
+      return ParameterBuilder(name)
+    }
   }
 
   /**
-   *
+   * @since 0.1.0
    */
   fun required(): ParameterBuilder<T> {
     this.required = true
@@ -27,7 +51,7 @@ class ParameterBuilder<T> : Buildable<Parameter<T>> {
   }
 
   /**
-   *
+   * @since 0.1.0
    */
   fun optional(): ParameterBuilder<T> {
     this.required = false
@@ -35,33 +59,45 @@ class ParameterBuilder<T> : Buildable<Parameter<T>> {
   }
 
   /**
-   *
+   * @since 0.1.0
    */
   fun varargs(): ParameterBuilder<T> {
     this.varargs = true
     return this
   }
 
-  fun validationBy(validator: ParameterValidatorHandler<T>): ParameterBuilder<T> {
-    this.validator = validator
-    return this
-  }
-
-  fun autocompletedWith(
-    autoCompletionHandler: AutoCompletionHandler
+  /**
+   * @since 0.1.0
+   */
+  fun validatorHandler(
+    validator: ParameterValidatorHandler<T>
   ): ParameterBuilder<T> {
-    this.autoCompletionHandler = autoCompletionHandler
+    this.validatorHandler = validator
     return this
   }
 
   /**
+   * @since 0.1.0
+   */
+  fun suggestionHandler(
+    suggestionHandler: SuggestionHandler
+  ): ParameterBuilder<T> {
+    this.suggestionHandler = suggestionHandler
+    return this
+  }
+
+  /**
+   * @throws IllegalStateException
    *
+   * @since 0.1.0
    */
   override fun build(): Parameter<T> {
-    return Parameter<T>(
-      this.name!!,
+    return ParameterImpl(
+      this.name,
       this.required ?: throw IllegalStateException(""),
-      this.varargs
+      this.varargs,
+      this.validatorHandler,
+      this.suggestionHandler
     )
   }
 }

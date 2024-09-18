@@ -4,11 +4,12 @@ import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.Performer
 
-fun createVersionCommand(): Command {
-  return CommandBuilder()
-    .name("version")
+fun createVersionCommand(): Command<Performer> {
+  return CommandBuilder.begin<Performer>("version")
     .aliases("ver", "v")
-    .handler<Performer> { performer, arguments ->
+    .handler { performer, _ ->
+      //
+      //
       performer.sendMessages(
         "v0.1.0"
       )

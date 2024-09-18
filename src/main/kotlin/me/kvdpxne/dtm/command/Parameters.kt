@@ -1,67 +1,118 @@
 package me.kvdpxne.dtm.command
 
-import me.kvdpxne.dtm.game.GameManager
-import me.kvdpxne.dtm.user.UserManager
-
-fun builderWorldNameParameter(
-  name: String = "MAP_ARENA"
-): ParameterBuilder<String> {
-  return ParameterBuilder<String>()
-    .name(name)
-    .validationBy(ParameterValidators.STRING_VALIDATOR)
-    .autocompletedWith { begin ->
-      //
-      emptyList()
-    }
-}
+import me.kvdpxne.dtm.shared.Worlds
+import me.kvdpxne.dtm.user.LocalUserManager
+import me.kvdpxne.dtm.user.User
+import me.kvdpxne.dtm.user.UserService
+import org.bukkit.Bukkit
+import org.bukkit.World
 
 /**
  * @since 0.1.0
  */
-fun builderUserNameParameter(
-  name: String = "user_name"
-): ParameterBuilder<String> {
-  return ParameterBuilder<String>()
-    .name(name)
-    .validationBy(ParameterValidators.STRING_VALIDATOR)
-    .autocompletedWith { begin ->
-      //
-      UserManager.activeUsers
-        .filter { it.name.startsWith(begin, true) }
-        .map { it.name }
-    }
+object Parameters {
+
+  /**
+   * @since 0.1.0
+   */
+  fun arenaNameParameter(
+    parameterName: String = "ARENA_NAME"
+  ): ParameterBuilder<String> {
+    return ParameterBuilder.begin<String>(parameterName)
+      .validatorHandler(ParameterValidators.STRING_VALIDATOR)
+      .suggestionHandler {
+        emptyList()
+      }
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun arenaWorldNameParameter(
+    parameterName: String = "ARENA_WORLD_NAME"
+  ): ParameterBuilder<String> {
+    return ParameterBuilder.begin<String>(parameterName)
+      .validatorHandler(ParameterValidators.STRING_VALIDATOR)
+      .suggestionHandler {
+        Bukkit.getWorlds().map { world: World ->
+          world.name
+        }
+      }
+  }
+
+  fun gameNameParameter(
+    parameterName: String = "GAME_NAME"
+  ): ParameterBuilder<String> {
+    return ParameterBuilder.begin<String>(parameterName)
+      .validatorHandler(ParameterValidators.STRING_VALIDATOR)
+      .suggestionHandler {
+        emptyList()
+      }
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun localGameNameParameter(
+    parameterName: String = "GAME_NAME"
+  ): ParameterBuilder<String> {
+    return ParameterBuilder.begin<String>(parameterName)
+      .validatorHandler(ParameterValidators.STRING_VALIDATOR)
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun userNameParameter(
+    parameterName: String = "USER_NAME"
+  ): ParameterBuilder<String> {
+    return ParameterBuilder.begin<String>(parameterName)
+      .validatorHandler(ParameterValidators.STRING_VALIDATOR)
+      .suggestionHandler {
+        UserService.findNames()
+      }
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun teamNameParameter(
+    parameterName: String = "TEAM_NAME"
+  ): ParameterBuilder<String> {
+    return ParameterBuilder.begin<String>(parameterName)
+      .validatorHandler(ParameterValidators.STRING_VALIDATOR)
+      .suggestionHandler {
+        emptyList()
+      }
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun localUserNameParameter(
+    parameterName: String = "USER_NAME"
+  ): ParameterBuilder<String> {
+    return ParameterBuilder.begin<String>(parameterName)
+      .validatorHandler(ParameterValidators.STRING_VALIDATOR)
+      .suggestionHandler { input: String ->
+        LocalUserManager.users
+          .filter { localUser: User -> localUser.name.startsWith(input) }
+          .map { localUser: User -> localUser.name }
+      }
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun localWorldNameParameter(
+    parameterName: String = "LOCAL_WORLD_NAME"
+  ): ParameterBuilder<String> {
+    return ParameterBuilder.begin<String>(parameterName)
+      .validatorHandler(ParameterValidators.STRING_VALIDATOR)
+      .suggestionHandler {
+        Worlds.localWorldsNames
+      }
+  }
 }
 
-/**
- * @since 0.1.0
- */
-fun builderArenaNameParameter(
-  name: String = "arena_name"
-): ParameterBuilder<String> {
-  return ParameterBuilder<String>()
-    .name(name)
-    .validationBy(ParameterValidators.STRING_VALIDATOR)
-    .autocompletedWith { begin ->
-      //
-      me.kvdpxne.dtm.game.ArenaService.findArenas()
-        .filter { it.name.startsWith(begin) }
-        .map { it.name }
-    }
-}
 
-/**
- * @since 0.1.0
- */
-fun builderGameNameParameter(
-  name: String = "game_name"
-): ParameterBuilder<String> {
-  return ParameterBuilder<String>()
-    .name(name)
-    .validationBy(ParameterValidators.STRING_VALIDATOR)
-    .autocompletedWith { begin ->
-      //
-      GameManager.games
-        .filter { it.name.startsWith(begin) }
-        .map { it.name }
-    }
-}

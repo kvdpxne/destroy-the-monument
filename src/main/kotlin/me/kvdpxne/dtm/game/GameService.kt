@@ -17,6 +17,10 @@ object GameService {
     return DaoGame.findGames()
   }
 
+  fun findGameByName(name: String): Game<Team>? {
+    return DaoGame.findGameByNameOrNull(name)
+  }
+
   /**
    * @since 0.1.0
    */

@@ -1,6 +1,7 @@
 package me.kvdpxne.dtm.game
 
-import me.kvdpxne.dtm.user.User
+import me.kvdpxne.dtm.shared.debug.Debug
+import me.kvdpxne.dtm.user.LocalUser
 
 /**
  * @since 0.1.0
@@ -56,12 +57,23 @@ object GameManager {
   /**
    *
    */
-  fun <T: Team, G : Game<T>> findByUser(user: User): G? {
+  fun <T: Team, G : Game<T>> findByUser(user: LocalUser): G? {
     return this._games.values.find {
       if (it is LocalGame) {
         return@find it.isInGame(user)
       }
       return@find false
     } as G?
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun removeGames() {
+    this._games.clear()
+
+    Debug.log {
+      "All stored game objects have been cleared."
+    }
   }
 }

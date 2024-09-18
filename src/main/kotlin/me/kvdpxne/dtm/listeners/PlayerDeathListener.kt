@@ -9,10 +9,10 @@ import me.kvdpxne.dtm.game.Teammate
 import me.kvdpxne.dtm.scoreboard.updateCoinCount
 import me.kvdpxne.dtm.scoreboard.updateDeathCount
 import me.kvdpxne.dtm.scoreboard.updateKillCount
+import me.kvdpxne.dtm.shared.minecraft.bukkit.localUser
 import me.kvdpxne.dtm.shared.minecraft.bukkit.respawn
 import me.kvdpxne.dtm.shared.minecraft.bukkit.runSynchronousDelayedTask
-import me.kvdpxne.dtm.user.User
-import me.kvdpxne.dtm.user.UserManager
+import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -89,8 +89,7 @@ object PlayerDeathListener : Listener {
 
     // Obiekt użytkownika uzyskany na podstawie unikatowego identyfikatora
     // obiektu gracza, który umarł.
-    val victimUser: User = UserManager.findByIdentifier(victim.uniqueId)
-      ?: return
+    val victimUser: LocalUser = event.entity.localUser ?: return
 
     // Obiekt lokalnej gry, do której jest przypisany obiekt użytkownika,
     // który umarł.
@@ -139,12 +138,9 @@ object PlayerDeathListener : Listener {
     // przypisana do drużynowego, który zginął.
     victimTeammate.currentProfession.ability?.cancelCooldown()
 
-    // Obiekt gracza, który jest zabójcą
-    val killer: Player? = victim.killer
-
     // Jeżeli obiekt gracza, który jest zabójcą nie istnieje to obiekt gracza,
     // który jest ofiarą popełnij samobójstwo.
-    if (null == killer) {
+    if (null == victim.killer) {
       // VICTIM_KIT_NAME VICTIM_USER_NAME ACTION
       // Zwiadowca       currant          zginął
       event.deathMessage = this.createTeammateSuicideMessage(victimTeammate)
@@ -155,8 +151,7 @@ object PlayerDeathListener : Listener {
     }
 
     //
-    val killerUser: User = UserManager.findByIdentifier(killer.uniqueId)
-      ?: return
+    val killerUser: LocalUser = event.entity.killer.localUser ?: return
 
     //
     val killerTeammate: Teammate = game.findTeammateByHostage(killerUser)

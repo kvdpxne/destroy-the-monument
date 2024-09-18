@@ -2,13 +2,13 @@ package me.kvdpxne.dtm.commands
 
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
+import me.kvdpxne.dtm.command.CommandException
+import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
-import me.kvdpxne.dtm.command.builderGameNameParameter
-import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.game.LocalTeam
-import me.kvdpxne.dtm.user.UserPerformer
+import me.kvdpxne.dtm.user.LocalUserPerformer
 
 object CommandGameStart {
 
@@ -24,21 +24,20 @@ object CommandGameStart {
     user.sendMessage("The game ${game.name} has started.")
   }
 
-  fun createStartCommand(): Command {
+  fun createStartCommand(): Command<Performer> {
     // Usage: /dtm start [GAME_NAME]
-    return CommandBuilder()
-      .name("start")
+    return CommandBuilder.begin<Performer>("start")
+      .aliases("s", "run", "r")
       .parameter(
-        builderGameNameParameter()
+        Parameters.localGameNameParameter()
           .optional()
           .build()
       )
-      .handler<Performer> { performer, arguments ->
-        if (arguments.isEmpty()) {
-
-          if (performer !is UserPerformer) {
-            performer.sendMessage("Command is not accessible from the console.")
-            return@handler
+      .handler { performer, parameters ->
+        if (parameters.isEmpty()) {
+          //
+          if (performer !is LocalUserPerformer) {
+            throw CommandException("Command is not accessible from the console.")
           }
 
           val game = performer.user.game
@@ -46,7 +45,13 @@ object CommandGameStart {
           return@handler
         }
 
-        val game = arguments.asFoundGame<LocalTeam, LocalGame>()
+        //
+        val gameName: String = parameters[0] as String
+
+        //
+        val game: LocalGame = GameManager.findGameByName<LocalTeam, LocalGame>(gameName)
+          ?: throw CommandException("")
+
         startGame(game, performer)
       }
       .build()

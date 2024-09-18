@@ -2,57 +2,53 @@ package me.kvdpxne.dtm.commands
 
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
-import me.kvdpxne.dtm.command.ParameterBuilder
-import me.kvdpxne.dtm.command.ParameterValidators
-import me.kvdpxne.dtm.data.DaoTeam
+import me.kvdpxne.dtm.command.CommandException
+import me.kvdpxne.dtm.command.Parameters
+import me.kvdpxne.dtm.game.Arena
 import me.kvdpxne.dtm.game.ArenaService
-import me.kvdpxne.dtm.game.BaseRevivalPosition
-import me.kvdpxne.dtm.user.UserPerformer
+import me.kvdpxne.dtm.game.RevivalPositionImpl
+import me.kvdpxne.dtm.game.Team
+import me.kvdpxne.dtm.game.TeamService
+import me.kvdpxne.dtm.user.LocalUserPerformer
+import org.bukkit.Location
 
-fun createArenaMapRevivalSetCommand(): Command {
+fun createArenaMapRevivalSetCommand(): Command<LocalUserPerformer> {
   // Usage: /dtm arena map revival set <ARENA_NAME> <TEAM_NAME>
-  return CommandBuilder()
-    .name("set")
+  return CommandBuilder.begin<LocalUserPerformer>("set")
     .parameter(
-      ParameterBuilder<String>()
-        .name("ARENA_NAME")
-        .validationBy(ParameterValidators.STRING_VALIDATOR)
+      Parameters.arenaNameParameter()
         .required()
         .build()
     )
     .parameter(
-      ParameterBuilder<String>()
-        .name("TEAM_NAME")
-        .validationBy(ParameterValidators.STRING_VALIDATOR)
+      Parameters.teamNameParameter()
         .required()
         .build()
     )
-    .handler<UserPerformer> { performer, parameter ->
+    .handler { performer, parameters ->
+      //
+      val arenaName: String = parameters[0] as String
 
-      val arenaName = parameter.asText()
-      val arena = ArenaService.findArenaByName(arenaName)
+      //
+      val arena: Arena = ArenaService.findArenaByName(arenaName)
+        ?: throw CommandException("&cBłąd: &7Arena o nazwie: &c$arenaName &7nie istnieje.")
 
-      if (null == arena) {
-        performer.sendMessage("&cBłąd: &7Arena o nazwie: &c$arenaName &7nie istnieje.")
-        return@handler
-      }
+      //
+      val teamName: String = parameters[1] as String
 
-      val teamName = parameter.asText(1)
-      val team = DaoTeam.findTeamByName(teamName)
+      //
+      val team: Team = TeamService.findTeamByName(teamName)
+        ?: throw CommandException("&cBłąd: &7Drużyna o nazwie: &c$teamName &7nie istnieje.")
 
-      if (null == team) {
-        performer.sendMessage("&cBłąd: &7Drużyna o nazwie: &c$teamName &7nie istnieje.")
-        return@handler
-      }
-
-      val location = performer.player?.location ?: return@handler
+      //
+      val location: Location = performer.player!!.location
 
       //
       //
       ArenaService.insertArenaRevivalPosition(
         arena,
         //
-        BaseRevivalPosition(
+        RevivalPositionImpl(
           location.x,
           location.y,
           location.z,

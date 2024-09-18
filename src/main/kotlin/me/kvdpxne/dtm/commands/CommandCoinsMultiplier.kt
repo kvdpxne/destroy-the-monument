@@ -2,14 +2,14 @@ package me.kvdpxne.dtm.commands
 
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
+import me.kvdpxne.dtm.command.Performer
 
-fun createCoinsMultiplierCommand(): Command {
+fun createCoinsMultiplierCommand(): Command<Performer> {
   /* Usages:
    * /dtm coins multiplier set <VALUE> [USER_NAME]
    * /dtm coins multiplier show [USER_NAME]
    */
-  return CommandBuilder()
-    .name("multiplier")
+  return CommandBuilder.begin<Performer>("multiplier")
     .hub()
     .children(
       createCoinsMultiplierSetCommand(),

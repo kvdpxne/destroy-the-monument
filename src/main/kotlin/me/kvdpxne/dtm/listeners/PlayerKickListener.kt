@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.listeners
 
 import me.kvdpxne.dtm.data.DaoUser
-import me.kvdpxne.dtm.user.UserManager
+import me.kvdpxne.dtm.user.LocalUserManager
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -23,9 +23,9 @@ object PlayerKickListener : Listener {
       return
     }
 
-    UserManager.findByIdentifier(event.player.uniqueId)?.let {
+    LocalUserManager.findUserByIdentifier(event.player.uniqueId.toString())?.let {
       DaoUser.updateUser(it)
-      UserManager.removeUser(it)
+      LocalUserManager.removeUser(it)
     }
   }
 }

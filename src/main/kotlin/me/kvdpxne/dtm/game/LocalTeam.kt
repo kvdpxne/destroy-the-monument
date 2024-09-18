@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.game
 
-import me.kvdpxne.dtm.command.Communicative
-import me.kvdpxne.dtm.user.User
+import me.kvdpxne.dtm.shared.ancillary.Communicative
+import me.kvdpxne.dtm.user.LocalUser
 
 interface LocalTeam : Communicative, Team {
 
@@ -30,14 +30,14 @@ interface LocalTeam : Communicative, Team {
    * @since 0.1.0
    */
   fun hasTeammate(
-    user: User
+    user: LocalUser
   ): Boolean
 
   /**
    * @since 0.1.0
    */
   fun getTeammate(
-    user: User
+    user: LocalUser
   ): Teammate?
 
   /**
@@ -55,7 +55,7 @@ interface LocalTeam : Communicative, Team {
    * [Game.removeTeammate] method.
    */
   fun removeTeammate(
-    user: User
+    user: LocalUser
   ): Boolean
 
   /**

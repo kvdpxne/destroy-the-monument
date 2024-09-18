@@ -2,9 +2,9 @@ package me.kvdpxne.dtm.data
 
 import me.kvdpxne.dtm.data.source.database
 import me.kvdpxne.dtm.data.tables.TableArena
-import me.kvdpxne.dtm.game.BaseArena
-import me.kvdpxne.dtm.game.BaseArenaMap
-import me.kvdpxne.dtm.uid.toUuid
+import me.kvdpxne.dtm.game.Arena
+import me.kvdpxne.dtm.game.ArenaImpl
+import me.kvdpxne.dtm.game.ArenaMapImpl
 import org.ktorm.dsl.QueryRowSet
 import org.ktorm.dsl.eq
 import org.ktorm.dsl.from
@@ -26,7 +26,7 @@ object DaoArena {
    */
   private fun toArena(
     row: QueryRowSet
-  ): BaseArena {
+  ): ArenaImpl {
     //
     val identifier = row[TableArena.identifier]!!
 
@@ -43,7 +43,7 @@ object DaoArena {
     val name = row[TableArena.name]!!
 
     //
-    return BaseArena(
+    return ArenaImpl(
       name,
       identifier
     ).apply {
@@ -54,7 +54,7 @@ object DaoArena {
         return@apply
       }
 
-      this.map = BaseArenaMap(
+      this.map = ArenaMapImpl(
         mapName,
         mapIdentifier
       )
@@ -64,7 +64,7 @@ object DaoArena {
   /**
    * @since 0.1.0
    */
-  fun findArenas(): List<BaseArena> {
+  fun findArenas(): List<ArenaImpl> {
     return database.from(TableArena)
       .select()
       .mapNotNull {
@@ -78,7 +78,7 @@ object DaoArena {
    */
   fun findArenaByIdentifierOrNull(
     identifier: String
-  ): BaseArena? {
+  ): ArenaImpl? {
     return database.from(TableArena)
       .select()
       .where {
@@ -95,7 +95,7 @@ object DaoArena {
    */
   fun findArenaByNameOrNull(
     name: String
-  ): BaseArena? {
+  ): ArenaImpl? {
     return database.from(TableArena)
       .select()
       .where {
@@ -111,7 +111,7 @@ object DaoArena {
    * @since 0.1.0
    */
   fun insertArena(
-    arena: BaseArena
+    arena: Arena
   ) {
     database.insert(TableArena) {
       set(it.identifier, arena.identifier)
@@ -124,7 +124,7 @@ object DaoArena {
   /**
    * @since 0.1.0
    */
-  fun updateArena(arena: BaseArena) {
+  fun updateArena(arena: Arena) {
     database.update(TableArena) {
       set(it.name, arena.name)
       set(it.mapIdentifier, arena.map?.identifier.toString())

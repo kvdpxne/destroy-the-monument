@@ -2,41 +2,43 @@ package me.kvdpxne.dtm.commands
 
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
+import me.kvdpxne.dtm.command.CommandException
+import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
-import me.kvdpxne.dtm.command.builderArenaNameParameter
-import me.kvdpxne.dtm.command.builderGameNameParameter
 import me.kvdpxne.dtm.data.DaoGameArena
-import me.kvdpxne.dtm.game.LocalGame
-import me.kvdpxne.dtm.game.LocalTeam
+import me.kvdpxne.dtm.game.Arena
+import me.kvdpxne.dtm.game.ArenaService
+import me.kvdpxne.dtm.game.Game
+import me.kvdpxne.dtm.game.GameService
+import me.kvdpxne.dtm.game.Team
 
-fun createArenaAddCommand(): Command {
+fun createArenaAddCommand(): Command<Performer> {
   // Usage: /dtm arena add <ARENA_NAME> <GAME_NAME>
-  return CommandBuilder()
-    .name("add")
+  return CommandBuilder.begin<Performer>("add")
     .parameter(
-      builderArenaNameParameter()
+      Parameters.arenaNameParameter()
         .required()
         .build()
     )
     .parameter(
-      builderGameNameParameter()
+      Parameters.localGameNameParameter()
         .required()
         .build()
     )
-    .handler<Performer> { performer, arguments ->
-      val arena = arguments.asFoundArena()
+    .handler { performer, parameters ->
+      // Nazwa obiektu areny przechowywanej w bazie danych.
+      val arenaName: String = parameters[0] as String
 
-      if (null == arena) {
-        performer.sendMessage("An arena named ${arguments.asText()} does not exist.")
-        return@handler
-      }
+      //
+      val arena: Arena = ArenaService.findArenaByName(arenaName)
+        ?: throw CommandException("An arena named $arenaName does not exist.")
 
-      val game = arguments.asFoundGame<LocalTeam, LocalGame>(1)
+      // Nazwa obiektu gry przechowywanej w bazie danych.
+      val gameName: String = parameters[1] as String
 
-      if (null == game) {
-        performer.sendMessage("An game named ${arguments.asText(1)}does not exist.")
-        return@handler
-      }
+      //
+      val game: Game<Team> = GameService.findGameByName(gameName)
+        ?: throw CommandException("An game named $gameName does not exist.")
 
       DaoGameArena.insertGameArena(game.identifier, arena.identifier)
       performer.sendMessage("Success")

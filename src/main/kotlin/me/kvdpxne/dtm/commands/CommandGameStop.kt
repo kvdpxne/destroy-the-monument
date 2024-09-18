@@ -2,12 +2,13 @@ package me.kvdpxne.dtm.commands
 
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
+import me.kvdpxne.dtm.command.CommandException
+import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
-import me.kvdpxne.dtm.command.builderGameNameParameter
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.game.LocalTeam
-import me.kvdpxne.dtm.user.UserPerformer
+import me.kvdpxne.dtm.user.LocalUserPerformer
 
 object CommandGameStop {
 
@@ -31,21 +32,19 @@ object CommandGameStop {
     performer.sendMessage("The ${game.name} game has been stopped.")
   }
 
-  fun createStopCommand(): Command {
+  fun createStopCommand(): Command<Performer> {
     // Usage: /dtm stop [GAME_NAME]
-    return CommandBuilder()
-      .name("stop")
+    return CommandBuilder.begin<Performer>("stop")
       .parameter(
-        builderGameNameParameter()
+        Parameters.localGameNameParameter()
           .optional()
           .build()
       )
-      .handler<Performer> { performer, arguments ->
-        if (arguments.isEmpty()) {
-
-          if (performer !is UserPerformer) {
-            performer.sendMessage("Command is not accessible from the console.")
-            return@handler
+      .handler { performer, parameters ->
+        if (parameters.isEmpty()) {
+          //
+          if (performer !is LocalUserPerformer) {
+            throw CommandException("Command is not accessible from the console.")
           }
 
           val game = performer.user.game
@@ -53,7 +52,13 @@ object CommandGameStop {
           return@handler
         }
 
-        val game = arguments.asFoundGame<LocalTeam, LocalGame>()
+        //
+        val gameName: String = parameters[0] as String
+
+        //
+        val game: LocalGame = GameManager.findGameByName<LocalTeam, LocalGame>(gameName)
+          ?: throw CommandException("")
+
         stopGame(game, performer)
       }
       .build()

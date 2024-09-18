@@ -2,13 +2,17 @@ package me.kvdpxne.dtm.data
 
 import me.kvdpxne.dtm.data.source.database
 import me.kvdpxne.dtm.data.tables.TablePositionRevival
-import me.kvdpxne.dtm.game.BaseRevivalPosition
+import me.kvdpxne.dtm.data.tables.TableTeam
+import me.kvdpxne.dtm.game.RevivalPositionImpl
+import me.kvdpxne.dtm.game.TeamImpl
 import me.kvdpxne.dtm.game.RevivalPosition
 import me.kvdpxne.dtm.game.Team
+import me.kvdpxne.dtm.game.TeamColors
 import org.ktorm.dsl.QueryRowSet
 import org.ktorm.dsl.delete
 import org.ktorm.dsl.eq
 import org.ktorm.dsl.from
+import org.ktorm.dsl.innerJoin
 import org.ktorm.dsl.insert
 import org.ktorm.dsl.map
 import org.ktorm.dsl.select
@@ -30,7 +34,7 @@ object DaoPositionRevival {
 
     //
     val teamIdentifier = row[TablePositionRevival.teamIdentifier]!!
-    val teamIdentity = DaoTeam.findTeamByIdentifier(teamIdentifier)!! as T
+    val name = row[TableTeam.name]!!
 
     //
     val x = row[TablePositionRevival.x]!!
@@ -40,13 +44,17 @@ object DaoPositionRevival {
     val yaw = row[TablePositionRevival.yaw]!!
 
     //
-    return BaseRevivalPosition(
+    return RevivalPositionImpl(
       x,
       y,
       z,
       pitch,
       yaw,
-      teamIdentity,
+      TeamImpl(
+        name,
+        TeamColors.findTeamColorByName(name)!!,
+        teamIdentifier
+      ) as T,
       identifier
     )
   }
@@ -58,7 +66,20 @@ object DaoPositionRevival {
     identifier: String
   ): RevivalPosition<T>? {
     return database.from(TablePositionRevival)
-      .select()
+      .innerJoin(
+        TableTeam,
+        TablePositionRevival.teamIdentifier eq TableTeam.identifier
+      )
+      .select(
+        TablePositionRevival.identifier,
+        TablePositionRevival.x,
+        TablePositionRevival.y,
+        TablePositionRevival.z,
+        TablePositionRevival.pitch,
+        TablePositionRevival.yaw,
+        TablePositionRevival.teamIdentifier,
+        TableTeam.name
+      )
       .where {
         TablePositionRevival.identifier eq identifier
       }

@@ -1,38 +1,14 @@
 package me.kvdpxne.dtm.user
 
-import me.kvdpxne.dtm.statistics.BaseIdentifiableStatistics
-import me.kvdpxne.dtm.uid.Uid
+import me.kvdpxne.dtm.statistics.IdentifiableStatistics
 
-/**
- * A class representing statistics for a user in the game.
- *
- * This class inherits from `BaseIdentifiableStatistics` and provides additional
- * statistics specific to user performance such as played games, games won, and
- * games lost. It also defines methods for incrementing each of these values.
- *
- * @param kills The initial number of kills (default 0).
- * @param assists The initial number of assists (default 0).
- * @param deaths The initial number of deaths (default 0).
- * @param destroyedMonuments The initial number of destroyed monuments (default 0).
- * @param playedGames The initial number of played games (default 0).
- * @param gamesWon The initial number of games won (default 0).
- * @param gamesLost The initial number of games lost (default 0).
- * @param identifier
- *
- * @since 0.1.0
- */
-class UserStatistics(
-  // @formatter:off
-      kills             : Int = 0,
-      assists           : Int = 0,
-      deaths            : Int = 0,
-      destroyedMonuments: Int = 0,
-  var playedGames       : Int = 0,
-  var gamesWon          : Int = 0,
-  var gamesLost         : Int = 0,
-      identifier        : String = Uid.next()
-  // @formatter:on
-): BaseIdentifiableStatistics(kills, assists, deaths, destroyedMonuments, identifier) {
+interface UserStatistics : IdentifiableStatistics {
+
+  val playedGames: Int
+
+  val gamesWon: Int
+
+  val gamesLost: Int
 
   /**
    * Increments the number of played games by the specified amount (defaults
@@ -45,29 +21,23 @@ class UserStatistics(
    *
    * @since 0.1.0
    */
-  fun addPlayedGames(playedGames: Int = 1) {
-    this.playedGames = this.add(this.playedGames, playedGames)
-  }
+  fun addPlayedGames(playedGames: Int = 1)
 
   /**
    * Increments the number of games won by 1 (or a specified value).
    *
-   * @param gameWon The number of games won to add (defaults to 1)
+   * @param gamesWon The number of games won to add (defaults to 1)
    *
    * @since 0.1.0
    */
-  fun addGamesWon(gameWon: Int = 1) {
-    this.gamesWon = this.add(this.gamesWon, gameWon)
-  }
+  fun addGamesWon(gamesWon: Int = 1)
 
   /**
    * Increments the number of games lost by 1 (or a specified value).
    *
-   * @param gameLost The number of games lost to add (defaults to 1)
+   * @param gamesLost The number of games lost to add (defaults to 1)
    *
    * @since 0.1.0
    */
-  fun addGamesLost(gameLost: Int = 1) {
-    this.gamesLost = this.add(this.gamesLost, gameLost)
-  }
+  fun addGamesLost(gamesLost: Int = 1)
 }

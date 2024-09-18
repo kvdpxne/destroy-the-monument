@@ -14,13 +14,13 @@ object ArenaService {
   /**
    * @since 0.1.0
    */
-  fun findArenas(): List<BaseArena> {
+  fun findArenas(): List<ArenaImpl> {
     return DaoArena.findArenas()
   }
 
   fun findArenaByIdentifier(
     identifier: String
-  ): BaseArena? {
+  ): ArenaImpl? {
     return DaoArena.findArenaByIdentifierOrNull(identifier)
   }
 
@@ -31,7 +31,7 @@ object ArenaService {
    */
   fun findArenaByName(
     name: String,
-  ): BaseArena? {
+  ): ArenaImpl? {
     return DaoArena.findArenaByNameOrNull(name)
   }
 
@@ -39,7 +39,7 @@ object ArenaService {
    * @since 0.1.0
    */
   fun insertArena(
-    arena: BaseArena
+    arena: Arena
   ) {
     DaoArena.insertArena(arena)
   }
@@ -48,7 +48,7 @@ object ArenaService {
    * @since 0.1.0
    */
   fun insertArenaRevivalPosition(
-    arena: BaseArena,
+    arena: Arena,
     revivalPosition: RevivalPosition<Team>
   ) {
     DaoPositionRevival.insertPositionRevival(revivalPosition)
@@ -59,8 +59,8 @@ object ArenaService {
    * @since 0.1.0
    */
   fun insertArenaMonumentPosition(
-    arena: BaseArena,
-    monumentPosition: BaseMonumentPosition<Team>
+    arena: Arena,
+    monumentPosition: MonumentPositionImpl<Team>
   ) {
     DaoPositionMonument.insertPositionMonument(monumentPosition)
     DaoArenaPositionMonument.insertArenaPositionMonument(arena.identifier, monumentPosition.identifier)

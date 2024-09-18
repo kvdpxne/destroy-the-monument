@@ -10,7 +10,7 @@ import me.kvdpxne.dtm.shared.minecraft.bukkit.ItemBuilder
 import me.kvdpxne.dtm.shared.minecraft.bukkit.equipB
 import me.kvdpxne.dtm.shared.minecraft.bukkit.reset
 import me.kvdpxne.dtm.shared.minecraft.bukkit.toBuilder
-import me.kvdpxne.dtm.user.User
+import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
@@ -18,7 +18,7 @@ import org.bukkit.inventory.ItemStack
 
 fun createTeamSelectionGui(
   game: LocalGame,
-  user: User
+  user: LocalUser
 ): Gui {
 
   //
@@ -107,7 +107,7 @@ fun createTeamSelectionGui(
   return gui
 }
 
-fun createGameSelectionGui(user: User): Gui {
+fun createGameSelectionGui(user: LocalUser): Gui {
   // Lista dostępnych obiektów gier
   val games: List<Game<*>> = GameManager.games
 
@@ -164,7 +164,7 @@ fun createGameSelectionGui(user: User): Gui {
   return gui
 }
 
-fun createProfessionSelectionGui(user: User): Gui {
+fun createProfessionSelectionGui(user: LocalUser): Gui {
 
   val gui = Gui("Choose your profession", Rows.TWO)
   val itemBuilder = Material.STAINED_CLAY.toBuilder()
@@ -199,7 +199,7 @@ fun createProfessionSelectionGui(user: User): Gui {
       }
 
       //
-      user.currentProfession = profession.clone()
+      user.updateCurrentProfession(profession.clone())
 
       event.isCancelled = true
       event.whoClicked.closeInventory()
