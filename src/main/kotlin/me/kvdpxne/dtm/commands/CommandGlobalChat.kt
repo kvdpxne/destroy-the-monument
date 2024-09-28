@@ -8,6 +8,9 @@ import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
+/**
+ * @since 0.1.0
+ */
 fun createGlobalChatCommand(): Command<LocalUserPerformer> {
   // Usage: /g <TEXT...>
   return CommandBuilder.begin<LocalUserPerformer>("globalChat")

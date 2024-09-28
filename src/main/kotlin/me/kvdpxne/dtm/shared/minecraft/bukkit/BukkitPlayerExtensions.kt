@@ -8,6 +8,7 @@ import me.kvdpxne.dtm.shared.minecraft.MinecraftEnumClientCommand
 import me.kvdpxne.dtm.shared.minecraft.MinecraftPacketPlayInClientCommand
 import me.kvdpxne.dtm.user.LocalUser
 import me.kvdpxne.dtm.user.LocalUserManager
+import me.kvdpxne.dtm.user.UserException
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Location
@@ -151,5 +152,6 @@ fun Player.respawn() {
   this.handle.playerConnection.a(packet)
 }
 
-val Player.localUser: LocalUser?
-  get() = LocalUserManager.findUserByIdentifier(this.uniqueId.toString())
+val Player.localUser: LocalUser
+  get() = LocalUserManager.findUserByIdentifier(this.uniqueId)
+    ?: throw UserException()

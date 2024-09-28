@@ -5,6 +5,9 @@ import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.gui.createProfessionSelectionGui
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
+/**
+ * @since 0.1.0
+ */
 fun createKitCommand(): Command<LocalUserPerformer> {
   return CommandBuilder.begin<LocalUserPerformer>("kit")
     .aliases("kits", "class", "classes", "profession", "professions")

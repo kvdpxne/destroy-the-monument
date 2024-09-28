@@ -1,11 +1,15 @@
 package me.kvdpxne.dtm.game
 
+import java.util.UUID
 import me.kvdpxne.dtm.shared.ancillary.Identifiable
 import me.kvdpxne.dtm.shared.ancillary.Nameable
 import org.bukkit.ChatColor
 import org.bukkit.DyeColor
 
-interface Team : Identifiable<String>, Nameable {
+/**
+ * @since 0.1.0
+ */
+interface Team : Identifiable<UUID>, Nameable {
 
   /**
    * @since 0.1.0
@@ -45,6 +49,4 @@ interface Team : Identifiable<String>, Nameable {
    * @since 0.1.0
    */
   fun toLocalTeam(): LocalTeam
-
-
 }

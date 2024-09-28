@@ -11,6 +11,9 @@ import me.kvdpxne.dtm.user.LocalUserPerformer
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserService
 
+/**
+ * @since 0.1.0
+ */
 fun createCoinsMultiplierSetCommand(): Command<Performer> {
   // Usage: /dtm coins multiplier set <VALUE> [USER_NAME]
   return CommandBuilder.begin<Performer>("set")
@@ -37,7 +40,7 @@ fun createCoinsMultiplierSetCommand(): Command<Performer> {
 
         val oldMultiplier = performer.user.wallet.multiplier
 
-        performer.user.wallet.updateMultiplier(value)
+        performer.user.wallet.multiplier = value
         performer.sendMessage("&6&lDTM &7> &fZmieniono mnożnik z &6$oldMultiplier &fna &6$value.")
         return@handler
       }
@@ -49,7 +52,7 @@ fun createCoinsMultiplierSetCommand(): Command<Performer> {
 
         val oldMultiplier = user.wallet.multiplier
 
-        user.wallet.updateMultiplier(value)
+        user.wallet.multiplier = value
         performer.sendMessage("&6&lDTM &7> &fZmieniono mnożnik z &6$oldMultiplier &fna &6$value.")
         return@handler
       }

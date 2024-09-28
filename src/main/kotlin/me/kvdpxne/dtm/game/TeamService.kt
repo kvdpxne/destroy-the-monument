@@ -1,6 +1,8 @@
 package me.kvdpxne.dtm.game
 
-import me.kvdpxne.dtm.data.DaoTeam
+import java.util.UUID
+import kotlinx.coroutines.runBlocking
+import me.kvdpxne.dtm.data.TeamDao
 
 /**
  * @since 0.1.0
@@ -11,41 +13,30 @@ object TeamService {
    * @since 0.1.0
    */
   fun findTeamByIdentifier(
-    identifier: String
+    identifier: UUID
   ): Team? {
-    require(identifier.isNotBlank()) {
-      "identifier cannot be blank"
+    return runBlocking {
+      TeamDao.findTeamByIdentifier(identifier)
     }
-
-    return DaoTeam.findTeamByIdentifier(identifier)
   }
 
   /**
    * @since 0.1.0
    */
   fun findTeamByName(
-    name: String
+    name: String,
+    ignoreCase: Boolean = true
   ): Team? {
-    return DaoTeam.findTeamByName(name)
+    return runBlocking {
+      TeamDao.findTeamByName(name, ignoreCase)
+    }
   }
 
-  /**
-   * @since 0.1.0
-   */
-  fun insertTeamIdentity(
+  fun createTeam(
     team: Team
   ) {
-    DaoTeam.insertTeam(team)
+    runBlocking {
+      TeamDao.insertTeam(team)
+    }
   }
-
-//  fun existsTeamIdentityByIdentifier(
-//    identifier: String
-//  ): Boolean {
-//    var found = teamIdentities.containsKey(identifier)
-//    if (found) {
-//      return true
-//    }
-//
-//    return DaoTeam.findTeamByIdentifier(identifier) != null
-//  }
 }

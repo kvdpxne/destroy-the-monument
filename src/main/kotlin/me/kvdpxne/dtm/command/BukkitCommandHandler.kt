@@ -36,31 +36,37 @@ internal class BukkitCommandHandler internal constructor(
       return true
     }
 
-    if (this.command.javaClass.isAssignableFrom(LocalUserPerformer::class.java)) {
+    try {
+      if (this.command.javaClass.isAssignableFrom(LocalUserPerformer::class.java)) {
+        if (commandSender !is Player) {
+          commandSender.sendMessage("This command can only be used in the game.")
+          return true
+        }
+
+        this.command.execute(
+          commandSender.localUser.performer,
+          arrayOf(label, *arguments)
+        )
+        return true
+      }
+
       if (commandSender !is Player) {
-        commandSender.sendMessage("This command can only be used in the game.")
+        this.command.execute(
+          BukkitConsolePerformer.INSTANCE,
+          arrayOf(label, *arguments)
+        )
         return true
       }
 
       this.command.execute(
-        commandSender.localUser!!.performer,
+        commandSender.localUser.performer,
         arrayOf(label, *arguments)
       )
       return true
+    } catch (exception: CommandException) {
+      commandSender.sendMessage(exception.message)
     }
 
-    if (commandSender !is Player) {
-      this.command.execute(
-        BukkitConsolePerformer.INSTANCE,
-        arrayOf(label, *arguments)
-      )
-      return true
-    }
-
-    this.command.execute(
-      commandSender.localUser!!.performer,
-      arrayOf(label, *arguments)
-    )
     return true
   }
 

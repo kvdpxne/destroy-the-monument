@@ -5,12 +5,14 @@ import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
-import me.kvdpxne.dtm.data.DaoGameTeam
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameService
 import me.kvdpxne.dtm.game.Team
 import me.kvdpxne.dtm.game.TeamService
 
+/**
+ * @since 0.1.0
+ */
 fun createTeamAddCommand(): Command<Performer> {
   // Usage: /dtm team add <GAME_NAME> <TEAM_IDENTITY>
   return CommandBuilder.begin<Performer>("add")
@@ -32,15 +34,17 @@ fun createTeamAddCommand(): Command<Performer> {
       val game: Game<Team> = GameService.findGameByName(gameName)
         ?: throw CommandException("An game named $gameName does not exist.")
 
+      println("fsf $game")
+
       //
       val teamName: String = parameters[1] as String
 
       //
-      val team = TeamService.findTeamByName(teamName)
+      val team: Team = TeamService.findTeamByName(teamName)
         ?: throw CommandException("Team $teamName does not exist.")
 
       //
-      DaoGameTeam.insertGameTeam(game.identifier, team.identifier)
+      GameService.insertGameTeam(game, team)
 
       //
       performer.sendMessage("Success")

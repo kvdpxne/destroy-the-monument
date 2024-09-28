@@ -11,6 +11,9 @@ import me.kvdpxne.dtm.user.LocalUserPerformer
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserService
 
+/**
+ * @since 0.1.0
+ */
 fun createCoinsSetCommand(): Command<Performer> {
   // Usage: /dtm coins set <VALUE> [USER_NAME]
   return CommandBuilder.begin<Performer>("set")
@@ -36,7 +39,7 @@ fun createCoinsSetCommand(): Command<Performer> {
 
         val oldValue = performer.user.wallet.coins
 
-        performer.user.wallet.updateCoins(value)
+        performer.user.wallet.coins = value
         performer.sendMessage("&6&lDTM &7> &fZmieniono wartość portfela z &6$oldValue &fna &6$value.")
         return@handler
       }
@@ -48,7 +51,7 @@ fun createCoinsSetCommand(): Command<Performer> {
 
         val oldValue = user.wallet.coins
 
-        user.wallet.updateCoins(value)
+        user.wallet.coins = value
         performer.sendMessage("&6&lDTM &7> &fZmieniono wartość portfela z &6$oldValue &fna &6$value &fu użytkownika &6${user.name}&f.")
       }
     }

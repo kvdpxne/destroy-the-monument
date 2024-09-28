@@ -12,6 +12,9 @@ import me.kvdpxne.dtm.game.TeamService
 import me.kvdpxne.dtm.user.LocalUserPerformer
 import org.bukkit.Location
 
+/**
+ * @since 0.1.0
+ */
 fun createArenaMapRevivalSetCommand(): Command<LocalUserPerformer> {
   // Usage: /dtm arena map revival set <ARENA_NAME> <TEAM_NAME>
   return CommandBuilder.begin<LocalUserPerformer>("set")

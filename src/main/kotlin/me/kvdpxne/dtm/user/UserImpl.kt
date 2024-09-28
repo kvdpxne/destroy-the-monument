@@ -1,5 +1,6 @@
 package me.kvdpxne.dtm.user
 
+import java.util.UUID
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.wallet.Wallet
 
@@ -10,7 +11,7 @@ open class UserImpl internal constructor(
   override val statistics       : UserStatistics,
   override val wallet           : Wallet,
   override var currentProfession: Profession,
-  override val identifier       : String,
+  override val identifier       : UUID
   // @formatter:on
 ) : User {
 

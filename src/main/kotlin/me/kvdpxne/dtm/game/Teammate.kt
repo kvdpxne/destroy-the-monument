@@ -1,8 +1,8 @@
 package me.kvdpxne.dtm.game
 
 import fr.mrmicky.fastboard.FastBoard
-import me.kvdpxne.dtm.shared.ancillary.Communicative
 import me.kvdpxne.dtm.profession.Profession
+import me.kvdpxne.dtm.shared.ancillary.Communicative
 import me.kvdpxne.dtm.statistics.Statistics
 import me.kvdpxne.dtm.user.LocalUser
 

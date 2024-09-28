@@ -5,6 +5,9 @@ import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.game.ArenaService
 
+/**
+ * @since 0.1.0
+ */
 fun createArenaMapListCommand(): Command<Performer> {
   // Usage: /dtm arena map list
   return CommandBuilder.begin<Performer>("list")

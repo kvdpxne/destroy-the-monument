@@ -1,10 +1,10 @@
 package me.kvdpxne.dtm.user
 
-import me.kvdpxne.dtm.shared.ancillary.Communicative
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.game.LocalTeam
 import me.kvdpxne.dtm.game.Teammate
 import me.kvdpxne.dtm.profession.Profession
+import me.kvdpxne.dtm.shared.ancillary.Communicative
 
 /**
  * @since 0.1.0

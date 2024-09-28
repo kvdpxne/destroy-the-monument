@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.game
 
+import java.util.UUID
 import me.kvdpxne.dtm.shared.basics.position.BaseIdentifiableBlockPosition
-import me.kvdpxne.dtm.uid.Uid
 
 /**
  * @param x
@@ -18,7 +18,7 @@ class MonumentPositionImpl<T : Team>(
                y         : Int,
                z         : Int,
   override val team      : T,
-               identifier: String = Uid.next()
+               identifier: UUID = UUID.randomUUID()
   // @formatter:on
 ) : BaseIdentifiableBlockPosition(
   x = x,

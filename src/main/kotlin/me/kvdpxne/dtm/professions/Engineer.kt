@@ -8,7 +8,6 @@ import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionBuilder
 import me.kvdpxne.dtm.shared.ItemsClipboard.ITEM_TOOL_AXE
 import me.kvdpxne.dtm.shared.ItemsClipboard.ITEM_TOOL_PICKAXE
-import me.kvdpxne.dtm.shared.indexOfSecond
 import me.kvdpxne.dtm.shared.minecraft.bukkit.isNullOrTypeAir
 import me.kvdpxne.dtm.shared.minecraft.bukkit.toBuilder
 import org.bukkit.Material
@@ -58,7 +57,7 @@ fun createEngineer(): Profession = ProfessionBuilder()
       if (64 < sum) {
         val diff = sum - 64
         inventory.setItem(index, ItemStack(Material.COBBLESTONE, 64))
-        val nextIndex = inventory.contents.indexOfSecond { it.isNullOrTypeAir() }
+        val nextIndex = inventory.contents.indexOfFirst { it.isNullOrTypeAir() }
         inventory.setItem(nextIndex, ItemStack(Material.COBBLESTONE, diff))
         return@ability
       }
@@ -68,7 +67,7 @@ fun createEngineer(): Profession = ProfessionBuilder()
       return@ability
     }
 
-    val nextIndex = inventory.contents.indexOfSecond { it.isNullOrTypeAir() }
+    val nextIndex = inventory.contents.indexOfFirst { it.isNullOrTypeAir() }
     inventory.setItem(nextIndex, ItemStack(Material.COBBLESTONE, 15))
   }
   .enabled()

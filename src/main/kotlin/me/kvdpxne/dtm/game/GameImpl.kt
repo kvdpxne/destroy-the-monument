@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.game
 
+import java.util.UUID
 import me.kvdpxne.dtm.shared.ancillary.AbstractIdentifiable
-import me.kvdpxne.dtm.uid.Uid
 
 /**
  * @param name
@@ -16,21 +16,21 @@ open class GameImpl<T : Team>(
   // @formatter:off
   override val name       : String,
   override val displayName: String,
-               teams      : Map<String, T>     = mutableMapOf(),
-               arenas     : Map<String, Arena> = mutableMapOf(),
-               identifier : String             = Uid.next()
+               teams      : Map<UUID, T>     = mutableMapOf(),
+               arenas     : Map<UUID, Arena> = mutableMapOf(),
+               identifier : UUID             = UUID.randomUUID()
   // @formatter:on
-) : AbstractIdentifiable<String>(identifier), Game<T> {
+) : AbstractIdentifiable<UUID>(identifier), Game<T> {
 
   /**
    * @since 0.1.0
    */
-  protected val _teams: Map<String, T> = teams
+  protected val _teams: Map<UUID, T> = teams
 
   /**
    * @since 0.1.0
    */
-  protected val _arenas: Map<String, Arena> = arenas
+  protected val _arenas: Map<UUID, Arena> = arenas
 
   /**
    * @since 0.1.0
@@ -74,19 +74,11 @@ open class GameImpl<T : Team>(
     return this._arenas.containsValue(arena)
   }
 
-  override fun findTeamByIdentifier(identifier: String): T? {
-    require(identifier.isNotBlank()) {
-      "The given key must not be blank."
-    }
-
+  override fun findTeamByIdentifier(identifier: UUID): T? {
     return this._teams[identifier]
   }
 
-  override fun findArenaByIdentifier(identifier: String): Arena? {
-    require(identifier.isNotBlank()) {
-      "The given key must not be blank."
-    }
-
+  override fun findArenaByIdentifier(identifier: UUID): Arena? {
     return this._arenas[identifier]
   }
 
@@ -100,7 +92,7 @@ open class GameImpl<T : Team>(
       name = this.name,
 
       //
-      teams = this._teams.mapValues { (_: String, team: Team) ->
+      teams = this._teams.mapValues { (_: UUID, team: Team) ->
         team.toLocalTeam()
       }.toMap(),
 

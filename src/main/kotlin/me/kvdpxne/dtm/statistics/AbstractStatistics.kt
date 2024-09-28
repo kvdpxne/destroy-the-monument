@@ -14,7 +14,7 @@ package me.kvdpxne.dtm.statistics
  *
  * @since 0.1.0
  */
-abstract class AbstractStatistics : Statistics {
+abstract class AbstractStatistics protected constructor() : Statistics {
 
   /**
    * Ensures the sum of a statistic (kills, deaths, etc.), and the provided

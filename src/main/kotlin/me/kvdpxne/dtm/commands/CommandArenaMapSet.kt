@@ -5,7 +5,6 @@ import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
-import me.kvdpxne.dtm.data.DaoArena
 import me.kvdpxne.dtm.game.Arena
 import me.kvdpxne.dtm.game.ArenaService
 import me.kvdpxne.dtm.game.ArenaImpl
@@ -41,8 +40,8 @@ fun createArenaMapSetCommand(): Command<Performer> {
       val world: World = WorldLoaderHelper.getWorld(worldName)
         ?: throw CommandException("&cBŁĄD: &7Mapa o nazwie &c$worldName &7nie istnieje.")
 
-      (arena as ArenaImpl).map = ArenaMapImpl(world.name, world.uid.toString())
-      DaoArena.updateArena(arena)
+      ArenaService.updateArenaMap(arena, ArenaMapImpl(world.name, world.uid))
+
       performer.sendMessage("&6&lDTM &7> &7Przypisano mapę o nazwię &a$worldName &7do areny o nazwie: &a$arenaName&7.")
     }
     .build()

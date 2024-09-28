@@ -1,44 +1,40 @@
 package me.kvdpxne.dtm.wallet
 
+import java.util.UUID
 import me.kvdpxne.dtm.shared.ancillary.Identifiable
 
 /**
  * @since 0.1.0
  */
-interface Wallet : Identifiable<String> {
+interface Wallet : Comparable<Wallet>, Identifiable<UUID> {
 
   /**
+   * @throws IllegalArgumentException
+   *
    * @since 0.1.0
    */
-  override val identifier: String
+  var coins: Long
 
   /**
+   * @throws IllegalArgumentException
+   *
    * @since 0.1.0
    */
-  val coins: Long
+  var multiplier: Float
 
   /**
-   * @since 0.1.0
-   */
-  val multiplier: Float
-
-  /**
+   * @throws IllegalArgumentException
+   * @throws ArithmeticException
+   *
    * @since 0.1.0
    */
   fun addCoins(coins: Long)
 
   /**
+   * @throws IllegalArgumentException
+   * @throws ArithmeticException
+   *
    * @since 0.1.0
    */
   fun subtractCoins(coins: Long)
-
-  /**
-   * @since 0.1.0
-   */
-  fun updateCoins(coins: Long)
-
-  /**
-   * @since 0.1.0
-   */
-  fun updateMultiplier(multiplier: Float)
 }

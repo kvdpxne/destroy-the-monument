@@ -1,5 +1,10 @@
 package me.kvdpxne.dtm
 
+import java.util.UUID
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import me.kvdpxne.dico.Dico
 import me.kvdpxne.dtm.command.CommandManager
 import me.kvdpxne.dtm.commands.createBaseCommand
@@ -38,6 +43,7 @@ import me.kvdpxne.dtm.user.LocalUserManager
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserBuilder
 import me.kvdpxne.dtm.user.UserService
+import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
 import org.bukkit.generator.ChunkGenerator
@@ -118,8 +124,8 @@ class DestroyTheMonument : JavaPlugin() {
 
     for (player: Player in Dico.getLocalPlayers().asCollection()) {
       //
-      val user: User = UserService.findUserByIdentifier(player.uniqueId.toString())
-        ?: UserBuilder.create(player.uniqueId.toString(), player.name)
+      val user: User = UserService.findUserByIdentifier(player.uniqueId)
+        ?: UserBuilder.create(player.uniqueId, player.name)
           .build()
 
       // Dodaje obiekt użytkownika do lokalnej pamięci.
@@ -133,8 +139,6 @@ class DestroyTheMonument : JavaPlugin() {
 
     // Usuwa wszystkie przechowywane obiekty gry z lokalnej pamięci.
     GameManager.removeGames()
-
-    System.gc()
 
     instance = null
   }

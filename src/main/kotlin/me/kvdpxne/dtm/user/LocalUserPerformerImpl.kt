@@ -9,8 +9,10 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
 class LocalUserPerformerImpl(
+  // @formatter:off
   override val identifier: UUID,
-  override val user: LocalUser
+  override val user      : LocalUser
+  // @formatter:on
 ) : LocalUserPerformer {
 
   private val _player: Reference<Player> by lazy {

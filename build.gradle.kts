@@ -19,13 +19,11 @@ val fileName = "craftbukkit-1.7.10.jar"
 dependencies {
   shadow(files("libraries/$fileName"))
 
-  implementation(libraries.sqlite)
-  implementation(libraries.ktorm)
+  implementation(libraries.bundles.exposed)
+  implementation(libraries.postgresql)
 
-  implementation(libraries.thrivi)
+//  implementation(libraries.thrivi)
   implementation("fr.mrmicky:fastboard:2.1.2")
-
-  implementation("com.github.f4b6a3:ulid-creator:5.2.3")
 
   implementation(libraries.bundles.disco)
   implementation(libraries.notchity)
@@ -80,10 +78,6 @@ tasks {
 
   shadowJar {
     archiveClassifier.set("bukkit")
-    relocate("fr.mrmicky.fastboard", "me.kvdpxne.fastboard")
-
-//    // Replace 'com.yourpackage' with the package of your plugin
-//    relocate 'fr.mrmicky.fastboard', 'com.yourpackage.fastboard'
   }
 
   register("runMinecraftServer") {

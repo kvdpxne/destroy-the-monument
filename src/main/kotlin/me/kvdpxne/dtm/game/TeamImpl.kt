@@ -1,15 +1,15 @@
 package me.kvdpxne.dtm.game
 
+import java.util.UUID
 import me.kvdpxne.dtm.shared.ancillary.AbstractIdentifiable
-import me.kvdpxne.dtm.uid.Uid
 
 open class TeamImpl(
   // @formatter:off
   override val name      : String,
   override val color     : TeamColor,
-               identifier: String = Uid.next()
+               identifier: UUID = UUID.randomUUID()
   // @formatter:on
-) : AbstractIdentifiable<String>(identifier), Team {
+) : AbstractIdentifiable<UUID>(identifier), Team {
 
   override val game: Game<out Team>
     get() = TODO("Not yet implemented")

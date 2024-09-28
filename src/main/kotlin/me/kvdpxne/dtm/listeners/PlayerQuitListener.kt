@@ -1,7 +1,9 @@
 package me.kvdpxne.dtm.listeners
 
-import me.kvdpxne.dtm.data.DaoUser
+import me.kvdpxne.dtm.shared.minecraft.bukkit.localUser
+import me.kvdpxne.dtm.user.LocalUser
 import me.kvdpxne.dtm.user.LocalUserManager
+import me.kvdpxne.dtm.user.UserService
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -21,9 +23,9 @@ object PlayerQuitListener : Listener {
   fun handlePlayerQuit(event: PlayerQuitEvent) {
     val player = event.player
 
-    LocalUserManager.findUserByIdentifier(player.uniqueId.toString())?.also {
-      DaoUser.updateUser(it)
-      LocalUserManager.removeUser(it)
+    event.player.localUser?.let { localUser: LocalUser ->
+      UserService.updateUser(localUser)
+      LocalUserManager.removeUser(localUser)
     }
   }
 }

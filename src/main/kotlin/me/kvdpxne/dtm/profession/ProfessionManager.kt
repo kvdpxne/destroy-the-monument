@@ -1,5 +1,6 @@
 package me.kvdpxne.dtm.profession
 
+import java.util.UUID
 import me.kvdpxne.dtm.professions.createArcher
 import me.kvdpxne.dtm.professions.createAssassin
 import me.kvdpxne.dtm.professions.createDefender
@@ -16,7 +17,7 @@ object ProfessionManager : Iterable<Profession> {
   /**
    * @since 0.1.0
    */
-  private val _professions: MutableMap<String, Profession> = mutableMapOf()
+  private val _professions: MutableMap<UUID, Profession> = mutableMapOf()
 
   /**
    * @since 0.1.0

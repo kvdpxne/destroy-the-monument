@@ -1,8 +1,7 @@
 package me.kvdpxne.dtm.wallet
 
-import kotlin.math.abs
+import java.util.UUID
 import me.kvdpxne.dtm.shared.ancillary.AbstractIdentifiable
-import me.kvdpxne.dtm.uid.Uid
 
 /**
  * @param initialCoins
@@ -13,11 +12,11 @@ import me.kvdpxne.dtm.uid.Uid
  */
 class WalletImpl(
   // @formatter:off
-  initialCoins     : Long   = 1000,
-  initialMultiplier: Float  = 1.0F,
-  identifier       : String = Uid.next()
+  initialCoins     : Long  = 1000,
+  initialMultiplier: Float = 1.0F,
+  identifier       : UUID  = UUID.randomUUID(),
   // @formatter:on
-) : AbstractIdentifiable<String>(identifier), Wallet {
+) : AbstractIdentifiable<UUID>(identifier), Wallet {
 
   /**
    * @since 0.1.0
@@ -29,52 +28,75 @@ class WalletImpl(
    */
   private var _multiplier: Float = initialMultiplier
 
-  /**
-   * @since 0.1.0
-   */
-  override val coins: Long
+  override var coins: Long
     get() = this._coins
+    set(value) {
+      require(value > 0) {
+        "coins ($value) must be greater than 0"
+      }
 
-  /**
-   * @since 0.1.0
-   */
-  override val multiplier: Float
+      this._coins = value
+    }
+
+  override var multiplier: Float
     get() = this._multiplier
+    set(value) {
+      require(value > 0) {
+        "multiplier($value) must be greater than 0"
+      }
+
+      this._multiplier = value
+    }
 
   /**
-   * @since 0.1.0
+   * @param coins
+   *
    */
+  private fun calc(
+    coins: Long
+  ): Long {
+    if (0.000f >= this._multiplier) {
+      return coins
+    }
+
+    val value: Long = (coins * this._multiplier).toLong()
+    if (0 > value) {
+      throw ArithmeticException("long overflow")
+    }
+
+    return value
+  }
+
   override fun addCoins(
     coins: Long
   ) {
-    this._coins += (coins * this._multiplier).toLong()
+    require(coins > 0) {
+      "coins ($coins) must be greater than 0."
+    }
+
+    this._coins = Math.addExact(
+      this._coins,
+      this.calc(coins)
+    )
   }
 
-  /**
-   * @since 0.1.0
-   */
   override fun subtractCoins(
     coins: Long
   ) {
-    this._coins -= (coins * this._multiplier).toLong()
+    require(coins > 0) {
+      "coins ($coins) must be greater than 0."
+    }
+
+    this._coins = Math.subtractExact(
+      this._coins,
+      this.calc(coins)
+    )
   }
 
-  /**
-   * @since 0.1.0
-   */
-  override fun updateCoins(
-    coins: Long
-  ) {
-    this._coins = abs(coins)
-  }
-
-  /**
-   * @since 0.1.0
-   */
-  override fun updateMultiplier(
-    multiplier: Float
-  ) {
-    this._multiplier = abs(multiplier)
+  override fun compareTo(
+    other: Wallet
+  ): Int {
+    return this.coins.compareTo(other.coins)
   }
 
   override fun toString(): String {

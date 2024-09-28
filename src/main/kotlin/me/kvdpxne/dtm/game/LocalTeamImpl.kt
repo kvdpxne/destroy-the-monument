@@ -1,5 +1,6 @@
 package me.kvdpxne.dtm.game
 
+import java.util.UUID
 import me.kvdpxne.dtm.shared.debug.Debug
 import me.kvdpxne.dtm.user.LocalUser
 
@@ -7,7 +8,7 @@ class LocalTeamImpl(
   // @formatter:off
   name      : String,
   color     : TeamColor,
-  identifier: String,
+  identifier: UUID,
   teammates : MutableSet<Teammate>
   // @formatter:on
 ) : TeamImpl(name, color, identifier), LocalTeam {

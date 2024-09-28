@@ -1,10 +1,12 @@
 package me.kvdpxne.dtm.game
 
-import me.kvdpxne.dtm.data.DaoArena
-import me.kvdpxne.dtm.data.DaoArenaPositionMonument
-import me.kvdpxne.dtm.data.DaoArenaPositionRevival
-import me.kvdpxne.dtm.data.DaoPositionMonument
-import me.kvdpxne.dtm.data.DaoPositionRevival
+import java.util.UUID
+import kotlinx.coroutines.runBlocking
+import me.kvdpxne.dtm.data.ArenaDao
+import me.kvdpxne.dtm.data.ArenaMonumentPositionsDao
+import me.kvdpxne.dtm.data.ArenaRevivalPositionsDao
+import me.kvdpxne.dtm.data.MonumentPositionDao
+import me.kvdpxne.dtm.data.RevivalPositionDao
 
 /**
  * @since 0.1.0
@@ -14,14 +16,21 @@ object ArenaService {
   /**
    * @since 0.1.0
    */
-  fun findArenas(): List<ArenaImpl> {
-    return DaoArena.findArenas()
+  fun findArenas(): List<Arena> {
+    return runBlocking {
+      ArenaDao.findArenas()
+    }
   }
 
+  /**
+   * @since 0.1.0
+   */
   fun findArenaByIdentifier(
-    identifier: String
-  ): ArenaImpl? {
-    return DaoArena.findArenaByIdentifierOrNull(identifier)
+    identifier: UUID
+  ): Arena? {
+    return runBlocking {
+      ArenaDao.findArenaByIdentifier(identifier)
+    }
   }
 
   /**
@@ -31,8 +40,11 @@ object ArenaService {
    */
   fun findArenaByName(
     name: String,
-  ): ArenaImpl? {
-    return DaoArena.findArenaByNameOrNull(name)
+    ignoreCase: Boolean = true
+  ): Arena? {
+    return runBlocking {
+      ArenaDao.findArenaByName(name, ignoreCase)
+    }
   }
 
   /**
@@ -41,7 +53,15 @@ object ArenaService {
   fun insertArena(
     arena: Arena
   ) {
-    DaoArena.insertArena(arena)
+    runBlocking {
+      ArenaDao.insertArena(arena)
+    }
+  }
+
+  fun updateArenaMap(arena: Arena, map: ArenaMap) {
+    runBlocking {
+      ArenaDao.updateArenaMap(arena, map)
+    }
   }
 
   /**
@@ -51,8 +71,11 @@ object ArenaService {
     arena: Arena,
     revivalPosition: RevivalPosition<Team>
   ) {
-    DaoPositionRevival.insertPositionRevival(revivalPosition)
-    DaoArenaPositionRevival.insertArenaPositionRevival(arena.identifier, revivalPosition.identifier)
+    runBlocking {
+      RevivalPositionDao.insertRevivalPosition(revivalPosition)
+      ArenaRevivalPositionsDao.insertArenaRevivalPosition(arena, revivalPosition)
+    }
+
   }
 
   /**
@@ -62,7 +85,9 @@ object ArenaService {
     arena: Arena,
     monumentPosition: MonumentPositionImpl<Team>
   ) {
-    DaoPositionMonument.insertPositionMonument(monumentPosition)
-    DaoArenaPositionMonument.insertArenaPositionMonument(arena.identifier, monumentPosition.identifier)
+    runBlocking {
+      MonumentPositionDao.insertMonumentPosition(monumentPosition)
+      ArenaMonumentPositionsDao.insertArenaMonumentPosition(arena, monumentPosition)
+    }
   }
 }

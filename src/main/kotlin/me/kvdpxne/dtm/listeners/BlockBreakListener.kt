@@ -79,7 +79,7 @@ object BlockBreakListener : Listener {
 
     // Obiekt użytkownika, pozyskany z unikatowego identyfikatora gracza,
     // który zniszczył blok.
-    val user: LocalUser = event.player.localUser ?: return
+    val user: LocalUser = event.player.localUser
 
     // Obiekt lokalnej gry, do której jest przypisany obiekt użytkownika.
     val game: LocalGame = user.game ?: return

@@ -1,4 +1,3 @@
 package me.kvdpxne.dtm.user
 
-open class UserException : RuntimeException() {
-}
+open class UserException : RuntimeException()

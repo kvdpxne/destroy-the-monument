@@ -8,6 +8,9 @@ import me.kvdpxne.dtm.game.Teammate
 import me.kvdpxne.dtm.profession.Ability
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
+/**
+ * @since 0.1.0
+ */
 fun createAbilityRenewCommand(): Command<LocalUserPerformer> {
   // Usage: /dtm ability renew
   return CommandBuilder.begin<LocalUserPerformer>("renew")
@@ -15,7 +18,6 @@ fun createAbilityRenewCommand(): Command<LocalUserPerformer> {
       val teammate: Teammate = performer.user.teammate
         ?: throw CommandException(Configuration.NO_IN_GAME_MESSAGE)
 
-      //
       val ability: Ability = teammate.currentProfession.ability
         ?: throw CommandException(Configuration.NO_ABILIT_TO_FILL_MESSAGE)
 

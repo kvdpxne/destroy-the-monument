@@ -29,6 +29,19 @@ object StatisticsCriteria {
   const val BY_ASSISTS = 3
 
   /**
+   * @since 0.1.0
+   */
+  const val BY_KDA = 8
+
+  /**
+   * Constant representing the criteria for comparing by the number of
+   * destroyed monuments.
+   *
+   * @since 0.1.0
+   */
+  const val BY_DESTROYED_MONUMENTS = 7
+
+  /**
    * Constant representing the criteria for comparing by the number of played
    * games.
    *
@@ -51,12 +64,4 @@ object StatisticsCriteria {
    * @since 0.1.0
    */
   const val BY_GAMES_LOST = 6
-
-  /**
-   * Constant representing the criteria for comparing by the number of
-   * destroyed monuments.
-   *
-   * @since 0.1.0
-   */
-  const val BY_DESTROYED_MONUMENTS = 7
 }

@@ -4,10 +4,13 @@ import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
-import me.kvdpxne.dtm.data.DaoTeam
 import me.kvdpxne.dtm.game.TeamImpl
 import me.kvdpxne.dtm.game.TeamColors
+import me.kvdpxne.dtm.game.TeamService
 
+/**
+ * @since 0.1.0
+ */
 fun createTeamCreateCommand(): Command<Performer> {
   // Usage: /dtm team create <TEAM_NAME>
   return CommandBuilder.begin<Performer>("create")
@@ -29,7 +32,8 @@ fun createTeamCreateCommand(): Command<Performer> {
       }
 
       val team = TeamImpl(teamName, color)
-      DaoTeam.insertTeam(team)
+
+      TeamService.createTeam(team)
 
       performer.sendMessage(teamName)
     }

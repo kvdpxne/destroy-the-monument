@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.game
 
+import java.util.UUID
 import me.kvdpxne.dtm.shared.ancillary.AbstractIdentifiable
-import me.kvdpxne.dtm.uid.Uid
 
 /**
  * @param name
@@ -12,9 +12,10 @@ import me.kvdpxne.dtm.uid.Uid
 class ArenaImpl(
   // @formatter:off
   override val name      : String,
-               identifier: String = Uid.next()
+               map       : ArenaMap? = null,
+               identifier: UUID      = UUID.randomUUID()
   // @formatter:on
-) : AbstractIdentifiable<String>(identifier), Arena {
+) : AbstractIdentifiable<UUID>(identifier), Arena {
 
   /**
    * Map of positions for each team where teammates will be spawned after death
@@ -22,17 +23,17 @@ class ArenaImpl(
    *
    * @since 0.1.0
    */
-  val _revivalPositions: MutableMap<String, RevivalPosition<out Team>> = mutableMapOf()
+  val _revivalPositions: MutableMap<UUID, RevivalPosition<out Team>> = mutableMapOf()
 
   /**
    * @since 0.1.0
    */
-  val _monumentPositions: MutableMap<String, MutableSet<MonumentPosition<out Team>>> = mutableMapOf()
+  val _monumentPositions: MutableMap<UUID, MutableSet<MonumentPosition<out Team>>> = mutableMapOf()
 
   /**
    * @since 0.1.0
    */
-  override var map: ArenaMap? = null
+  override var map: ArenaMap? = map
 
   /**
    * @since 0.1.0
@@ -65,12 +66,6 @@ class ArenaImpl(
     team: Team
   ): List<MonumentPosition<out Team>> {
     return this._monumentPositions[team.identifier]?.toList() ?: emptyList()
-  }
-
-  fun findPositionMonument(
-    identifier: String
-  ): Set<MonumentPosition<out Team>>? {
-    return this._monumentPositions[identifier]
   }
 
   /**

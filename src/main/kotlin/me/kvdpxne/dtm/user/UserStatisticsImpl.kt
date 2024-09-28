@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.user
 
-import me.kvdpxne.dtm.statistics.BaseIdentifiableStatistics
-import me.kvdpxne.dtm.uid.Uid
+import java.util.UUID
+import me.kvdpxne.dtm.statistics.IdentifiableStatisticsImpl
 
 /**
  * A class representing statistics for a user in the game.
@@ -23,22 +23,17 @@ import me.kvdpxne.dtm.uid.Uid
  */
 class UserStatisticsImpl(
   // @formatter:off
-      kills             : Int = 0,
-      assists           : Int = 0,
-      deaths            : Int = 0,
-      destroyedMonuments: Int = 0,
-  override var playedGames       : Int = 0,
-  override var gamesWon          : Int = 0,
-  override var gamesLost         : Int = 0,
-      identifier        : String = Uid.next()
+               kills             : Int  = 0,
+               assists           : Int  = 0,
+               deaths            : Int  = 0,
+               destroyedMonuments: Int  = 0,
+  override var playedGames       : Int  = 0,
+  override var gamesWon          : Int  = 0,
+  override var gamesLost         : Int  = 0,
+               identifier        : UUID = UUID.randomUUID()
   // @formatter:on
-) : BaseIdentifiableStatistics(
-  kills,
-  assists,
-  deaths,
-  destroyedMonuments,
-  identifier
-), UserStatistics {
+) : IdentifiableStatisticsImpl(kills, assists, deaths, destroyedMonuments,
+  identifier), UserStatistics {
 
   override fun addPlayedGames(playedGames: Int) {
     this.playedGames = this.add(this.playedGames, playedGames)
@@ -50,5 +45,13 @@ class UserStatisticsImpl(
 
   override fun addGamesLost(gamesLost: Int) {
     this.gamesLost = this.add(this.gamesLost, gamesLost)
+  }
+
+  override fun reset() {
+    super.reset()
+
+    this.playedGames = 0
+    this.gamesWon = 0
+    this.gamesLost = 0
   }
 }

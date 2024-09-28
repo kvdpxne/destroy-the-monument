@@ -9,7 +9,6 @@ import me.kvdpxne.dtm.shared.minecraft.bukkit.isMonument
 import me.kvdpxne.dtm.shared.minecraft.bukkit.localUser
 import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.Material
-import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener

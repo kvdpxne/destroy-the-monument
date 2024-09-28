@@ -8,6 +8,9 @@ import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.game.Arena
 import me.kvdpxne.dtm.game.ArenaService
 
+/**
+ * @since 0.1.0
+ */
 fun createArenaMapRevivalListCommand(): Command<Performer> {
   // Usage: /dtm arena map revival list <ARENA_NAME>
   return CommandBuilder.begin<Performer>("list")

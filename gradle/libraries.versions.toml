@@ -2,26 +2,22 @@
 # Plugins
 kotlin = "1.9.25"
 shadow = "8.3.0"
-
-# Dependencites
-kotlin-logging = "7.0.0"
-ktorm = "4.0.0"
-sqlite = "3.46.0.0"
+exposed = "0.54.0"
 thrivi = "13199ef603"
-
-#
 dico = "f00e6003b3"
 notchity = "8bf2b5125e"
+postgresql = "42.7.4"
+sqlite = "3.46.1.0"
 
 [libraries]
-kotlin-logging = { group = "io.github.oshai", name = "kotlin-logging-jvm", version.ref = "kotlin-logging" }
-ktorm = { group = "org.ktorm", name = "ktorm-support-sqlite", version.ref = "ktorm" }
-sqlite = { group = "org.xerial", name = "sqlite-jdbc", version.ref = "sqlite" }
-thrivi = { group = "com.github.kvdpxne", name = "thrivi", version.ref = "thrivi" }
-
-dico-api = { group = "com.github.kvdpxne.dico", name = "api", version.ref = "dico" }
-dico-core = { group = "com.github.kvdpxne.dico", name = "core", version.ref = "dico" }
-notchity = { group = "com.github.kvdpxne", name = "notchity", version.ref = "notchity" }
+exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
+exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
+thrivi = { module = "com.github.kvdpxne:thrivi", version.ref = "thrivi" }
+dico-api = { module = "com.github.kvdpxne.dico:api", version.ref = "dico" }
+dico-core = { module = "com.github.kvdpxne.dico:core", version.ref = "dico" }
+notchity = { module = "com.github.kvdpxne:notchity", version.ref = "notchity" }
+postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+sqlite = { module = "org.xerial:sqlite-jdbc", version.ref = "sqlite" }
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
@@ -29,3 +25,4 @@ shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
 
 [bundles]
 disco = ["dico-api", "dico-core"]
+exposed = ["exposed-core", "exposed-jdbc"]

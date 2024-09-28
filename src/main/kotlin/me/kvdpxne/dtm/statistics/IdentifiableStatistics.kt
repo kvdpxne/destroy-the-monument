@@ -1,5 +1,6 @@
 package me.kvdpxne.dtm.statistics
 
+import java.util.UUID
 import me.kvdpxne.dtm.shared.ancillary.Identifiable
 
 /**
@@ -13,12 +14,4 @@ import me.kvdpxne.dtm.shared.ancillary.Identifiable
  *
  * @since 0.1.0
  */
-interface IdentifiableStatistics : Statistics, Identifiable<String> {
-
-  /**
-   * The unique string identifier associated with this player statistic.
-   *
-   * @since 0.1.0
-   */
-  override val identifier: String
-}
+interface IdentifiableStatistics : Identifiable<UUID>, Statistics

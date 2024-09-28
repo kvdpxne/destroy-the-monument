@@ -1,5 +1,6 @@
 package me.kvdpxne.dtm.shared.basics.position
 
+import java.util.UUID
 import me.kvdpxne.dtm.shared.ancillary.AbstractIdentifiable
 
 /**
@@ -10,7 +11,7 @@ abstract class AbstractIdentifiablePosition<T : Number>(
   override val x         : T,
   override val y         : T,
   override val z         : T,
-  override val worldName: String?,
-               identifier: String
+  override val worldName : String?,
+               identifier: UUID = UUID.randomUUID()
   // @formatter:on
-) : AbstractIdentifiable<String>(identifier), IdentifiablePosition<T>
+) : AbstractIdentifiable<UUID>(identifier), IdentifiablePosition<T>

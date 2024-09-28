@@ -1,5 +1,6 @@
 package me.kvdpxne.dtm.game
 
+import java.util.UUID
 import me.kvdpxne.dtm.DestroyTheMonument
 import me.kvdpxne.dtm.configuration.Configuration
 import me.kvdpxne.dtm.scoreboard.createServerScoreboard
@@ -10,17 +11,24 @@ import me.kvdpxne.dtm.shared.minecraft.bukkit.cancelTask
 import me.kvdpxne.dtm.shared.minecraft.bukkit.equipB
 import me.kvdpxne.dtm.shared.minecraft.bukkit.reset
 import me.kvdpxne.dtm.shared.minecraft.bukkit.toLocation
-import me.kvdpxne.dtm.uid.Uid
 import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.Bukkit
 import org.bukkit.Location
 
+/**
+ * @param name
+ * @param teams
+ * @param arenas
+ * @param identifier
+ *
+ * @since 0.1.0
+ */
 class LocalGameImpl(
   // @formatter:off
   name      : String,
-  teams     : Map<String, LocalTeam> = emptyMap(),
-  arenas    : Map<String, Arena>     = emptyMap(),
-  identifier: String                 = Uid.next()
+  teams     : Map<UUID, LocalTeam>,
+  arenas    : Map<UUID, Arena>,
+  identifier: UUID
   // @formatter:on
 ) : GameImpl<LocalTeam>(
   name,
@@ -33,7 +41,7 @@ class LocalGameImpl(
   /**
    * @since 0.1.0
    */
-  private val _hostages: MutableMap<String, LocalUser> = mutableMapOf()
+  private val _hostages: MutableMap<UUID, LocalUser> = mutableMapOf()
 
   private var _currentArena: Arena? = null
 
@@ -228,7 +236,7 @@ class LocalGameImpl(
    * @since 0.1.0
    */
   override fun findHostageByIdentifier(
-    identifier: String
+    identifier: UUID
   ): LocalUser? {
     return this._hostages[identifier]
   }
@@ -305,7 +313,7 @@ class LocalGameImpl(
 
     //
     return arena.players.any {
-      it.uniqueId.toString() == user.identifier
+      it.uniqueId == user.identifier
     }
   }
 

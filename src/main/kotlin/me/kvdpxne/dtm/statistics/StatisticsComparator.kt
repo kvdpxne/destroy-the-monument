@@ -1,6 +1,11 @@
 package me.kvdpxne.dtm.statistics
 
-import me.kvdpxne.dtm.user.UserStatistics
+import kotlin.math.roundToInt
+import me.kvdpxne.dtm.statistics.StatisticsCriteria.BY_ASSISTS
+import me.kvdpxne.dtm.statistics.StatisticsCriteria.BY_DEATHS
+import me.kvdpxne.dtm.statistics.StatisticsCriteria.BY_DESTROYED_MONUMENTS
+import me.kvdpxne.dtm.statistics.StatisticsCriteria.BY_KDA
+import me.kvdpxne.dtm.statistics.StatisticsCriteria.BY_KILLS
 
 /**
  * Provides utility functions for creating comparators used to sort statistics
@@ -37,42 +42,17 @@ object StatisticsComparator {
    * @since 0.1.0
    */
   fun compare(
-    type: Int = StatisticsCriteria.BY_KILLS
+    type: Int = BY_KILLS
   ): Comparator<Statistics> {
-    require(type in 0..6) {
-      "Unsupported comparison criteria: $type"
-    }
-
     return Comparator { a: Statistics, b: Statistics ->
-
-      // Handle UserStatistics objects first
-      if (a is UserStatistics && b is UserStatistics) {
-        return@Comparator when (type) {
-          0 -> b.kills - a.kills
-          1 -> b.deaths - a.deaths
-          2 -> b.assists - a.assists
-          3 -> b.playedGames - a.playedGames
-          4 -> b.gamesWon - a.gamesWon
-          5 -> b.gamesLost - a.gamesLost
-          6 -> b.destroyedMonuments - a.destroyedMonuments
-          else -> throw IllegalArgumentException("Unknown type $type")
-        }
+      when (type) {
+        BY_KILLS -> b.kills - a.kills
+        BY_DEATHS -> b.deaths - a.deaths
+        BY_ASSISTS -> b.assists - a.assists
+        BY_KDA -> (b.kdr - a.kdr).roundToInt()
+        BY_DESTROYED_MONUMENTS -> b.destroyedMonuments - a.destroyedMonuments
+        else -> throw IllegalArgumentException("Unknown type $type")
       }
-
-      // Then handle BaseStatistics objects
-      if (a is StatisticsImpl && b is StatisticsImpl) {
-        return@Comparator when (type) {
-          0 -> b.kills - a.kills
-          1 -> b.deaths - a.deaths
-          2 -> b.assists - a.assists
-          6 -> b.destroyedMonuments - a.destroyedMonuments
-          else -> throw IllegalArgumentException("Unknown type $type")
-        }
-      }
-
-      throw StatisticsException(
-        "Unsupported statistics object types for comparison."
-      )
     }
   }
 }

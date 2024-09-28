@@ -7,6 +7,9 @@ import me.kvdpxne.dtm.shared.minecraft.bukkit.moveToLobby
 import me.kvdpxne.dtm.shared.minecraft.bukkit.reset
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
+/**
+ * @since 0.1.0
+ */
 fun createLeaveCommand(): Command<LocalUserPerformer> {
   return CommandBuilder.begin<LocalUserPerformer>("leave")
     .handler { performer, _ ->

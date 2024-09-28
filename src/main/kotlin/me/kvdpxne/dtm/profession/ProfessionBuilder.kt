@@ -10,7 +10,7 @@ import org.bukkit.potion.PotionEffectType
 class ProfessionBuilder {
 
   // @formatter:off
-  private          var identifier : String
+  private          var identifier : UUID
   private lateinit var name       : String
   private lateinit var displayName: String
   private lateinit var items      : Array<out SlotItem>
@@ -24,7 +24,7 @@ class ProfessionBuilder {
     this.effect = null
     this.ability = null
     this.enabled = null
-    this.identifier = UUID.randomUUID().toString()
+    this.identifier = UUID.randomUUID()
   }
 
   fun name(name: String): ProfessionBuilder {

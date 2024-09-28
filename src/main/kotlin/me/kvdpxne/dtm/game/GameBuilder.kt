@@ -23,7 +23,6 @@ class GameBuilder : Buildable<Game<*>> {
   }
 
 
-
   override fun build(): Game<*> {
     TODO("Not yet implemented")
   }

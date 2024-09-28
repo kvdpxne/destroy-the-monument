@@ -28,6 +28,12 @@ open class StatisticsImpl(
 ) : AbstractStatistics() {
 
   /**
+   * @since 0.1.0
+   */
+  override val kdr: Float
+    get() = String.format("%.3f", (this.kills + this.assists) / this.deaths).toFloat()
+
+  /**
    * Increments the number of kills by 1 (or a specified value).
    *
    * @param kills The number of kills to add (defaults to 1)
@@ -69,6 +75,29 @@ open class StatisticsImpl(
    */
   override fun addDestroyedMonuments(destroyedMonuments: Int) {
     this.destroyedMonuments = this.add(this.destroyedMonuments, destroyedMonuments)
+  }
+
+  override fun subtractKills(kills: Int) {
+    this.kills = this.subtract(this.kills, kills)
+  }
+
+  override fun subtractDeaths(deaths: Int) {
+    this.deaths = this.subtract(this.deaths, deaths)
+  }
+
+  override fun subtractAssists(assists: Int) {
+    this.assists = this.subtract(this.assists, assists)
+  }
+
+  override fun subtractDestroyedMonuments(destroyedMonuments: Int) {
+    this.destroyedMonuments = this.subtract(this.destroyedMonuments, destroyedMonuments)
+  }
+
+  override fun reset() {
+    this.kills = 0
+    this.assists = 0
+    this.deaths = 0
+    this.destroyedMonuments = 0
   }
 
   /**

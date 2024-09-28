@@ -1,17 +1,13 @@
 package me.kvdpxne.dtm.game
 
+import java.util.UUID
 import me.kvdpxne.dtm.shared.ancillary.Identifiable
 import me.kvdpxne.dtm.shared.basics.position.BlockPosition
 
 /**
  * @since 0.1.0
  */
-interface Arena : Identifiable<String> {
-
-  /**
-   * @since 0.1.0
-   */
-  override val identifier: String
+interface Arena : Identifiable<UUID> {
 
   /**
    * @since 0.1.0

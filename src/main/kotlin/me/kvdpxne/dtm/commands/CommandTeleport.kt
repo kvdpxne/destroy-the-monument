@@ -9,6 +9,9 @@ import me.kvdpxne.dtm.shared.minecraft.bukkit.toEntityPosition
 import me.kvdpxne.dtm.user.LocalUserPerformer
 import org.bukkit.World
 
+/**
+ * @since 0.1.0
+ */
 fun createTeleportCommand(): Command<LocalUserPerformer> {
   // Usage: /dtm teleport <WORLD_NAME>
   return CommandBuilder.begin<LocalUserPerformer>("teleport")

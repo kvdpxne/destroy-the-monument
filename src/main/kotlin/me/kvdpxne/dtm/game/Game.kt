@@ -1,12 +1,13 @@
 package me.kvdpxne.dtm.game
 
+import java.util.UUID
 import me.kvdpxne.dtm.shared.ancillary.Identifiable
 import me.kvdpxne.dtm.shared.ancillary.Nameable
 
 /**
  * @since 0.1.0
  */
-interface Game<T : Team> : Identifiable<String>, Nameable {
+interface Game<T : Team> : Identifiable<UUID>, Nameable {
 
   /**
    * @since 0.1.0
@@ -47,12 +48,12 @@ interface Game<T : Team> : Identifiable<String>, Nameable {
   /**
    * @since 0.1.0
    */
-  fun findTeamByIdentifier(identifier: String): T?
+  fun findTeamByIdentifier(identifier: UUID): T?
 
   /**
    * @since 0.1.0
    */
-  fun findArenaByIdentifier(identifier: String): Arena?
+  fun findArenaByIdentifier(identifier: UUID): Arena?
 
   /**
    * @since 0.1.0

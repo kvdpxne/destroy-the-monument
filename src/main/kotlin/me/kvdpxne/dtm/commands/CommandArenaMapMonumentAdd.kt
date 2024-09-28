@@ -12,6 +12,9 @@ import me.kvdpxne.dtm.game.TeamService
 import me.kvdpxne.dtm.shared.basics.position.BlockPosition
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
+/**
+ * @since 0.1.0
+ */
 fun createArenaMapMonumentAddCommand(): Command<LocalUserPerformer> {
   // Usage: /dtm arena map monument add <ARENA_NAME> <TEAM_IDENTITY>
   return CommandBuilder.begin<LocalUserPerformer>("add")

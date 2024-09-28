@@ -1,5 +1,6 @@
 package me.kvdpxne.dtm.user
 
+import java.util.UUID
 import me.kvdpxne.dtm.shared.debug.Debug
 
 /**
@@ -10,7 +11,7 @@ object LocalUserManager {
   /**
    * @since 0.1.0
    */
-  private val _usersByIdentifier: MutableMap<String, User> = mutableMapOf()
+  private val _usersByIdentifier: MutableMap<UUID, User> = mutableMapOf()
 
   /**
    * @since 0.1.0
@@ -33,9 +34,9 @@ object LocalUserManager {
    * Tries to find a [User] by the given unique user identifier.
    */
   fun findUserByIdentifier(
-    identifier: String
+    identifier: UUID
   ): LocalUser? {
-    return this._usersByIdentifier[identifier.lowercase()] as LocalUser?
+    return this._usersByIdentifier[identifier] as LocalUser?
   }
 
   /**

@@ -1,5 +1,6 @@
 package me.kvdpxne.dtm.game
 
+import java.util.UUID
 import me.kvdpxne.dtm.shared.ancillary.Communicative
 import me.kvdpxne.dtm.user.LocalUser
 
@@ -85,6 +86,9 @@ interface LocalGame : Game<LocalTeam>, Communicative {
    */
   val isTeamsSameSize: Boolean
 
+  /**
+   * @since 0.1.0
+   */
   var timerTaskIdentifier: Int
 
   /**
@@ -111,7 +115,7 @@ interface LocalGame : Game<LocalTeam>, Communicative {
    * @since 0.1.0
    */
   fun findHostageByIdentifier(
-    identifier: String
+    identifier: UUID
   ): LocalUser?
 
   /**
@@ -131,37 +135,53 @@ interface LocalGame : Game<LocalTeam>, Communicative {
   /**
    * @since 0.1.0
    */
-  fun isInGame(user: LocalUser): Boolean
+  fun isInGame(
+    user: LocalUser
+  ): Boolean
 
   /**
    * @since 0.1.0
    */
-  fun isInTeam(user: LocalUser): Boolean
+  fun isInTeam(
+    user: LocalUser
+  ): Boolean
 
   /**
    * @since 0.1.0
    */
-  fun isInArena(user: LocalUser): Boolean
+  fun isInArena(
+    user: LocalUser
+  ): Boolean
 
   /**
    * @since 0.1.0
    */
-  fun addHostage(user: LocalUser): Boolean
+  fun addHostage(
+    user: LocalUser
+  ): Boolean
 
   /**
    * @since 0.1.0
    */
-  fun addTeammate(team: LocalTeam, user: LocalUser): Boolean
+  fun addTeammate(
+    team: LocalTeam,
+    user: LocalUser
+  ): Boolean
 
   /**
    * @since 0.1.0
    */
-  fun removeHostage(user: LocalUser): Boolean
+  fun removeHostage(
+    user: LocalUser
+  ): Boolean
 
   /**
    * @since 0.1.0
    */
-  fun removeTeammate(team: LocalTeam, user: LocalUser): Boolean
+  fun removeTeammate(
+    team: LocalTeam,
+    user: LocalUser
+  ): Boolean
 
 //  /**
 //   * @since 0.1.0

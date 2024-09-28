@@ -1,11 +1,11 @@
 package me.kvdpxne.dtm.shared.minecraft.bukkit
 
+import kotlin.random.Random
 import me.kvdpxne.dtm.colorize
 import me.kvdpxne.dtm.colorizeAll
 import me.kvdpxne.dtm.shared.minecraft.BukkitItemStack
 import me.kvdpxne.dtm.shared.minecraft.MinecraftNBTTagCompound
 import me.kvdpxne.dtm.shared.minecraft.MinecraftNBTTagList
-import me.kvdpxne.dtm.uid.Uid
 import org.bukkit.Color
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
@@ -201,11 +201,11 @@ class ItemBuilder private constructor(private var itemStack: ItemStack) {
         this.setInt("Operation", operation)
 
         //
-        val uid = Uid.fast()
+        val time: Long = System.currentTimeMillis()
 
         //
-        this.setLong("UUIDLeast", uid.leastSignificantBits)
-        this.setLong("UUIDMost", uid.mostSignificantBits)
+        this.setLong("UUIDLeast", Random.nextLong())
+        this.setLong("UUIDMost", time.shl(16).or(Random.nextLong().and(65535L)))
       }
 
       attributeModifiers.add(newAttributeModifier)

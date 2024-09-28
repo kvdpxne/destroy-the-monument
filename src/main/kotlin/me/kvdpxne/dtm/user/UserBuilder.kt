@@ -1,10 +1,12 @@
 package me.kvdpxne.dtm.user
 
+import java.util.UUID
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionManager
 import me.kvdpxne.dtm.shared.ancillary.Buildable
 import me.kvdpxne.dtm.wallet.Wallet
 import me.kvdpxne.dtm.wallet.WalletImpl
+import org.bukkit.entity.Player
 
 /**
  * @param identifier
@@ -15,15 +17,17 @@ import me.kvdpxne.dtm.wallet.WalletImpl
  */
 class UserBuilder private constructor(
   // @formatter:off
-  private val identifier : String,
+  private val identifier : UUID,
   private val name       : String,
   private val displayName: String
   // @formatter:on
 ) : Buildable<User> {
 
-  private var statistics: UserStatistics? = null
-  private var wallet: Wallet? = null
-  private var currentProfession: Profession? = null
+  // @formatter:off
+  private var statistics       : UserStatistics? = null
+  private var wallet           : Wallet?         = null
+  private var currentProfession: Profession?     = null
+  // @formatter:on
 
   companion object {
 
@@ -34,14 +38,21 @@ class UserBuilder private constructor(
      * @since 0.1.0
      */
     fun create(
-      identifier: String,
+      identifier: UUID,
       name: String
     ): UserBuilder {
-      require(identifier.isNotEmpty()) {
-        "identifier must not be empty."
-      }
-
       return UserBuilder(identifier, name.lowercase(), name)
+    }
+
+    /**
+     * @param player
+     *
+     * @since 0.1.0
+     */
+    fun create(
+      player: Player
+    ): UserBuilder {
+      return this.create(player.uniqueId, player.name)
     }
   }
 
@@ -53,7 +64,7 @@ class UserBuilder private constructor(
   }
 
   fun wallet(
-    wallet: WalletImpl
+    wallet: Wallet
   ): UserBuilder {
     this.wallet = wallet
     return this

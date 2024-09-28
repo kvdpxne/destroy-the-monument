@@ -9,6 +9,9 @@ import me.kvdpxne.dtm.user.LocalUserPerformer
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserService
 
+/**
+ * @since 0.1.0
+ */
 fun createCoinsShowCommand(): Command<Performer> {
   // Usage: /dtm coins show [USER_NAME]
   return CommandBuilder.begin<Performer>("show")

@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.game
 
+import java.util.UUID
 import me.kvdpxne.dtm.shared.basics.position.BaseIdentifiableEntityPosition
-import me.kvdpxne.dtm.uid.Uid
 
 /**
  * @param x
@@ -20,7 +20,7 @@ class RevivalPositionImpl<T : Team>(
                pitch     : Float,
                yaw       : Float,
   override var team      : T,
-               identifier: String = Uid.next()
+               identifier: UUID = UUID.randomUUID()
   // @formatter:on
 ) : BaseIdentifiableEntityPosition(
   x = x,

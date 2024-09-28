@@ -1,0 +1,116 @@
+package me.kvdpxne.dtm.data
+
+import java.util.UUID
+import me.kvdpxne.dtm.data.repositories.TeamRepository
+import me.kvdpxne.dtm.data.sources.DatabasesConfiguration
+import me.kvdpxne.dtm.data.tables.TeamTable
+import me.kvdpxne.dtm.data.transactions.concurrentTransaction
+import me.kvdpxne.dtm.game.Team
+import me.kvdpxne.dtm.game.TeamColors
+import me.kvdpxne.dtm.game.TeamImpl
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.lowerCase
+
+/**
+ * @since 0.1.0
+ */
+object TeamDao : TeamRepository {
+
+  /**
+   * @since 0.1.0
+   */
+  private val FIELDS: List<Column<*>> = listOf(
+    TeamTable.identifier,
+    TeamTable.name
+  )
+
+  /**
+   * @since 0.1.0
+   */
+  private fun ResultRow.toTeam(): Team {
+    //
+    val identifier: UUID = this[TeamTable.identifier]
+
+    //
+    val name: String = this[TeamTable.name]
+
+    //
+    return TeamImpl(
+      name,
+      TeamColors.findTeamColorByName(name)!!,
+      identifier
+    )
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  override suspend fun findTeams(): List<Team> {
+    return concurrentTransaction(DatabasesConfiguration.main) {
+      TeamTable
+        .select(FIELDS)
+        .map { row: ResultRow ->
+          row.toTeam()
+        }
+        .toList()
+    }
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  override suspend fun findTeamByIdentifier(
+    identifier: UUID
+  ): Team? {
+    return concurrentTransaction(DatabasesConfiguration.main) {
+      TeamTable
+        .select(FIELDS)
+        .where {
+          TeamTable.identifier eq identifier
+        }
+        .firstNotNullOfOrNull { row: ResultRow ->
+          row.toTeam()
+        }
+    }
+  }
+
+  override suspend fun findTeamByName(
+    name: String,
+    ignoreCase: Boolean
+  ): Team? {
+    return concurrentTransaction(DatabasesConfiguration.main) {
+      TeamTable
+        .select(FIELDS)
+        .where {
+          if (ignoreCase) {
+            TeamTable.name.lowerCase() eq name.lowercase()
+          } else {
+            TeamTable.name eq name
+          }
+        }
+        .firstOrNull()
+        ?.let { row: ResultRow ->
+          row.toTeam()
+        }
+    }
+  }
+
+  override suspend fun insertTeam(team: Team) {
+    concurrentTransaction(DatabasesConfiguration.main) {
+      TeamTable.insert {
+        it[this.identifier] = team.identifier
+        it[this.name] = team.name
+      }
+    }
+  }
+
+  override suspend fun updateTeam(team: Team) {
+    TODO("Not yet implemented")
+  }
+
+  override suspend fun deleteTeamByIdentifier(identifier: UUID) {
+    TODO("Not yet implemented")
+  }
+}

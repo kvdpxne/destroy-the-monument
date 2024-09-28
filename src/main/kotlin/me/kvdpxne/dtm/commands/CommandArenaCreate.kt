@@ -8,6 +8,9 @@ import me.kvdpxne.dtm.game.Arena
 import me.kvdpxne.dtm.game.ArenaService
 import me.kvdpxne.dtm.game.ArenaImpl
 
+/**
+ * @since 0.1.0
+ */
 fun createArenaCreateCommand(): Command<Performer> {
   // Usage: /dtm arena create <ARENA_NAME>
   return CommandBuilder.begin<Performer>("create")
@@ -17,7 +20,7 @@ fun createArenaCreateCommand(): Command<Performer> {
         .build()
     )
     .handler { performer, parameters ->
-      // Nazwa areny.
+      // Unikatowa nazwa obiektu areny.
       val arenaName: String = parameters[0] as String
 
       // Nowo utworzony obiekt areny.

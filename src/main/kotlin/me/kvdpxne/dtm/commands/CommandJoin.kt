@@ -6,6 +6,9 @@ import me.kvdpxne.dtm.gui.createGameSelectionGui
 import me.kvdpxne.dtm.gui.createTeamSelectionGui
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
+/**
+ * @since 0.1.0
+ */
 fun createJoinCommand(): Command<LocalUserPerformer> {
   return CommandBuilder.begin<LocalUserPerformer>("join")
     .handler { performer, _ ->

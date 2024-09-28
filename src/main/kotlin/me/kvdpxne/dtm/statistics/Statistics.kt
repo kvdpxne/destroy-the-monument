@@ -12,21 +12,73 @@ package me.kvdpxne.dtm.statistics
  */
 interface Statistics : Measurable {
 
+  /**
+   * @since 0.1.0
+   */
   val kills: Int
 
+  /**
+   * @since 0.1.0
+   */
   val assists: Int
 
+  /**
+   * @since 0.1.0
+   */
   val deaths: Int
 
+  /**
+   * @since 0.1.0
+   */
   val destroyedMonuments: Int
 
+  /**
+   * @since 0.1.0
+   */
+  val kdr: Float
+
+  /**
+   * @since 0.1.0
+   */
   fun addKills(kills: Int = 1)
 
+  /**
+   * @since 0.1.0
+   */
   fun addDeaths(deaths: Int = 1)
 
+  /**
+   * @since 0.1.0
+   */
   fun addAssists(assists: Int = 1)
 
+  /**
+   * @since 0.1.0
+   */
   fun addDestroyedMonuments(destroyedMonuments: Int = 1)
 
+  /**
+   * @since 0.1.0
+   */
+  fun subtractKills(kills: Int = 1)
 
+  /**
+   * @since 0.1.0
+   */
+  fun subtractDeaths(deaths: Int = 1)
+
+  /**
+   * @since 0.1.0
+   */
+  fun subtractAssists(assists: Int = 1)
+
+  /**
+   * @since 0.1.0
+   */
+  fun subtractDestroyedMonuments(destroyedMonuments: Int = 1)
+
+  /**
+   * @since 0.1.0
+   */
+  fun reset()
 }
