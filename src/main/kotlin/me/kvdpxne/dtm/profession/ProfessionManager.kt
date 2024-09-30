@@ -1,51 +1,89 @@
 package me.kvdpxne.dtm.profession
 
+import java.util.UUID
+import me.kvdpxne.dtm.professions.createArcher
+import me.kvdpxne.dtm.professions.createAssassin
+import me.kvdpxne.dtm.professions.createDefender
+import me.kvdpxne.dtm.professions.createEngineer
+import me.kvdpxne.dtm.professions.createKnight
+import me.kvdpxne.dtm.professions.createMedic
+import me.kvdpxne.dtm.professions.createPyro
+import me.kvdpxne.dtm.professions.createScout
+import me.kvdpxne.dtm.professions.createSpecialist
+import me.kvdpxne.dtm.shared.debug.Debug
+
 object ProfessionManager : Iterable<Profession> {
 
   /**
-   *
+   * @since 0.1.0
    */
-  var professions = mutableMapOf<String, Profession>()
-    private set
+  private val _professions: MutableMap<UUID, Profession> = mutableMapOf()
 
+  /**
+   * @since 0.1.0
+   */
+  val professions: List<Profession>
+    get() = this._professions.values.toList()
 
-  fun getRandomProfession() = professions.values.random()
+  /**
+   * Returns a random profession object.
+   *
+   * This function retrieves all professions from the `professionMap`
+   * (assumed to be a map of some kind) and then returns a random element from
+   * the collection of values.
+   *
+   * @return A random `Profession` object.
+   * @since 0.1.0
+   */
+  val randomProfession: Profession
+    get() = this._professions.values.filter { it.enabled }.random()
 
-  fun hasProfession(name: String) = professions.contains(name)
-
-  fun findProfessionByName(name: String) = professions[name]
-
-  fun addProfession(profession: Profession): Boolean {
-    val name = profession.name
-    if (hasProfession(name)) {
-      return false
+  /**
+   * @param name
+   * @param ignoreCase
+   *
+   * @return
+   * @since 0.1.0
+   */
+  fun findProfessionByName(
+    name: String,
+    ignoreCase: Boolean = true
+  ): Profession? {
+    return this._professions.values.find {
+      it.name.equals(name, ignoreCase)
     }
-
-    professions[name] = profession
-    return true
   }
 
   /**
-   *
+   * @since 0.1.0
    */
-  fun initializeBuiltInProfessions() {
-    arrayOf(
-      archer(),
-      engineer(),
-      knight(),
-      medic(),
-      pyro(),
-      scout()
-    ).forEach { addProfession(it) }
+  fun addProfession(
+    profession: Profession
+  ) {
+    val identifier = profession.identifier
+    if (this._professions.contains(identifier)) {
+      return
+    }
+
+    this._professions[identifier] = profession
+    Debug.log {
+      "The profession \"$profession\" has been added and assigned to the " +
+        "identifier \"$identifier\"."
+    }
   }
 
+  fun addProfessions(
+    vararg professions: Profession
+  ) {
+    professions.forEach {
+      this.addProfession(it)
+    }
+  }
 
   /**
    * Returns an iterator over the elements of this object.
    */
-  override fun iterator() = professions.values.iterator()
-
-  override fun toString(): String {
-    return "ProfessionManager(professions=$professions)"
+  override fun iterator(): Iterator<Profession> {
+    return this._professions.values.iterator()
   }
 }

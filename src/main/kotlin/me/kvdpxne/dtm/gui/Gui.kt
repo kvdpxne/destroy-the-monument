@@ -8,16 +8,17 @@ import org.bukkit.inventory.ItemStack
 open class Gui(displayName: String, rows: Rows) {
 
   private val holder = GuiHolder()
-  private val inventory = Bukkit.createInventory(holder, rows.size, displayName)
+  val inventory = Bukkit.createInventory(holder, rows.size, displayName)
+
+  companion object {
+
+    fun withDecimal(displayName: String, rows: Int): Gui {
+      return Gui(displayName, Rows.findRowBySize(rows))
+    }
+  }
 
   init {
     holder.inventory = this.inventory
-  }
-
-  fun last(): Int = inventory.size - 1
-
-  fun free(range: IntRange = 0..last()) = range.firstOrNull {
-    hasItem(it).not()
   }
 
   private fun hasItem(slot: Int): Boolean {

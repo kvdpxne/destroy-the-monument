@@ -1,30 +1,16 @@
 package me.kvdpxne.dtm.command
 
-class Parameter(arguments: Array<out String>) {
+interface Parameter<T> {
 
-  var arguments: Array<out String> = arguments
-    private set
+  val name: String
 
-  fun length(): Int {
-    return arguments.size
-  }
+  val required: Boolean
 
-  fun asParameter(from: Int = 1): Parameter {
-    val size = length()
-    if (from > size) {
-      return this
-    }
-    return Parameter(arguments.copyOfRange(from, size))
-  }
+  val varargs: Boolean
 
-  /**
-   * @throws ArrayIndexOutOfBoundsException
-   */
-  fun asText(index: Int = 0): String {
-    return arguments[index]
-  }
+  val validatorHandler: ParameterValidatorHandler<T>?
 
-  fun isEmpty(): Boolean {
-    return 0 == length()
-  }
+  val suggestionHandler: SuggestionHandler?
+
+  val command: Command<*>
 }

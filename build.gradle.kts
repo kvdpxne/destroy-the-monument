@@ -11,36 +11,32 @@ description = "A simple game of destroying the monument of the opposing team."
 group = "me.kvdpxne"
 version = "0.1.0"
 
-val targetJavaVersion = 8
+val targetJavaVersion = 21
 
 // Filename with the extension.
 val fileName = "craftbukkit-1.7.10.jar"
 
-repositories {
-  mavenCentral()
-  mavenLocal()
-}
-
 dependencies {
-  compileOnly(files("libraries/$fileName"))
+  shadow(files("libraries/$fileName"))
 
-  implementation("org.xerial:sqlite-jdbc:3.42.0.0")
+  implementation(libraries.bundles.exposed)
+  implementation(libraries.postgresql)
 
-  implementation("org.ktorm:ktorm-support-sqlite:3.6.0")
+//  implementation(libraries.thrivi)
+  implementation("fr.mrmicky:fastboard:2.1.2")
 
-  implementation("io.github.oshai:kotlin-logging-jvm:5.0.1")
-  implementation("org.slf4j:slf4j-api:2.0.7")
-  implementation("org.slf4j:slf4j-simple:2.0.7")
-
-
+  implementation(libraries.bundles.disco)
+  implementation(libraries.notchity)
 
   testImplementation(kotlin("test"))
 }
 
 java {
   val javaVersion = JavaVersion.toVersion(targetJavaVersion)
+
   sourceCompatibility = javaVersion
   targetCompatibility = javaVersion
+
   if (JavaVersion.current() < javaVersion) {
     toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
   }
@@ -59,7 +55,7 @@ tasks {
   }
 
   withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.jvmTarget = "21"
   }
 
   processResources {
@@ -105,7 +101,8 @@ tasks {
       exec {
         workingDir = outputDirectory
         executable = "java"
-        args("-jar", fileName)
+        // Spigot with protocol hack
+        args("-jar", "spigot-1.7.10-SNAPSHOT-b1657.jar")
         standardInput = System.`in`
       }
     }
@@ -117,7 +114,7 @@ tasks {
 
     dependsOn(shadowJar)
 
-    val outputDirectory = file("run/plugins")
+    val outputDirectory = file("run/plugins/update")
     val target = shadowJar.get().archiveFile.get().asFile
 
     doLast {

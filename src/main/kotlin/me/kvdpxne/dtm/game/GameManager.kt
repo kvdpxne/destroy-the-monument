@@ -1,63 +1,92 @@
 package me.kvdpxne.dtm.game
 
 import java.util.UUID
-import me.kvdpxne.dtm.data.GameDao
-import me.kvdpxne.dtm.user.User
+import me.kvdpxne.dtm.shared.debug.Debug
+import me.kvdpxne.dtm.user.LocalUser
 
 object GameManager {
 
-  var games: MutableMap<UUID, Game> = mutableMapOf()
-    private set
+  /**
+   * @since 0.1.0
+   */
+  private val _games: MutableMap<UUID, Game<Team>> = mutableMapOf()
 
   init {
     // TODO Delete in the future.
     // Information about games should be loaded into memory only when it is
     // really needed and removed when it is no longer needed.
-    GameDao.findAll().forEach {
-      games[it.identifier] = it
+    for (game: Game<Team> in GameService.findGames()) {
+      this._games[game.identifier] = game.toLocalGame() as Game<Team>
     }
   }
 
   /**
+   * @since 0.1.0
+   */
+  val games: List<Game<*>>
+    get() = this._games.values.toList()
+
+  /**
+   * @since 0.1.0
+   */
+  val size: Int
+    get() = this._games.size
+
+  /**
    * Tries to find a [Game] by [Game.identifier].
    */
-  fun findByIdentifier(identifier: UUID): Game? {
-    return games[identifier]
+  fun findGameByIdentifier(
+    identifier: UUID
+  ): Game<*>? {
+    return this._games[identifier]
   }
 
   /**
    * Tries to find a [Game] by [Game.name].
    */
-  fun findByName(name: String, ignoreCase: Boolean = true): Game? {
-    return games.values.find {
-      it.name.equals(name, ignoreCase)
+  fun <T : Team, G : Game<T>> findGameByName(
+    name: String
+  ): G? {
+    return this._games.values.find {
+      it.name.equals(name, true)
+    } as G
+  }
+
+  /**
+   *
+   */
+  fun <T : Team, G : Game<T>> findByUser(user: LocalUser): G? {
+    return this._games.values.find {
+      if (it is LocalGame) {
+        return@find it.isInGame(user)
+      }
+      return@find false
+    } as G?
+  }
+
+  fun addArenaToGame(
+    game: Game<Team>,
+    arena: Arena
+  ) {
+    val foundGame: Game<Team> = this._games[game.identifier]
+      ?: return
+
+    foundGame as GameImpl<Team>
+    foundGame.addArena(arena)
+
+    Debug.log {
+      ""
     }
   }
 
-//  fun findGameByArenaName(name: String, ignoreCase: Boolean = true): Game? {
-//    return games.values
-//      .find { it.arenas?.name.equals(name, ignoreCase) }
-//  }
+  /**
+   * @since 0.1.0
+   */
+  fun removeGames() {
+    this._games.clear()
 
-  fun findByUser(user: User): Game? {
-    return games.values.find {
-      it.isInGame(user)
+    Debug.log {
+      "All stored game objects have been cleared."
     }
-  }
-
-  fun createGame(name: String): Boolean {
-    require(name.isNotBlank()) {
-      "The name of the game must contain some characters and cannot be just" +
-        "whitespace."
-    }
-
-    if (null != findByName(name)) {
-      return false
-    }
-    val identifier = UUID.randomUUID()
-    val game = Game(identifier, name)
-    games[identifier] = game
-    GameDao.insert(game)
-    return true
   }
 }

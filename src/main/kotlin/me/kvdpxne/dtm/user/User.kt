@@ -1,60 +1,33 @@
 package me.kvdpxne.dtm.user
 
 import java.util.UUID
-import me.kvdpxne.dtm.command.Communicative
-import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.profession.Profession
-import me.kvdpxne.dtm.profession.ProfessionManager
-import me.kvdpxne.dtm.statistics.Statistics
+import me.kvdpxne.dtm.shared.ancillary.Identifiable
+import me.kvdpxne.dtm.shared.ancillary.Nameable
+import me.kvdpxne.dtm.wallet.Wallet
 
-class User(
-  val identifier: UUID,
-  var name: String,
-  var statistics: Statistics = Statistics.empty()
-) : Communicative {
+/**
+ * @since 0.1.0
+ */
+interface User : Identifiable<UUID>, Nameable {
 
-  val performer: Performer
-  var profession: Profession = ProfessionManager.getRandomProfession()
+  /**
+   * @since 0.1.0
+   */
+  val statistics: UserStatistics
 
-  init {
-    performer = UserPerformer(identifier, name, this)
-  }
+  /**
+   * @since 0.1.0
+   */
+  val wallet: Wallet
 
-  override fun sendMessage(message: String) {
-    performer.sendMessage(message)
-  }
+  /**
+   * @since 0.1.0
+   */
+  val currentProfession: Profession
 
-  override fun sendMessage(message: () -> String) {
-    performer.sendMessage(message)
-  }
-
-  override fun sendMessages(messages: Array<out String>) {
-    performer.sendMessages(messages)
-  }
-
-  override fun sendMessages(messages: () -> Array<out String>) {
-    performer.sendMessages(messages)
-  }
-
-  override fun equals(other: Any?): Boolean {
-    if (this === other) return true
-    if (javaClass != other?.javaClass) return false
-
-    other as User
-
-    if (identifier != other.identifier) return false
-    if (name != other.name) return false
-
-    return true
-  }
-
-  override fun hashCode(): Int {
-    var result = identifier.hashCode()
-    result = 31 * result + name.hashCode()
-    return result
-  }
-
-  override fun toString(): String {
-    return "User(identifier=$identifier, name='$name')"
-  }
+  /**
+   * @since 0.1.0
+   */
+  fun asLocalUser(): LocalUser
 }
