@@ -2,7 +2,6 @@ package me.kvdpxne.dtm.shared.minecraft.bukkit
 
 import kotlin.random.Random
 import me.kvdpxne.dtm.colorize
-import me.kvdpxne.dtm.colorizeAll
 import me.kvdpxne.dtm.shared.minecraft.BukkitItemStack
 import me.kvdpxne.dtm.shared.minecraft.MinecraftNBTTagCompound
 import me.kvdpxne.dtm.shared.minecraft.MinecraftNBTTagList
@@ -107,7 +106,7 @@ class ItemBuilder private constructor(private var itemStack: ItemStack) {
     name: String
   ): ItemBuilder {
     this.itemStack.itemMeta = this.itemStack.itemMeta.apply {
-      this.displayName = name.colorize()
+      this.displayName = name.colorize
     }
     return this
   }
@@ -128,7 +127,7 @@ class ItemBuilder private constructor(private var itemStack: ItemStack) {
     vararg lore: String
   ): ItemBuilder {
     this.itemStack.itemMeta = this.itemStack.itemMeta.apply {
-      this.lore = arrayOf(*lore).colorizeAll()
+      this.lore = listOf(*lore).colorize as List<String>
     }
     return this
   }

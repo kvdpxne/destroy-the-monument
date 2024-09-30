@@ -4,6 +4,7 @@ import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.command.Parameters
+import me.kvdpxne.dtm.configuration.Configuration
 import me.kvdpxne.dtm.game.Arena
 import me.kvdpxne.dtm.game.ArenaService
 import me.kvdpxne.dtm.game.MonumentPositionImpl
@@ -31,22 +32,30 @@ fun createArenaMapMonumentAddCommand(): Command<LocalUserPerformer> {
     .handler { performer, parameters ->
       //
       val position: BlockPosition = performer.user.cache.selectedMonumentPosition
-        ?: throw CommandException("&cBŁĄD: &7Nie wybrano zaznaczono żadnego bloku monumentu.\n" +
-          "&eINFO: &7Użyj &a/dtm wand &7aby móc zaznaczyć blok monumentu.")
+        ?: throw CommandException(
+          "&cBłąd: &cNie wybrano zaznaczono żadnego bloku monumentu.\n" +
+            "&eINFO: &7Użyj &a/dtm wand &7aby móc zaznaczyć blok monumentu."
+        )
 
-      //
+      // Unikalna nazwa areny.
       val arenaName: String = parameters[0] as String
 
       //
       val arena: Arena = ArenaService.findArenaByName(arenaName)
-        ?: throw CommandException("&cBłąd: &7Arena o nazwie: &c$arenaName &7nie istnieje.")
+        ?: throw CommandException(
+          Configuration.NO_FOUND_ARENA
+            .replace("{ARENA_NAME}", arenaName)
+        )
 
-      //
+      // Unikalna nazwa drużyny.
       val teamName: String = parameters[1] as String
 
       //
       val team: Team = TeamService.findTeamByName(teamName)
-        ?: throw CommandException("&cBłąd: &7Drużyna o nazwie: &c$teamName &7nie istnieje.")
+        ?: throw CommandException(
+          Configuration.NO_FOUND_TEAM
+            .replace("{TEAM_NAME}", teamName)
+        )
 
       //
       ArenaService.insertArenaMonumentPosition(
@@ -59,8 +68,9 @@ fun createArenaMapMonumentAddCommand(): Command<LocalUserPerformer> {
         )
       )
 
-      performer.sendMessage("&6&lDTM &7> &7Dodano nowy blok monumentu dla" +
-        "drużyny ${team.displayName} &7na arenie o nazwie &a${arenaName}&7."
+      performer.sendMessage(
+        "&6&lDTM &7> &7Dodano nowy blok monumentu dla" +
+          "drużyny ${team.displayName} &7na arenie o nazwie &a${arena.name}&7."
       )
     }
     .build()

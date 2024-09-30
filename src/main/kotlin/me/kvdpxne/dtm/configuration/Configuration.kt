@@ -27,16 +27,24 @@ object Configuration {
    */
   const val RADIUS_OF_BLOCK_INTERACTION = 3.874
 
-  const val NO_IN_GAME_MESSAGE = "&cBłąd: &7Nie jesteś grze."
-
-  const val NO_ABILIT_TO_FILL_MESSAGE = "&cBłąd: &7Twoja profesja nie posiada umiejętności."
-
-  const val REFIL_ABILITY_MESSAGE = "&6&lDTM &7> &aUmiejętność została odnowiona"
-
   /**
    * @since 0.1.0
    */
   const val RADIUS_OF_EXPLOSION_INTERACTION = 11.941
+
+  const val NO_IN_GAME_MESSAGE = "&cBłąd: &7Nie jesteś grze."
+
+  const val NO_ABILITY_MESSAGE = "&cBłąd: &7Twoja profesja nie posiada umiejętności specjalnej."
+
+  const val DEPLETE_ABILITY_MESSAGE = "&6&lDTM &7> &aUmiejętność została anulowana."
+
+  const val RENEW_ABILITY_MESSAGE = "&6&lDTM &7> &aUmiejętność została odnowiona."
+
+  const val NO_FOUND_ARENA = "&cBłąd&8: &7Arena o nazwie &c{ARENA_NAME} &7nie istnieje."
+
+  const val NO_FOUND_GAME = "&cBłąd&8: &7Gra o nazwie &c{GAME_NAME} &7nie istnieje."
+
+  const val NO_FOUND_TEAM = "&cBłąd&8: &7Drużyna o nazwie &c{TEAM_NAME} &7nie istnieje."
 
   const val SPAWN_BLOCK_BREAK_DENIED_MESSAGE = "&6&lDTM &7> &cNie możesz niszczyć bloków na spawnie."
 

@@ -50,14 +50,14 @@ interface Arena : Identifiable<UUID> {
     x: Int,
     y: Int,
     z: Int
-  ): MonumentPosition<out Team>?
+  ): MonumentPosition<Team>?
 
   /**
    * @since 0.1.0
    */
   fun getMonumentPosition(
     position: BlockPosition
-  ): MonumentPosition<out Team>? {
+  ): MonumentPosition<Team>? {
     return this.getMonumentPosition(
       position.x,
       position.y,

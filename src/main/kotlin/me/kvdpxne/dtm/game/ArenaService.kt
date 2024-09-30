@@ -90,4 +90,23 @@ object ArenaService {
       ArenaMonumentPositionsDao.insertArenaMonumentPosition(arena, monumentPosition)
     }
   }
+
+  /**
+   * @since 0.1.0
+   */
+  fun deleteArenaMonumentPosition(
+    arena: Arena,
+    monumentPosition: MonumentPosition<Team>
+  ) {
+    runBlocking {
+      ArenaMonumentPositionsDao.deleteArenaMonumentPosition(arena, monumentPosition)
+      MonumentPositionDao.deleteMonumentPosition(monumentPosition)
+    }
+  }
+
+  fun deleteArena(
+    arena: Arena
+  ) {
+
+  }
 }

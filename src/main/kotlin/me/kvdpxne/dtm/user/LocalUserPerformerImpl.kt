@@ -53,7 +53,7 @@ class LocalUserPerformerImpl(
   override fun sendMessage(
     message: String
   ) {
-    this.player?.sendMessage(message.colorize())
+    this.player?.sendMessage(message.colorize)
   }
 
   /**
@@ -62,7 +62,7 @@ class LocalUserPerformerImpl(
   override fun sendMessage(
     message: () -> String
   ) {
-    this.player?.sendMessage(message().colorize())
+    this.player?.sendMessage(message().colorize)
   }
 
   /**
@@ -76,7 +76,7 @@ class LocalUserPerformerImpl(
       //
       //
       messages.forEach { message ->
-        player.sendMessage(message.colorize())
+        player.sendMessage(message.colorize)
       }
       return
     }

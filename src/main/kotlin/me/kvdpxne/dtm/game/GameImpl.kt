@@ -2,6 +2,7 @@ package me.kvdpxne.dtm.game
 
 import java.util.UUID
 import me.kvdpxne.dtm.shared.ancillary.AbstractIdentifiable
+import me.kvdpxne.dtm.shared.debug.Debug
 
 /**
  * @param name
@@ -25,12 +26,12 @@ open class GameImpl<T : Team>(
   /**
    * @since 0.1.0
    */
-  protected val _teams: Map<UUID, T> = teams
+  protected val _teams: MutableMap<UUID, T> = teams.toMutableMap()
 
   /**
    * @since 0.1.0
    */
-  protected val _arenas: Map<UUID, Arena> = arenas
+  protected val _arenas: MutableMap<UUID, Arena> = arenas.toMutableMap()
 
   /**
    * @since 0.1.0
@@ -74,12 +75,53 @@ open class GameImpl<T : Team>(
     return this._arenas.containsValue(arena)
   }
 
-  override fun findTeamByIdentifier(identifier: UUID): T? {
+  override fun findTeamByIdentifier(
+    identifier: UUID
+  ): T? {
     return this._teams[identifier]
   }
 
-  override fun findArenaByIdentifier(identifier: UUID): Arena? {
+  override fun findArenaByIdentifier(
+    identifier: UUID
+  ): Arena? {
     return this._arenas[identifier]
+  }
+
+  /**
+   * @param arena
+   *
+   * @since 0.1.0
+   */
+  internal fun addTeam(
+    team: Team
+  ): Boolean {
+    if (team.identifier in this._teams) {
+      return false
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    this._teams[team.identifier] = team as T
+
+    Debug.log {
+      ""
+    }
+    return true
+  }
+
+  /**
+   * @param arena
+   *
+   * @since 0.1.0
+   */
+  internal fun addArena(
+    arena: Arena
+  ): Boolean {
+    if (arena.identifier in this._teams) {
+      return false
+    }
+
+    this._arenas[arena.identifier] = arena
+    return true
   }
 
   /**

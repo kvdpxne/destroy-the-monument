@@ -29,4 +29,24 @@ interface ArenaMonumentPositionsRepository {
     arena: Arena,
     monumentPosition: MonumentPosition<Team>
   )
+
+  /**
+   * @param arena
+   * @param monumentPosition
+   *
+   * @since 0.1.0
+   */
+  suspend fun deleteArenaMonumentPosition(
+    arena: Arena,
+    monumentPosition: MonumentPosition<Team>
+  )
+
+  /**
+   * @param arena
+   *
+   * @since 0.1.0
+   */
+  suspend fun deleteArenaMonumentPositions(
+    arena: Arena
+  )
 }

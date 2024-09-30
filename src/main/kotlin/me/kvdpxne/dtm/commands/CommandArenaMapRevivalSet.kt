@@ -4,6 +4,7 @@ import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.command.Parameters
+import me.kvdpxne.dtm.configuration.Configuration
 import me.kvdpxne.dtm.game.Arena
 import me.kvdpxne.dtm.game.ArenaService
 import me.kvdpxne.dtm.game.RevivalPositionImpl
@@ -29,12 +30,15 @@ fun createArenaMapRevivalSetCommand(): Command<LocalUserPerformer> {
         .build()
     )
     .handler { performer, parameters ->
-      //
+      // Unikalna nazwa areny
       val arenaName: String = parameters[0] as String
 
       //
       val arena: Arena = ArenaService.findArenaByName(arenaName)
-        ?: throw CommandException("&cBłąd: &7Arena o nazwie: &c$arenaName &7nie istnieje.")
+        ?: throw CommandException(
+          Configuration.NO_FOUND_ARENA
+            .replace("{ARENA_NAME}", arenaName)
+        )
 
       //
       val teamName: String = parameters[1] as String

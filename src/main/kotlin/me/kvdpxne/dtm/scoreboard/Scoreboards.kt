@@ -2,7 +2,6 @@ package me.kvdpxne.dtm.scoreboard
 
 import fr.mrmicky.fastboard.FastBoard
 import me.kvdpxne.dtm.colorize
-import me.kvdpxne.dtm.colorizeAll
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
@@ -32,9 +31,9 @@ fun initScoreboard(
   coins: Long
 ): FastBoard {
   return FastBoard(player).apply {
-    this.updateTitle("&c&lD&f&lT&9&lM".colorize())
+    this.updateTitle("&c&lD&f&lT&9&lM".colorize)
     this.updateLines(
-      arrayOf(
+      listOf(
         "&7Czas gry: &e&l00:00",
         "",
         "&c&lCzerwoni:",
@@ -50,39 +49,39 @@ fun initScoreboard(
         "",
         "&7Monety:",
         "&6&l$coins"
-      ).colorizeAll()
+      ).colorize
     )
   }
 }
 
 fun updateScoreboardTime(fastBoard: FastBoard, time: String) {
-  fastBoard.updateLine(0, "&7Czas gry: &e&l$time".colorize())
+  fastBoard.updateLine(0, "&7Czas gry: &e&l$time".colorize)
 }
 
 fun updateRedPlayerCount(fastBoard: FastBoard, count: Int) {
-  fastBoard.updateLine(3, "&7- Gracze: &6&l$count".colorize())
+  fastBoard.updateLine(3, "&7- Gracze: &6&l$count".colorize)
 }
 
 fun updateFirstMonumentCounter(fastBoard: FastBoard, count: Int) {
-  fastBoard.updateLine(4, "&7- Monumenty: &6&l$count".colorize())
+  fastBoard.updateLine(4, "&7- Monumenty: &6&l$count".colorize)
 }
 
 fun updateBluePlayerCount(fastBoard: FastBoard, count: Int) {
-  fastBoard.updateLine(7, "&7- Gracze: &6&l$count".colorize())
+  fastBoard.updateLine(7, "&7- Gracze: &6&l$count".colorize)
 }
 
 fun updateSecondMonumentCounter(fastBoard: FastBoard, count: Int) {
-  fastBoard.updateLine(8, "&7- Monumenty: &6&l$count".colorize())
+  fastBoard.updateLine(8, "&7- Monumenty: &6&l$count".colorize)
 }
 
 fun updateKillCount(fastBoard: FastBoard, count: Int) {
-  fastBoard.updateLine(10, "&7Zabojstwa: &6&l$count".colorize())
+  fastBoard.updateLine(10, "&7Zabojstwa: &6&l$count".colorize)
 }
 
 fun updateDeathCount(fastBoard: FastBoard, count: Int) {
-  fastBoard.updateLine(11, "&7Smierci: &6&l$count".colorize())
+  fastBoard.updateLine(11, "&7Smierci: &6&l$count".colorize)
 }
 
 fun updateCoinCount(fastBoard: FastBoard, count: Long) {
-  fastBoard.updateLine(14, "&6&l$count".colorize())
+  fastBoard.updateLine(14, "&6&l$count".colorize)
 }

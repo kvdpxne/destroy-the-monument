@@ -13,8 +13,9 @@ import me.kvdpxne.dtm.game.TeamColors
 import me.kvdpxne.dtm.game.TeamImpl
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.transactions.transaction
 
 /**
  * @since 0.1.0
@@ -131,6 +132,30 @@ object MonumentPositionDao : MonumentPositionRepository {
   override suspend fun deleteMonumentPositionByIdentifier(
     identifier: UUID
   ) {
-    TODO("Not yet implemented")
+    concurrentTransaction(DatabasesConfiguration.main) {
+      MonumentPositionTable.deleteWhere {
+        this.identifier eq identifier
+      }
+    }
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  override suspend fun deleteMonumentPosition(
+    monumentPosition: MonumentPosition<Team>
+  ) {
+    this.deleteMonumentPositionByIdentifier(monumentPosition.identifier)
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  override suspend fun countMonumentPositions(): Long {
+    return concurrentTransaction(DatabasesConfiguration.main) {
+      MonumentPositionTable
+        .select(MonumentPositionTable.identifier)
+        .count()
+    }
   }
 }

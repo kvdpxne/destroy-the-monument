@@ -5,6 +5,7 @@ import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
+import me.kvdpxne.dtm.configuration.Configuration
 import me.kvdpxne.dtm.game.Arena
 import me.kvdpxne.dtm.game.ArenaService
 
@@ -25,7 +26,10 @@ fun createArenaMapRevivalListCommand(): Command<Performer> {
 
       //
       val arena: Arena = ArenaService.findArenaByName(arenaName)
-        ?: throw CommandException("")
+        ?: throw CommandException(
+          Configuration.NO_FOUND_ARENA
+            .replace("{ARENA_NAME}", arenaName)
+        )
 
       //
       for (it in arena.revivalPositions) {

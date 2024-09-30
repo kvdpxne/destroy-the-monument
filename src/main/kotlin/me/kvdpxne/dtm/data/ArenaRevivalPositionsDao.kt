@@ -8,7 +8,11 @@ import me.kvdpxne.dtm.data.transactions.concurrentTransaction
 import me.kvdpxne.dtm.game.Arena
 import me.kvdpxne.dtm.game.RevivalPosition
 import me.kvdpxne.dtm.game.Team
+import org.jetbrains.exposed.sql.ISqlExpressionBuilder
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 
 /**
@@ -50,6 +54,34 @@ object ArenaRevivalPositionsDao : ArenaRevivalPositionsRepository {
           it[this.arenaIdentifier] = arena.identifier
           it[this.revivalPositionIdentifier] = revivalPosition.identifier
         }
+    }
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  override suspend fun deleteArenaRevivalPosition(
+    arena: Arena,
+    revivalPosition: RevivalPosition<Team>
+  ) {
+    concurrentTransaction(DatabasesConfiguration.main) {
+      ArenaRevivalPositionsTable.deleteWhere { _: ISqlExpressionBuilder ->
+        (this.arenaIdentifier eq arena.identifier) and
+          (this.revivalPositionIdentifier eq revivalPosition.identifier)
+      }
+    }
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  override suspend fun deleteArenaRevivalPositions(
+    arena: Arena
+  ) {
+    concurrentTransaction(DatabasesConfiguration.main) {
+      ArenaRevivalPositionsTable.deleteWhere { _: ISqlExpressionBuilder ->
+        this.arenaIdentifier eq arena.identifier
+      }
     }
   }
 }

@@ -18,5 +18,13 @@ interface GameTeamsRepository {
     identifier: UUID
   ): List<Team>
 
-  suspend fun insertGameTeam(game: Game<Team>, team: Team)
+  suspend fun insertGameTeam(
+    game: Game<Team>,
+    team: Team
+  )
+
+  suspend fun deleteGameTeam(
+    game: Game<Team>,
+    team: Team
+  )
 }

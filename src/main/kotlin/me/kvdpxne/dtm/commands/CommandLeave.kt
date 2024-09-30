@@ -2,6 +2,9 @@ package me.kvdpxne.dtm.commands
 
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
+import me.kvdpxne.dtm.command.CommandException
+import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.shared.minecraft.bukkit.equipA
 import me.kvdpxne.dtm.shared.minecraft.bukkit.moveToLobby
 import me.kvdpxne.dtm.shared.minecraft.bukkit.reset
@@ -12,21 +15,22 @@ import me.kvdpxne.dtm.user.LocalUserPerformer
  */
 fun createLeaveCommand(): Command<LocalUserPerformer> {
   return CommandBuilder.begin<LocalUserPerformer>("leave")
+    .aliases("quit", "exit")
     .handler { performer, _ ->
-      val game = performer.user.game
+      // Obiekt lokalnej gry, do której jest przypisany użytkownik.
+      val localGame: LocalGame = performer.user.game
+        ?: throw CommandException(Configuration.NO_IN_GAME_MESSAGE)
 
-      if (null == game) {
-        performer.sendMessage("You are not in any game.")
-        return@handler
-      }
-
-      if (game.isInArena(performer.user)) {
-        game.findTeammateByHostage(performer.user)?.leave()
+      //
+      if (localGame.isInArena(performer.user)) {
+        localGame.findTeammateByHostage(performer.user)?.leave()
         performer.sendMessage("You left the game.")
         return@handler
       }
 
-      game.removeHostage(performer.user)
+      localGame.removeHostage(performer.user)
+
+      //
       performer.player?.reset()
       performer.player?.moveToLobby()
       performer.player?.equipA()

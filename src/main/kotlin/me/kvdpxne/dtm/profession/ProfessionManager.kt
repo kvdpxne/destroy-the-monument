@@ -81,27 +81,6 @@ object ProfessionManager : Iterable<Profession> {
   }
 
   /**
-   *
-   */
-  fun addBuiltInProfessions() {
-    this.addProfessions(
-      createArcher(),
-      createKnight(),
-      createEngineer(),
-      createScout(),
-      createMedic(),
-      createPyro(),
-      createDefender(),
-      createAssassin(),
-      createSpecialist()
-    )
-
-    Debug.log {
-      "All built-in professions have been added"
-    }
-  }
-
-  /**
    * Returns an iterator over the elements of this object.
    */
   override fun iterator(): Iterator<Profession> {

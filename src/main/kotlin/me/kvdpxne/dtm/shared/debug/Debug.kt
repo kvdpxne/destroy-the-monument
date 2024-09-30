@@ -77,7 +77,7 @@ object Debug {
     message: () -> String
   ) {
     if (this._printInConsole) {
-      println(message())
+      this.logger.info(message())
     }
 
     if (this._printInGame) {

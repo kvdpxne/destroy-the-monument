@@ -12,9 +12,11 @@ import me.kvdpxne.dtm.game.Team
 import me.kvdpxne.dtm.game.TeamColors
 import me.kvdpxne.dtm.game.TeamImpl
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ISqlExpressionBuilder
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.transactions.transaction
 
 /**
  * @since 0.1.0
@@ -70,6 +72,9 @@ object RevivalPositionDao : RevivalPositionRepository {
     )
   }
 
+  /**
+   * @since 0.1.0
+   */
   override suspend fun findRevivalPositions(): List<RevivalPosition<Team>> {
     return concurrentTransaction(DatabasesConfiguration.main) {
       RevivalPositionTable
@@ -102,6 +107,9 @@ object RevivalPositionDao : RevivalPositionRepository {
     }
   }
 
+  /**
+   * @since 0.1.0
+   */
   override suspend fun insertRevivalPosition(revivalPosition: RevivalPosition<Team>) {
     concurrentTransaction(DatabasesConfiguration.main) {
       RevivalPositionTable.insert {
@@ -120,7 +128,36 @@ object RevivalPositionDao : RevivalPositionRepository {
     TODO("Not yet implemented")
   }
 
-  override suspend fun deleteRevivalPositionByIdentifier(identifier: UUID) {
-    TODO("Not yet implemented")
+  /**
+   * @since 0.1.0
+   */
+  override suspend fun deleteRevivalPositionByIdentifier(
+    identifier: UUID
+  ) {
+    concurrentTransaction(DatabasesConfiguration.main) {
+      RevivalPositionTable.deleteWhere { _: ISqlExpressionBuilder ->
+        this.identifier eq identifier
+      }
+    }
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  override suspend fun deleteRevivalPosition(
+    revivalPosition: RevivalPosition<Team>
+  ) {
+    this.deleteRevivalPositionByIdentifier(revivalPosition.identifier)
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  override suspend fun countRevivalPositions(): Long {
+    return concurrentTransaction(DatabasesConfiguration.main) {
+      RevivalPositionTable
+        .select(RevivalPositionTable.identifier)
+        .count()
+    }
   }
 }

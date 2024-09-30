@@ -5,6 +5,7 @@ import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
+import me.kvdpxne.dtm.configuration.Configuration
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameService
 import me.kvdpxne.dtm.game.Team
@@ -27,21 +28,25 @@ fun createTeamAddCommand(): Command<Performer> {
         .build()
     )
     .handler { performer, parameters ->
-      //
+      // Unikalna nazwa gry.
       val gameName: String = parameters[0] as String
 
       //
       val game: Game<Team> = GameService.findGameByName(gameName)
-        ?: throw CommandException("An game named $gameName does not exist.")
-
-      println("fsf $game")
+        ?: throw CommandException(
+          Configuration.NO_FOUND_GAME
+            .replace("{GAME_NAME}", gameName)
+        )
 
       //
       val teamName: String = parameters[1] as String
 
       //
       val team: Team = TeamService.findTeamByName(teamName)
-        ?: throw CommandException("Team $teamName does not exist.")
+        ?: throw CommandException(
+          Configuration.NO_FOUND_TEAM
+            .replace("{TEAM_NAME}", teamName)
+        )
 
       //
       GameService.insertGameTeam(game, team)

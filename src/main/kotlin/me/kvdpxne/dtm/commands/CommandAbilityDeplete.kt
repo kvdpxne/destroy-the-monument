@@ -15,14 +15,20 @@ fun createAbilityDepleteCommand(): Command<LocalUserPerformer> {
   // Usage: /dtm ability deplete
   return CommandBuilder.begin<LocalUserPerformer>("deplete")
     .handler { performer, _ ->
+
       val teammate: Teammate = performer.user.teammate
         ?: throw CommandException(Configuration.NO_IN_GAME_MESSAGE)
 
+      // Umiejętność specjalna aktualnie wybranej klasy.
       val ability: Ability = teammate.currentProfession.ability
-        ?: throw CommandException(Configuration.NO_ABILIT_TO_FILL_MESSAGE)
+        ?: throw CommandException(Configuration.NO_ABILITY_MESSAGE)
 
+      //
       ability.renewDelayed(performer.player!!)
-      performer.sendMessage(Configuration.REFIL_ABILITY_MESSAGE)
+
+      performer.sendConfiguredMessage { configuration: Configuration ->
+        configuration.DEPLETE_ABILITY_MESSAGE
+      }
     }
     .build()
 }

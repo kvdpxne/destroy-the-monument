@@ -29,4 +29,24 @@ interface ArenaRevivalPositionsRepository {
     arena: Arena,
     revivalPosition: RevivalPosition<Team>
   )
+
+  /**
+   * @param arena
+   * @param revivalPosition
+   *
+   * @since 0.1.0
+   */
+  suspend fun deleteArenaRevivalPosition(
+    arena: Arena,
+    revivalPosition: RevivalPosition<Team>
+  )
+
+  /**
+   * @param arena
+   *
+   * @since 0.1.0
+   */
+  suspend fun deleteArenaRevivalPositions(
+    arena: Arena
+  )
 }

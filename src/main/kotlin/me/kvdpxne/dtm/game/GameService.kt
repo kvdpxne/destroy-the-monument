@@ -71,4 +71,10 @@ object GameService {
       GameTeamsDao.insertGameTeam(game, team)
     }
   }
+
+  fun deleteGameTeam(game: Game<Team>, team: Team) {
+    runBlocking {
+      GameTeamsDao.deleteGameTeam(game, team)
+    }
+  }
 }

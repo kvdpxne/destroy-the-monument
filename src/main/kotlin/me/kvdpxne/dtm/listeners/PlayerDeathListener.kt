@@ -45,7 +45,7 @@ object PlayerDeathListener : Listener {
   private fun createTeammateSuicideMessage(
     teammate: Teammate
   ): String {
-    return "${this.formatTeammate(teammate)} &6umarł".colorize()
+    return "${this.formatTeammate(teammate)} &6umarł".colorize
   }
 
   /**
@@ -56,7 +56,7 @@ object PlayerDeathListener : Listener {
     killer: Teammate
   ): String {
     return "${this.formatTeammate(killer)} &6--> ${this.formatTeammate(victim)}"
-      .colorize()
+      .colorize
   }
 
   /**

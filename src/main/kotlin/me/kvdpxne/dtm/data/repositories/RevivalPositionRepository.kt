@@ -10,6 +10,12 @@ import me.kvdpxne.dtm.game.Team
 interface RevivalPositionRepository {
 
   /**
+   * Retrieves a list of all revival positions from the data source.
+   * Each revival position is associated with a specific team.
+   *
+   * @return A list of all `RevivalPosition` entities, each associated with a team.
+   *         If no revival positions exist, an empty list is returned.
+   *
    * @since 0.1.0
    */
   suspend fun findRevivalPositions(): List<RevivalPosition<Team>>
@@ -42,11 +48,33 @@ interface RevivalPositionRepository {
   )
 
   /**
-   * @param identifier
+   * Deletes a revival position from the data source, identified by its unique identifier.
+   *
+   * @param identifier The UUID that uniquely identifies the revival position to be deleted.
    *
    * @since 0.1.0
    */
   suspend fun deleteRevivalPositionByIdentifier(
     identifier: UUID
   )
+
+  /**
+   * Deletes a specific revival position from the data source.
+   *
+   * @param revivalPosition The [RevivalPosition] entity to be deleted.
+   *
+   * @since 0.1.0
+   */
+  suspend fun deleteRevivalPosition(
+    revivalPosition: RevivalPosition<Team>
+  )
+
+  /**
+   * Counts the total number of revival positions present in the data source.
+   *
+   * @return The total count of revival positions.
+   *
+   * @since 0.1.0
+   */
+  suspend fun countRevivalPositions(): Long
 }

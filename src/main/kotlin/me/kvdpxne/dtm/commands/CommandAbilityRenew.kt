@@ -19,10 +19,10 @@ fun createAbilityRenewCommand(): Command<LocalUserPerformer> {
         ?: throw CommandException(Configuration.NO_IN_GAME_MESSAGE)
 
       val ability: Ability = teammate.currentProfession.ability
-        ?: throw CommandException(Configuration.NO_ABILIT_TO_FILL_MESSAGE)
+        ?: throw CommandException(Configuration.NO_ABILITY_MESSAGE)
 
       ability.renew(performer.player!!)
-      performer.sendMessage(Configuration.REFIL_ABILITY_MESSAGE)
+      performer.sendMessage(Configuration.RENEW_ABILITY_MESSAGE)
     }
     .build()
 }

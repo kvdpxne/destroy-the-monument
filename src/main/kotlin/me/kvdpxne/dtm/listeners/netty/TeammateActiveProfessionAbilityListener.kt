@@ -47,9 +47,9 @@ object TeammateActiveProfessionAbilityListener {
           return
         }
 
-        if (packet !is PacketPlayInFlying) {
-          println("read: $packet")
-        }
+//        if (packet !is PacketPlayInFlying) {
+//          println("read: $packet")
+//        }
 
 
         super.channelRead(channelHandlerContext, packet)

@@ -220,7 +220,7 @@ object BlockBreakListener : Listener {
 
     game.sendMessages {
       val coloredUser = "${killerTeam.colorInChat}${user.name}"
-      val coloredMonument = "${monumentBelongs.colorInChat}&l${monumentBelongs.name}".colorize().uppercase()
+      val coloredMonument = "${monumentBelongs.colorInChat}&l${monumentBelongs.name}".colorize.uppercase()
 
       val end = when (victimTeam.health) {
         1 -> "&fPozostał &61 &fmonument."

@@ -23,12 +23,12 @@ class ArenaImpl(
    *
    * @since 0.1.0
    */
-  val _revivalPositions: MutableMap<UUID, RevivalPosition<out Team>> = mutableMapOf()
+  val _revivalPositions: MutableMap<UUID, RevivalPosition<Team>> = mutableMapOf()
 
   /**
    * @since 0.1.0
    */
-  val _monumentPositions: MutableMap<UUID, MutableSet<MonumentPosition<out Team>>> = mutableMapOf()
+  val _monumentPositions: MutableMap<UUID, MutableSet<MonumentPosition<Team>>> = mutableMapOf()
 
   /**
    * @since 0.1.0
@@ -75,11 +75,11 @@ class ArenaImpl(
     x: Int,
     y: Int,
     z: Int
-  ): MonumentPosition<out Team>? {
+  ): MonumentPosition<Team>? {
     // NOTE:
     //
-    for (monuments: Set<MonumentPosition<*>> in this._monumentPositions.values) {
-      for (monument: MonumentPosition<*> in monuments) {
+    for (monuments: Set<MonumentPosition<Team>> in this._monumentPositions.values) {
+      for (monument: MonumentPosition<Team> in monuments) {
         if (monument.isIn(x, y, z)) {
           return monument
         }
@@ -89,7 +89,7 @@ class ArenaImpl(
   }
 
   fun addPositionMonument(
-    position: MonumentPosition<out Team>
+    position: MonumentPosition<Team>
   ) {
     val fs = this._monumentPositions[position.team.identifier] ?: mutableSetOf()
     fs.add(position)
@@ -97,7 +97,7 @@ class ArenaImpl(
   }
 
   fun addRevivalPosition(
-    position: RevivalPosition<out Team>
+    position: RevivalPosition<Team>
   ) {
     this._revivalPositions[position.team.identifier] = position
   }

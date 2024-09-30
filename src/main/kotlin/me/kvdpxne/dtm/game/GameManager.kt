@@ -9,14 +9,14 @@ object GameManager {
   /**
    * @since 0.1.0
    */
-  private val _games: MutableMap<UUID, Game<out Team>> = mutableMapOf()
+  private val _games: MutableMap<UUID, Game<Team>> = mutableMapOf()
 
   init {
     // TODO Delete in the future.
     // Information about games should be loaded into memory only when it is
     // really needed and removed when it is no longer needed.
-    for (game: Game<*> in GameService.findGames()) {
-      this._games[game.identifier] = game.toLocalGame()
+    for (game: Game<Team> in GameService.findGames()) {
+      this._games[game.identifier] = game.toLocalGame() as Game<Team>
     }
   }
 
@@ -64,8 +64,19 @@ object GameManager {
     } as G?
   }
 
-  fun addArenaToGame(localGame: Game<Team>, arena: Arena) {
+  fun addArenaToGame(
+    game: Game<Team>,
+    arena: Arena
+  ) {
+    val foundGame: Game<Team> = this._games[game.identifier]
+      ?: return
 
+    foundGame as GameImpl<Team>
+    foundGame.addArena(arena)
+
+    Debug.log {
+      ""
+    }
   }
 
   /**
