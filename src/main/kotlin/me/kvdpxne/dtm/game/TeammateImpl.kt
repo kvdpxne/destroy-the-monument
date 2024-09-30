@@ -1,6 +1,7 @@
 package me.kvdpxne.dtm.game
 
 import fr.mrmicky.fastboard.FastBoard
+import me.kvdpxne.dtm.listeners.netty.NettyListenerManager
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.shared.collections.QueuingPair
 import me.kvdpxne.dtm.shared.collections.toQueuingPair
@@ -66,6 +67,8 @@ class TeammateImpl(
 
     player.scoreboard.getPlayerTeam(player).removePlayer(player)
     player.scoreboard = Bukkit.getScoreboardManager().mainScoreboard
+
+    NettyListenerManager.removePlayer(player)
 
     player.reset()
     player.moveToLobby()

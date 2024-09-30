@@ -1,6 +1,7 @@
 package me.kvdpxne.dtm.user
 
 import java.util.UUID
+import me.kvdpxne.dtm.shared.StylishToStringBuilder
 import me.kvdpxne.dtm.statistics.IdentifiableStatisticsImpl
 
 /**
@@ -53,5 +54,19 @@ class UserStatisticsImpl(
     this.playedGames = 0
     this.gamesWon = 0
     this.gamesLost = 0
+  }
+
+  override fun toString(): String {
+    return StylishToStringBuilder()
+      .begin("UserStatistics")
+      .add("identifier", this.identifier)
+      .add("kills", this.kills)
+      .add("assists", this.assists)
+      .add("deaths", this.deaths)
+      .add("destroyedMonuments", this.destroyedMonuments)
+      .add("playedGames", this.playedGames)
+      .add("gamesWon", this.gamesWon)
+      .add("gamesLost", this.gamesLost)
+      .build()
   }
 }

@@ -2,13 +2,10 @@ package me.kvdpxne.dtm.listeners.netty
 
 import net.minecraft.server.v1_7_R4.NetworkManager
 import net.minecraft.server.v1_7_R4.PacketPlayInBlockDig
-import net.minecraft.server.v1_7_R4.PacketPlayInFlying
 import net.minecraft.util.io.netty.channel.Channel
 import net.minecraft.util.io.netty.channel.ChannelDuplexHandler
 import net.minecraft.util.io.netty.channel.ChannelHandlerContext
 import net.minecraft.util.io.netty.channel.ChannelPromise
-import org.bukkit.Bukkit
-import org.bukkit.ChatColor
 import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer
 import org.bukkit.entity.Player
 
@@ -23,16 +20,7 @@ val NetworkManager.channel: Channel
   return channel
 }
 
-
-object TeammateActiveProfessionAbilityListener {
-
-  private fun removePlayer(player: Player) {
-    val channel = (player as CraftPlayer).handle.playerConnection.networkManager.channel
-
-    channel.eventLoop().submit {
-      channel.pipeline().remove(player.getName())
-    }
-  }
+object NettyListenerManager {
 
   fun addPlayer(player: Player) {
     val channelDuplexHandler = object : ChannelDuplexHandler() {
@@ -67,5 +55,13 @@ object TeammateActiveProfessionAbilityListener {
 
     val pipeline = (player as CraftPlayer).handle.playerConnection.networkManager.channel.pipeline()
     pipeline.addBefore("packet_handler", player.getName(), channelDuplexHandler)
+  }
+
+  fun removePlayer(player: Player) {
+    val channel = (player as CraftPlayer).handle.playerConnection.networkManager.channel
+
+    channel.eventLoop().submit {
+      channel.pipeline().remove(player.getName())
+    }
   }
 }

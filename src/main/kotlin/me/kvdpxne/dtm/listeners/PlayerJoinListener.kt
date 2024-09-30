@@ -1,6 +1,5 @@
 package me.kvdpxne.dtm.listeners
 
-import me.kvdpxne.dtm.listeners.netty.TeammateActiveProfessionAbilityListener
 import me.kvdpxne.dtm.shared.minecraft.bukkit.equipA
 import me.kvdpxne.dtm.shared.minecraft.bukkit.moveToLobby
 import me.kvdpxne.dtm.shared.minecraft.bukkit.reset
@@ -43,7 +42,5 @@ object PlayerJoinListener : Listener {
 
     //
     player.equipA()
-
-    TeammateActiveProfessionAbilityListener.addPlayer(player)
   }
 }

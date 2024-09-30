@@ -1,6 +1,7 @@
 package me.kvdpxne.dtm.wallet
 
 import java.util.UUID
+import me.kvdpxne.dtm.shared.StylishToStringBuilder
 import me.kvdpxne.dtm.shared.ancillary.AbstractIdentifiable
 
 /**
@@ -100,10 +101,11 @@ class WalletImpl(
   }
 
   override fun toString(): String {
-    return "Wallet{" +
-      "coins=\"${this._coins}\", " +
-      "multiplier=\"${this._multiplier}\"," +
-      "identifier=\"${this.identifier}\"" +
-      "}"
+    return StylishToStringBuilder()
+      .begin("Wallet")
+      .add("identifier", this.identifier)
+      .add("coins", this._coins)
+      .add("multiplier", this._multiplier)
+      .build()
   }
 }
