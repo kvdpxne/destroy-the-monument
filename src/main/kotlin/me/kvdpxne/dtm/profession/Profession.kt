@@ -2,43 +2,85 @@ package me.kvdpxne.dtm.profession
 
 import java.util.UUID
 import me.kvdpxne.dtm.gui.SlotItem
+import me.kvdpxne.dtm.shared.minecraft.bukkit.hasDurability
+import me.kvdpxne.dtm.shared.minecraft.bukkit.isLeatherArmor
+import me.kvdpxne.dtm.shared.minecraft.bukkit.runSynchronousDelayedTask
+import me.kvdpxne.dtm.shared.minecraft.bukkit.toBuilder
 import org.bukkit.DyeColor
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.meta.LeatherArmorMeta
 import org.bukkit.potion.PotionEffect
 
 class Profession(
-  var name: String,
-  var displayName: String? = null,
-  var items: List<SlotItem>,
-  var icon: ItemStack,
-  var effect: PotionEffect? = null,
-  val identifier: UUID = UUID.randomUUID()
-) {
+  // @formatter:off
+  var name       : String,
+  var displayName: String,
+  var items      : List<SlotItem>,
+  var icon       : ItemStack,
+  var enabled    : Boolean       = true,
+  var effect     : PotionEffect? = null,
+  var ability    : Ability?      = null,
+  val identifier : UUID          = UUID.randomUUID()
+  // @formatter:on
+) : Cloneable {
 
   init {
-    if (displayName.isNullOrBlank()) {
+    if (displayName.isBlank()) {
       displayName = name
     }
   }
 
-  fun equip(player: Player, dyeColor: DyeColor) {
-    items.forEach {
-      val item = it.item
-      val meta = item.itemMeta
-      if (meta is LeatherArmorMeta) {
-        meta.color = dyeColor.color
-        item.itemMeta = meta
+  /**
+   * @since 0.1.0
+   */
+  private fun colourArmour(
+    item: SlotItem,
+    dyeColor: DyeColor
+  ): ItemStack {
+    if (!item.item.hasDurability()) {
+      return item.item
+    }
+
+    val builder = item.item.toBuilder()
+    if (item.index in 36..39 && item.item.isLeatherArmor()) {
+      builder.leather(dyeColor.color)
+    }
+
+    return builder.unbreakable().build()
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun equip(
+    player: Player,
+    dyeColor: DyeColor
+  ) {
+    if (null != this.effect) {
+      runSynchronousDelayedTask(4L) {
+        player.addPotionEffect(this.effect, true)
       }
-      player.inventory.setItem(it.index, item)
+    }
+
+    this.items.forEach {
+      player.inventory.setItem(
+        it.index,
+        this.colourArmour(it, dyeColor)
+      )
     }
   }
 
-  fun addEffect(player: Player) {
-    if (null != effect) {
-      player.addPotionEffect(effect, true)
-    }
+  public override fun clone(): Profession {
+    return Profession(
+      this.name,
+      this.displayName,
+      this.items,
+      this.icon,
+      this.enabled,
+      this.effect,
+      this.ability?.clone(),
+      this.identifier
+    )
   }
 
   override fun equals(other: Any?): Boolean {

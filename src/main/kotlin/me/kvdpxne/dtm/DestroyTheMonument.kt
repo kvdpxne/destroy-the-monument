@@ -1,84 +1,282 @@
 package me.kvdpxne.dtm
 
-import me.kvdpxne.dtm.command.BaseCommand
-import me.kvdpxne.dtm.command.bukkit.BukkitCommandMapAccessor
-import me.kvdpxne.dtm.game.ArenaManager
+import me.kvdpxne.dico.Dico
+import me.kvdpxne.dtm.command.CommandManager
+import me.kvdpxne.dtm.commands.createBaseCommand
+import me.kvdpxne.dtm.commands.createGlobalChatCommand
+import me.kvdpxne.dtm.configuration.Configuration
 import me.kvdpxne.dtm.game.GameManager
-import me.kvdpxne.dtm.gui.GuiActionHandler
-import me.kvdpxne.dtm.implementations.bukkit.BukkitPluginBootLoader
-import me.kvdpxne.dtm.listener.EntityDamageListener
-import me.kvdpxne.dtm.listener.MonumentDestroyHandler
-import me.kvdpxne.dtm.listener.PlayerDeathListener
-import me.kvdpxne.dtm.listener.PlayerDropItemListener
-import me.kvdpxne.dtm.listener.PlayerInteractListener
-import me.kvdpxne.dtm.listener.PlayerJoinListener
-import me.kvdpxne.dtm.listener.PlayerQuitListener
-import me.kvdpxne.dtm.listener.PlayerRespawnListener
-import me.kvdpxne.dtm.listener.WeatherChangeListener
+import me.kvdpxne.dtm.listeners.BlockBreakListener
+import me.kvdpxne.dtm.listeners.BlockPistonExtendListener
+import me.kvdpxne.dtm.listeners.BlockPlaceListener
+import me.kvdpxne.dtm.listeners.EntityDamageListener
+import me.kvdpxne.dtm.listeners.EntityExplodeListener
+import me.kvdpxne.dtm.listeners.PlayerChatListener
+import me.kvdpxne.dtm.listeners.PlayerCraftItemListener
+import me.kvdpxne.dtm.listeners.PlayerDeathListener
+import me.kvdpxne.dtm.listeners.PlayerDropItemListener
+import me.kvdpxne.dtm.listeners.PlayerFoodLevelChangeListener
+import me.kvdpxne.dtm.listeners.PlayerInteractListener
+import me.kvdpxne.dtm.listeners.PlayerInventoryClickListener
+import me.kvdpxne.dtm.listeners.PlayerInventoryInteractListener
+import me.kvdpxne.dtm.listeners.PlayerItemConsumeListener
+import me.kvdpxne.dtm.listeners.PlayerJoinListener
+import me.kvdpxne.dtm.listeners.PlayerKickListener
+import me.kvdpxne.dtm.listeners.PlayerPrepareCraftItemListener
+import me.kvdpxne.dtm.listeners.PlayerPrepareItemEnchantListener
+import me.kvdpxne.dtm.listeners.PlayerQuitListener
+import me.kvdpxne.dtm.listeners.PlayerRespawnListener
+import me.kvdpxne.dtm.listeners.PlayerToggleFlightListener
+import me.kvdpxne.dtm.listeners.ProjectileHitListener
+import me.kvdpxne.dtm.listeners.WeatherChangeListener
 import me.kvdpxne.dtm.profession.ProfessionManager
-import me.kvdpxne.dtm.user.UserManager
+import me.kvdpxne.dtm.professions.createArcher
+import me.kvdpxne.dtm.professions.createAssassin
+import me.kvdpxne.dtm.professions.createDefender
+import me.kvdpxne.dtm.professions.createEngineer
+import me.kvdpxne.dtm.professions.createKnight
+import me.kvdpxne.dtm.professions.createMedic
+import me.kvdpxne.dtm.professions.createPyro
+import me.kvdpxne.dtm.professions.createScout
+import me.kvdpxne.dtm.professions.createSpecialist
+import me.kvdpxne.dtm.shared.VoidChunkGenerator
+import me.kvdpxne.dtm.shared.debug.Debug
+import me.kvdpxne.dtm.shared.minecraft.bukkit.BukkitTextFormatter
+import me.kvdpxne.dtm.user.LocalUserManager
+import me.kvdpxne.dtm.user.User
+import me.kvdpxne.dtm.user.UserBuilder
+import me.kvdpxne.dtm.user.UserService
+import me.kvdpxne.notchity.VersionCreator
+import org.bukkit.entity.Player
 import org.bukkit.event.Listener
+import org.bukkit.generator.ChunkGenerator
+import org.bukkit.plugin.PluginManager
 import org.bukkit.plugin.java.JavaPlugin
 
-@Suppress("unused")
+/**
+ * Main class for the DestroyTheMonument plugin, extending JavaPlugin.
+ *
+ * This class handles the initialization and management of the plugin during
+ * its lifecycle.
+ *
+ * It also provides a singleton-like instance of the plugin for global access.
+ *
+ * @since 0.1.0
+ */
 class DestroyTheMonument : JavaPlugin() {
 
-  init {
-//    System.setProperty(org.slf4j.simple.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "TRACE")
-    BukkitPluginBootLoader()
+  companion object {
 
-    // Initialize
-    GameManager
-    ArenaManager
-    UserManager
-
-    ProfessionManager.initializeBuiltInProfessions()
+    /**
+     * Holds the singleton instance of the DestroyTheMonument plugin.
+     *
+     * This instance can be accessed globally within the plugin, but is set
+     * only once during the plugin's initialization.
+     *
+     * @since 0.1.0
+     */
+    var instance: DestroyTheMonument? = null
+      private set
   }
 
-  private fun registerListener(vararg listeners: Listener) {
-    val pluginManager = server.pluginManager
-    listeners.forEach {
-      pluginManager.registerEvents(it, this)
+  /**
+   * Flag indicating whether the plugin is in the process of being disabled.
+   * When set to true, the plugin is either in an unrecoverable error state
+   * or about to be shut down.
+   *
+   * This flag prevents further operations that should not proceed if the
+   * plugin is being disabled.
+   *
+   * @since 0.1.0
+   */
+  private var isDisabling: Boolean = false
+
+  /**
+   * Registers multiple event listeners with the plugin's event handling system.
+   *
+   * This method accepts any number of listeners and registers them with the
+   * server's plugin manager.
+   * The listeners will be active once registered, handling corresponding events
+   * within the plugin.
+   *
+   * @param listeners List of event listeners to register.
+   *
+   * @since 0.1.0
+   */
+  private fun registerListeners(
+    vararg listeners: Listener
+  ) {
+    val pluginManager: PluginManager = this.server.pluginManager
+
+    for (listener: Listener in listeners) {
+      pluginManager.registerEvents(listener, this)
     }
   }
 
-  override fun onLoad() {
-//    ArenaManager.arenas.values.forEach {
-//      println(it.toString())
-//      it.spawnPoints.values.forEach {
-//        println(it.toString())
-//      }
-//      it.monuments.values.forEach {
-//        it.forEach {
-//          println(it.toString())
-//        }
-//      }
-//    }
+  /**
+   * Shuts down the plugin by disabling it.
+   *
+   * This method is called when an irrecoverable error occurs during the loading
+   * process, ensuring that the plugin is safely disabled to prevent further
+   * issues.
+   *
+   * @since 0.1.0
+   */
+  private fun shutdown() {
+    this.server.pluginManager.disablePlugin(this)
   }
 
-  override fun onEnable() {
+  /**
+   * @since 0.1.0
+   */
+  override fun onLoad() {
+    if (!VersionCreator.getBukkitVersion().isEqual(10710)) {
+      arrayOf(
+        "An error occurred while trying to load the plugin.",
+        "Error: Incorrect Minecraft release",
+        "",
+        "The currently used version of the plugin requires a",
+        "Minecraft release codenamed \"v1_7_R4\".",
+        "",
+        "We recommend using the Spigot server platform with the",
+        "code name \"b1657\" to get full compatibility with the",
+        "current version of the plugin.",
+        "",
+        "If you think the error should not occur please contact us.",
+        "https://github.com/kvdpxne/destroy-the-monument"
+      ).forEach { message: String ->
+        this.logger.severe(message)
+      }
+
+      this.isDisabling = true
+      return
+    }
+
     //
-    registerListener(
+    Debug.initialize(this.logger)
+
+    //
+    instance = this
+
+    PluginContext.textFormatter = BukkitTextFormatter
+
+    try {
       //
-      GuiActionHandler,
+      LocalUserManager
+      GameManager
+    } catch (_: Throwable) {
+      this.isDisabling = true
+      return
+    }
+
+    CommandManager
+    ProfessionManager
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  override fun onEnable() {
+    // Sprawdzenie, czy plugin jest w trakcie wyłączania.
+    // Jeżeli tak, to wywoływana jest metoda shutdown, która wyłącza plugin.
+    if (this.isDisabling) {
+      this.shutdown()
+      return
+    }
+
+    //
+    this.registerListeners(
+      BlockBreakListener,
+      BlockPistonExtendListener,
+      BlockPlaceListener,
 
       EntityDamageListener,
+      EntityExplodeListener,
 
-      MonumentDestroyHandler,
+      PlayerChatListener,
+      PlayerCraftItemListener,
       PlayerDeathListener,
       PlayerDropItemListener,
+      PlayerFoodLevelChangeListener,
       PlayerInteractListener,
+      PlayerInventoryClickListener,
+      PlayerInventoryInteractListener,
+      PlayerItemConsumeListener,
       PlayerJoinListener,
+      PlayerKickListener,
+      PlayerPrepareCraftItemListener,
+      PlayerPrepareItemEnchantListener,
       PlayerQuitListener,
-      PlayerRespawnListener(this),
+      PlayerRespawnListener,
+      PlayerToggleFlightListener,
+
+      ProjectileHitListener,
+
       WeatherChangeListener
     )
 
-    BukkitCommandMapAccessor.registerCommands(
-      BaseCommand
+    //
+    CommandManager.addCommands(
+      createBaseCommand(),
+      createGlobalChatCommand()
     )
+
+    ProfessionManager.addProfessions(
+      createArcher(),
+      createKnight(),
+      createEngineer(),
+      createScout(),
+      createMedic(),
+      createPyro(),
+      createDefender(),
+      createAssassin(),
+      createSpecialist()
+    )
+
+    for (player: Player in Dico.getLocalPlayers().asCollection()) {
+      var user: User? = UserService.findUserByIdentifier(player.uniqueId)
+
+      if (null == user) {
+        user = UserBuilder.create(player).build()
+        UserService.createUser(user)
+      }
+
+      // Dodaje obiekt użytkownika do lokalnej pamięci.
+      LocalUserManager.addUser(user)
+    }
   }
 
+  /**
+   * @since 0.1.0
+   */
   override fun onDisable() {
+    if (this.isDisabling) {
+      return
+    }
+
+    // Usuwa wszystkie przechowywane obiektu użytkowników z lokalnej pamięci.
+    LocalUserManager.removeUsers()
+
+    // Usuwa wszystkie przechowywane obiekty gry z lokalnej pamięci.
+    GameManager.removeGames()
+
+    instance = null
+  }
+
+  /**
+   * @param name
+   * @param identifier
+   *
+   * @since 0.1.0
+   */
+  override fun getDefaultWorldGenerator(
+    name: String,
+    identifier: String
+  ): ChunkGenerator {
+    if (Configuration.OVERRIDE_DEFAULT_CHUNK_GENERATOR) {
+      return VoidChunkGenerator.INSTANCE
+    }
+
+    return super.getDefaultWorldGenerator(name, identifier)
   }
 }

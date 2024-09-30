@@ -1,34 +1,41 @@
 package me.kvdpxne.dtm.command
 
-open class Command(
-  val name: String,
-  val description: String = "",
-  val usage: String = "",
-  val aliases: Array<out String> = emptyArray(),
-  val permission: String = "",
-  val executionType: ExecutionPlaceType = ExecutionPlaceType.EVERYWHERE
-) {
+interface Command<T : Performer> {
 
-  /**
-   * @param content The name or alias of the command.
-   */
-  fun contains(content: String): Boolean {
-    //
-    //
-    if (content.isBlank()) {
-      return false
-    }
+  val name: String
 
-    //
-    if (this.name.equals(content, true)) {
-      return true
-    }
+  val fullName: String
 
-    //
-    return this.aliases.any {
-      it.equals(content, true)
-    }
-  }
+  val description: String
 
+  val usage: String
 
+  val aliases: Array<String>
+
+  val permission: String
+
+  val executable: Boolean
+
+  val parameters: Array<Parameter<*>>
+
+  val children: Array<Command<Performer>>
+
+  val parent: Command<Performer>?
+
+  val handler: CommandHandler<T>?
+
+  fun matches(
+    input: String
+  ): Boolean
+
+  fun execute(
+    performer: T,
+    arguments: Array<String>
+  )
+
+  fun suggestions(
+    suggestions: MutableList<String>,
+    arguments: Array<String>,
+    commandIndex: Int
+  )
 }

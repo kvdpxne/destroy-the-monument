@@ -1,48 +1,76 @@
 package me.kvdpxne.dtm.command
 
-object CommandManager : Iterable<Command> {
+object CommandManager : Iterable<Command<Performer>> {
+
+  private val _commands: MutableMap<String, Command<Performer>> = mutableMapOf()
+
+  val commands: List<Command<Performer>>
+    get() = this._commands.values.toList()
+
+  val names: List<String>
+    get() = this._commands.keys.toList()
+
+  val size: Int
+    get() = this._commands.size
+
+  internal fun getSubCommand(
+    args: Array<out String>,
+    currentCommand: Pair<Command<Performer>, Int>? = null,
+    idx: Int = 0
+  ): Pair<Command<Performer>, Int>? {
+    // Return the last command when there are no more arguments
+    if (idx >= args.size) {
+      return currentCommand
+    }
+
+    // If currentCommand is null, idx must be 0, so search in all commands
+    val commandSupplier = currentCommand?.first?.children?.asIterable()
+      ?: this._commands.values
+
+    // Look if something matches the current index, if it does, look if there are further matches
+    commandSupplier
+      .firstOrNull { it.matches(args[idx]) }
+      ?.let { return getSubCommand(args, Pair(it, idx), idx + 1) }
+
+    // If no match was found, currentCommand is the subcommand that we searched for
+    return currentCommand
+  }
 
   /**
-   * A set of all registered commands.
+   * @since 0.1.0
    */
-  var commands: MutableList<Command> = mutableListOf()
-    private set
+  fun addCommand(
+    command: Command<*>
+  ) {
+    @Suppress("UNCHECKED_CAST")
+    command as Command<Performer>
 
-  fun addCommand(command: Command): Boolean {
-    val contents = buildList(16) {
-      this.add(command.name)
-      this.addAll(command.aliases)
-    }
-
-    val result = commands.any { command2 ->
-      contents.any {
-        command2.contains(it)
-      }
-    }
-
-    if (result) {
-      return false
-    }
-
-    this.commands.add(command)
-    return true
+    this._commands[command.name.lowercase()] = command
+    BukkitCommandHandler(command).register()
   }
 
-  fun removeCommand(command: Command): Boolean {
-    return commands.remove(command)
-  }
-
-  fun removeCommand(content: String): Boolean {
-    return commands.removeIf {
-      it.contains(content)
+  /**
+   * @since 0.1.0
+   */
+  fun addCommands(
+    vararg commands: Command<*>
+  ) {
+    for (command: Command<*> in commands) {
+      this.addCommand(command)
     }
   }
 
-  fun size(): Int {
-    return commands.size
+  fun removeCommand(
+    command: Command<Performer>
+  ) {
+    this._commands.remove(command.name.lowercase())
+    // TODO unregister
   }
 
-  override fun iterator(): Iterator<Command> {
-    return this.commands.iterator()
+  /**
+   *
+   */
+  override fun iterator(): Iterator<Command<Performer>> {
+    return this._commands.values.iterator()
   }
 }
