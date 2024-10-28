@@ -1,17 +1,19 @@
 package me.kvdpxne.dtm.data.tables
 
 import java.util.UUID
+import me.kvdpxne.dtm.data.Efn
+import me.kvdpxne.dtm.data.En
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
 
 /**
  * @since 0.1.0
  */
-object GameTeamsTable : Table("game_teams") {
+object GameTeamsTable : Table(En.GAME_TEAMS) {
 
-  val gameIdentifier: Column<UUID> = this.uuid("game_identifier")
+  val gameIdentifier: Column<UUID> = this.uuid(Efn.GAME_IDENTIFIER)
     .references(GameTable.identifier)
 
-  val teamIdentifier: Column<UUID> = this.uuid("team_identifier")
+  val teamIdentifier: Column<UUID> = this.uuid(Efn.TEAM_IDENTIFIER)
     .references(TeamTable.identifier)
 }
