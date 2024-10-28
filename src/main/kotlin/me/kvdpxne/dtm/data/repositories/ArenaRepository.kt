@@ -43,7 +43,7 @@ interface ArenaRepository {
    */
   suspend fun insertArena(
     arena: Arena
-  )
+  ): Int
 
   /**
    * @param arena
@@ -52,7 +52,7 @@ interface ArenaRepository {
    */
   suspend fun updateArena(
     arena: Arena
-  )
+  ): Int
 
   suspend fun updateArenaMap(arena: Arena, map: ArenaMap)
 
@@ -63,7 +63,7 @@ interface ArenaRepository {
    */
   suspend fun deleteArenaByIdentifier(
     identifier: UUID
-  )
+  ): Int
 
   /**
    * @since 0.1.0

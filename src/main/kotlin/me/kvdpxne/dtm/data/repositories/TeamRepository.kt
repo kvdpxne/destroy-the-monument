@@ -37,7 +37,7 @@ interface TeamRepository {
    */
   suspend fun insertTeam(
     team: Team
-  )
+  ): Int
 
   /**
    * @param team
@@ -46,7 +46,7 @@ interface TeamRepository {
    */
   suspend fun updateTeam(
     team: Team
-  )
+  ): Int
 
   /**
    * @param identifier
@@ -55,5 +55,5 @@ interface TeamRepository {
    */
   suspend fun deleteTeamByIdentifier(
     identifier: UUID
-  )
+  ): Int
 }

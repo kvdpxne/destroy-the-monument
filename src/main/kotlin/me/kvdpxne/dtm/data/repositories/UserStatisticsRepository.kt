@@ -2,6 +2,9 @@ package me.kvdpxne.dtm.data.repositories
 
 import me.kvdpxne.dtm.user.UserStatistics
 
+/**
+ * @since 0.1.0
+ */
 interface UserStatisticsRepository {
 
   /**

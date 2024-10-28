@@ -31,7 +31,7 @@ interface GameRepository {
    */
   suspend fun findGameByName(
     name: String,
-    ignoreCase: Boolean
+    ignoreCase: Boolean = true
   ): Game<Team>?
 
   /**
@@ -41,7 +41,25 @@ interface GameRepository {
    */
   suspend fun insertGame(
     game: Game<Team>
-  )
+  ): Int
+
+  /**
+   * @param game
+   *
+   * @since 0.1.0
+   */
+  suspend fun updateGame(
+    game: Game<Team>
+  ): Int
+
+  /**
+   * @param identifier
+   *
+   * @since 0.1.0
+   */
+  suspend fun deleteGameByIdentifier(
+    identifier: UUID
+  ): Int
 
   /**
    * @since 0.1.0

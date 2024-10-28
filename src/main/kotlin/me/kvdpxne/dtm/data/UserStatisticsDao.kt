@@ -40,9 +40,7 @@ object UserStatisticsDao : UserStatisticsRepository {
     return concurrentTransaction(DatabasesConfiguration.main) {
       UserStatisticsTable.insert { it: InsertStatement<Number> ->
         it[this.identifier] = userStatistics.identifier
-
-        //
-        buildUserStatisticsStatement(userStatistics, it)
+        this@UserStatisticsDao.buildUserStatisticsStatement(userStatistics, it)
       }.insertedCount
     }
   }
@@ -54,8 +52,7 @@ object UserStatisticsDao : UserStatisticsRepository {
       UserStatisticsTable.update({
         UserStatisticsTable.identifier eq userStatistics.identifier
       }) { it: UpdateStatement ->
-        //
-        buildUserStatisticsStatement(userStatistics, it)
+        this@UserStatisticsDao.buildUserStatisticsStatement(userStatistics, it)
       }
     }
   }

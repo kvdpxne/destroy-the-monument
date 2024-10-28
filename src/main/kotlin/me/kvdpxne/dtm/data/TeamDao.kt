@@ -12,8 +12,12 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.lowerCase
+import org.jetbrains.exposed.sql.statements.UpdateBuilder
+import org.jetbrains.exposed.sql.update
 
 /**
  * @since 0.1.0
@@ -97,20 +101,51 @@ object TeamDao : TeamRepository {
     }
   }
 
-  override suspend fun insertTeam(team: Team) {
-    concurrentTransaction(DatabasesConfiguration.main) {
+  /**
+   * @param team
+   * @param builder
+   *
+   * @since 0.1.0
+   */
+  private fun buildTeamStatement(
+    team: Team,
+    builder: UpdateBuilder<Int>
+  ) {
+    TeamTable.run {
+      builder[this.name] = team.name
+    }
+  }
+
+  override suspend fun insertTeam(
+    team: Team
+  ): Int {
+    return concurrentTransaction(DatabasesConfiguration.main) {
       TeamTable.insert {
         it[this.identifier] = team.identifier
-        it[this.name] = team.name
+        this@TeamDao.buildTeamStatement(team, it)
+      }.insertedCount
+    }
+  }
+
+  override suspend fun updateTeam(
+    team: Team
+  ): Int {
+    return concurrentTransaction(DatabasesConfiguration.main) {
+      TeamTable.update({
+        TeamTable.identifier eq team.identifier
+      }) {
+        this@TeamDao.buildTeamStatement(team, it)
       }
     }
   }
 
-  override suspend fun updateTeam(team: Team) {
-    TODO("Not yet implemented")
-  }
-
-  override suspend fun deleteTeamByIdentifier(identifier: UUID) {
-    TODO("Not yet implemented")
+  override suspend fun deleteTeamByIdentifier(
+    identifier: UUID
+  ): Int {
+    return concurrentTransaction(DatabasesConfiguration.main) {
+      TeamTable.deleteWhere {
+        this.identifier eq identifier
+      }
+    }
   }
 }

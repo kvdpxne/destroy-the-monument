@@ -17,6 +17,9 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.statements.InsertStatement
+import org.jetbrains.exposed.sql.statements.UpdateBuilder
+import org.jetbrains.exposed.sql.update
 
 /**
  * @since 0.1.0
@@ -107,24 +110,49 @@ object RevivalPositionDao : RevivalPositionRepository {
   }
 
   /**
+   * @param revivalPosition
+   * @param builder
+   *
    * @since 0.1.0
    */
-  override suspend fun insertRevivalPosition(revivalPosition: RevivalPosition<Team>) {
-    concurrentTransaction(DatabasesConfiguration.main) {
-      RevivalPositionTable.insert {
-        it[this.identifier] = revivalPosition.identifier
-        it[this.teamIdentifier] = revivalPosition.team.identifier
-        it[this.x] = revivalPosition.x
-        it[this.y] = revivalPosition.y
-        it[this.z] = revivalPosition.z
-        it[this.pitch] = revivalPosition.pitch
-        it[this.yaw] = revivalPosition.yaw
-      }
+  private fun buildMonumentPositionStatement(
+    revivalPosition: RevivalPosition<Team>,
+    builder: UpdateBuilder<Int>
+  ) {
+    RevivalPositionTable.run {
+      builder[this.teamIdentifier] = revivalPosition.team.identifier
+      builder[this.x] = revivalPosition.x
+      builder[this.y] = revivalPosition.y
+      builder[this.z] = revivalPosition.z
+      builder[this.pitch] = revivalPosition.pitch
+      builder[this.yaw] = revivalPosition.yaw
     }
   }
 
-  override suspend fun updateRevivalPosition(revivalPosition: RevivalPosition<Team>) {
-    TODO("Not yet implemented")
+  /**
+   * @since 0.1.0
+   */
+  override suspend fun insertRevivalPosition(
+    revivalPosition: RevivalPosition<Team>
+  ): Int {
+    return concurrentTransaction(DatabasesConfiguration.main) {
+      RevivalPositionTable.insert { it: InsertStatement<Number> ->
+        it[this.identifier] = revivalPosition.identifier
+        this@RevivalPositionDao.buildMonumentPositionStatement(revivalPosition, it)
+      }.insertedCount
+    }
+  }
+
+  override suspend fun updateRevivalPosition(
+    revivalPosition: RevivalPosition<Team>
+  ): Int {
+    return concurrentTransaction(DatabasesConfiguration.main) {
+      RevivalPositionTable.update({
+        RevivalPositionTable.identifier eq revivalPosition.identifier
+      }) {
+        this@RevivalPositionDao.buildMonumentPositionStatement(revivalPosition, it)
+      }
+    }
   }
 
   /**
@@ -132,21 +160,12 @@ object RevivalPositionDao : RevivalPositionRepository {
    */
   override suspend fun deleteRevivalPositionByIdentifier(
     identifier: UUID
-  ) {
-    concurrentTransaction(DatabasesConfiguration.main) {
+  ): Int {
+    return concurrentTransaction(DatabasesConfiguration.main) {
       RevivalPositionTable.deleteWhere { _: ISqlExpressionBuilder ->
         this.identifier eq identifier
       }
     }
-  }
-
-  /**
-   * @since 0.1.0
-   */
-  override suspend fun deleteRevivalPosition(
-    revivalPosition: RevivalPosition<Team>
-  ) {
-    this.deleteRevivalPositionByIdentifier(revivalPosition.identifier)
   }
 
   /**

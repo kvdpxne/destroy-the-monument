@@ -1,6 +1,7 @@
 package me.kvdpxne.dtm.data
 
 import java.util.UUID
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import me.kvdpxne.dtm.data.repositories.GameRepository
 import me.kvdpxne.dtm.data.sources.DatabasesConfiguration
@@ -14,9 +15,12 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.lowerCase
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.statements.UpdateBuilder
+import org.jetbrains.exposed.sql.update
 
 /**
  * @since 0.1.0
@@ -48,19 +52,21 @@ object GameDao : GameRepository {
     val arenas: MutableMap<UUID, Arena> = mutableMapOf()
 
     runBlocking {
-      GameTeamsDao
-        .findGameTeamsByGameIdentifier(identifier)
-        .forEach { team: Team ->
-          teams[team.identifier] = team
-        }
+      launch {
+        GameTeamsDao
+          .findGameTeamsByGameIdentifier(identifier)
+          .forEach { team: Team ->
+            teams[team.identifier] = team
+          }
+      }
 
-      GameArenasDao
-        .findGameArenasByGameIdentifier(identifier)
-        .forEach { arena: Arena ->
-          arenas[arena.identifier] = arena
-        }
-
-      null
+      launch {
+        GameArenasDao
+          .findGameArenasByGameIdentifier(identifier)
+          .forEach { arena: Arena ->
+            arenas[arena.identifier] = arena
+          }
+      }
     }
 
     return GameImpl(
@@ -120,13 +126,50 @@ object GameDao : GameRepository {
     }
   }
 
+  /**
+   * @param game
+   * @param builder
+   *
+   * @since 0.1.0
+   */
+  private fun buildGameStatement(
+    game: Game<Team>,
+    builder: UpdateBuilder<Int>
+  ) {
+    GameTable.run {
+      builder[this.name] = game.name
+    }
+  }
+
   override suspend fun insertGame(
     game: Game<Team>
-  ) {
-    concurrentTransaction(DatabasesConfiguration.main) {
+  ): Int {
+    return concurrentTransaction(DatabasesConfiguration.main) {
       GameTable.insert {
         it[this.identifier] = game.identifier
-        it[this.name] = game.name
+        this@GameDao.buildGameStatement(game, it)
+      }.insertedCount
+    }
+  }
+
+  override suspend fun updateGame(
+    game: Game<Team>
+  ): Int {
+    return concurrentTransaction(DatabasesConfiguration.main) {
+      GameTable.update({
+        GameTable.identifier eq game.identifier
+      }) {
+        this@GameDao.buildGameStatement(game, it)
+      }
+    }
+  }
+
+  override suspend fun deleteGameByIdentifier(
+    identifier: UUID
+  ): Int {
+    return concurrentTransaction(DatabasesConfiguration.main) {
+      GameTable.deleteWhere {
+        this.identifier eq identifier
       }
     }
   }

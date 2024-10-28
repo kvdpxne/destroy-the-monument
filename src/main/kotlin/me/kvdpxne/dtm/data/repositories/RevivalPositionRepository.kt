@@ -36,7 +36,7 @@ interface RevivalPositionRepository {
    */
   suspend fun insertRevivalPosition(
     revivalPosition: RevivalPosition<Team>
-  )
+  ): Int
 
   /**
    * @param revivalPosition
@@ -45,7 +45,7 @@ interface RevivalPositionRepository {
    */
   suspend fun updateRevivalPosition(
     revivalPosition: RevivalPosition<Team>
-  )
+  ): Int
 
   /**
    * Deletes a revival position from the data source, identified by its unique identifier.
@@ -56,18 +56,7 @@ interface RevivalPositionRepository {
    */
   suspend fun deleteRevivalPositionByIdentifier(
     identifier: UUID
-  )
-
-  /**
-   * Deletes a specific revival position from the data source.
-   *
-   * @param revivalPosition The [RevivalPosition] entity to be deleted.
-   *
-   * @since 0.1.0
-   */
-  suspend fun deleteRevivalPosition(
-    revivalPosition: RevivalPosition<Team>
-  )
+  ): Int
 
   /**
    * Counts the total number of revival positions present in the data source.

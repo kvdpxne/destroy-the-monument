@@ -16,6 +16,8 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.statements.UpdateBuilder
+import org.jetbrains.exposed.sql.update
 
 /**
  * @since 0.1.0
@@ -100,19 +102,34 @@ object MonumentPositionDao : MonumentPositionRepository {
   }
 
   /**
+   * @param monumentPosition
+   * @param builder
+   *
+   * @since 0.1.0
+   */
+  private fun buildMonumentPositionStatement(
+    monumentPosition: MonumentPosition<Team>,
+    builder: UpdateBuilder<Int>
+  ) {
+    MonumentPositionTable.run {
+      builder[this.teamIdentifier] = monumentPosition.team.identifier
+      builder[this.x] = monumentPosition.x
+      builder[this.y] = monumentPosition.y
+      builder[this.z] = monumentPosition.z
+    }
+  }
+
+  /**
    * @since 0.1.0
    */
   override suspend fun insertMonumentPosition(
     monumentPosition: MonumentPosition<Team>
-  ) {
-    concurrentTransaction(DatabasesConfiguration.main) {
+  ): Int {
+    return concurrentTransaction(DatabasesConfiguration.main) {
       MonumentPositionTable.insert {
         it[this.identifier] = monumentPosition.identifier
-        it[this.teamIdentifier] = monumentPosition.team.identifier
-        it[this.x] = monumentPosition.x
-        it[this.y] = monumentPosition.y
-        it[this.z] = monumentPosition.z
-      }
+        this@MonumentPositionDao.buildMonumentPositionStatement(monumentPosition, it)
+      }.insertedCount
     }
   }
 
@@ -121,19 +138,12 @@ object MonumentPositionDao : MonumentPositionRepository {
    */
   override suspend fun updateMonumentPosition(
     monumentPosition: MonumentPosition<Team>
-  ) {
-    TODO("Not yet implemented")
-  }
-
-  /**
-   * @since 0.1.0
-   */
-  override suspend fun deleteMonumentPositionByIdentifier(
-    identifier: UUID
-  ) {
-    concurrentTransaction(DatabasesConfiguration.main) {
-      MonumentPositionTable.deleteWhere {
-        this.identifier eq identifier
+  ): Int {
+    return concurrentTransaction(DatabasesConfiguration.main) {
+      MonumentPositionTable.update({
+        MonumentPositionTable.identifier eq monumentPosition.identifier
+      }) {
+        this@MonumentPositionDao.buildMonumentPositionStatement(monumentPosition, it)
       }
     }
   }
@@ -141,10 +151,14 @@ object MonumentPositionDao : MonumentPositionRepository {
   /**
    * @since 0.1.0
    */
-  override suspend fun deleteMonumentPosition(
-    monumentPosition: MonumentPosition<Team>
-  ) {
-    this.deleteMonumentPositionByIdentifier(monumentPosition.identifier)
+  override suspend fun deleteMonumentPositionByIdentifier(
+    identifier: UUID
+  ): Int {
+    return concurrentTransaction(DatabasesConfiguration.main) {
+      MonumentPositionTable.deleteWhere {
+        this.identifier eq identifier
+      }
+    }
   }
 
   /**

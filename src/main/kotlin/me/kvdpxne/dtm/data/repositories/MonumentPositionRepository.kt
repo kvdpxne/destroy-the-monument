@@ -51,7 +51,7 @@ interface MonumentPositionRepository {
    */
   suspend fun insertMonumentPosition(
     monumentPosition: MonumentPosition<Team>
-  )
+  ): Int
 
   /**
    * Updates an existing monument position in the data source.
@@ -63,7 +63,7 @@ interface MonumentPositionRepository {
    */
   suspend fun updateMonumentPosition(
     monumentPosition: MonumentPosition<Team>
-  )
+  ): Int
 
   /**
    * Deletes a monument position identified by its unique identifier.
@@ -74,18 +74,7 @@ interface MonumentPositionRepository {
    */
   suspend fun deleteMonumentPositionByIdentifier(
     identifier: UUID
-  )
-
-  /**
-   * Deletes a specific monument position from the data source.
-   *
-   * @param monumentPosition The [MonumentPosition] object to be deleted.
-   *
-   * @since 0.1.0
-   */
-  suspend fun deleteMonumentPosition(
-    monumentPosition: MonumentPosition<Team>
-  )
+  ): Int
 
   /**
    * Counts the total number of monument positions available in the data source.

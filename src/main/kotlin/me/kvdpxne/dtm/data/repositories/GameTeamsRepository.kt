@@ -18,11 +18,23 @@ interface GameTeamsRepository {
     identifier: UUID
   ): List<Team>
 
+  /**
+   * @param game
+   * @param team
+   *
+   * @since 0.1.0
+   */
   suspend fun insertGameTeam(
     game: Game<Team>,
     team: Team
   )
 
+  /**
+   * @param game
+   * @param team
+   *
+   * @since 0.1.0
+   */
   suspend fun deleteGameTeam(
     game: Game<Team>,
     team: Team

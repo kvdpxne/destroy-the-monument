@@ -21,6 +21,7 @@ import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.lowerCase
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
+import org.jetbrains.exposed.sql.update
 
 object UserDao : UserRepository {
 
@@ -185,11 +186,8 @@ object UserDao : UserRepository {
   ): Int {
     val count: Int = concurrentTransaction(DatabasesConfiguration.main) {
       UserTable.insert {
-        //
         it[this.identifier] = user.identifier
-
-        //
-        buildUserStatement(user, it)
+        this@UserDao.buildUserStatement(user, it)
       }.insertedCount
     }
 
@@ -203,7 +201,18 @@ object UserDao : UserRepository {
   override suspend fun updateUser(
     user: User
   ): Int {
-    TODO("Not yet implemented")
+    val count: Int = concurrentTransaction(DatabasesConfiguration.main) {
+      UserTable.update({
+        UserTable.identifier eq user.identifier
+      }) {
+        this@UserDao.buildUserStatement(user, it)
+      }
+    }
+
+    UserStatisticsDao.updateUserStatistics(user.statistics)
+    UserWalletDao.updateUserWallet(user.wallet)
+
+    return count
   }
 
   override suspend fun deleteUserByIdentifier(

@@ -100,7 +100,7 @@ object ArenaService {
   ) {
     runBlocking {
       ArenaMonumentPositionsDao.deleteArenaMonumentPosition(arena, monumentPosition)
-      MonumentPositionDao.deleteMonumentPosition(monumentPosition)
+      MonumentPositionDao.deleteMonumentPositionByIdentifier(monumentPosition.identifier)
     }
   }
 

@@ -1,6 +1,7 @@
 package me.kvdpxne.dtm.data
 
 import java.util.UUID
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import me.kvdpxne.dtm.data.repositories.ArenaRepository
 import me.kvdpxne.dtm.data.sources.DatabasesConfiguration
@@ -17,6 +18,8 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.lowerCase
 import org.jetbrains.exposed.sql.update
@@ -65,19 +68,21 @@ object ArenaDao : ArenaRepository {
     )
 
     runBlocking {
-      ArenaMonumentPositionsDao
-        .findArenaMonumentPositionsByArenaIdentifier(identifier)
-        .forEach { monumentPosition: MonumentPosition<Team> ->
-          arena.addPositionMonument(monumentPosition)
-        }
+      launch {
+        ArenaMonumentPositionsDao
+          .findArenaMonumentPositionsByArenaIdentifier(identifier)
+          .forEach { monumentPosition: MonumentPosition<Team> ->
+            arena.addPositionMonument(monumentPosition)
+          }
+      }
 
-      ArenaRevivalPositionsDao
-        .findArenaRevivalPositionsByArenaIdentifier(identifier)
-        .forEach { revivalPosition: RevivalPosition<Team> ->
-          arena.addRevivalPosition(revivalPosition)
-        }
-
-      null
+      launch {
+        ArenaRevivalPositionsDao
+          .findArenaRevivalPositionsByArenaIdentifier(identifier)
+          .forEach { revivalPosition: RevivalPosition<Team> ->
+            arena.addRevivalPosition(revivalPosition)
+          }
+      }
     }
 
     return arena
@@ -128,16 +133,20 @@ object ArenaDao : ArenaRepository {
     }
   }
 
-  override suspend fun insertArena(arena: Arena) {
-    concurrentTransaction(DatabasesConfiguration.main) {
+  override suspend fun insertArena(
+    arena: Arena
+  ): Int {
+    return concurrentTransaction(DatabasesConfiguration.main) {
       ArenaTable.insert {
         it[this.identifier] = arena.identifier
         it[this.name] = arena.name
-      }
+      }.insertedCount
     }
   }
 
-  override suspend fun updateArena(arena: Arena) {
+  override suspend fun updateArena(
+    arena: Arena
+  ): Int {
     TODO("Not yet implemented")
   }
 
@@ -152,8 +161,14 @@ object ArenaDao : ArenaRepository {
     }
   }
 
-  override suspend fun deleteArenaByIdentifier(identifier: UUID) {
-    TODO("Not yet implemented")
+  override suspend fun deleteArenaByIdentifier(
+    identifier: UUID
+  ): Int {
+    return concurrentTransaction(DatabasesConfiguration.main) {
+      ArenaTable.deleteWhere {
+        this.identifier eq identifier
+      }
+    }
   }
 
   override suspend fun countArenas(): Long {

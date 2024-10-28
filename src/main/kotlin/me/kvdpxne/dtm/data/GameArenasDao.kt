@@ -7,7 +7,11 @@ import me.kvdpxne.dtm.data.tables.GameArenasTable
 import me.kvdpxne.dtm.data.transactions.concurrentTransaction
 import me.kvdpxne.dtm.game.Arena
 import me.kvdpxne.dtm.game.Game
+import me.kvdpxne.dtm.game.Team
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 
 /**
@@ -37,13 +41,25 @@ object GameArenasDao : GameArenasRepository {
   }
 
   override suspend fun insertGameArena(
-    game: Game<*>,
-    gameArena: Arena
+    game: Game<Team>,
+    arena: Arena
   ) {
     return concurrentTransaction(DatabasesConfiguration.main) {
       GameArenasTable.insert {
         it[this.gameIdentifier] = game.identifier
-        it[this.arenaIdentifier] = gameArena.identifier
+        it[this.arenaIdentifier] = arena.identifier
+      }
+    }
+  }
+
+  override suspend fun deleteGameArena(
+    game: Game<Team>,
+    arena: Arena
+  ) {
+    return concurrentTransaction(DatabasesConfiguration.main) {
+      GameArenasTable.deleteWhere {
+        (this.gameIdentifier eq game.identifier) and
+          (this.arenaIdentifier eq arena.identifier)
       }
     }
   }
