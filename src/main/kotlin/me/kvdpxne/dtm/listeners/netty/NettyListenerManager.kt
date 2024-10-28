@@ -1,5 +1,6 @@
 package me.kvdpxne.dtm.listeners.netty
 
+import me.kvdpxne.dtm.Constants
 import net.minecraft.server.v1_7_R4.NetworkManager
 import net.minecraft.server.v1_7_R4.PacketPlayInBlockDig
 import net.minecraft.util.io.netty.channel.Channel
@@ -54,7 +55,7 @@ object NettyListenerManager {
     }
 
     val pipeline = (player as CraftPlayer).handle.playerConnection.networkManager.channel.pipeline()
-    pipeline.addBefore("packet_handler", player.getName(), channelDuplexHandler)
+    pipeline.addBefore("packet_handler", "${Constants.NAME}_${player.getName()}", channelDuplexHandler)
   }
 
   fun removePlayer(player: Player) {

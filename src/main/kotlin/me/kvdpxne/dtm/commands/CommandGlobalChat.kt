@@ -5,7 +5,6 @@ import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.command.ParameterBuilder
 import me.kvdpxne.dtm.command.ParameterValidators
-import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
@@ -13,11 +12,11 @@ import me.kvdpxne.dtm.user.LocalUserPerformer
  * @since 0.1.0
  */
 fun createGlobalChatCommand(): Command<LocalUserPerformer> {
-  // Usage: /g <TEXT...>
+  // Usage: /g <MESSAGE>
   return CommandBuilder.begin<LocalUserPerformer>("globalChat")
     .aliases("global", "g")
     .parameter(
-      ParameterBuilder.begin<String>("TEXT")
+      ParameterBuilder.begin<String>("MESSAGE")
         .validatorHandler(ParameterValidators.STRING_VALIDATOR)
         .required()
         .varargs()
@@ -29,7 +28,7 @@ fun createGlobalChatCommand(): Command<LocalUserPerformer> {
         ?: throw CommandException("&cBłąd&8: Nie jesteś w grze.")
 
       val name: String = performer.name
-      val textLine: String = parameters.joinToString(" ")
+      val textLine: String = (parameters[0] as Array<*>).joinToString(" ") { it as String }
 
       localGame.sendMessage("&7[&6G&7] &6$name&7: &f$textLine")
     }

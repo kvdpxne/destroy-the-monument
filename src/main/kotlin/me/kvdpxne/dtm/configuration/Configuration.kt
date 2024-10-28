@@ -6,6 +6,10 @@ object Configuration {
 
   val MONUMENT_TYPE = Material.OBSIDIAN
 
+  const val TRACE_MESSAGES_IN_GAME = true
+
+  const val TRACE_GLOBAL_MESSAGES_IN_GAME = true
+
   const val REVIVAL_PLAYER_DELAY = 22L
 
   const val GAME_END_DELAY = 20

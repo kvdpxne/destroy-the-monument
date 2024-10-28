@@ -277,6 +277,18 @@ class LocalGameImpl(
     return null
   }
 
+  override fun findTeammateTeamByHostage(
+    hostage: LocalUser
+  ): Pair<LocalTeam, Teammate>? {
+    for (localTeam: LocalTeam in this._teams.values) {
+      val teammate: Teammate? = localTeam.getTeammate(hostage)
+      if (null != teammate) {
+        return Pair(localTeam, teammate)
+      }
+    }
+    return null
+  }
+
   /**
    * Checks if the given [user] is in the game.
    */

@@ -76,6 +76,9 @@ interface LocalGame : Game<LocalTeam>, Communicative {
   val isRunning: Boolean
     get() = GameStates.RUNNING == this.state
 
+  val isEnding: Boolean
+    get() = GameStates.ENDING == this.state
+
   /**
    * The game is in the process of stopping.
    *
@@ -134,6 +137,10 @@ interface LocalGame : Game<LocalTeam>, Communicative {
   fun findTeammateByHostage(
     hostage: LocalUser
   ): Teammate?
+
+  fun findTeammateTeamByHostage(
+    hostage: LocalUser
+  ): Pair<LocalTeam, Teammate>?
 
   /**
    * @since 0.1.0

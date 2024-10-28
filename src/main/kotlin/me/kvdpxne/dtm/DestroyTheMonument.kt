@@ -29,6 +29,7 @@ import me.kvdpxne.dtm.listeners.PlayerRespawnListener
 import me.kvdpxne.dtm.listeners.PlayerToggleFlightListener
 import me.kvdpxne.dtm.listeners.ProjectileHitListener
 import me.kvdpxne.dtm.listeners.WeatherChangeListener
+import me.kvdpxne.dtm.listeners.netty.NettyListenerManager
 import me.kvdpxne.dtm.profession.ProfessionManager
 import me.kvdpxne.dtm.professions.createArcher
 import me.kvdpxne.dtm.professions.createAssassin
@@ -243,6 +244,9 @@ class DestroyTheMonument : JavaPlugin() {
 
       // Dodaje obiekt użytkownika do lokalnej pamięci.
       LocalUserManager.addUser(user)
+
+      //
+      NettyListenerManager.removePlayer(player)
     }
   }
 

@@ -1,5 +1,8 @@
 package me.kvdpxne.dtm.listeners
 
+import java.util.logging.Logger
+import me.kvdpxne.dtm.DestroyTheMonument
+import me.kvdpxne.dtm.configuration.Configuration
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.shared.minecraft.bukkit.cancel
 import me.kvdpxne.dtm.shared.minecraft.bukkit.localUser
@@ -34,13 +37,13 @@ object PlayerChatListener : Listener {
     }
 
     //
-    val user: LocalUser = event.player.localUser ?: return
+    val user: LocalUser = event.player.localUser
 
     //
     val game: LocalGame = user.game ?: return
 
     //
-    if (!game.isRunning || !game.isStopping) {
+    if (!game.isStarting && !game.isRunning) {
       return
     }
 
@@ -65,13 +68,25 @@ object PlayerChatListener : Listener {
     }
 
     //
-    val team: LocalTeam = user.team ?: return
+    val team: Pair<LocalTeam, Teammate> = game.findTeammateTeamByHostage(user)
+      ?: return
 
     //
-    val teammate = user.teammate ?: return
-
     event.cancel()
 
-    team.sendMessage("${this.formatTeammate(teammate)}&7: &f${event.message}")
+    //
+    val message: String = event.message
+
+    //
+    team.first.sendMessage("${this.formatTeammate(team.second)}&7: &f$message")
+
+    if (Configuration.TRACE_MESSAGES_IN_GAME) {
+      val logger: Logger = DestroyTheMonument.instance?.logger ?: return
+
+      val professionName: String = team.second.currentProfession.displayName
+      val teammateName: String = team.second.user.name
+
+      logger.info("[${game.name}] [${team.first.name}] $professionName $teammateName: $message")
+    }
   }
 }
