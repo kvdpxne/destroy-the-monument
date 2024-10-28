@@ -3,9 +3,9 @@ package me.kvdpxne.dtm.user
 import java.util.UUID
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.LocalGame
-import me.kvdpxne.dtm.game.LocalTeam
-import me.kvdpxne.dtm.game.Teammate
 import me.kvdpxne.dtm.profession.Profession
+import me.kvdpxne.dtm.team.LocalTeam
+import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.wallet.Wallet
 
 class LocalUserImpl(

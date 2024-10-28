@@ -1,15 +1,15 @@
 package me.kvdpxne.dtm.commands
 
+import me.kvdpxne.dtm.arena.Arena
+import me.kvdpxne.dtm.arena.ArenaService
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.configuration.Configuration
-import me.kvdpxne.dtm.game.Arena
-import me.kvdpxne.dtm.game.ArenaService
-import me.kvdpxne.dtm.game.RevivalPositionImpl
-import me.kvdpxne.dtm.game.Team
-import me.kvdpxne.dtm.game.TeamService
+import me.kvdpxne.dtm.position.RevivalPositionImpl
+import me.kvdpxne.dtm.team.Team
+import me.kvdpxne.dtm.team.TeamService
 import me.kvdpxne.dtm.user.LocalUserPerformer
 import org.bukkit.Location
 

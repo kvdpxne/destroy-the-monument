@@ -1,8 +1,8 @@
 package me.kvdpxne.dtm.data.repositories
 
 import java.util.UUID
-import me.kvdpxne.dtm.game.RevivalPosition
-import me.kvdpxne.dtm.game.Team
+import me.kvdpxne.dtm.position.RevivalPosition
+import me.kvdpxne.dtm.team.Team
 
 /**
  * @since 0.1.0

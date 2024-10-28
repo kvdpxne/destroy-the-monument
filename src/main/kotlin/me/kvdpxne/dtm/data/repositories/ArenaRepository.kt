@@ -1,8 +1,8 @@
 package me.kvdpxne.dtm.data.repositories
 
 import java.util.UUID
-import me.kvdpxne.dtm.game.Arena
-import me.kvdpxne.dtm.game.ArenaMap
+import me.kvdpxne.dtm.arena.Arena
+import me.kvdpxne.dtm.arena.ArenaMap
 
 /**
  * @since 0.1.0

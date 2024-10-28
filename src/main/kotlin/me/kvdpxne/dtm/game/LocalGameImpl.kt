@@ -2,6 +2,7 @@ package me.kvdpxne.dtm.game
 
 import java.util.UUID
 import me.kvdpxne.dtm.DestroyTheMonument
+import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.configuration.Configuration
 import me.kvdpxne.dtm.listeners.netty.NettyListenerManager
 import me.kvdpxne.dtm.scoreboard.createServerScoreboard
@@ -12,6 +13,9 @@ import me.kvdpxne.dtm.shared.minecraft.bukkit.cancelTask
 import me.kvdpxne.dtm.shared.minecraft.bukkit.equipB
 import me.kvdpxne.dtm.shared.minecraft.bukkit.reset
 import me.kvdpxne.dtm.shared.minecraft.bukkit.toLocation
+import me.kvdpxne.dtm.team.LocalTeam
+import me.kvdpxne.dtm.team.Teammate
+import me.kvdpxne.dtm.team.TeammateImpl
 import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.Bukkit
 import org.bukkit.Location

@@ -2,13 +2,13 @@ package me.kvdpxne.dtm.listeners
 
 import me.kvdpxne.dtm.configuration.Configuration
 import me.kvdpxne.dtm.game.LocalGame
-import me.kvdpxne.dtm.game.LocalTeam
-import me.kvdpxne.dtm.game.Teammate
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.shared.minecraft.bukkit.localUser
 import me.kvdpxne.dtm.shared.minecraft.bukkit.reset
 import me.kvdpxne.dtm.shared.minecraft.bukkit.runSynchronousDelayedTask
 import me.kvdpxne.dtm.shared.minecraft.bukkit.toLocation
+import me.kvdpxne.dtm.team.LocalTeam
+import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority

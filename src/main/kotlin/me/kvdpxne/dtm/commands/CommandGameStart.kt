@@ -7,7 +7,7 @@ import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.LocalGame
-import me.kvdpxne.dtm.game.LocalTeam
+import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
 object CommandGameStart {

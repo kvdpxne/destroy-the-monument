@@ -4,13 +4,13 @@ import java.util.UUID
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.mapNotNull
+import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.data.repositories.GameArenasRepository
 import me.kvdpxne.dtm.data.sources.DatabasesConfiguration
 import me.kvdpxne.dtm.data.tables.GameArenasTable
 import me.kvdpxne.dtm.data.transactions.concurrentTransaction
-import me.kvdpxne.dtm.game.Arena
 import me.kvdpxne.dtm.game.Game
-import me.kvdpxne.dtm.game.Team
+import me.kvdpxne.dtm.team.Team
 import org.jetbrains.exposed.sql.ISqlExpressionBuilder
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq

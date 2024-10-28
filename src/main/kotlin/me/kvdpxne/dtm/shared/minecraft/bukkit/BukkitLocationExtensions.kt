@@ -1,10 +1,10 @@
 package me.kvdpxne.dtm.shared.minecraft.bukkit
 
-import me.kvdpxne.dtm.shared.basics.position.BaseBlockPosition
-import me.kvdpxne.dtm.shared.basics.position.BaseEntityPosition
-import me.kvdpxne.dtm.shared.basics.position.BlockPosition
-import me.kvdpxne.dtm.shared.basics.position.EntityPosition
-import me.kvdpxne.dtm.shared.basics.toWorld
+import me.kvdpxne.dtm.position.BaseBlockPosition
+import me.kvdpxne.dtm.position.BaseEntityPosition
+import me.kvdpxne.dtm.position.BlockPosition
+import me.kvdpxne.dtm.position.EntityPosition
+import me.kvdpxne.dtm.position.toWorld
 import org.bukkit.Location
 import org.bukkit.World
 

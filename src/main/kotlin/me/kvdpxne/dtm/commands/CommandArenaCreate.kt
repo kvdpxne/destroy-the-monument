@@ -4,9 +4,9 @@ import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
-import me.kvdpxne.dtm.game.Arena
-import me.kvdpxne.dtm.game.ArenaService
-import me.kvdpxne.dtm.game.ArenaImpl
+import me.kvdpxne.dtm.arena.Arena
+import me.kvdpxne.dtm.arena.ArenaService
+import me.kvdpxne.dtm.arena.ArenaImpl
 
 /**
  * @since 0.1.0

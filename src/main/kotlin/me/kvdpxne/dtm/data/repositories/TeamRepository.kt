@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.data.repositories
 
 import java.util.UUID
-import me.kvdpxne.dtm.game.Team
+import me.kvdpxne.dtm.team.Team
 
 interface TeamRepository {
 

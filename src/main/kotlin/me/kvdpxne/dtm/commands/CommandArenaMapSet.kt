@@ -6,10 +6,9 @@ import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.configuration.Configuration
-import me.kvdpxne.dtm.game.Arena
-import me.kvdpxne.dtm.game.ArenaService
-import me.kvdpxne.dtm.game.ArenaImpl
-import me.kvdpxne.dtm.game.ArenaMapImpl
+import me.kvdpxne.dtm.arena.Arena
+import me.kvdpxne.dtm.arena.ArenaService
+import me.kvdpxne.dtm.arena.ArenaMapImpl
 import me.kvdpxne.dtm.shared.WorldLoaderHelper
 import org.bukkit.World
 

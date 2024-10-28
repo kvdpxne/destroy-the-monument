@@ -2,7 +2,7 @@ package me.kvdpxne.dtm.listeners
 
 import me.kvdpxne.dtm.configuration.Configuration
 import me.kvdpxne.dtm.game.LocalGame
-import me.kvdpxne.dtm.game.RevivalPosition
+import me.kvdpxne.dtm.position.RevivalPosition
 import me.kvdpxne.dtm.shared.minecraft.bukkit.cancel
 import me.kvdpxne.dtm.shared.minecraft.bukkit.hasInventory
 import me.kvdpxne.dtm.shared.minecraft.bukkit.isMonument

@@ -4,10 +4,10 @@ import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
-import me.kvdpxne.dtm.game.GameImpl
 import me.kvdpxne.dtm.game.Game
+import me.kvdpxne.dtm.game.GameImpl
 import me.kvdpxne.dtm.game.GameService
-import me.kvdpxne.dtm.game.Team
+import me.kvdpxne.dtm.team.Team
 
 /**
  * @since 0.1.0

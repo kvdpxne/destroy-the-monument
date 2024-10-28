@@ -1,14 +1,11 @@
 package me.kvdpxne.dtm.listeners
 
+import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.colorize
 import me.kvdpxne.dtm.configuration.Configuration
-import me.kvdpxne.dtm.game.Arena
 import me.kvdpxne.dtm.game.LocalGame
-import me.kvdpxne.dtm.game.LocalTeam
-import me.kvdpxne.dtm.game.MonumentPosition
-import me.kvdpxne.dtm.game.RevivalPosition
-import me.kvdpxne.dtm.game.Team
-import me.kvdpxne.dtm.game.Teammate
+import me.kvdpxne.dtm.position.MonumentPosition
+import me.kvdpxne.dtm.position.RevivalPosition
 import me.kvdpxne.dtm.scoreboard.updateFirstMonumentCounter
 import me.kvdpxne.dtm.scoreboard.updateSecondMonumentCounter
 import me.kvdpxne.dtm.shared.ItemsClipboard
@@ -23,6 +20,9 @@ import me.kvdpxne.dtm.shared.minecraft.bukkit.isRich
 import me.kvdpxne.dtm.shared.minecraft.bukkit.localUser
 import me.kvdpxne.dtm.shared.minecraft.bukkit.reset
 import me.kvdpxne.dtm.shared.minecraft.bukkit.runSynchronousDelayedTask
+import me.kvdpxne.dtm.team.LocalTeam
+import me.kvdpxne.dtm.team.Team
+import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.Location
 import org.bukkit.block.Block

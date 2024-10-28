@@ -1,8 +1,8 @@
 package me.kvdpxne.dtm.data.repositories
 
 import java.util.UUID
-import me.kvdpxne.dtm.game.MonumentPosition
-import me.kvdpxne.dtm.game.Team
+import me.kvdpxne.dtm.position.MonumentPosition
+import me.kvdpxne.dtm.team.Team
 
 /**
  * A repository interface for managing monument positions in a game.

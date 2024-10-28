@@ -1,7 +1,10 @@
 package me.kvdpxne.dtm.game
 
 import java.util.UUID
+import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.shared.ancillary.Communicative
+import me.kvdpxne.dtm.team.LocalTeam
+import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.user.LocalUser
 
 /**

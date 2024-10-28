@@ -4,8 +4,8 @@ import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.configuration.Configuration
-import me.kvdpxne.dtm.game.Teammate
 import me.kvdpxne.dtm.profession.Ability
+import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
 /**

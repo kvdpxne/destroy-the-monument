@@ -9,7 +9,7 @@ import me.kvdpxne.dtm.data.sources.DatabasesConfiguration
 import me.kvdpxne.dtm.data.tables.GameTeamsTable
 import me.kvdpxne.dtm.data.transactions.concurrentTransaction
 import me.kvdpxne.dtm.game.Game
-import me.kvdpxne.dtm.game.Team
+import me.kvdpxne.dtm.team.Team
 import org.jetbrains.exposed.sql.ISqlExpressionBuilder
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq

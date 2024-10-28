@@ -1,6 +1,8 @@
 package me.kvdpxne.dtm.game
 
+import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.shared.ancillary.Buildable
+import me.kvdpxne.dtm.team.Team
 
 class GameBuilder : Buildable<Game<*>> {
 

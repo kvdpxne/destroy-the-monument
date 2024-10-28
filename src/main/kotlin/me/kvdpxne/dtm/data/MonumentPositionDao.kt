@@ -6,11 +6,11 @@ import me.kvdpxne.dtm.data.sources.DatabasesConfiguration
 import me.kvdpxne.dtm.data.tables.MonumentPositionTable
 import me.kvdpxne.dtm.data.tables.TeamTable
 import me.kvdpxne.dtm.data.transactions.concurrentTransaction
-import me.kvdpxne.dtm.game.MonumentPosition
-import me.kvdpxne.dtm.game.MonumentPositionImpl
-import me.kvdpxne.dtm.game.Team
-import me.kvdpxne.dtm.game.TeamColors
-import me.kvdpxne.dtm.game.TeamImpl
+import me.kvdpxne.dtm.position.MonumentPosition
+import me.kvdpxne.dtm.position.MonumentPositionImpl
+import me.kvdpxne.dtm.team.Team
+import me.kvdpxne.dtm.team.TeamColors
+import me.kvdpxne.dtm.team.TeamImpl
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq

@@ -1,8 +1,8 @@
 package me.kvdpxne.dtm.listeners
 
 import me.kvdpxne.dtm.game.LocalGame
-import me.kvdpxne.dtm.game.LocalTeam
 import me.kvdpxne.dtm.shared.minecraft.bukkit.localUser
+import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.GameMode
 import org.bukkit.entity.Player

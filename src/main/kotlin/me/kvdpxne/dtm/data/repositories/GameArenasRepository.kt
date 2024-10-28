@@ -2,9 +2,9 @@ package me.kvdpxne.dtm.data.repositories
 
 import java.util.UUID
 import kotlinx.coroutines.flow.Flow
-import me.kvdpxne.dtm.game.Arena
+import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.game.Game
-import me.kvdpxne.dtm.game.Team
+import me.kvdpxne.dtm.team.Team
 
 /**
  * @since 0.1.0

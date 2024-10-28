@@ -1,10 +1,10 @@
 package me.kvdpxne.dtm.listeners.netty
 
 import me.kvdpxne.dtm.game.LocalGame
-import me.kvdpxne.dtm.game.Teammate
 import me.kvdpxne.dtm.gui.createProfessionSelectionGui
 import me.kvdpxne.dtm.shared.minecraft.bukkit.localUser
 import me.kvdpxne.dtm.shared.minecraft.bukkit.resetExperienceBar
+import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.user.LocalUser
 import net.minecraft.server.v1_7_R4.PacketPlayInBlockDig
 import org.bukkit.entity.Player

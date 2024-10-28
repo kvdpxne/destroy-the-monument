@@ -3,13 +3,13 @@ package me.kvdpxne.dtm.gui
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.LocalGame
-import me.kvdpxne.dtm.game.LocalTeam
 import me.kvdpxne.dtm.profession.ProfessionManager
 import me.kvdpxne.dtm.shared.ItemsClipboard
 import me.kvdpxne.dtm.shared.minecraft.bukkit.ItemBuilder
 import me.kvdpxne.dtm.shared.minecraft.bukkit.equipB
 import me.kvdpxne.dtm.shared.minecraft.bukkit.reset
 import me.kvdpxne.dtm.shared.minecraft.bukkit.toBuilder
+import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.Material
 import org.bukkit.entity.Player

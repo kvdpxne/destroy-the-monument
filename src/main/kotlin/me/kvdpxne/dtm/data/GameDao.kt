@@ -4,14 +4,14 @@ import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.data.repositories.GameRepository
 import me.kvdpxne.dtm.data.sources.DatabasesConfiguration
 import me.kvdpxne.dtm.data.tables.GameTable
 import me.kvdpxne.dtm.data.transactions.concurrentTransaction
-import me.kvdpxne.dtm.game.Arena
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameImpl
-import me.kvdpxne.dtm.game.Team
+import me.kvdpxne.dtm.team.Team
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.ResultRow

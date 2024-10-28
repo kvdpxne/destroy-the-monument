@@ -1,8 +1,10 @@
 package me.kvdpxne.dtm.game
 
 import java.util.UUID
+import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.shared.ancillary.Identifiable
 import me.kvdpxne.dtm.shared.ancillary.Nameable
+import me.kvdpxne.dtm.team.Team
 
 /**
  * @since 0.1.0

@@ -1,20 +1,19 @@
 package me.kvdpxne.dtm.listeners
 
 import kotlin.random.Random
+import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.configuration.Configuration
-import me.kvdpxne.dtm.game.Arena
 import me.kvdpxne.dtm.game.LocalGame
-import me.kvdpxne.dtm.game.LocalTeam
-import me.kvdpxne.dtm.game.Teammate
 import me.kvdpxne.dtm.profession.Ability
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.shared.minecraft.bukkit.localUser
+import me.kvdpxne.dtm.team.LocalTeam
+import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.entity.Arrow
-import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener

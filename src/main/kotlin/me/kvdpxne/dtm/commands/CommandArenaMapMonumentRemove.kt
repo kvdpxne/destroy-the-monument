@@ -1,15 +1,15 @@
 package me.kvdpxne.dtm.commands
 
+import me.kvdpxne.dtm.arena.Arena
+import me.kvdpxne.dtm.arena.ArenaService
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.configuration.Configuration
-import me.kvdpxne.dtm.game.Arena
-import me.kvdpxne.dtm.game.ArenaService
-import me.kvdpxne.dtm.game.MonumentPosition
-import me.kvdpxne.dtm.game.Team
-import me.kvdpxne.dtm.shared.basics.position.BlockPosition
+import me.kvdpxne.dtm.position.BlockPosition
+import me.kvdpxne.dtm.position.MonumentPosition
+import me.kvdpxne.dtm.team.Team
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
 /**
@@ -26,8 +26,10 @@ fun createArenaMapMonumentRemoveCommand(): Command<LocalUserPerformer> {
     .handler { performer, parameters ->
       //
       val position: BlockPosition = performer.user.cache.selectedMonumentPosition
-        ?: throw CommandException("&cBŁĄD: &7Nie wybrano zaznaczono żadnego bloku monumentu.\n" +
-          "&eINFO: &7Użyj &a/dtm wand &7aby móc zaznaczyć blok monumentu.")
+        ?: throw CommandException(
+          "&cBŁĄD: &7Nie wybrano zaznaczono żadnego bloku monumentu.\n" +
+            "&eINFO: &7Użyj &a/dtm wand &7aby móc zaznaczyć blok monumentu."
+        )
 
       // Unikatowa nazwa obiektu "Arena".
       val arenaName: String = parameters[0] as String

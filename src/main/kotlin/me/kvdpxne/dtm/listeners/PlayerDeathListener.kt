@@ -1,17 +1,17 @@
 package me.kvdpxne.dtm.listeners
 
+import me.kvdpxne.dtm.arena.Arena
+import me.kvdpxne.dtm.arena.ArenaException
 import me.kvdpxne.dtm.colorize
 import me.kvdpxne.dtm.configuration.Configuration
-import me.kvdpxne.dtm.game.Arena
-import me.kvdpxne.dtm.game.ArenaException
 import me.kvdpxne.dtm.game.LocalGame
-import me.kvdpxne.dtm.game.Teammate
 import me.kvdpxne.dtm.scoreboard.updateCoinCount
 import me.kvdpxne.dtm.scoreboard.updateDeathCount
 import me.kvdpxne.dtm.scoreboard.updateKillCount
 import me.kvdpxne.dtm.shared.minecraft.bukkit.localUser
 import me.kvdpxne.dtm.shared.minecraft.bukkit.respawn
 import me.kvdpxne.dtm.shared.minecraft.bukkit.runSynchronousDelayedTask
+import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler

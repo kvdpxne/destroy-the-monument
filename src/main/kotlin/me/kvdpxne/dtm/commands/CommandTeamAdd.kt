@@ -8,8 +8,8 @@ import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.configuration.Configuration
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameService
-import me.kvdpxne.dtm.game.Team
-import me.kvdpxne.dtm.game.TeamService
+import me.kvdpxne.dtm.team.Team
+import me.kvdpxne.dtm.team.TeamService
 
 /**
  * @since 0.1.0

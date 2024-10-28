@@ -1,17 +1,17 @@
 package me.kvdpxne.dtm.commands
 
+import me.kvdpxne.dtm.arena.Arena
+import me.kvdpxne.dtm.arena.ArenaService
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.configuration.Configuration
-import me.kvdpxne.dtm.game.Arena
-import me.kvdpxne.dtm.game.ArenaService
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.GameService
-import me.kvdpxne.dtm.game.Team
+import me.kvdpxne.dtm.team.Team
 
 /**
  * @since 0.1.0
