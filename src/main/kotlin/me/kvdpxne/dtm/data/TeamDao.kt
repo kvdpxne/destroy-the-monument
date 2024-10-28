@@ -9,7 +9,9 @@ import me.kvdpxne.dtm.game.Team
 import me.kvdpxne.dtm.game.TeamColors
 import me.kvdpxne.dtm.game.TeamImpl
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.SqlExpressionBuilder
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.lowerCase
 
@@ -58,21 +60,27 @@ object TeamDao : TeamRepository {
     }
   }
 
+  private suspend fun findTeamBy(
+    predicate: SqlExpressionBuilder.() -> Op<Boolean>
+  ): Team? {
+    return concurrentTransaction(DatabasesConfiguration.main) {
+      TeamTable
+        .select(FIELDS)
+        .where(predicate)
+        .firstNotNullOfOrNull { row: ResultRow ->
+          row.toTeam()
+        }
+    }
+  }
+
   /**
    * @since 0.1.0
    */
   override suspend fun findTeamByIdentifier(
     identifier: UUID
   ): Team? {
-    return concurrentTransaction(DatabasesConfiguration.main) {
-      TeamTable
-        .select(FIELDS)
-        .where {
-          TeamTable.identifier eq identifier
-        }
-        .firstNotNullOfOrNull { row: ResultRow ->
-          row.toTeam()
-        }
+    return this.findTeamBy {
+      TeamTable.identifier eq identifier
     }
   }
 
@@ -80,20 +88,12 @@ object TeamDao : TeamRepository {
     name: String,
     ignoreCase: Boolean
   ): Team? {
-    return concurrentTransaction(DatabasesConfiguration.main) {
-      TeamTable
-        .select(FIELDS)
-        .where {
-          if (ignoreCase) {
-            TeamTable.name.lowerCase() eq name.lowercase()
-          } else {
-            TeamTable.name eq name
-          }
-        }
-        .firstOrNull()
-        ?.let { row: ResultRow ->
-          row.toTeam()
-        }
+    return this.findTeamBy {
+      if (ignoreCase) {
+        TeamTable.name.lowerCase() eq name.lowercase()
+      } else {
+        TeamTable.name eq name
+      }
     }
   }
 

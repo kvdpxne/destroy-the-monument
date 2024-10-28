@@ -147,10 +147,9 @@ object UserDao : UserRepository {
         .innerJoin(UserWalletTable)
         .select(fields)
         .where(predicate)
-        .map { row: ResultRow ->
+        .firstNotNullOfOrNull { row: ResultRow ->
           row.toUser()
         }
-        .firstOrNull()
     }
   }
 

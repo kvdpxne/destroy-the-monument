@@ -100,8 +100,7 @@ object RevivalPositionDao : RevivalPositionRepository {
         .where {
           RevivalPositionTable.identifier eq identifier
         }
-        .firstOrNull()
-        ?.let { row: ResultRow ->
+        .firstNotNullOfOrNull { row: ResultRow ->
           row.toRevivalPosition()
         }
     }

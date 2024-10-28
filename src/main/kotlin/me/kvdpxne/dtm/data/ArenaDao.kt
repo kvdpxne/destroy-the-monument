@@ -101,10 +101,9 @@ object ArenaDao : ArenaRepository {
       ArenaTable
         .select(FIELDS)
         .where(predicate)
-        .map { row: ResultRow ->
+        .firstNotNullOfOrNull { row: ResultRow ->
           row.toArena()
         }
-        .firstOrNull()
     }
   }
 

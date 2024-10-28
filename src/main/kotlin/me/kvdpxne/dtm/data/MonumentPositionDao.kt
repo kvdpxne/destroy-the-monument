@@ -93,8 +93,7 @@ object MonumentPositionDao : MonumentPositionRepository {
         .where {
           MonumentPositionTable.identifier eq identifier
         }
-        .firstOrNull()
-        ?.let { row: ResultRow ->
+        .firstNotNullOfOrNull { row: ResultRow ->
           row.toMonumentPosition()
         }
     }

@@ -93,10 +93,9 @@ object GameDao : GameRepository {
       GameTable
         .select(FIELDS)
         .where(predicate)
-        .map { row: ResultRow ->
+        .firstNotNullOfOrNull { row: ResultRow ->
           row.toGame()
         }
-        .firstOrNull()
     }
   }
 
