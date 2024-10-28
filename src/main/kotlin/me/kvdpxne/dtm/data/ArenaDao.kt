@@ -71,7 +71,7 @@ object ArenaDao : ArenaRepository {
       launch {
         ArenaMonumentPositionsDao
           .findArenaMonumentPositionsByArenaIdentifier(identifier)
-          .forEach { monumentPosition: MonumentPosition<Team> ->
+          .collect { monumentPosition: MonumentPosition<Team> ->
             arena.addPositionMonument(monumentPosition)
           }
       }
@@ -79,7 +79,7 @@ object ArenaDao : ArenaRepository {
       launch {
         ArenaRevivalPositionsDao
           .findArenaRevivalPositionsByArenaIdentifier(identifier)
-          .forEach { revivalPosition: RevivalPosition<Team> ->
+          .collect { revivalPosition: RevivalPosition<Team> ->
             arena.addRevivalPosition(revivalPosition)
           }
       }

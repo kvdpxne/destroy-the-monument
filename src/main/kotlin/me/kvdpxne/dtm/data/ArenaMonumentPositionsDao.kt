@@ -1,6 +1,9 @@
 package me.kvdpxne.dtm.data
 
 import java.util.UUID
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.mapNotNull
 import me.kvdpxne.dtm.data.repositories.ArenaMonumentPositionsRepository
 import me.kvdpxne.dtm.data.sources.DatabasesConfiguration
 import me.kvdpxne.dtm.data.tables.ArenaMonumentPositionsTable
@@ -14,52 +17,44 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.statements.InsertStatement
 
 /**
  * @since 0.1.0
  */
 object ArenaMonumentPositionsDao : ArenaMonumentPositionsRepository {
 
-  /**
-   * @since 0.1.0
-   */
   override suspend fun findArenaMonumentPositionsByArenaIdentifier(
     identifier: UUID
-  ): List<MonumentPosition<Team>> {
+  ): Flow<MonumentPosition<Team>> {
     return concurrentTransaction(DatabasesConfiguration.main) {
       ArenaMonumentPositionsTable
         .select(ArenaMonumentPositionsTable.monumentPositionIdentifier)
         .where {
           ArenaMonumentPositionsTable.arenaIdentifier eq identifier
         }
+        .asFlow()
         .mapNotNull { row: ResultRow ->
           MonumentPositionDao.findMonumentPositionByIdentifier(
             row[ArenaMonumentPositionsTable.monumentPositionIdentifier]
           )
         }
-        .toList()
     }
   }
 
-  /**
-   * @since 0.1.0
-   */
   override suspend fun insertArenaMonumentPosition(
     arena: Arena,
     monumentPosition: MonumentPosition<Team>
   ) {
     concurrentTransaction(DatabasesConfiguration.main) {
       ArenaMonumentPositionsTable
-        .insert {
+        .insert { it: InsertStatement<Number> ->
           it[this.arenaIdentifier] = arena.identifier
           it[this.monumentPositionIdentifier] = monumentPosition.identifier
         }
     }
   }
 
-  /**
-   * @since 0.1.0
-   */
   override suspend fun deleteArenaMonumentPosition(
     arena: Arena,
     monumentPosition: MonumentPosition<Team>
@@ -72,9 +67,6 @@ object ArenaMonumentPositionsDao : ArenaMonumentPositionsRepository {
     }
   }
 
-  /**
-   * @since 0.1.0
-   */
   override suspend fun deleteArenaMonumentPositions(
     arena: Arena
   ) {

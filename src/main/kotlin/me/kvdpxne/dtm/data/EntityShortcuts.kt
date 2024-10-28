@@ -1,4 +1,4 @@
-  package me.kvdpxne.dtm.data
+package me.kvdpxne.dtm.data
 
 /**
  * Type alias for `EntityFieldNames`, providing a shorter, more concise name.

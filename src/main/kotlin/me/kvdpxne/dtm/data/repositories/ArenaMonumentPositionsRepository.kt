@@ -1,6 +1,7 @@
 package me.kvdpxne.dtm.data.repositories
 
 import java.util.UUID
+import kotlinx.coroutines.flow.Flow
 import me.kvdpxne.dtm.game.Arena
 import me.kvdpxne.dtm.game.MonumentPosition
 import me.kvdpxne.dtm.game.Team
@@ -17,7 +18,7 @@ interface ArenaMonumentPositionsRepository {
    */
   suspend fun findArenaMonumentPositionsByArenaIdentifier(
     identifier: UUID
-  ): List<MonumentPosition<Team>>
+  ): Flow<MonumentPosition<Team>>
 
   /**
    * @param arena

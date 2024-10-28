@@ -1,6 +1,7 @@
 package me.kvdpxne.dtm.data.repositories
 
 import java.util.UUID
+import kotlinx.coroutines.flow.Flow
 import me.kvdpxne.dtm.game.Arena
 import me.kvdpxne.dtm.game.RevivalPosition
 import me.kvdpxne.dtm.game.Team
@@ -17,7 +18,7 @@ interface ArenaRevivalPositionsRepository {
    */
   suspend fun findArenaRevivalPositionsByArenaIdentifier(
     identifier: UUID
-  ): List<RevivalPosition<Team>>
+  ): Flow<RevivalPosition<Team>>
 
   /**
    * @param arena

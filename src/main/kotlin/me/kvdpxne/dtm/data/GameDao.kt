@@ -1,6 +1,7 @@
 package me.kvdpxne.dtm.data
 
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import me.kvdpxne.dtm.data.repositories.GameRepository
@@ -46,16 +47,14 @@ object GameDao : GameRepository {
     val name: String = this[GameTable.name]
 
     //
-    val teams: MutableMap<UUID, Team> = mutableMapOf()
-
-    //
-    val arenas: MutableMap<UUID, Arena> = mutableMapOf()
+    val teams: MutableMap<UUID, Team> = ConcurrentHashMap(8)
+    val arenas: MutableMap<UUID, Arena> = ConcurrentHashMap(32)
 
     runBlocking {
       launch {
         GameTeamsDao
           .findGameTeamsByGameIdentifier(identifier)
-          .forEach { team: Team ->
+          .collect { team: Team ->
             teams[team.identifier] = team
           }
       }
@@ -63,7 +62,7 @@ object GameDao : GameRepository {
       launch {
         GameArenasDao
           .findGameArenasByGameIdentifier(identifier)
-          .forEach { arena: Arena ->
+          .collect { arena: Arena ->
             arenas[arena.identifier] = arena
           }
       }

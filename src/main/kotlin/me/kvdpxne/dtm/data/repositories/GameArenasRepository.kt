@@ -1,6 +1,7 @@
 package me.kvdpxne.dtm.data.repositories
 
 import java.util.UUID
+import kotlinx.coroutines.flow.Flow
 import me.kvdpxne.dtm.game.Arena
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.Team
@@ -17,7 +18,7 @@ interface GameArenasRepository {
    */
   suspend fun findGameArenasByGameIdentifier(
     identifier: UUID
-  ): List<Arena>
+  ): Flow<Arena>
 
   /**
    * @param game
@@ -39,5 +40,14 @@ interface GameArenasRepository {
   suspend fun deleteGameArena(
     game: Game<Team>,
     arena: Arena
+  )
+
+  /**
+   * @param game
+   *
+   * @since 0.1.0
+   */
+  suspend fun deleteGameArenas(
+    game: Game<Team>
   )
 }

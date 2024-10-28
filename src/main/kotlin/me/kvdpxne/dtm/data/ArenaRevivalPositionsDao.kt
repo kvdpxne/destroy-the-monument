@@ -1,6 +1,9 @@
 package me.kvdpxne.dtm.data
 
 import java.util.UUID
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.mapNotNull
 import me.kvdpxne.dtm.data.repositories.ArenaRevivalPositionsRepository
 import me.kvdpxne.dtm.data.sources.DatabasesConfiguration
 import me.kvdpxne.dtm.data.tables.ArenaRevivalPositionsTable
@@ -14,52 +17,44 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.statements.InsertStatement
 
 /**
  * @since 0.1.0
  */
 object ArenaRevivalPositionsDao : ArenaRevivalPositionsRepository {
 
-  /**
-   * @since 0.1.0
-   */
   override suspend fun findArenaRevivalPositionsByArenaIdentifier(
     identifier: UUID
-  ): List<RevivalPosition<Team>> {
+  ): Flow<RevivalPosition<Team>> {
     return concurrentTransaction(DatabasesConfiguration.main) {
       ArenaRevivalPositionsTable
         .select(ArenaRevivalPositionsTable.revivalPositionIdentifier)
         .where {
           ArenaRevivalPositionsTable.arenaIdentifier eq identifier
         }
+        .asFlow()
         .mapNotNull { row: ResultRow ->
           RevivalPositionDao.findRevivalPositionByIdentifier(
             row[ArenaRevivalPositionsTable.revivalPositionIdentifier]
           )
         }
-        .toList()
     }
   }
 
-  /**
-   * @since 0.1.0
-   */
   override suspend fun insertArenaRevivalPosition(
     arena: Arena,
     revivalPosition: RevivalPosition<Team>
   ) {
     concurrentTransaction(DatabasesConfiguration.main) {
       ArenaRevivalPositionsTable
-        .insert {
+        .insert { it: InsertStatement<Number> ->
           it[this.arenaIdentifier] = arena.identifier
           it[this.revivalPositionIdentifier] = revivalPosition.identifier
         }
     }
   }
 
-  /**
-   * @since 0.1.0
-   */
   override suspend fun deleteArenaRevivalPosition(
     arena: Arena,
     revivalPosition: RevivalPosition<Team>
@@ -72,9 +67,6 @@ object ArenaRevivalPositionsDao : ArenaRevivalPositionsRepository {
     }
   }
 
-  /**
-   * @since 0.1.0
-   */
   override suspend fun deleteArenaRevivalPositions(
     arena: Arena
   ) {
