@@ -2,8 +2,8 @@ package me.kvdpxne.dtm.team
 
 import java.util.UUID
 import me.kvdpxne.dtm.game.Game
-import me.kvdpxne.dtm.shared.ancillary.Identifiable
-import me.kvdpxne.dtm.shared.ancillary.Nameable
+import me.kvdpxne.dtm.shared.Identifiable
+import me.kvdpxne.dtm.shared.Nameable
 import org.bukkit.ChatColor
 import org.bukkit.DyeColor
 

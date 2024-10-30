@@ -1,12 +1,13 @@
 package me.kvdpxne.dtm.listeners
 
-import me.kvdpxne.dtm.shared.ItemsClipboard
-import me.kvdpxne.dtm.shared.minecraft.bukkit.asItem
-import me.kvdpxne.dtm.shared.minecraft.bukkit.cancel
-import me.kvdpxne.dtm.shared.minecraft.bukkit.isArmor
-import me.kvdpxne.dtm.shared.minecraft.bukkit.isIngot
-import me.kvdpxne.dtm.shared.minecraft.bukkit.isTool
-import me.kvdpxne.dtm.shared.minecraft.bukkit.isWeapon
+import me.kvdpxne.dtm.shared.item.ItemsClipboard
+import me.kvdpxne.dtm.shared.material.asItem
+import me.kvdpxne.dtm.shared.event.cancel
+import me.kvdpxne.dtm.shared.item.isArmor
+import me.kvdpxne.dtm.shared.material.isArmor
+import me.kvdpxne.dtm.shared.material.isIngot
+import me.kvdpxne.dtm.shared.material.isTool
+import me.kvdpxne.dtm.shared.material.isWeapon
 import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener

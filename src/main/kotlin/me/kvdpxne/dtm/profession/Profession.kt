@@ -2,10 +2,10 @@ package me.kvdpxne.dtm.profession
 
 import java.util.UUID
 import me.kvdpxne.dtm.gui.SlotItem
-import me.kvdpxne.dtm.shared.minecraft.bukkit.hasDurability
-import me.kvdpxne.dtm.shared.minecraft.bukkit.isLeatherArmor
-import me.kvdpxne.dtm.shared.minecraft.bukkit.runSynchronousDelayedTask
-import me.kvdpxne.dtm.shared.minecraft.bukkit.toBuilder
+import me.kvdpxne.dtm.shared.item.hasDurability
+import me.kvdpxne.dtm.shared.item.isLeatherArmor
+import me.kvdpxne.dtm.shared.task.runSynchronousDelayedTask
+import me.kvdpxne.dtm.shared.item.toBuilder
 import org.bukkit.DyeColor
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack

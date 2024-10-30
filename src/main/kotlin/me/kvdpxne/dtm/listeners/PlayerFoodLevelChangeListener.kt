@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.listeners
 
-import me.kvdpxne.dtm.shared.minecraft.bukkit.localUser
+import me.kvdpxne.dtm.shared.player.localUser
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener

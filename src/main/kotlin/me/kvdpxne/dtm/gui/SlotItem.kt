@@ -1,6 +1,7 @@
 package me.kvdpxne.dtm.gui
 
-import me.kvdpxne.dtm.shared.minecraft.bukkit.toBuilder
+import me.kvdpxne.dtm.shared.item.toBuilder
+import me.kvdpxne.dtm.shared.material.toBuilder
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 

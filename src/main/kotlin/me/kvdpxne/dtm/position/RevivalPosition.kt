@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.position
 
 import java.util.UUID
-import me.kvdpxne.dtm.shared.ancillary.Identifiable
+import me.kvdpxne.dtm.shared.Identifiable
 import me.kvdpxne.dtm.team.Team
 import me.kvdpxne.dtm.team.Teamable
 

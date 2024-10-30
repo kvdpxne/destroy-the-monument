@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.team
 
-import me.kvdpxne.dtm.shared.ancillary.Communicative
+import me.kvdpxne.dtm.shared.Communicative
 import me.kvdpxne.dtm.user.LocalUser
 
 interface LocalTeam : Communicative, Team {

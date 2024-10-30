@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.command
 
-import me.kvdpxne.dtm.shared.ancillary.Communicative
+import me.kvdpxne.dtm.shared.Communicative
 
 interface Performer : Communicative {
 

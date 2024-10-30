@@ -5,9 +5,9 @@ import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.configuration.Configuration
 import me.kvdpxne.dtm.game.LocalGame
-import me.kvdpxne.dtm.shared.minecraft.bukkit.equipA
-import me.kvdpxne.dtm.shared.minecraft.bukkit.moveToLobby
-import me.kvdpxne.dtm.shared.minecraft.bukkit.reset
+import me.kvdpxne.dtm.shared.player.equipA
+import me.kvdpxne.dtm.shared.player.moveToLobby
+import me.kvdpxne.dtm.shared.player.reset
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
 /**

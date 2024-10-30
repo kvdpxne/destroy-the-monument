@@ -4,6 +4,11 @@ import org.bukkit.Material
 
 object Configuration {
 
+  /**
+   *
+   */
+  const val USE_PROTOCOL_LIB = true
+
   val MONUMENT_TYPE = Material.OBSIDIAN
 
   const val TRACE_MESSAGES_IN_GAME = true

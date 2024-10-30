@@ -1,9 +1,9 @@
 package me.kvdpxne.dtm.listeners
 
-import me.kvdpxne.dtm.shared.minecraft.bukkit.equipA
-import me.kvdpxne.dtm.shared.minecraft.bukkit.moveToLobby
-import me.kvdpxne.dtm.shared.minecraft.bukkit.reset
-import me.kvdpxne.dtm.shared.minecraft.bukkit.runSynchronousDelayedTask
+import me.kvdpxne.dtm.shared.player.equipA
+import me.kvdpxne.dtm.shared.player.moveToLobby
+import me.kvdpxne.dtm.shared.player.reset
+import me.kvdpxne.dtm.shared.task.runSynchronousDelayedTask
 import me.kvdpxne.dtm.user.LocalUserManager
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserBuilder

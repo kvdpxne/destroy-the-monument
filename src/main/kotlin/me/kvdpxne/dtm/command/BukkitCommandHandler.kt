@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.command
 
-import me.kvdpxne.dtm.shared.minecraft.bukkit.localUser
+import me.kvdpxne.dtm.shared.player.localUser
 import me.kvdpxne.dtm.user.LocalUserPerformer
 import org.bukkit.command.CommandSender
 import org.bukkit.command.defaults.BukkitCommand

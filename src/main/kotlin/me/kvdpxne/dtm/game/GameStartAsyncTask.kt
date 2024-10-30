@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.game
 
 import me.kvdpxne.dtm.configuration.Configuration
-import me.kvdpxne.dtm.shared.minecraft.bukkit.runSynchronousTask
+import me.kvdpxne.dtm.shared.task.runSynchronousTask
 import org.bukkit.scheduler.BukkitRunnable
 
 /**

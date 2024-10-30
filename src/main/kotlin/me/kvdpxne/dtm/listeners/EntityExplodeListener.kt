@@ -6,10 +6,10 @@ import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.position.RevivalPosition
-import me.kvdpxne.dtm.shared.minecraft.bukkit.cancel
-import me.kvdpxne.dtm.shared.minecraft.bukkit.hasInventory
-import me.kvdpxne.dtm.shared.minecraft.bukkit.isPlant
-import me.kvdpxne.dtm.shared.minecraft.bukkit.isRich
+import me.kvdpxne.dtm.shared.event.cancel
+import me.kvdpxne.dtm.shared.block.hasInventory
+import me.kvdpxne.dtm.shared.block.isPlant
+import me.kvdpxne.dtm.shared.block.isRich
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.World

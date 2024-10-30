@@ -2,16 +2,18 @@ package me.kvdpxne.dtm.game
 
 import java.util.UUID
 import me.kvdpxne.dtm.arena.Arena
-import me.kvdpxne.dtm.shared.ancillary.AbstractIdentifiable
+import me.kvdpxne.dtm.shared.AbstractIdentifiable
 import me.kvdpxne.dtm.shared.debug.Debug
 import me.kvdpxne.dtm.team.Team
 
 /**
- * @param name
- * @param displayName
- * @param teams
- * @param arenas
- * @param identifier
+ * Implementation of the [Game] interface that holds teams and arenas.
+ *
+ * @param name The name of the game.
+ * @param displayName The display name of the game.
+ * @param teams A map of teams associated with their [UUID]s.
+ * @param arenas A map of arenas associated with their [UUID]s.
+ * @param identifier A unique identifier for the game.
  *
  * @since 0.1.0
  */
@@ -26,71 +28,53 @@ open class GameImpl<T : Team>(
 ) : AbstractIdentifiable<UUID>(identifier), Game<T> {
 
   /**
+   * A mutable map holding the teams in the game.
+   *
    * @since 0.1.0
    */
   protected val _teams: MutableMap<UUID, T> = teams.toMutableMap()
 
   /**
+   * A mutable map holding the arenas in the game.
+   *
    * @since 0.1.0
    */
   protected val _arenas: MutableMap<UUID, Arena> = arenas.toMutableMap()
 
-  /**
-   * @since 0.1.0
-   */
   override val teams: Collection<T>
     get() = this._teams.values.toList()
 
-  /**
-   * @since 0.1.0
-   */
   override val arenas: Collection<Arena>
     get() = this._arenas.values.toList()
 
-  /**
-   * @since 0.1.0
-   */
   override val numberOfTeams: Int
     get() = this._teams.size
 
-  /**
-   * @since 0.1.0
-   */
   override val numberOfArenas: Int
     get() = this._arenas.size
 
-  /**
-   * @since 0.1.0
-   */
-  override fun hasTeam(
-    team: T
-  ): Boolean {
+  override fun hasTeam(team: T): Boolean {
     return this._teams.containsValue(team)
   }
 
-  /**
-   * @since 0.1.0
-   */
-  override fun hasArena(
-    arena: Arena
-  ): Boolean {
+  override fun hasArena(arena: Arena): Boolean {
     return this._arenas.containsValue(arena)
   }
 
-  override fun findTeamByIdentifier(
-    identifier: UUID
-  ): T? {
+  override fun findTeamByIdentifier(identifier: UUID): T? {
     return this._teams[identifier]
   }
 
-  override fun findArenaByIdentifier(
-    identifier: UUID
-  ): Arena? {
+  override fun findArenaByIdentifier(identifier: UUID): Arena? {
     return this._arenas[identifier]
   }
 
   /**
-   * @param arena
+   * Adds a team to the game.
+   *
+   * @param team The team to add.
+   * @return `true` if the team was added successfully; `false` if the tea
+   *         already exists.
    *
    * @since 0.1.0
    */
@@ -105,13 +89,17 @@ open class GameImpl<T : Team>(
     this._teams[team.identifier] = team as T
 
     Debug.log {
-      ""
+      "Team ${team.name} added to the game."
     }
     return true
   }
 
   /**
-   * @param arena
+   * Adds an arena to the game.
+   *
+   * @param arena The arena to add.
+   * @return `true` if the arena was added successfully; `false` if the arena
+   *         already exists.
    *
    * @since 0.1.0
    */
@@ -123,12 +111,13 @@ open class GameImpl<T : Team>(
     }
 
     this._arenas[arena.identifier] = arena
+
+    Debug.log {
+      "Arena ${arena.name} added to the game."
+    }
     return true
   }
 
-  /**
-   * @since 0.1.0
-   */
   override fun toLocalGame(): LocalGame {
     return LocalGameImpl(
       //

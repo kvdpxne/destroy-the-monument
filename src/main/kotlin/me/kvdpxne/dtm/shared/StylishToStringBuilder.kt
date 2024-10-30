@@ -1,7 +1,5 @@
 package me.kvdpxne.dtm.shared
 
-import me.kvdpxne.dtm.shared.ancillary.Buildable
-
 /**
  * A utility class for building customizable, stylish `toString` representations of objects.
  *

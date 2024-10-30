@@ -3,7 +3,7 @@ package me.kvdpxne.dtm.listeners
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.LocalGame
-import me.kvdpxne.dtm.shared.minecraft.bukkit.cancel
+import me.kvdpxne.dtm.shared.event.cancel
 import org.bukkit.World
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority

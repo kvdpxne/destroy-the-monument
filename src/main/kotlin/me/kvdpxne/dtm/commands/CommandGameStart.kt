@@ -41,7 +41,7 @@ object CommandGameStart {
           }
 
           val game = performer.user.game
-          startGame(game as LocalGame, performer)
+          startGame(game, performer)
           return@handler
         }
 

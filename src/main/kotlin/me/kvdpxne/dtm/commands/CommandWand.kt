@@ -2,7 +2,7 @@ package me.kvdpxne.dtm.commands
 
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
-import me.kvdpxne.dtm.shared.ItemsClipboard
+import me.kvdpxne.dtm.shared.item.ItemsClipboard
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
 /**

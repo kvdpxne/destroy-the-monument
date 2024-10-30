@@ -1,10 +1,12 @@
 package me.kvdpxne.dtm.commands
 
+import me.kvdpxne.dtm.DestroyTheMonument
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.command.ParameterBuilder
 import me.kvdpxne.dtm.command.ParameterValidators
+import me.kvdpxne.dtm.configuration.Configuration
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
@@ -28,9 +30,17 @@ fun createGlobalChatCommand(): Command<LocalUserPerformer> {
         ?: throw CommandException("&cBłąd&8: Nie jesteś w grze.")
 
       val name: String = performer.name
-      val textLine: String = (parameters[0] as Array<*>).joinToString(" ") { it as String }
+      val message: String = (parameters[0] as Array<*>).joinToString(" ") {
+        it as String
+      }
 
-      localGame.sendMessage("&7[&6G&7] &6$name&7: &f$textLine")
+      localGame.sendMessage("&7[&6G&7] &6$name&7: &f$message")
+
+      if (Configuration.TRACE_GLOBAL_MESSAGES_IN_GAME) {
+        DestroyTheMonument.instance?.logger?.info(
+          "[${localGame.name}] [G] $name: $message"
+        )
+      }
     }
     .build()
 }

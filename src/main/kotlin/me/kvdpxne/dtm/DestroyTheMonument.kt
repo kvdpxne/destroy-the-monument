@@ -1,5 +1,6 @@
 package me.kvdpxne.dtm
 
+import com.comphenix.protocol.ProtocolLibrary
 import me.kvdpxne.dico.Dico
 import me.kvdpxne.dtm.command.CommandManager
 import me.kvdpxne.dtm.commands.createBaseCommand
@@ -40,9 +41,10 @@ import me.kvdpxne.dtm.professions.createMedic
 import me.kvdpxne.dtm.professions.createPyro
 import me.kvdpxne.dtm.professions.createScout
 import me.kvdpxne.dtm.professions.createSpecialist
-import me.kvdpxne.dtm.shared.VoidChunkGenerator
 import me.kvdpxne.dtm.shared.debug.Debug
-import me.kvdpxne.dtm.shared.minecraft.bukkit.BukkitTextFormatter
+import me.kvdpxne.dtm.shared.reflection.Reflection
+import me.kvdpxne.dtm.shared.text.BukkitTextFormatter
+import me.kvdpxne.dtm.shared.world.VoidChunkGenerator
 import me.kvdpxne.dtm.user.LocalUserManager
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserBuilder
@@ -160,6 +162,12 @@ class DestroyTheMonument : JavaPlugin() {
     instance = this
 
     PluginContext.textFormatter = BukkitTextFormatter
+
+    if (Configuration.USE_PROTOCOL_LIB) {
+      ProtocolLibrary.getProtocolManager()
+    } else {
+      Reflection
+    }
 
     try {
       //

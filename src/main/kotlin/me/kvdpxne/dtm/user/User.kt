@@ -2,8 +2,8 @@ package me.kvdpxne.dtm.user
 
 import java.util.UUID
 import me.kvdpxne.dtm.profession.Profession
-import me.kvdpxne.dtm.shared.ancillary.Identifiable
-import me.kvdpxne.dtm.shared.ancillary.Nameable
+import me.kvdpxne.dtm.shared.Identifiable
+import me.kvdpxne.dtm.shared.Nameable
 import me.kvdpxne.dtm.wallet.Wallet
 
 /**

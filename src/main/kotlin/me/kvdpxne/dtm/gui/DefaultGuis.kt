@@ -4,11 +4,12 @@ import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.profession.ProfessionManager
-import me.kvdpxne.dtm.shared.ItemsClipboard
-import me.kvdpxne.dtm.shared.minecraft.bukkit.ItemBuilder
-import me.kvdpxne.dtm.shared.minecraft.bukkit.equipB
-import me.kvdpxne.dtm.shared.minecraft.bukkit.reset
-import me.kvdpxne.dtm.shared.minecraft.bukkit.toBuilder
+import me.kvdpxne.dtm.shared.item.ItemsClipboard
+import me.kvdpxne.dtm.shared.item.ItemBuilder
+import me.kvdpxne.dtm.shared.player.equipB
+import me.kvdpxne.dtm.shared.player.reset
+import me.kvdpxne.dtm.shared.item.toBuilder
+import me.kvdpxne.dtm.shared.material.toBuilder
 import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.Material

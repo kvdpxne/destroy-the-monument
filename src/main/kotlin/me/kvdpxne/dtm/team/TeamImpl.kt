@@ -2,7 +2,7 @@ package me.kvdpxne.dtm.team
 
 import java.util.UUID
 import me.kvdpxne.dtm.game.Game
-import me.kvdpxne.dtm.shared.ancillary.AbstractIdentifiable
+import me.kvdpxne.dtm.shared.AbstractIdentifiable
 
 open class TeamImpl(
   // @formatter:off

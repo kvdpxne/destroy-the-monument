@@ -62,7 +62,7 @@ object NettyListenerManager {
     val channel = (player as CraftPlayer).handle.playerConnection.networkManager.channel
 
     channel.eventLoop().submit {
-      channel.pipeline().remove(player.getName())
+      channel.pipeline().remove("${Constants.NAME}_${player.getName()}")
     }
   }
 }

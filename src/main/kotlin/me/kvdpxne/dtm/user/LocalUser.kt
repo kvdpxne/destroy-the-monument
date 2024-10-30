@@ -2,7 +2,7 @@ package me.kvdpxne.dtm.user
 
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.profession.Profession
-import me.kvdpxne.dtm.shared.ancillary.Communicative
+import me.kvdpxne.dtm.shared.Communicative
 import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.team.Teammate
 

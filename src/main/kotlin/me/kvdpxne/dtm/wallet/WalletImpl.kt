@@ -2,7 +2,7 @@ package me.kvdpxne.dtm.wallet
 
 import java.util.UUID
 import me.kvdpxne.dtm.shared.StylishToStringBuilder
-import me.kvdpxne.dtm.shared.ancillary.AbstractIdentifiable
+import me.kvdpxne.dtm.shared.AbstractIdentifiable
 
 /**
  * @param initialCoins

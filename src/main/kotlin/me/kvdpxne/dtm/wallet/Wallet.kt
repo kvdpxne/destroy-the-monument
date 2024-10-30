@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.wallet
 
 import java.util.UUID
-import me.kvdpxne.dtm.shared.ancillary.Identifiable
+import me.kvdpxne.dtm.shared.Identifiable
 
 /**
  * @since 0.1.0

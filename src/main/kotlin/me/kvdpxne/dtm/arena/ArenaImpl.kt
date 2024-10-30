@@ -3,7 +3,7 @@ package me.kvdpxne.dtm.arena
 import java.util.UUID
 import me.kvdpxne.dtm.position.MonumentPosition
 import me.kvdpxne.dtm.position.RevivalPosition
-import me.kvdpxne.dtm.shared.ancillary.AbstractIdentifiable
+import me.kvdpxne.dtm.shared.AbstractIdentifiable
 import me.kvdpxne.dtm.team.Team
 
 /**

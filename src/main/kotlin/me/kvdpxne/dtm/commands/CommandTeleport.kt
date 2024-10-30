@@ -4,8 +4,8 @@ import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.command.Parameters
-import me.kvdpxne.dtm.shared.WorldLoaderHelper
-import me.kvdpxne.dtm.shared.minecraft.bukkit.toEntityPosition
+import me.kvdpxne.dtm.shared.world.WorldLoaderHelper
+import me.kvdpxne.dtm.shared.world.toEntityPosition
 import me.kvdpxne.dtm.user.LocalUserPerformer
 import org.bukkit.World
 

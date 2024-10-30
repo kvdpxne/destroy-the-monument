@@ -9,10 +9,10 @@ import me.kvdpxne.dtm.scoreboard.createServerScoreboard
 import me.kvdpxne.dtm.scoreboard.createServerTeam
 import me.kvdpxne.dtm.scoreboard.initScoreboard
 import me.kvdpxne.dtm.shared.debug.Debug
-import me.kvdpxne.dtm.shared.minecraft.bukkit.cancelTask
-import me.kvdpxne.dtm.shared.minecraft.bukkit.equipB
-import me.kvdpxne.dtm.shared.minecraft.bukkit.reset
-import me.kvdpxne.dtm.shared.minecraft.bukkit.toLocation
+import me.kvdpxne.dtm.shared.task.cancelTask
+import me.kvdpxne.dtm.shared.player.equipB
+import me.kvdpxne.dtm.shared.player.reset
+import me.kvdpxne.dtm.shared.world.toLocation
 import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.team.TeammateImpl

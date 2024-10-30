@@ -7,9 +7,9 @@ import me.kvdpxne.dtm.listeners.netty.NettyListenerManager
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.shared.collections.QueuingPair
 import me.kvdpxne.dtm.shared.collections.toQueuingPair
-import me.kvdpxne.dtm.shared.minecraft.bukkit.equipB
-import me.kvdpxne.dtm.shared.minecraft.bukkit.moveToLobby
-import me.kvdpxne.dtm.shared.minecraft.bukkit.reset
+import me.kvdpxne.dtm.shared.player.equipB
+import me.kvdpxne.dtm.shared.player.moveToLobby
+import me.kvdpxne.dtm.shared.player.reset
 import me.kvdpxne.dtm.statistics.StatisticsImpl
 import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.Bukkit

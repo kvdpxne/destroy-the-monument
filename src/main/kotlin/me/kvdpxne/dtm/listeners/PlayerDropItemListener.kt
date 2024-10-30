@@ -1,8 +1,8 @@
 package me.kvdpxne.dtm.listeners
 
 import me.kvdpxne.dtm.game.LocalGame
-import me.kvdpxne.dtm.shared.minecraft.bukkit.cancel
-import me.kvdpxne.dtm.shared.minecraft.bukkit.localUser
+import me.kvdpxne.dtm.shared.event.cancel
+import me.kvdpxne.dtm.shared.player.localUser
 import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler

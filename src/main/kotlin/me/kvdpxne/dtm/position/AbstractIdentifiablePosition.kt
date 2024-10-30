@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.position
 
 import java.util.UUID
-import me.kvdpxne.dtm.shared.ancillary.AbstractIdentifiable
+import me.kvdpxne.dtm.shared.AbstractIdentifiable
 
 /**
  * @since 0.1.0

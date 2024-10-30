@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.listeners
 
 import me.kvdpxne.dtm.game.LocalGame
-import me.kvdpxne.dtm.shared.minecraft.bukkit.localUser
+import me.kvdpxne.dtm.shared.player.localUser
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent

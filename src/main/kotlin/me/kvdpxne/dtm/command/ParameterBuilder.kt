@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.command
 
-import me.kvdpxne.dtm.shared.ancillary.Buildable
+import me.kvdpxne.dtm.shared.Buildable
 
 /**
  * @since 0.1.0

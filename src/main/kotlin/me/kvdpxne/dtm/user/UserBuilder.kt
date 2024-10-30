@@ -3,7 +3,7 @@ package me.kvdpxne.dtm.user
 import java.util.UUID
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionManager
-import me.kvdpxne.dtm.shared.ancillary.Buildable
+import me.kvdpxne.dtm.shared.Buildable
 import me.kvdpxne.dtm.wallet.Wallet
 import me.kvdpxne.dtm.wallet.WalletImpl
 import org.bukkit.entity.Player

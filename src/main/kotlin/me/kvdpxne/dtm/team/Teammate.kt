@@ -3,7 +3,7 @@ package me.kvdpxne.dtm.team
 import fr.mrmicky.fastboard.FastBoard
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.profession.Profession
-import me.kvdpxne.dtm.shared.ancillary.Communicative
+import me.kvdpxne.dtm.shared.Communicative
 import me.kvdpxne.dtm.statistics.Statistics
 import me.kvdpxne.dtm.user.LocalUser
 

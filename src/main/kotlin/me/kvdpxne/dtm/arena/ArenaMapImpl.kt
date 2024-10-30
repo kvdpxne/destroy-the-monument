@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.arena
 
 import java.util.UUID
-import me.kvdpxne.dtm.shared.WorldLoaderHelper
+import me.kvdpxne.dtm.shared.world.WorldLoaderHelper
 import org.bukkit.Bukkit
 import org.bukkit.World
 
@@ -38,10 +38,6 @@ class ArenaMapImpl(
     }
   }
 
-  /**
-   * @throws IllegalArgumentException If the arena map is not currently loaded
-   * and an attempt has been made to unload it.
-   */
   override fun unload(): Boolean {
     requireNotNull(world) {
       "Arena map cannot be unloaded if it is not currently loaded."
@@ -55,6 +51,15 @@ class ArenaMapImpl(
       if (it) {
         world = null
       }
+    }
+  }
+
+  override fun save(): Boolean {
+    return try {
+      this.world?.save()
+      true
+    } catch (_: Exception) {
+      false
     }
   }
 

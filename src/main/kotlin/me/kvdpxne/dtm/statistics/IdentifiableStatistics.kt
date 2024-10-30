@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.statistics
 
 import java.util.UUID
-import me.kvdpxne.dtm.shared.ancillary.Identifiable
+import me.kvdpxne.dtm.shared.Identifiable
 
 /**
  * Defines a contract for player statistics that can be measured, compared,

@@ -9,7 +9,7 @@ import me.kvdpxne.dtm.configuration.Configuration
 import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.arena.ArenaService
 import me.kvdpxne.dtm.arena.ArenaMapImpl
-import me.kvdpxne.dtm.shared.WorldLoaderHelper
+import me.kvdpxne.dtm.shared.world.WorldLoaderHelper
 import org.bukkit.World
 
 fun createArenaMapSetCommand(): Command<Performer> {

@@ -2,7 +2,7 @@ package me.kvdpxne.dtm.commands
 
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
-import me.kvdpxne.dtm.shared.minecraft.bukkit.toLocation
+import me.kvdpxne.dtm.shared.world.toLocation
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
 /**
