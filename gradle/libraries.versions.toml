@@ -1,28 +1,37 @@
 [versions]
 # Plugins
 kotlin = "1.9.25"
+kotlinx-coroutines = "1.8.1"
+kotlinx-serialization = "1.6.3"
 shadow = "8.3.0"
 exposed = "0.54.0"
 thrivi = "13199ef603"
-dico = "f00e6003b3"
-notchity = "8bf2b5125e"
+dico = "d2facc69c4"
+notchity = "cf6803c868"
+spigot-current-oldest = "1.8-R0.1-SNAPSHOT"
+spigot-legacy = "1.7.2-R0.1-SNAPSHOT"
 postgresql = "42.7.4"
 sqlite = "3.46.1.0"
+
+[plugins]
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
 
 [libraries]
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
 exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
 thrivi = { module = "com.github.kvdpxne:thrivi", version.ref = "thrivi" }
-dico-api = { module = "com.github.kvdpxne.dico:api", version.ref = "dico" }
+dico-common = { module = "com.github.kvdpxne.dico:common", version.ref = "dico" }
 dico-core = { module = "com.github.kvdpxne.dico:core", version.ref = "dico" }
 notchity = { module = "com.github.kvdpxne:notchity", version.ref = "notchity" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+kotlinx-coroutines-jvm = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-jvm", version.ref = "kotlinx-coroutines" }
+kotlinx-serialization-cbor = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+spigot-current-oldest = { module = "org.spigotmc:spigot-api", version.ref = "spigot-current-oldest" }
+spigot-legacy = { module = "org.spigotmc:spigot-api", version.ref = "spigot-legacy" }
 sqlite = { module = "org.xerial:sqlite-jdbc", version.ref = "sqlite" }
 
-[plugins]
-kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
-
 [bundles]
-disco = ["dico-api", "dico-core"]
+disco = ["dico-common", "dico-core"]
 exposed = ["exposed-core", "exposed-jdbc"]

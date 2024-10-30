@@ -11,13 +11,17 @@ description = "A simple game of destroying the monument of the opposing team."
 group = "me.kvdpxne"
 version = "0.1.0"
 
-val targetJavaVersion = 21
+val targetJavaVersion = 11
 
 // Filename with the extension.
-val fileName = "craftbukkit-1.7.10.jar"
+val fileName = "spigot-1.7.10-SNAPSHOT-b1657.jar"
 
 dependencies {
-  shadow(files("libraries/$fileName"))
+  try {
+    compileOnly(files("run/$fileName"))
+  } catch (_: Exception) {
+    compileOnly(libraries.spigot.legacy)
+  }
 
   implementation(libraries.bundles.exposed)
   implementation(libraries.postgresql)
@@ -55,7 +59,12 @@ tasks {
   }
 
   withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "21"
+    var value: String = targetJavaVersion.toString()
+    if (8 >= targetJavaVersion) {
+      value = "1.$value"
+    }
+
+    kotlinOptions.jvmTarget = value
   }
 
   processResources {
@@ -101,8 +110,7 @@ tasks {
       exec {
         workingDir = outputDirectory
         executable = "java"
-        // Spigot with protocol hack
-        args("-jar", "spigot-1.7.10-SNAPSHOT-b1657.jar")
+        args("-jar", fileName)
         standardInput = System.`in`
       }
     }
