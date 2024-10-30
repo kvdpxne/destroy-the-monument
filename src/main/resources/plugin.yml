@@ -6,3 +6,4 @@ prefix: "DTM"
 author: "kvdpxne"
 description: "${description}"
 website: "https://github.com/kvdpxne/destroy-the-monument"
+softdepend: ["ProtocolLib"]

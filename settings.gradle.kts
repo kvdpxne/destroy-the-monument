@@ -36,6 +36,8 @@ dependencyResolutionManagement {
     // 1.8 upwards.
     maven("https://repo.md-5.net/content/repositories/public/")
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots")
+
+    maven("https://repo.dmulloy2.net/repository/public/")
   }
 
   repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)

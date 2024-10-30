@@ -1,17 +1,17 @@
 package me.kvdpxne.dtm.arena
 
 /**
- * Custom exception class for handling errors related to arenas in the game.
+ * Exception thrown when an error occurs during the unloading of an arena map.
  *
- * This class extends [RuntimeException] to provide a specific exception type
- * for arena-related operations.
+ * This class extends [ArenaException] to provide specific context for issues
+ * related to unloading arena maps in the game.
  *
  * @param message The detail message for the exception, which can provide
  *                information about the error.
  *
  * @since 0.1.0
  */
-open class ArenaException(message: String) : RuntimeException(message) {
+class ArenaMapUnloadException(message: String) : ArenaException(message) {
 
   companion object {
 
@@ -21,6 +21,6 @@ open class ArenaException(message: String) : RuntimeException(message) {
      * @since 0.1.0
      */
     @Suppress("ConstPropertyName")
-    private const val serialVersionUID: Long = -8396776841121661460L
+    private const val serialVersionUID: Long = 8256285322088095734L
   }
 }

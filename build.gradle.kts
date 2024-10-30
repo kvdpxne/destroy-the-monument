@@ -11,7 +11,18 @@ description = "A simple game of destroying the monument of the opposing team."
 group = "me.kvdpxne"
 version = "0.1.0"
 
-val targetJavaVersion = 11
+configurations.all {
+  resolutionStrategy.dependencySubstitution {
+    // The version of the spigot api that the ProtocolLib plugin uses.
+    val version = "1.7.10-R0.1-SNAPSHOT"
+
+    substitute(module("org.spigotmc:spigot:$version"))
+      .using(module("org.spigotmc:spigot-api:$version"))
+      .because("The artifact named spigot has been replaced by spigot-api.")
+  }
+}
+
+val targetJavaVersion = 8
 
 // Filename with the extension.
 val fileName = "spigot-1.7.10-SNAPSHOT-b1657.jar"
@@ -26,11 +37,12 @@ dependencies {
   implementation(libraries.bundles.exposed)
   implementation(libraries.postgresql)
 
-//  implementation(libraries.thrivi)
   implementation("fr.mrmicky:fastboard:2.1.2")
 
   implementation(libraries.bundles.disco)
   implementation(libraries.notchity)
+
+  compileOnly(libraries.protocollib.legacy)
 
   testImplementation(kotlin("test"))
 }

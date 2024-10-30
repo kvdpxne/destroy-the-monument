@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.scoreboard
 
 import fr.mrmicky.fastboard.FastBoard
-import me.kvdpxne.dtm.colorize
+import me.kvdpxne.dtm.shared.text.colorize
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player

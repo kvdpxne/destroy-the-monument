@@ -19,7 +19,7 @@ internal object BukkitCommandMapHolder {
     val server: Server = Bukkit.getServer()
     val field: Field = server.javaClass.getDeclaredField("commandMap")
 
-    field.trySetAccessible()
+    field.isAccessible = true
     val commandMap: CommandMap = field.get(server) as CommandMap
 
     field.isAccessible = false

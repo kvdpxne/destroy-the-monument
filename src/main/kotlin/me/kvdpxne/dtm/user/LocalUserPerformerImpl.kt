@@ -3,7 +3,7 @@ package me.kvdpxne.dtm.user
 import java.lang.ref.Reference
 import java.lang.ref.WeakReference
 import java.util.UUID
-import me.kvdpxne.dtm.colorize
+import me.kvdpxne.dtm.shared.text.colorize
 import me.kvdpxne.dtm.configuration.Configuration
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player

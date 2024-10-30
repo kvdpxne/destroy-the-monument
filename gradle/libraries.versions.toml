@@ -1,5 +1,4 @@
 [versions]
-# Plugins
 kotlin = "1.9.25"
 kotlinx-coroutines = "1.8.1"
 kotlinx-serialization = "1.6.3"
@@ -8,6 +7,8 @@ exposed = "0.54.0"
 thrivi = "13199ef603"
 dico = "d2facc69c4"
 notchity = "cf6803c868"
+protocollib-current = "5.1.0"
+protocollib-legacy = "3.7.0"
 spigot-current-oldest = "1.8-R0.1-SNAPSHOT"
 spigot-legacy = "1.7.2-R0.1-SNAPSHOT"
 postgresql = "42.7.4"
@@ -26,6 +27,7 @@ dico-common = { module = "com.github.kvdpxne.dico:common", version.ref = "dico" 
 dico-core = { module = "com.github.kvdpxne.dico:core", version.ref = "dico" }
 notchity = { module = "com.github.kvdpxne:notchity", version.ref = "notchity" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+protocollib-legacy = { module = "com.comphenix.protocol:ProtocolLib-Legacy", version.ref = "protocollib-legacy" }
 kotlinx-coroutines-jvm = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-jvm", version.ref = "kotlinx-coroutines" }
 kotlinx-serialization-cbor = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 spigot-current-oldest = { module = "org.spigotmc:spigot-api", version.ref = "spigot-current-oldest" }
