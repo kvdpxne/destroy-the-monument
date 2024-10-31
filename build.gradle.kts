@@ -2,7 +2,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
   libraries.plugins.run {
+    alias(dokka)
     alias(kotlin)
+//    alias(kotlin.serialization)
     alias(shadow)
   }
 }
@@ -29,9 +31,9 @@ val fileName = "spigot-1.7.10-SNAPSHOT-b1657.jar"
 
 dependencies {
   try {
-    compileOnly(files("run/$fileName"))
+    shadow(files("run/$fileName"))
   } catch (_: Exception) {
-    compileOnly(libraries.spigot.legacy)
+    shadow(libraries.spigot.legacy)
   }
 
   implementation(libraries.bundles.exposed)

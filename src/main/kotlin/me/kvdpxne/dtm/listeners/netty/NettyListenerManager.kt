@@ -55,6 +55,10 @@ object NettyListenerManager {
     }
 
     val pipeline = (player as CraftPlayer).handle.playerConnection.networkManager.channel.pipeline()
+    if (null != pipeline.get("${Constants.NAME}_${player.getName()}")) {
+      return
+    }
+
     pipeline.addBefore("packet_handler", "${Constants.NAME}_${player.getName()}", channelDuplexHandler)
   }
 

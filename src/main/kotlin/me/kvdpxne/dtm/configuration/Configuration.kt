@@ -7,7 +7,16 @@ object Configuration {
   /**
    *
    */
-  const val USE_PROTOCOL_LIB = true
+  val USE_PROTOCOL_LIB = true && this.canUseProtocolLib()
+
+  fun canUseProtocolLib(): Boolean {
+    return try {
+      Class.forName("com.comphenix.protocol.ProtocolLibrary")
+      true
+    } catch (_: ClassNotFoundException) {
+      false
+    }
+  }
 
   val MONUMENT_TYPE = Material.OBSIDIAN
 

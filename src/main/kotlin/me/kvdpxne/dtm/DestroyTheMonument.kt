@@ -146,7 +146,7 @@ class DestroyTheMonument : JavaPlugin() {
         "current version of the plugin.",
         "",
         "If you think the error should not occur please contact us.",
-        "https://github.com/kvdpxne/destroy-the-monument"
+        Constants.GITHUB_ISSUES
       ).forEach { message: String ->
         this.logger.severe(message)
       }
@@ -173,7 +173,9 @@ class DestroyTheMonument : JavaPlugin() {
       //
       LocalUserManager
       GameManager
-    } catch (_: Throwable) {
+    } catch (exception: Throwable) {
+      exception.printStackTrace()
+
       this.isDisabling = true
       return
     }

@@ -53,4 +53,19 @@ object Constants {
    * @since 0.1.0
    */
   const val IS_DEVELOPMENT = true
+
+  /**
+   * @since 0.1.0
+   */
+  const val GITHUB_REPOSITORY = "https://github.com/kvdpxne/destroy-the-monument"
+
+  /**
+   * @since 0.1.0
+   */
+  const val GITHUB_ISSUES = "${GITHUB_REPOSITORY}/issues"
+
+  /**
+   * @since 0.1.0
+   */
+  const val GITHUB_RELEASES = "${GITHUB_ISSUES}/releases"
 }
