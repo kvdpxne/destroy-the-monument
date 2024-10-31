@@ -9,9 +9,9 @@ import me.kvdpxne.dtm.scoreboard.createServerScoreboard
 import me.kvdpxne.dtm.scoreboard.createServerTeam
 import me.kvdpxne.dtm.scoreboard.initScoreboard
 import me.kvdpxne.dtm.shared.debug.Debug
-import me.kvdpxne.dtm.shared.task.cancelTask
 import me.kvdpxne.dtm.shared.player.equipB
 import me.kvdpxne.dtm.shared.player.reset
+import me.kvdpxne.dtm.shared.task.cancelTask
 import me.kvdpxne.dtm.shared.world.toLocation
 import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.team.Teammate
@@ -337,8 +337,45 @@ class LocalGameImpl(
   }
 
   /**
+   * Increases the count of spectators by one.
+   *
+   * Logs the change in the spectators' count from the old value to the
+   * new value.
+   *
    * @since 0.1.0
    */
+  private fun increaseSpectators() {
+    val oldValue: Int = this.spectators
+    ++this.spectators
+
+    Debug.log {
+      "Spectators increased: $oldValue -> ${this.spectators}"
+    }
+  }
+
+  /**
+   * Decreases the count of spectators by one if it’s above zero.
+   *
+   * Logs a warning if the spectators' count is already at zero, and logs the
+   * change in count when successfully decreased.
+   *
+   * @since 0.1.0
+   */
+  private fun decreaseSpectators() {
+    val oldValue: Int = this.spectators
+    if (0 > oldValue - 1) {
+      Debug.log {
+        "Cannot decrease spectators: already at minimum (0)"
+      }
+      return
+    }
+
+    --this.spectators
+    Debug.log {
+      "Spectators decreased: $oldValue -> ${this.spectators}"
+    }
+  }
+
   override fun addHostage(
     user: LocalUser
   ): Boolean {
@@ -347,7 +384,7 @@ class LocalGameImpl(
     }
 
     this._hostages[user.identifier] = user
-    ++this.spectators
+    this.increaseSpectators()
 
     Debug.log {
       "$user user has been added as a hostage to the $this game."
@@ -372,16 +409,16 @@ class LocalGameImpl(
     //
     val teammate: Teammate = TeammateImpl(this, team, user)
 
-    //
-    this._teams.values.forEach {
-      // Checking if the user is present in the team is not necessary because
-      // the method to remove the user from the team filters the collections
-      // of current users in the team to find the given user.
-      if (!it.removeTeammate(teammate)) {
-        return@forEach
+    for (presentTeam: LocalTeam in this._teams.values) {
+      // Jeżeli podany użytkownik, który ma być dodany do podanej drużyny, a
+      // istnieje już w innej drużynie, to zostanie z niej usunięty.
+      if (!presentTeam.removeTeammate(teammate)) {
+        continue
       }
 
-      ++this.spectators
+      // Jeżeli podany użytkownik zostanie usunięty z drużyny, to liczba
+      // spektatorów zostanie zwiększona o 1.
+      this.increaseSpectators()
     }
 
     //
@@ -389,9 +426,9 @@ class LocalGameImpl(
       throw IllegalStateException("")
     }
 
-    // If the user has successfully joined the team, the number of users
-    // (spectators) who are currently not playing should decrease.
-    --this.spectators
+    // Jeżeli podany użytkownik został pomyślnie dodany do podanej drużyny, to
+    // liczba spektatorów zostanie zmniejszona o 1.
+    this.decreaseSpectators()
 
     //
     this.shouldStart()
@@ -432,7 +469,7 @@ class LocalGameImpl(
       return false
     }
 
-    ++this.spectators
+    this.increaseSpectators()
     return true
   }
 
