@@ -406,13 +406,10 @@ class LocalGameImpl(
       return false
     }
 
-    //
-    val teammate: Teammate = TeammateImpl(this, team, user)
-
     for (presentTeam: LocalTeam in this._teams.values) {
       // Jeżeli podany użytkownik, który ma być dodany do podanej drużyny, a
       // istnieje już w innej drużynie, to zostanie z niej usunięty.
-      if (!presentTeam.removeTeammate(teammate)) {
+      if (!presentTeam.removeTeammate(user)) {
         continue
       }
 
@@ -420,6 +417,9 @@ class LocalGameImpl(
       // spektatorów zostanie zwiększona o 1.
       this.increaseSpectators()
     }
+
+    //
+    val teammate: Teammate = TeammateImpl(this, team, user)
 
     //
     if (!team.addTeammate(teammate)) {
