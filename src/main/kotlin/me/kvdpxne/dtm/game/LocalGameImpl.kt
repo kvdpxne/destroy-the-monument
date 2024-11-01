@@ -12,6 +12,7 @@ import me.kvdpxne.dtm.shared.debug.Debug
 import me.kvdpxne.dtm.shared.player.equipB
 import me.kvdpxne.dtm.shared.player.reset
 import me.kvdpxne.dtm.shared.task.cancelTask
+import me.kvdpxne.dtm.shared.text.toSingleLines
 import me.kvdpxne.dtm.shared.world.toLocation
 import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.team.Teammate
@@ -145,6 +146,10 @@ class LocalGameImpl(
    */
   override fun setAsRunning() {
     this._state = GameStates.RUNNING
+  }
+
+  override fun setAsEnding() {
+    this._state = GameStates.ENDING
   }
 
   /**
@@ -393,6 +398,21 @@ class LocalGameImpl(
     return true
   }
 
+  private fun createAndAddTeammate(
+    user: LocalUser,
+    team: LocalTeam
+  ): Teammate {
+    //
+    val teammate: Teammate = TeammateImpl(this, team, user)
+
+    //
+    if (!team.addTeammate(teammate)) {
+      throw IllegalStateException("")
+    }
+
+    return teammate
+  }
+
   /**
    * @since 0.1.0
    */
@@ -419,12 +439,7 @@ class LocalGameImpl(
     }
 
     //
-    val teammate: Teammate = TeammateImpl(this, team, user)
-
-    //
-    if (!team.addTeammate(teammate)) {
-      throw IllegalStateException("")
-    }
+    val teammate: Teammate = this.createAndAddTeammate(user, team)
 
     // Jeżeli podany użytkownik został pomyślnie dodany do podanej drużyny, to
     // liczba spektatorów zostanie zmniejszona o 1.
@@ -470,6 +485,30 @@ class LocalGameImpl(
     }
 
     this.increaseSpectators()
+    return true
+  }
+
+  override fun relocateTeammateToTeam(
+    teammate: Teammate,
+    to: LocalTeam
+  ): Boolean {
+    val from: LocalTeam = teammate.team
+    if (from == to || !from.hasTeammate(teammate) || to.hasTeammate(teammate)) {
+      return false
+    }
+
+    from.removeTeammate(teammate)
+
+    val user: LocalUser = teammate.user
+    this.createAndAddTeammate(user, to)
+
+    Debug.log {
+      """
+        User ${user.name} has been relocated from the ${from.name} team${" "}
+        to the ${to.name} team.
+      """.toSingleLines()
+    }
+
     return true
   }
 

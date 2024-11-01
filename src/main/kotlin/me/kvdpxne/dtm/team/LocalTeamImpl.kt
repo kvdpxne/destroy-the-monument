@@ -25,6 +25,12 @@ class LocalTeamImpl(
     get() = this._teammates.size
 
   override fun hasTeammate(
+    teammate: Teammate
+  ): Boolean {
+    return this._teammates.contains(teammate)
+  }
+
+  override fun hasTeammate(
     user: LocalUser
   ): Boolean {
     return this._teammates.any {
@@ -43,20 +49,22 @@ class LocalTeamImpl(
   override fun addTeammate(
     teammate: Teammate
   ): Boolean {
-    return this._teammates.add(teammate).also {
-      if (!it) {
-        return@also
-      }
-
-      Debug.log {
-        "A new $teammate teammate has been added to the $this team."
-      }
+    if (!this._teammates.add(teammate)) {
+      return false
     }
+
+    Debug.log {
+      "${teammate.user.name} user has been added to the ${this.name} team."
+    }
+    return true
   }
 
   override fun removeTeammate(
     user: LocalUser
   ): Boolean {
+
+
+
     //
 //    val wasRemoved: Boolean = this._teammates.removeIf { teammate: Teammate ->
 //      teammate.user == user
@@ -71,15 +79,14 @@ class LocalTeamImpl(
   override fun removeTeammate(
     teammate: Teammate
   ): Boolean {
-    return this._teammates.remove(teammate).also {
-      if (!it) {
-        return@also
-      }
-
-      Debug.log {
-        "Removed $teammate user from $this team."
-      }
+    if (!this._teammates.remove(teammate)) {
+      return false
     }
+
+    Debug.log {
+      "${teammate.user.name} user has been removed from the ${this.name} team."
+    }
+    return true
   }
 
   override fun removeTeammates() {

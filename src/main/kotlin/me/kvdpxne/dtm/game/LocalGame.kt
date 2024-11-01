@@ -129,28 +129,35 @@ interface LocalGame : Game<LocalTeam>, Communicative {
   var timerTaskIdentifier: Int
 
   /**
-   * Sets the game as initialized.
+   * Sets the game state as initialized.
    *
    * @since 0.1.0
    */
   fun setAsInitialized()
 
   /**
-   * Sets the game as starting.
+   * Sets the game state as starting.
    *
    * @since 0.1.0
    */
   fun setAsStarting()
 
   /**
-   * Sets the game as running.
+   * Sets the game state as running.
    *
    * @since 0.1.0
    */
   fun setAsRunning()
 
   /**
-   * Sets the game as stopping.
+   * Sets the game state as ending.
+   *
+   * @since 0.1.0
+   */
+  fun setAsEnding()
+
+  /**
+   * Sets the game state as stopping.
    *
    * @since 0.1.0
    */
@@ -280,6 +287,35 @@ interface LocalGame : Game<LocalTeam>, Communicative {
   fun removeTeammate(
     team: LocalTeam,
     user: LocalUser
+  ): Boolean
+
+  /**
+   * Efficiently relocates a teammate from their current team to a specified
+   * team.
+   *
+   * This method directly transfers a teammate from their current [LocalTeam]
+   * to a target team ([to]), bypassing unnecessary logic present in the
+   * standard [removeTeammate] and [addTeammate] methods. This optimization
+   * makes it faster for cases where simple relocation is needed.
+   *
+   * The relocation is successful if:
+   * - The current team is not the same as the target team.
+   * - The teammate is present in their current team (`from`).
+   * - The teammate is not already in the target team.
+   *
+   * If all conditions are met, the teammate is removed from their original team
+   * and added to the target team, and a log entry is generated upon successful
+   * relocation.
+   *
+   * @param teammate The teammate to be relocated.
+   * @param to The target team to which the teammate will be moved.
+   * @return `true` if the relocation was successful, `false` otherwise.
+   *
+   * @since 0.1.0
+   */
+  fun relocateTeammateToTeam(
+    teammate: Teammate,
+    to: LocalTeam
   ): Boolean
 
   /**

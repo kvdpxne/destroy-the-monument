@@ -26,6 +26,10 @@ interface LocalTeam : Communicative, Team {
    */
   val size: Int
 
+  fun hasTeammate(
+    teammate: Teammate
+  ): Boolean
+
   /**
    * @since 0.1.0
    */
