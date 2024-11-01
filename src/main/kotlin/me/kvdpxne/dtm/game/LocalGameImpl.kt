@@ -8,6 +8,7 @@ import me.kvdpxne.dtm.listeners.netty.NettyListenerManager
 import me.kvdpxne.dtm.scoreboard.createServerScoreboard
 import me.kvdpxne.dtm.scoreboard.createServerTeam
 import me.kvdpxne.dtm.scoreboard.initScoreboard
+import me.kvdpxne.dtm.shared.StylishToStringBuilder
 import me.kvdpxne.dtm.shared.debug.Debug
 import me.kvdpxne.dtm.shared.player.equipB
 import me.kvdpxne.dtm.shared.player.reset
@@ -392,7 +393,7 @@ class LocalGameImpl(
     this.increaseSpectators()
 
     Debug.log {
-      "$user user has been added as a hostage to the $this game."
+      "${user.name} user has been added to the ${this.name} game."
     }
 
     return true
@@ -463,13 +464,13 @@ class LocalGameImpl(
   ): Boolean {
     val hostage: LocalUser = this._hostages[user.identifier] ?: return false
     this._hostages.remove(user.identifier)
+    this.decreaseSpectators()
 
     Debug.log {
-      ""
+      "${user.name} user has been removed from the ${this.name} game."
     }
 
-    val team = this.findTeamByHostage(hostage) ?: return true
-    this.removeTeammate(team, hostage)
+    this.findTeamByHostage(hostage)?.removeTeammate(user)
     return true
   }
 
@@ -709,15 +710,16 @@ class LocalGameImpl(
   }
 
   override fun toString(): String {
-    return "LocalGame{" +
-      "name=\"${this.name}\", " +
-      "displayName=\"${this.displayName}\", " +
-      "teams=\"${this._teams.values}\", " +
-      "arenas=\"${this._arenas.values}\", " +
-      "currentArena=\"${this.currentArena}\", " +
-      "hostages=\"${this._hostages.values}\", " +
-      "state=\"${this.state}\", " +
-      "identifier=\"${this.identifier}\"" +
-      "}"
+    return StylishToStringBuilder()
+      .begin("LocalGame")
+      .add("name", this.name)
+      .add("displayName", this.displayName)
+      .add("teams", this._teams.values)
+      .add("arenas", this._arenas.values)
+      .add("currentArena", this._currentArena)
+      .add("hostages", this._hostages.values)
+      .add("state", this._state)
+      .add("identifier", this.identifier)
+      .build()
   }
 }

@@ -4,6 +4,7 @@ import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.profession.ProfessionManager
+import me.kvdpxne.dtm.shared.event.cancel
 import me.kvdpxne.dtm.shared.item.ItemsClipboard
 import me.kvdpxne.dtm.shared.item.ItemBuilder
 import me.kvdpxne.dtm.shared.player.equipB
@@ -11,6 +12,7 @@ import me.kvdpxne.dtm.shared.player.reset
 import me.kvdpxne.dtm.shared.item.toBuilder
 import me.kvdpxne.dtm.shared.material.toBuilder
 import me.kvdpxne.dtm.team.LocalTeam
+import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -44,31 +46,80 @@ fun createTeamSelectionGui(
   //
   val iterator: IntIterator = arrangement.iterator()
 
+  val itemBuilder: ItemBuilder = Material.WOOL.toBuilder()
+
+  val teammate: Teammate? = game.findTeammateByHostage(user)
+
   //
   for (team: LocalTeam in teams) {
 
-    val name = team.name
     val color = team.colorInChat
+
+    // TODO delete after adding translations
+    // nazwa     : Niebiescy   v Czerwoni
+    // do drużyny: Niebieskich v Czerwonych
+    // dodany do : Niebieskich v Czerwonych
+    val polishTeamName = if (team.name.equals("blue", true)) {
+      "Niebieskich"
+    } else {
+      "Czerwonych"
+    }
 
     gui.setItem(
       iterator.next(),
-      Material.WOOL.toBuilder()
+      itemBuilder
         .generation(team.dyeColor.woolData.toInt())
         .name {
-          "$color&l$name &8| &6${team.size}/bez limitu"
+          // TODO delete after adding translations
+          val polishTitle = if (team.name.equals("blue", true)) {
+            "Niebiescy"
+          } else {
+            "Czerwoni"
+          }
+
+          "$color&l$polishTitle &8| &6${team.size}/bez limitu"
         }
         .lore(
           "&7Zostaniesz dodany bezpośrednio",
-          "&7do drużyny $color&l$name&7."
+          "&7do drużyny $color&l$polishTeamName&7."
         )
         .build()
     ) { event: InventoryClickEvent ->
+      if (null != teammate) {
+        if (!game.relocateTeammateToTeam(teammate, team)) {
+          event.cancel()
+          user.sendMessage("&6&lDTM &7> &cNie możesz dołączyć do drużyny, w której już jesteś.")
+          return@setItem
+        }
+
+        user.sendMessage("&6&lDTM &7> &7Pomyślnie zmieniłeś swoją drużynę.")
+        game.sendMessage {
+          val displayName = user.performer.player?.displayName
+          "&6&lDTM &7> &fGracz &6$displayName &fdołączył do drużyny $color&l$polishTeamName&f."
+        }
+        event.whoClicked.closeInventory()
+        return@setItem
+      }
+
       //
-      game.addTeammate(team, user)
+      if (!game.addTeammate(team, user)) {
+        event.cancel()
+        user.sendMessages(
+          "&6&lDTM &7> &cNie możesz dołączyć do drużyny.",
+          "&6&lDTM &7> &cPrawdopodobnie jest to błąd, który nie powinien nigdy",
+          "&cwystąpić."
+        )
+        event.whoClicked.closeInventory()
+        return@setItem
+      }
 
       game.sendMessage {
         val displayName = user.performer.player?.displayName
-        "&6&lDTM &7> &fGracz &6$displayName &fdołączył do drużyny $color&l$name&f."
+        "&6&lDTM &7> &fGracz &6$displayName &fdołączył do drużyny $color&l$polishTeamName&f."
+      }
+
+      if (!game.isRunning) {
+        event.whoClicked.inventory.setItem(8, ItemsClipboard.TEAM_LEAVE_ITEM)
       }
 
       event.whoClicked.closeInventory()
@@ -86,22 +137,48 @@ fun createTeamSelectionGui(
       game.smallestTeam
     }
 
-    game.addTeammate(team, user)
+
+
+    val color = team.colorInChat
+
+    val polishTeamName = if (team.name.equals("blue", true)) {
+      "Niebieskich"
+    } else {
+      "Czerwonych"
+    }
+
+    val displayName = user.performer.player?.displayName
+
+    if (null != teammate) {
+      if (!game.relocateTeammateToTeam(teammate, team)) {
+        // Ten blok kodu nie powinien/nie ma prawa zostać nigdy wykonany.
+        event.cancel()
+        user.sendMessage("&6&lDTM &7> &cNie możesz dołączyć do drużyny, w której już jesteś.")
+        return@setItem
+      }
+
+      user.sendMessage("&6&lDTM &7> &7Pomyślnie zmieniłeś swoją drużynę.")
+      game.sendMessage("&6&lDTM &7> &fGracz &6$displayName &fdołączył do drużyny $color&l$polishTeamName&f.")
+      event.whoClicked.closeInventory()
+      return@setItem
+    }
+
+    if (!game.addTeammate(team, user)) {
+      event.cancel()
+      user.sendMessages(
+        "&6&lDTM &7> &cNie możesz dołączyć do drużyny.",
+        "&6&lDTM &7> &cPrawdopodobnie jest to błąd, który nie powinien nigdy",
+        "&cwystąpić."
+      )
+      event.whoClicked.closeInventory()
+      return@setItem
+    }
 
     val player = event.whoClicked as Player
     player.closeInventory()
 
     game.sendConfiguredMessage {
-      val displayName = player.displayName
-      val teamColor = team.colorInChat
-
-      val teamName = if (team.name.equals("blue", true)) {
-        "Niebieskich"
-      } else {
-        "Czerwonych"
-      }
-
-      "&6&lDTM &7> &fGracz &6$displayName &fdołączył do drużyny $teamColor&l$teamName&f."
+      "&6&lDTM &7> &fGracz &6$displayName &fdołączył do drużyny $color&l$polishTeamName&f."
     }
   }
 

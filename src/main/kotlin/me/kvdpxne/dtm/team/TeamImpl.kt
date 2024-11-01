@@ -3,6 +3,7 @@ package me.kvdpxne.dtm.team
 import java.util.UUID
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.shared.AbstractIdentifiable
+import me.kvdpxne.dtm.shared.StylishToStringBuilder
 
 open class TeamImpl(
   // @formatter:off
@@ -46,9 +47,10 @@ open class TeamImpl(
   }
 
   override fun toString(): String {
-    return "Team{" +
-      "name=\"${this.name}\", " +
-      "identifier=\"${this.identifier}\"" +
-      "}"
+    return StylishToStringBuilder()
+      .begin("Team")
+      .add("identifier", this.identifier)
+      .add("name", this.name)
+      .build()
   }
 }

@@ -37,7 +37,7 @@ fun createArenaRemoveCommand(): Command<Performer> {
             .replace("{ARENA_NAME}", arenaName)
         )
 
-      ArenaService.deleteArena(arena)
+      ArenaService.deleteArenaByIdentifier(arena.identifier)
 
       performer.sendMessage("")
     }

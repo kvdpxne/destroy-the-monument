@@ -1,6 +1,7 @@
 package me.kvdpxne.dtm.arena
 
 import java.util.UUID
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import me.kvdpxne.dtm.data.ArenaDao
 import me.kvdpxne.dtm.data.ArenaMonumentPositionsDao
@@ -10,6 +11,7 @@ import me.kvdpxne.dtm.data.RevivalPositionDao
 import me.kvdpxne.dtm.position.MonumentPosition
 import me.kvdpxne.dtm.position.MonumentPositionImpl
 import me.kvdpxne.dtm.position.RevivalPosition
+import me.kvdpxne.dtm.shared.debug.Debug
 import me.kvdpxne.dtm.team.Team
 
 /**
@@ -57,8 +59,14 @@ object ArenaService {
   fun insertArena(
     arena: Arena
   ) {
-    runBlocking {
+    val insertedRows: Int = runBlocking {
       ArenaDao.insertArena(arena)
+    }
+
+    if (1 == insertedRows) {
+      Debug.log {
+        "Arena $arena has been inserted into the database."
+      }
     }
   }
 
@@ -108,9 +116,30 @@ object ArenaService {
     }
   }
 
-  fun deleteArena(
-    arena: Arena
-  ) {
+  fun deleteArenaByIdentifier(
+    identifier: UUID
+  ): Boolean {
+    val arena: Arena = this.findArenaByIdentifier(identifier)
+      ?: return false
 
+    runBlocking {
+      launch {
+        ArenaMonumentPositionsDao.deleteArenaMonumentPositions(arena)
+
+        for (monumentPosition in arena.monumentPositions) {
+          MonumentPositionDao.deleteMonumentPositionByIdentifier(monumentPosition.identifier)
+        }
+      }
+
+      launch {
+        ArenaRevivalPositionsDao.deleteArenaRevivalPositions(arena)
+
+        for (revivalPosition in arena.revivalPositions) {
+          RevivalPositionDao.deleteRevivalPositionByIdentifier(revivalPosition.identifier)
+        }
+      }
+    }
+
+    return true
   }
 }

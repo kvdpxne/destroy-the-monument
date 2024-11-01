@@ -3,6 +3,7 @@ package me.kvdpxne.dtm.game
 import java.util.UUID
 import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.shared.AbstractIdentifiable
+import me.kvdpxne.dtm.shared.StylishToStringBuilder
 import me.kvdpxne.dtm.shared.debug.Debug
 import me.kvdpxne.dtm.team.Team
 
@@ -153,12 +154,13 @@ open class GameImpl<T : Team>(
   }
 
   override fun toString(): String {
-    return "Game{" +
-      "name=\"${this.name}\", " +
-      "displayName=\"${this.displayName}\", " +
-      "teams=\"${this._teams.values}\", " +
-      "arenas=\"${this._arenas.values}\", " +
-      "identifier=\"${this.identifier}\"" +
-      "}"
+    return StylishToStringBuilder()
+      .begin("Game")
+      .add("name", this.name)
+      .add("displayName", this.displayName)
+      .add("teams", this._teams.values)
+      .add("arenas", this._arenas.values)
+      .add("identifier", this.identifier)
+      .build()
   }
 }

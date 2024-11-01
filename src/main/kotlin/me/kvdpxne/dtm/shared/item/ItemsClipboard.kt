@@ -20,6 +20,10 @@ object ItemsClipboard {
     .name("&c&lOpuść gre")
     .build()
 
+  val TEAM_LEAVE_ITEM = Material.WEB.toBuilder()
+    .name("&c&lOpuść drużynę")
+    .build()
+
   val ITEM_TEAM_SELECT = Material.NETHER_STAR.toBuilder()
     .name("&e&lWybierz drużyne")
     .build()

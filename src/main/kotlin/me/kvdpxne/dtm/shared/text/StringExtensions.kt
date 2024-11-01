@@ -2,7 +2,7 @@ package me.kvdpxne.dtm.shared.text
 
 import me.kvdpxne.dtm.PluginContext.textFormatter
 
-private object StringHolder {
+object StringHolder {
   val fs = Regex("(\n*)\n")
 }
 

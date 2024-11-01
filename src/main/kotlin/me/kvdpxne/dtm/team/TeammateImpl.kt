@@ -5,6 +5,7 @@ import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.game.LocalGameImpl
 import me.kvdpxne.dtm.listeners.netty.NettyListenerManager
 import me.kvdpxne.dtm.profession.Profession
+import me.kvdpxne.dtm.shared.StylishToStringBuilder
 import me.kvdpxne.dtm.shared.collections.QueuingPair
 import me.kvdpxne.dtm.shared.collections.toQueuingPair
 import me.kvdpxne.dtm.shared.player.equipB
@@ -78,10 +79,11 @@ class TeammateImpl(
   }
 
   override fun toString(): String {
-    return "Teammate{" +
-      "user=\"${this.user}\", " +
-      "professionQueuingPair=\"${this.professionQueuingPair}\", " +
-      "statistics=\"${this.statistics}\"" +
-      "}"
+    return StylishToStringBuilder()
+      .begin("Teammate")
+      .add("user", this.user)
+      .add("professionQueuingPair", this.professionQueuingPair)
+      .add("statistics", this.statistics)
+      .build()
   }
 }

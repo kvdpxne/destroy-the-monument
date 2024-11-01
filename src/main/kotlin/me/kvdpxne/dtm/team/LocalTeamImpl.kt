@@ -1,6 +1,7 @@
 package me.kvdpxne.dtm.team
 
 import java.util.UUID
+import me.kvdpxne.dtm.shared.StylishToStringBuilder
 import me.kvdpxne.dtm.shared.debug.Debug
 import me.kvdpxne.dtm.user.LocalUser
 
@@ -159,11 +160,12 @@ class LocalTeamImpl(
   }
 
   override fun toString(): String {
-    return "LocalTeam{" +
-      "name=\"${this.name}\", " +
-      "teammates=\"${this._teammates}\", " +
-      "health=\"${this.health}\", " +
-      "identifier=\"${this.identifier}\"" +
-      "}"
+    return StylishToStringBuilder()
+      .begin("LocalTeam")
+      .add("identifier", this.identifier)
+      .add("name", this.name)
+      .add("teammates", this._teammates)
+      .add("health", this.health)
+      .build()
   }
 }

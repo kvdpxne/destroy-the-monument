@@ -2,6 +2,7 @@ package me.kvdpxne.dtm.user
 
 import java.util.UUID
 import me.kvdpxne.dtm.profession.Profession
+import me.kvdpxne.dtm.shared.StylishToStringBuilder
 import me.kvdpxne.dtm.wallet.Wallet
 
 open class UserImpl internal constructor(
@@ -24,5 +25,17 @@ open class UserImpl internal constructor(
       this.currentProfession,
       this.identifier
     )
+  }
+
+  override fun toString(): String {
+    return StylishToStringBuilder()
+      .begin("User")
+      .add("identifier", this.identifier)
+      .add("name", this.name)
+      .add("displayName", this.displayName)
+      .add("statistics", this.statistics)
+      .add("wallet", this.wallet)
+      .add("currentProfession", this.currentProfession)
+      .build()
   }
 }

@@ -67,8 +67,7 @@ object ProfessionManager : Iterable<Profession> {
 
     this._professions[identifier] = profession
     Debug.log {
-      "The profession \"$profession\" has been added and assigned to the " +
-        "identifier \"$identifier\"."
+      "The new ${profession.name} profession has been successfully registered."
     }
   }
 
