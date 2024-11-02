@@ -45,6 +45,7 @@ import me.kvdpxne.dtm.shared.debug.Debug
 import me.kvdpxne.dtm.shared.reflection.Reflection
 import me.kvdpxne.dtm.shared.text.BukkitTextFormatter
 import me.kvdpxne.dtm.shared.world.VoidChunkGenerator
+import me.kvdpxne.dtm.translation.TranslationService
 import me.kvdpxne.dtm.user.LocalUserManager
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserBuilder
@@ -168,6 +169,9 @@ class DestroyTheMonument : JavaPlugin() {
     } else {
       Reflection
     }
+
+    //
+    TranslationService.loadTranslations()
 
     try {
       //

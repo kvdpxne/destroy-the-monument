@@ -2,6 +2,7 @@ package me.kvdpxne.dtm.user
 
 import java.lang.ref.Reference
 import java.lang.ref.WeakReference
+import java.util.Locale
 import java.util.UUID
 import me.kvdpxne.dtm.shared.text.colorize
 import me.kvdpxne.dtm.configuration.Configuration
@@ -24,6 +25,9 @@ class LocalUserPerformerImpl(
 
   override val player: Player?
     get() = this._player.get()
+
+  override val locale: Locale
+    get() = Locale.of("pl", "PL")
 
   override val isOnline: Boolean
     get() = this.player?.isOnline ?: false

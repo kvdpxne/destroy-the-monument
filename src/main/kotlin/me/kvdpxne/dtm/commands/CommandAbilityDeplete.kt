@@ -6,6 +6,8 @@ import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.configuration.Configuration
 import me.kvdpxne.dtm.profession.Ability
 import me.kvdpxne.dtm.team.Teammate
+import me.kvdpxne.dtm.translation.TranslationService
+import me.kvdpxne.dtm.translation.message.MessageKeys
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
 /**
@@ -26,9 +28,10 @@ fun createAbilityDepleteCommand(): Command<LocalUserPerformer> {
       //
       ability.renewDelayed(performer.player!!)
 
-      performer.sendConfiguredMessage { configuration: Configuration ->
-        configuration.DEPLETE_ABILITY_MESSAGE
-      }
+      TranslationService.chains()
+        .receiver(performer)
+        .message(MessageKeys.COMMAND_ABILITY_DEPLETE)
+        .send()
     }
     .build()
 }

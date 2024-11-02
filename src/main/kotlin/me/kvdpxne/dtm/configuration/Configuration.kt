@@ -38,6 +38,8 @@ object Configuration {
 
   const val LOBBY_WORLD_NAME = "lobby"
 
+  const val USE_PREFIX = true
+
   var OVERRIDE_DEFAULT_CHUNK_GENERATOR = true
 
   /**
@@ -53,10 +55,6 @@ object Configuration {
   const val NO_IN_GAME_MESSAGE = "&cBłąd: &7Nie jesteś grze."
 
   const val NO_ABILITY_MESSAGE = "&cBłąd: &7Twoja profesja nie posiada umiejętności specjalnej."
-
-  const val DEPLETE_ABILITY_MESSAGE = "&6&lDTM &7> &aUmiejętność została anulowana."
-
-  const val RENEW_ABILITY_MESSAGE = "&6&lDTM &7> &aUmiejętność została odnowiona."
 
   const val NO_FOUND_ARENA = "&cBłąd&8: &7Arena o nazwie &c{ARENA_NAME} &7nie istnieje."
 

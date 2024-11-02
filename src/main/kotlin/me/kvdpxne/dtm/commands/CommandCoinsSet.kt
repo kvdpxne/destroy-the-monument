@@ -7,6 +7,9 @@ import me.kvdpxne.dtm.command.ParameterBuilder
 import me.kvdpxne.dtm.command.ParameterValidators
 import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
+import me.kvdpxne.dtm.translation.TranslationService
+import me.kvdpxne.dtm.translation.formatter.Formatter
+import me.kvdpxne.dtm.translation.message.MessageKeys
 import me.kvdpxne.dtm.user.LocalUserPerformer
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserService
@@ -25,7 +28,7 @@ fun createCoinsSetCommand(): Command<Performer> {
     )
     .parameter(
       Parameters.userNameParameter()
-        .required()
+        .optional()
         .build()
     )
     .handler { performer, parameters ->
@@ -37,10 +40,19 @@ fun createCoinsSetCommand(): Command<Performer> {
           throw CommandException("Komenda nie może zostać użyta w konsoli.")
         }
 
-        val oldValue = performer.user.wallet.coins
-
+        val oldValue: Long = performer.user.wallet.coins
         performer.user.wallet.coins = value
-        performer.sendMessage("&6&lDTM &7> &fZmieniono wartość portfela z &6$oldValue &fna &6$value.")
+
+        TranslationService.chains()
+          .receiver(performer)
+          .message(MessageKeys.COMMAND_COINS_SET_SELF)
+          .formatter(
+            Formatter.begin(2)
+              .with("OLD_VALUE", oldValue)
+              .with("NEW_VALUE", value)
+          )
+          .send()
+
         return@handler
       }
 
@@ -49,10 +61,21 @@ fun createCoinsSetCommand(): Command<Performer> {
         val user: User = UserService.findUserByName(userName)
           ?: throw CommandException("Nie znaleziono użytkownika.")
 
-        val oldValue = user.wallet.coins
-
+        val oldValue: Long = user.wallet.coins
         user.wallet.coins = value
-        performer.sendMessage("&6&lDTM &7> &fZmieniono wartość portfela z &6$oldValue &fna &6$value &fu użytkownika &6${user.name}&f.")
+
+        TranslationService.chains()
+          .receiver(performer)
+          .message(MessageKeys.COMMAND_COINS_SET_OTHERS)
+          .formatter(
+            Formatter.begin(3)
+              .with("OLD_VALUE", oldValue)
+              .with("NEW_VALUE", value)
+              .with("USER_NAME", user.name)
+          )
+          .send()
+
+        return@handler
       }
     }
     .build()
