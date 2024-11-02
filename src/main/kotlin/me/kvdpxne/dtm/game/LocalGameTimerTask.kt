@@ -74,7 +74,13 @@ class LocalGameTimerTask internal constructor(
     }
 
     this.playerMutableList.forEach {
-      updateScoreboardTime(it, this.formatTime())
+      try {
+        updateScoreboardTime(it, this.formatTime())
+      } catch (_: Throwable) {
+        runSynchronousTask {
+          this.game.stop()
+        }
+      }
     }
 
     ++this.secondsNumber

@@ -18,6 +18,8 @@ object Configuration {
     }
   }
 
+  const val USE_FA_F = true
+
   val MONUMENT_TYPE = Material.OBSIDIAN
 
   const val TRACE_MESSAGES_IN_GAME = true

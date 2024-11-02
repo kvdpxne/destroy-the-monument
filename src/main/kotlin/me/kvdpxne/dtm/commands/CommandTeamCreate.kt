@@ -7,6 +7,9 @@ import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.team.TeamColors
 import me.kvdpxne.dtm.team.TeamImpl
 import me.kvdpxne.dtm.team.TeamService
+import me.kvdpxne.dtm.translation.TranslationService
+import me.kvdpxne.dtm.translation.formatter.Formatter
+import me.kvdpxne.dtm.translation.message.MessageKeys
 
 /**
  * @since 0.1.0
@@ -35,7 +38,14 @@ fun createTeamCreateCommand(): Command<Performer> {
 
       TeamService.createTeam(team)
 
-      performer.sendMessage(teamName)
+      TranslationService.chains()
+        .receiver(performer)
+        .message(MessageKeys.COMMAND_TEAM_CREATE)
+        .formatter(
+          Formatter.begin(1)
+            .with("TEAM_NAME", team.name)
+        )
+        .send()
     }
     .build()
 }

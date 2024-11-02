@@ -27,7 +27,10 @@ class LocalUserPerformerImpl(
     get() = this._player.get()
 
   override val locale: Locale
-    get() = Locale.of("pl", "PL")
+    get() = Locale.Builder()
+      .setLanguage("pl")
+      .setRegion("PL")
+      .build()
 
   override val isOnline: Boolean
     get() = this.player?.isOnline ?: false

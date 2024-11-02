@@ -7,6 +7,9 @@ import me.kvdpxne.dtm.command.ParameterBuilder
 import me.kvdpxne.dtm.command.ParameterValidators
 import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
+import me.kvdpxne.dtm.translation.TranslationService
+import me.kvdpxne.dtm.translation.formatter.Formatter
+import me.kvdpxne.dtm.translation.message.MessageKeys
 import me.kvdpxne.dtm.user.LocalUserPerformer
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserService
@@ -38,18 +41,39 @@ fun createCoinsSubtractCommand(): Command<Performer> {
         }
 
         performer.user.wallet.subtractCoins(value)
-        performer.sendMessage("&6&lDTM &7> &fZ twojego portfela zostało odjęte &6$value &fmonet.")
+
+        TranslationService.chains()
+          .receiver(performer)
+          .message(MessageKeys.COMMAND_COINS_SUBTRACT_SELF)
+          .formatter(
+            Formatter.begin(1)
+              .with("VALUE", value)
+          )
+          .send()
+
         return@handler
       }
 
       if (2 == parameters.size) {
+        //
+        val userName: String = parameters[1] as String
 
-        val userName: String = parameters[0] as String
+        //
         val user: User = UserService.findUserByName(userName)
           ?: throw CommandException("Nie znaleziono użytkownika.")
 
         user.wallet.subtractCoins(value)
-        performer.sendMessage("&6&lDTM &7> &fZ portfela użytkownika &6${user.name} &fzostało odjęte &6$value &fmonet.")
+
+        TranslationService.chains()
+          .receiver(performer)
+          .message(MessageKeys.COMMAND_COINS_SUBTRACT_OTHERS)
+          .formatter(
+            Formatter.begin(2)
+              .with("USER_NAME", user.name)
+              .with("VALUE", value)
+          )
+          .send()
+
         return@handler
       }
     }

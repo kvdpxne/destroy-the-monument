@@ -21,9 +21,7 @@ object PlayerQuitListener : Listener {
     priority = EventPriority.MONITOR
   )
   fun handlePlayerQuit(event: PlayerQuitEvent) {
-    val player = event.player
-
-    event.player.localUser?.let { localUser: LocalUser ->
+    event.player.localUser.let { localUser: LocalUser ->
       UserService.updateUser(localUser)
       LocalUserManager.removeUser(localUser)
     }

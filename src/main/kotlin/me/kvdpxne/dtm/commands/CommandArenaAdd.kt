@@ -12,6 +12,9 @@ import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.GameService
 import me.kvdpxne.dtm.team.Team
+import me.kvdpxne.dtm.translation.TranslationService
+import me.kvdpxne.dtm.translation.formatter.Formatter
+import me.kvdpxne.dtm.translation.message.MessageKeys
 
 /**
  * @since 0.1.0
@@ -56,7 +59,15 @@ fun createArenaAddCommand(): Command<Performer> {
       //
       GameManager.addArenaToGame(game, arena)
 
-      performer.sendMessage("&6&lDTM &7> &7Arena o nazwie &a${arena.name} &7została przypisana do gry o nazwie &a${game.name}&7.")
+      TranslationService.chains()
+        .receiver(performer)
+        .message(MessageKeys.COMMAND_ARENA_ADD)
+        .formatter(
+          Formatter.begin(2)
+            .with("ARENA_NAME", arena.name)
+            .with("GAME_NAME", game.name)
+        )
+        .send()
     }
     .build()
 }

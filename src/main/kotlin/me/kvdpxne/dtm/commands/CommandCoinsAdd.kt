@@ -7,6 +7,9 @@ import me.kvdpxne.dtm.command.ParameterBuilder
 import me.kvdpxne.dtm.command.ParameterValidators
 import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
+import me.kvdpxne.dtm.translation.TranslationService
+import me.kvdpxne.dtm.translation.formatter.Formatter
+import me.kvdpxne.dtm.translation.message.MessageKeys
 import me.kvdpxne.dtm.user.LocalUserPerformer
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserService
@@ -40,7 +43,16 @@ fun createCoinsAddCommand(): Command<Performer> {
         }
 
         performer.user.wallet.addCoins(value)
-        performer.sendMessage("&6&lDTM &7> &fDo twojego portfela zostało dodane &6$value &fmonet.")
+
+        TranslationService.chains()
+          .receiver(performer)
+          .message(MessageKeys.COMMAND_COINS_ADD_SELF)
+          .formatter(
+            Formatter.begin(1)
+              .with("VALUE", value)
+          )
+          .send()
+
         return@handler
       }
 
@@ -50,7 +62,16 @@ fun createCoinsAddCommand(): Command<Performer> {
         ?: throw CommandException("Nie znaleziono użytkownika.")
 
       user.wallet.addCoins(value)
-      performer.sendMessage("&6&lDTM &7> &fDo portfela użytkownika &6${user.name} &fzostało dodane &6$value &fmonet.")
+
+      TranslationService.chains()
+        .receiver(performer)
+        .message(MessageKeys.COMMAND_COINS_ADD_OTHERS)
+        .formatter(
+          Formatter.begin(2)
+            .with("USER_NAME", user.name)
+            .with("VALUE", value)
+        )
+        .send()
     }
     .build()
 }

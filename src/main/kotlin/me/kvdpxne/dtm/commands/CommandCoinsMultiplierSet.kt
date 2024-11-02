@@ -7,6 +7,9 @@ import me.kvdpxne.dtm.command.ParameterBuilder
 import me.kvdpxne.dtm.command.ParameterValidators
 import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
+import me.kvdpxne.dtm.translation.TranslationService
+import me.kvdpxne.dtm.translation.formatter.Formatter
+import me.kvdpxne.dtm.translation.message.MessageKeys
 import me.kvdpxne.dtm.user.LocalUserPerformer
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserService
@@ -39,9 +42,18 @@ fun createCoinsMultiplierSetCommand(): Command<Performer> {
         }
 
         val oldMultiplier = performer.user.wallet.multiplier
-
         performer.user.wallet.multiplier = value
-        performer.sendMessage("&6&lDTM &7> &fZmieniono mnożnik z &6$oldMultiplier &fna &6$value.")
+
+        TranslationService.chains()
+          .receiver(performer)
+          .message(MessageKeys.COMMAND_COINS_MULTIPLIER_SET_SELF)
+          .formatter(
+            Formatter.begin(2)
+              .with("OLD_VALUE", oldMultiplier)
+              .with("NEW_VALUE", value)
+          )
+          .send()
+
         return@handler
       }
 
@@ -51,9 +63,19 @@ fun createCoinsMultiplierSetCommand(): Command<Performer> {
           ?: throw CommandException("Nie znaleziono użytkownika.")
 
         val oldMultiplier = user.wallet.multiplier
-
         user.wallet.multiplier = value
-        performer.sendMessage("&6&lDTM &7> &fZmieniono mnożnik z &6$oldMultiplier &fna &6$value.")
+
+        TranslationService.chains()
+          .receiver(performer)
+          .message(MessageKeys.COMMAND_COINS_MULTIPLIER_SET_OTHERS)
+          .formatter(
+            Formatter.begin(3)
+              .with("USER_NAME", user.name)
+              .with("OLD_VALUE", oldMultiplier)
+              .with("NEW_VALUE", value)
+          )
+          .send()
+
         return@handler
       }
     }

@@ -1,0 +1,54 @@
+{
+  "command": {
+    "ability": {
+      "deplete": "&7Your ability has been canceled.",
+      "renew": "&7Your ability has been renewed."
+    },
+    "arena": {
+      "add": "&7The arena named &6${ARENA_NAME} &7has been added to the pool of arenas in the game named &6${GAME_NAME}&7.",
+      "create": "&7A new arena named &6{ARENA_NAME}&7 has been created.",
+      "remove": "&7The arena named &6{ARENA_NAME} &7has been removed."
+    },
+    "coins": {
+      "add": {
+        "self": "&7Coins worth &6{VALUE} &7have been added to your wallet.",
+        "others": "&7Coins worth &6{VALUE} &7have been added to the wallet of user &6{USER_NAME}&7."
+      },
+      "multiplier": {
+        "set": {
+          "self": "&7Your coin multiplier has been changed from &6{OLD_VALUE} &7to &6{NEW_VALUE}&7.",
+          "others": "&7The coin multiplier for user &6{USER_NAME} &7has been changed from &6{OLD_VALUE} &7to &6{NEW_VALUE}&7."
+        },
+        "show": {
+          "self": "&7Your multiplier: &6{VALUE}&7.",
+          "others": "&7The multiplier of user &6{USER_NAME}&7: &6{VALUE}&7."
+        }
+      },
+      "set": {
+        "self": "&7Your wallet value has been changed from &6{OLD_VALUE} &7to &6{NEW_VALUE}&7.",
+        "others": "&7The wallet value has been changed from &6{OLD_VALUE} &7to &6{NEW_VALUE} &7for user &6{USER_NAME}&7."
+      },
+      "show": {
+        "self": "&7Your coins: &6{VALUE}&7.",
+        "others": "&7Coins of user &6{USER_NAME}&7: &6{VALUE}&7."
+      },
+      "subtract": {
+        "self": "&7Coins worth &6{VALUE} &7have been subtracted from your wallet.",
+        "others": "&7Coins worth &6{VALUE} &7have been subtracted from the wallet of user &6{USER_NAME}&7."
+      }
+    },
+    "game": {
+      "create": "&7A new game named &6{GAME_NAME}&7 has been created.",
+      "remove": "&7The game named &6{GAME_NAME} &7has been removed."
+    },
+    "insufficient": {
+      "privileges": "&cYou do not have sufficient privileges &8(&f{PRIVILEGE_NAME}&8) &cto execute this command."
+    },
+    "team": {
+      "add": "&7The team named &6{TEAM_NAME} &7has been added to the game named &6{GAME_NAME}&7.",
+      "create": "&7A new team named &6{TEAM_NAME}&7 has been created.",
+      "remove": "&7The team named &6{TEAM_NAME} &7has been removed from the game named &6{GAME_NAME}&7."
+    },
+    "wand": "&7A magic wand has been added to your inventory."
+  }
+}

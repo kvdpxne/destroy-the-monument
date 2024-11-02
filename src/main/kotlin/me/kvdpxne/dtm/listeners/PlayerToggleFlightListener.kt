@@ -38,7 +38,7 @@ object PlayerToggleFlightListener : Listener {
     val player: Player = event.player
 
     //
-    val user: LocalUser = event.player.localUser ?: return
+    val user: LocalUser = event.player.localUser
 
     //
     val game: LocalGame = user.game ?: return

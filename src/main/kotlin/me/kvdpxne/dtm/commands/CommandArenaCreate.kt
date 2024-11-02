@@ -7,6 +7,9 @@ import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.arena.ArenaService
 import me.kvdpxne.dtm.arena.ArenaImpl
+import me.kvdpxne.dtm.translation.TranslationService
+import me.kvdpxne.dtm.translation.formatter.Formatter
+import me.kvdpxne.dtm.translation.message.MessageKeys
 
 /**
  * @since 0.1.0
@@ -29,10 +32,14 @@ fun createArenaCreateCommand(): Command<Performer> {
       //
       ArenaService.insertArena(arena)
 
-      performer.sendMessages(
-        "&6&lDTM &7> &7Utworzono nową arenę o nazwie: &a$arenaName",
-        "&6&lDTM &7> &7Pamiętaj, że arena nie jest jeszcze gotowa aby przypisać ją do gry."
-      )
+      TranslationService.chains()
+        .receiver(performer)
+        .message(MessageKeys.COMMAND_ARENA_CREATE)
+        .formatter(
+          Formatter.begin(1)
+            .with("ARENA_NAME", arena.name)
+        )
+        .send()
     }
     .build()
 }

@@ -3,6 +3,8 @@ package me.kvdpxne.dtm.commands
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.shared.item.ItemsClipboard
+import me.kvdpxne.dtm.translation.TranslationService
+import me.kvdpxne.dtm.translation.message.MessageKeys
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
 /**
@@ -14,6 +16,11 @@ fun createWandCommand(): Command<LocalUserPerformer> {
     .aliases("w")
     .handler { performer, _ ->
       performer.player?.inventory?.addItem(ItemsClipboard.ITEM_WAND)
+
+      TranslationService.chains()
+        .receiver(performer)
+        .message(MessageKeys.COMMAND_WAND)
+        .send()
     }
     .build()
 }

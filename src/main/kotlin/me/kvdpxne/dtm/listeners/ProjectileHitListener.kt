@@ -1,5 +1,6 @@
 package me.kvdpxne.dtm.listeners
 
+import java.lang.reflect.Method
 import kotlin.random.Random
 import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.configuration.Configuration
@@ -109,7 +110,13 @@ object ProjectileHitListener : Listener {
       return
     }
 
-    val shooter: ProjectileSource? = projectile.shooter
+    lateinit var shooter: ProjectileSource
+    for (method: Method in projectile::class.java.methods) {
+      if ("getShooter" == method.name && ProjectileSource::class.java == method.returnType) {
+        shooter = method.invoke(projectile) as ProjectileSource
+      }
+    }
+
     if (shooter !is Player) {
       return
     }

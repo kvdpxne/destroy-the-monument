@@ -1,6 +1,10 @@
 package me.kvdpxne.dtm.command
 
+import me.kvdpxne.dtm.configuration.Configuration
 import me.kvdpxne.dtm.shared.player.localUser
+import me.kvdpxne.dtm.translation.TranslationService
+import me.kvdpxne.dtm.translation.formatter.Formatter
+import me.kvdpxne.dtm.translation.message.MessageKeys
 import me.kvdpxne.dtm.user.LocalUserPerformer
 import org.bukkit.command.CommandSender
 import org.bukkit.command.defaults.BukkitCommand
@@ -31,9 +35,23 @@ internal class BukkitCommandHandler internal constructor(
     label: String,
     arguments: Array<String>
   ): Boolean {
-    if (!testPermissionSilent(commandSender)) {
-      commandSender.sendMessage("You do not have sufficient privileges to execute this command.")
-      return true
+    if (Configuration.USE_FA_F) {
+      if (!testPermissionSilent(commandSender)) {
+        TranslationService.chains()
+          .receiver(commandSender.asPerformer())
+          .message(MessageKeys.COMMAND_INSUFFICIENT_PRIVILEGES)
+          .formatter(
+            Formatter.begin(1)
+              .with("PRIVILEGE_NAME", this.permission)
+          )
+          .send()
+
+        return true
+      }
+    } else {
+      if (!testPermission(commandSender)) {
+        return true
+      }
     }
 
     try {

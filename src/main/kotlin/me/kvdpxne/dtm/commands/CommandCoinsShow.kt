@@ -5,6 +5,9 @@ import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
+import me.kvdpxne.dtm.translation.TranslationService
+import me.kvdpxne.dtm.translation.formatter.Formatter
+import me.kvdpxne.dtm.translation.message.MessageKeys
 import me.kvdpxne.dtm.user.LocalUserPerformer
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserService
@@ -21,27 +24,37 @@ fun createCoinsShowCommand(): Command<Performer> {
         .build()
     )
     .handler { performer, parameters ->
-      if (parameters.isEmpty()) {
-
-        if (performer !is LocalUserPerformer) {
-          throw CommandException("Komenda nie może zostać użyta w konsoli.")
-        }
-
-        performer.sendMessage("&6&lDTM &7> &fMonety: &6${performer.user.wallet.coins}")
-        return@handler
-      }
-
       if (1 == parameters.size) {
         val userName: String = parameters[0] as String
+
         val user: User = UserService.findUserByName(userName)
           ?: throw CommandException("Nie znaleziono użytkownika.")
 
-        val name = user.name
-        val coins = user.wallet.coins
+        TranslationService.chains()
+          .receiver(performer)
+          .message(MessageKeys.COMMAND_COINS_SHOW_OTHERS)
+          .formatter(
+            Formatter.begin(1)
+              .with("USER_NAME", user.name)
+              .with("VALUE", user.wallet.coins)
+          )
+          .send()
 
-        performer.sendMessage("&6&lDTM &7> &fMonety użytkownika &6$name&f: &6$coins")
         return@handler
       }
+
+      if (performer !is LocalUserPerformer) {
+        throw CommandException("Komenda nie może zostać użyta w konsoli.")
+      }
+
+      TranslationService.chains()
+        .receiver(performer)
+        .message(MessageKeys.COMMAND_COINS_SHOW_SELF)
+        .formatter(
+          Formatter.begin(1)
+            .with("VALUE", performer.user.wallet.coins)
+        )
+        .send()
     }
     .build()
 }

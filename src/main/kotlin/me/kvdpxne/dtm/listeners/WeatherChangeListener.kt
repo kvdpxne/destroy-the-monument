@@ -4,6 +4,7 @@ import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.shared.event.cancel
+import me.kvdpxne.dtm.shared.world.WorldsHolder
 import org.bukkit.World
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -30,6 +31,15 @@ object WeatherChangeListener : Listener {
 
     // Obiekt światu, na którym zmieniła się pogoda.
     val world: World = event.world
+
+    //
+    val lobbyWorld: World? = WorldsHolder.lobbyWorld
+
+    //
+    if (null != lobbyWorld && world == lobbyWorld) {
+      event.cancel()
+      return
+    }
 
     //
     for (game: Game<*> in GameManager.games) {

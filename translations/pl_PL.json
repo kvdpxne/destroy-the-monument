@@ -1,0 +1,54 @@
+{
+  "command": {
+    "ability": {
+      "deplete": "&7Twoja umiejętność została anulowana.",
+      "renew": "&7Twoja umiejętność została odnowiona."
+    },
+    "arena": {
+      "add": "&7Arena o nazwie &6${ARENA_NAME} &7została dodana do puli aren w grze o nazwie &6${GAME_NAME}&7.",
+      "create": "&7Utworzono nową arenę o nazwie &6{ARENA_NAME}&7.",
+      "remove": "&7Arena o nazwie &6{ARENA_NAME} &7została usunięta."
+    },
+    "coins": {
+      "add": {
+        "self": "&7Do twojego portfela zostały dodane monety o wartości &6{VALUE}&7.",
+        "others": "&7Do portfela użytkownika &6{USER_NAME} &7zostały dodane monety o wartości &6{VALUE}&7."
+      },
+      "multiplier": {
+        "set": {
+          "self": "&7Twój mnożnik monet został zmieniony z &6{OLD_VALUE} &7na &6{NEW_VALUE}&7.",
+          "others": "&7Mnożnik monet użytkownika &6{USER_NAME} &7został zmieniony z &6{OLD_VALUE} &7na &6{NEW_VALUE}&7."
+        },
+        "show": {
+          "self": "&7Twój mnożnik: &6{VALUE}&7.",
+          "others": "&7Mnożnik użytkownika &6{USER_NAME}&7: &6{VALUE}&7."
+        }
+      },
+      "set": {
+        "self": "&7Zmieniono wartość portfela z &6{OLD_VALUE} &7na &6{NEW_VALUE}&7.",
+        "others": "&7Zmieniono wartość portfela z &6{OLD_VALUE} &7na &6{NEW_VALUE} &7dla użytkownika &6{USER_NAME}&7."
+      },
+      "show": {
+        "self": "&7Twoje monety: &6{VALUE}&7.",
+        "others": "&7Monety użytkownika &6{USER_NAME}&7: &6{VALUE}&7."
+      },
+      "subtract": {
+        "self": "&7Z twojego portfela zostały odjęte monety o wartości &6{VALUE}&7.",
+        "others": "&7Z portfela użytkownika &6{USER_NAME} &7zostały odjęte monety o wartości &6{VALUE}&7."
+      }
+    },
+    "game": {
+      "create": "&7Utworzono nową gre o nazwie &6{GAME_NAME}&7.",
+      "remove": "&7Gra o nazwie &6{GAME_NAME} &7została usunięta."
+    },
+    "insufficient": {
+      "privileges": "&cNie posiadasz wystarczających uprawnień &8(&f{PRIVILEGE_NAME}&8) &caby wykonać tą komendę."
+    },
+    "team": {
+      "add": "&7Drużyna o nazwie &6{TEAM_NAME} &7została dodana do gry o nazwie &6{GAME_NAME}&7.",
+      "create": "&7Utworzono nową drużynę o nazwie &6{TEAM_NAME}&7.",
+      "remove": "&7Drużyna o nazwie &6{TEAM_NAME} &7została usunięta z gry o nazwie &6{GAME_NAME}&7."
+    },
+    "wand": "&7Do twojego ekwipunku został dodany magiczny patyk."
+  }
+}

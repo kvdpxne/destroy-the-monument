@@ -5,6 +5,9 @@ import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
+import me.kvdpxne.dtm.translation.TranslationService
+import me.kvdpxne.dtm.translation.formatter.Formatter
+import me.kvdpxne.dtm.translation.message.MessageKeys
 import me.kvdpxne.dtm.user.LocalUserPerformer
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserService
@@ -29,8 +32,16 @@ fun createCoinsMultiplierShowCommand(): Command<Performer> {
         val user: User = UserService.findUserByName(userName)
           ?: throw CommandException("Nie znaleziono użytkownika.")
 
-        val multiplier = user.wallet.multiplier
-        performer.sendMessage("&6&lDTM &7> &fMnożnik: &6$multiplier")
+        TranslationService.chains()
+          .receiver(performer)
+          .message(MessageKeys.COMMAND_COINS_MULTIPLIER_SHOW_OTHERS)
+          .formatter(
+            Formatter.begin(2)
+              .with("USER_NAME", user.name)
+              .with("VALUE", user.wallet.multiplier)
+          )
+          .send()
+
         return@handler
       }
 
@@ -39,8 +50,14 @@ fun createCoinsMultiplierShowCommand(): Command<Performer> {
         return@handler
       }
 
-      val multiplier = performer.user.wallet.multiplier
-      performer.sendMessage("&6&lDTM &7> &fMnożnik: &6$multiplier")
+      TranslationService.chains()
+        .receiver(performer)
+        .message(MessageKeys.COMMAND_COINS_MULTIPLIER_SHOW_SELF)
+        .formatter(
+          Formatter.begin(1)
+            .with("VALUE", performer.user.wallet.multiplier)
+        )
+        .send()
     }
     .build()
 }

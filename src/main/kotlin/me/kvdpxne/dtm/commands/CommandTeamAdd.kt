@@ -10,6 +10,9 @@ import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameService
 import me.kvdpxne.dtm.team.Team
 import me.kvdpxne.dtm.team.TeamService
+import me.kvdpxne.dtm.translation.TranslationService
+import me.kvdpxne.dtm.translation.formatter.Formatter
+import me.kvdpxne.dtm.translation.message.MessageKeys
 
 /**
  * @since 0.1.0
@@ -51,8 +54,15 @@ fun createTeamAddCommand(): Command<Performer> {
       //
       GameService.insertGameTeam(game, team)
 
-      //
-      performer.sendMessage("Success")
+      TranslationService.chains()
+        .receiver(performer)
+        .message(MessageKeys.COMMAND_TEAM_ADD)
+        .formatter(
+          Formatter.begin(2)
+            .with("TEAM_NAME", team.name)
+            .with("GAME_NAME", game.name)
+        )
+        .send()
     }
     .build()
 }

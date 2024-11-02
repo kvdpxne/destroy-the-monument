@@ -97,7 +97,7 @@ object TranslationService {
       Files.walk(path)
         .filter(Files::isRegularFile)
         .map(TranslationService::openFile)
-        .collect(Collectors.toUnmodifiableList())
+        .collect(Collectors.toList())
     }
   }
 
@@ -127,7 +127,10 @@ object TranslationService {
       val language = splitted[0]
       val country = splitted[1]
 
-      val locale: Locale = Locale.of(language, country)
+      val locale = Locale.Builder()
+        .setLanguage(language)
+        .setRegion(country)
+        .build()
 
       val messages: Map<MessageKey, String> = this.flattenJson(element).toMap()
       val localeMessages = LocaleMessages(locale, messages)

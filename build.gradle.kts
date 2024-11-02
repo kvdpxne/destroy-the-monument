@@ -1,10 +1,11 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
   libraries.plugins.run {
     alias(dokka)
     alias(kotlin)
-//    alias(kotlin.serialization)
+    alias(kotlin.serialization)
     alias(shadow)
   }
 }
@@ -37,6 +38,8 @@ dependencies {
   }
 
   implementation(libraries.bundles.exposed)
+  implementation(libraries.kotlinx.serialization.json)
+
   implementation(libraries.postgresql)
 
   implementation("fr.mrmicky:fastboard:2.1.2")
@@ -78,10 +81,15 @@ tasks {
       value = "1.$value"
     }
 
-    kotlinOptions.jvmTarget = value
+    compilerOptions {
+      jvmTarget.set(JvmTarget.fromTarget(value))
+    }
   }
 
   processResources {
+    //
+    dependsOn("processTranslations")
+
     val properties = mapOf(
       "description" to rootProject.description,
       "version" to rootProject.version
@@ -95,12 +103,36 @@ tasks {
     }
   }
 
-  test {
+  withType<Test> {
     useJUnitPlatform()
+  }
+
+  withType<AbstractArchiveTask> {
+    isPreserveFileTimestamps = false
+    isReproducibleFileOrder = true
   }
 
   shadowJar {
     archiveClassifier.set("bukkit")
+  }
+
+  register("processTranslations") {
+    description = "Copies to resources and removes extra spaces from translation files."
+
+    doLast {
+      val source = layout.projectDirectory.dir("translations/").asFile
+      val target = layout.buildDirectory.dir("resources/main/translations/").get().asFile
+
+      if (!target.exists()) {
+        target.mkdirs()
+      }
+
+      source.walkTopDown()
+        .filter { it.isFile && it.extension == "json" }
+        .forEach {
+          it.copyTo(File(target, it.name), overwrite = true)
+        }
+    }
   }
 
   register("runMinecraftServer") {
