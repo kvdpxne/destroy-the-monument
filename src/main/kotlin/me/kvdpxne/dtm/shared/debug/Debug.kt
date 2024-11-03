@@ -61,7 +61,7 @@ object Debug {
   fun initialize(
     logger: Logger
   ) {
-    check(null != this.logger) {
+    check(null == this.logger) {
       "Debug logger already initialized."
     }
 
@@ -74,7 +74,7 @@ object Debug {
    * @since 0.1.0
    */
   fun destroy() {
-    check(null == this.logger) {
+    check(null != this.logger) {
       "Debug logger destroyed."
     }
 
