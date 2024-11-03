@@ -1,29 +1,41 @@
-package me.kvdpxne.dtm.listeners.netty
+package me.kvdpxne.dtm.listeners.packet
 
+import com.comphenix.protocol.PacketType
+import com.comphenix.protocol.events.PacketAdapter
+import com.comphenix.protocol.events.PacketContainer
+import com.comphenix.protocol.events.PacketEvent
+import me.kvdpxne.dtm.DestroyTheMonument
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.gui.createProfessionSelectionGui
 import me.kvdpxne.dtm.shared.player.localUser
 import me.kvdpxne.dtm.shared.player.resetExperienceBar
 import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.user.LocalUser
-import net.minecraft.server.v1_7_R4.PacketPlayInBlockDig
 import org.bukkit.entity.Player
 
-object PacketPlayInBlockDigListener {
+/**
+ * @since 0.1.0
+ */
+object PacketPlayInBlockDigListener : PacketAdapter(
+  DestroyTheMonument.instance,
+  PacketType.Play.Client.BLOCK_DIG
+) {
 
-  /**
-   *
-   */
-  fun handlePacketPlayInBlockDig(
-    packet: PacketPlayInBlockDig,
-    player: Player
-  ) {
-    if (4 != packet.g()) {
+  override fun onPacketReceiving(event: PacketEvent) {
+    val packet: PacketContainer = event.packet
+
+    val type: Int = packet.integers.readSafely(4)
+      ?: return
+
+    //
+    if (4 != type) {
       return
     }
 
+    val player: Player = event.player
+
     // The user object obtained from the unique identifier of the player object
-    val user: LocalUser = player.localUser ?: return
+    val user: LocalUser = player.localUser
 
     // The object of the game to which the user is assigned
     val game: LocalGame = user.game ?: return

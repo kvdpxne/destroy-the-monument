@@ -1,12 +1,15 @@
 package me.kvdpxne.dtm
 
 import com.comphenix.protocol.ProtocolLibrary
+import com.comphenix.protocol.ProtocolManager
+import com.comphenix.protocol.events.PacketListener
 import me.kvdpxne.dico.Dico
 import me.kvdpxne.dtm.command.CommandManager
 import me.kvdpxne.dtm.commands.createBaseCommand
 import me.kvdpxne.dtm.commands.createGlobalChatCommand
 import me.kvdpxne.dtm.configuration.Configuration
 import me.kvdpxne.dtm.game.GameManager
+import me.kvdpxne.dtm.game.GameService
 import me.kvdpxne.dtm.listeners.BlockBreakListener
 import me.kvdpxne.dtm.listeners.BlockPistonExtendListener
 import me.kvdpxne.dtm.listeners.BlockPlaceListener
@@ -30,7 +33,8 @@ import me.kvdpxne.dtm.listeners.PlayerRespawnListener
 import me.kvdpxne.dtm.listeners.PlayerToggleFlightListener
 import me.kvdpxne.dtm.listeners.ProjectileHitListener
 import me.kvdpxne.dtm.listeners.WeatherChangeListener
-import me.kvdpxne.dtm.listeners.netty.NettyListenerManager
+import me.kvdpxne.dtm.listeners.packet.PacketPlayInBlockDigListener
+import me.kvdpxne.dtm.listeners.packet.PacketPlayInSettingsListener
 import me.kvdpxne.dtm.profession.ProfessionManager
 import me.kvdpxne.dtm.professions.createArcher
 import me.kvdpxne.dtm.professions.createAssassin
@@ -118,6 +122,21 @@ class DestroyTheMonument : JavaPlugin() {
   }
 
   /**
+   * @param listeners
+   *
+   * @since 0.1.0
+   */
+  private fun registerPacketListeners(
+    vararg listeners: PacketListener
+  ) {
+    val protocolManager: ProtocolManager = ProtocolLibrary.getProtocolManager()
+
+    for (listener: PacketListener in listeners) {
+      protocolManager.addPacketListener(listener)
+    }
+  }
+
+  /**
    * Shuts down the plugin by disabling it.
    *
    * This method is called when an irrecoverable error occurs during the loading
@@ -174,6 +193,9 @@ class DestroyTheMonument : JavaPlugin() {
     TranslationService.loadTranslations()
 
     try {
+      GameService
+      UserService
+
       //
       LocalUserManager
       GameManager
@@ -199,7 +221,8 @@ class DestroyTheMonument : JavaPlugin() {
       return
     }
 
-    //
+    // Registers all event listeners built into the server platform needed
+    // for the plugin to function properly.
     this.registerListeners(
       BlockBreakListener,
       BlockPistonExtendListener,
@@ -231,6 +254,12 @@ class DestroyTheMonument : JavaPlugin() {
     )
 
     //
+    this.registerPacketListeners(
+      PacketPlayInBlockDigListener,
+      PacketPlayInSettingsListener
+    )
+
+    //
     CommandManager.addCommands(
       createBaseCommand(),
       createGlobalChatCommand()
@@ -258,9 +287,6 @@ class DestroyTheMonument : JavaPlugin() {
 
       // Dodaje obiekt użytkownika do lokalnej pamięci.
       LocalUserManager.addUser(user)
-
-      //
-      NettyListenerManager.removePlayer(player)
     }
   }
 
@@ -278,7 +304,18 @@ class DestroyTheMonument : JavaPlugin() {
     // Usuwa wszystkie przechowywane obiekty gry z lokalnej pamięci.
     GameManager.removeGames()
 
+    //
+    ProtocolLibrary.getProtocolManager().removePacketListeners(this)
+
+    Debug.log {
+      "The plugin has been properly disabled."
+    }
+
+    //
     instance = null
+
+    //
+    Debug.destroy()
   }
 
   /**
