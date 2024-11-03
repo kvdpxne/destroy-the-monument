@@ -6,6 +6,7 @@ import java.util.Locale
 import java.util.UUID
 import me.kvdpxne.dtm.shared.text.colorize
 import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.translation.TranslationService
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
@@ -26,11 +27,7 @@ class LocalUserPerformerImpl(
   override val player: Player?
     get() = this._player.get()
 
-  override val locale: Locale
-    get() = Locale.Builder()
-      .setLanguage("pl")
-      .setRegion("PL")
-      .build()
+  override var locale: Locale = TranslationService.defaultLocale
 
   override val isOnline: Boolean
     get() = this.player?.isOnline ?: false

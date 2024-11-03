@@ -13,7 +13,7 @@ interface LocalUserPerformer : Identifiable<UUID>, Communicative, Performer {
 
   val player: Player?
 
-  val locale: Locale
+  var locale: Locale
 
   val isOnline: Boolean
 
