@@ -4,7 +4,6 @@ import java.util.UUID
 import me.kvdpxne.dtm.DestroyTheMonument
 import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.configuration.Configuration
-import me.kvdpxne.dtm.listeners.netty.NettyListenerManager
 import me.kvdpxne.dtm.scoreboard.createServerScoreboard
 import me.kvdpxne.dtm.scoreboard.createServerTeam
 import me.kvdpxne.dtm.scoreboard.initScoreboard
@@ -241,8 +240,6 @@ class LocalGameImpl(
 
     player.scoreboard = bukkitTeamScoreboard
     bukkitTeam.addPlayer(player)
-
-    NettyListenerManager.addPlayer(player)
   }
 
   /**
@@ -588,8 +585,6 @@ class LocalGameImpl(
 
         teammate.fastBoard = fastBoard
         timerTask!!.playerMutableList += fastBoard
-
-        NettyListenerManager.addPlayer(player)
       }
     }
 
@@ -633,8 +628,6 @@ class LocalGameImpl(
 
         player.scoreboard.getPlayerTeam(player).removePlayer(player)
         player.scoreboard = Bukkit.getScoreboardManager().mainScoreboard
-
-        NettyListenerManager.removePlayer(player)
 
         player.reset()
         player.equipB()

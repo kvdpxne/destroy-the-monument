@@ -7,6 +7,8 @@ import com.comphenix.protocol.events.PacketEvent
 import java.util.Locale
 import me.kvdpxne.dtm.DestroyTheMonument
 import me.kvdpxne.dtm.shared.player.localUser
+import me.kvdpxne.dtm.translation.Locales
+import me.kvdpxne.dtm.translation.TranslationService
 
 object PacketPlayInSettingsListener : PacketAdapter(
   DestroyTheMonument.instance,
@@ -22,14 +24,11 @@ object PacketPlayInSettingsListener : PacketAdapter(
       return
     }
 
-    val parts: List<String> = textLocale.split("_")
-    val language: String = parts[0]
-    val region: String = parts[1]
-
-    val locale: Locale = Locale.Builder()
-      .setLanguage(language)
-      .setRegion(region)
-      .build()
+    val locale: Locale = try {
+      Locales.fromString(textLocale)
+    } catch (exception: Throwable) {
+      TranslationService.defaultLocale
+    }
 
     event.player.localUser.performer.locale = locale
   }

@@ -123,14 +123,11 @@ object TranslationService {
   fun loadTranslations() {
     for ((element: JsonObject, key: String) in this.openDirectory()) {
 
-      val splitted = key.split("_")
-      val language = splitted[0]
-      val country = splitted[1]
-
-      val locale = Locale.Builder()
-        .setLanguage(language)
-        .setRegion(country)
-        .build()
+      val locale: Locale = try {
+        Locales.fromString(key)
+      } catch (exception: Throwable) {
+        this.defaultLocale
+      }
 
       val messages: Map<MessageKey, String> = this.flattenJson(element).toMap()
       val localeMessages = LocaleMessages(locale, messages)
