@@ -2,6 +2,7 @@
 dico = "d2facc69c4"
 dokka = "1.9.20"
 exposed = "0.56.0"
+exposed-fixed = "fix-class-loader-SNAPSHOT"
 kotlin = "2.0.21"
 kotlinx-coroutines = "1.9.0"
 kotlinx-serialization = "1.7.3"
@@ -25,7 +26,9 @@ shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
 dico-common = { module = "com.github.kvdpxne.dico:common", version.ref = "dico" }
 dico-core = { module = "com.github.kvdpxne.dico:core", version.ref = "dico" }
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
+exposed-core-fixed = { module = "com.github.makeevrserg.Exposed-fix-class-loader:exposed-core", version.ref = "exposed-fixed" }
 exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
+exposed-jdbc-fixed = { module = "com.github.makeevrserg.Exposed-fix-class-loader:exposed-jdbc", version.ref = "exposed-fixed" }
 kotlinx-coroutines-jvm = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-jvm", version.ref = "kotlinx-coroutines" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 notchity = { module = "com.github.kvdpxne:notchity", version.ref = "notchity" }
@@ -39,3 +42,4 @@ thrivi = { module = "com.github.kvdpxne:thrivi", version.ref = "thrivi" }
 [bundles]
 disco = ["dico-common", "dico-core"]
 exposed = ["exposed-core", "exposed-jdbc"]
+exposed-fixed = ["exposed-core-fixed", "exposed-jdbc-fixed"]

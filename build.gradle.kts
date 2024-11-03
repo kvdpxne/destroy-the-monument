@@ -37,7 +37,7 @@ dependencies {
     shadow(libraries.spigot.legacy)
   }
 
-  implementation(libraries.bundles.exposed)
+  implementation(libraries.bundles.exposed.fixed)
   implementation(libraries.kotlinx.serialization.json)
 
   implementation(libraries.postgresql)

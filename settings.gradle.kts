@@ -24,9 +24,9 @@ dependencyResolutionManagement {
 
     maven {
       url = uri("https://jitpack.io/")
-      content {
-        includeGroupAndSubgroups("com.github.kvdpxne")
-      }
+//      content {
+//        includeGroupAndSubgroups("com.github.kvdpxne")
+//      }
     }
 
     maven("https://oss.sonatype.org/content/repositories/snapshots")
