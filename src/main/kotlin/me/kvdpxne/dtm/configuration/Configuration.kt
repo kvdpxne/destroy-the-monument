@@ -18,6 +18,10 @@ object Configuration {
     }
   }
 
+  const val DEBUG_IN_CONSOLE = false
+
+  const val DEBUG_IN_GAME = false
+
   const val USE_FA_F = true
 
   val MONUMENT_TYPE = Material.OBSIDIAN

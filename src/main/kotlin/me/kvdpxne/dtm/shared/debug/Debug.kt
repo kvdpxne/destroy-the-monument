@@ -2,6 +2,7 @@ package me.kvdpxne.dtm.shared.debug
 
 import java.util.logging.Logger
 import me.kvdpxne.dico.Dico
+import me.kvdpxne.dtm.configuration.Configuration
 import org.bukkit.entity.Player
 
 /**
@@ -16,21 +17,21 @@ object Debug {
    *
    * @since 0.1.0
    */
-  private lateinit var logger: Logger
+  private var logger: Logger? = null
 
   /**
    * Whether to print debug messages to the console.
    *
    * @since 0.1.0
    */
-  private var _printInConsole: Boolean = false
+  private var _printInConsole: Boolean = Configuration.DEBUG_IN_CONSOLE
 
   /**
    * Whether to print debug messages in-game to OP players.
    *
    * @since 0.1.0
    */
-  private var _printInGame: Boolean = false
+  private var _printInGame: Boolean = Configuration.DEBUG_IN_GAME
 
   /**
    * Gets whether debug messages are printed to the console.
@@ -39,7 +40,7 @@ object Debug {
    * @since 0.1.0
    */
   val printInConsole: Boolean
-    get() = _printInConsole
+    get() = this._printInConsole
 
   /**
    * Gets whether debug messages are printed in-game to OP players.
@@ -48,7 +49,7 @@ object Debug {
    * @since 0.1.0
    */
   val printInGame: Boolean
-    get() = _printInGame
+    get() = this._printInGame
 
   /**
    * Initializes the debug logger.
@@ -60,11 +61,35 @@ object Debug {
   fun initialize(
     logger: Logger
   ) {
-    check(!this::logger.isInitialized) {
+    check(null != this.logger) {
       "Debug logger already initialized."
     }
 
     this.logger = logger
+  }
+
+  /**
+   * @throws IllegalStateException
+   *
+   * @since 0.1.0
+   */
+  fun destroy() {
+    check(null == this.logger) {
+      "Debug logger destroyed."
+    }
+
+    this.logger = null
+  }
+
+  /**
+   * @param message
+   *
+   * @since 0.1.0
+   */
+  private fun constructMessage(
+    message: String,
+  ): String {
+    return "[DEBUG] $message"
   }
 
   /**
@@ -77,16 +102,18 @@ object Debug {
     message: () -> String
   ) {
     if (this._printInConsole) {
-      this.logger.info(message())
+      val constructedMessage: String = this.constructMessage(message())
+      this.logger?.info(constructedMessage)
     }
 
     if (this._printInGame) {
-      for (player: Player in Dico.getLocalPlayers().asArray()) {
+      for (player: Player in Dico.getLocalPlayers().asCollection()) {
         if (!player.isOp) {
           continue
         }
 
-        player.sendRawMessage("[Debug] ${message()}")
+        val constructedMessage: String = this.constructMessage(message())
+        player.sendRawMessage(constructedMessage)
       }
     }
   }
