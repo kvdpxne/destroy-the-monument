@@ -1,8 +1,11 @@
 package me.kvdpxne.dtm.user
 
-import me.kvdpxne.dtm.statistics.IdentifiableStatistics
+import java.util.UUID
+import me.kvdpxne.dtm.data.state.MutableState
+import me.kvdpxne.dtm.shared.Identifiable
+import me.kvdpxne.dtm.statistics.Statistics
 
-interface UserStatistics : IdentifiableStatistics {
+interface UserStatistics : Identifiable<UUID>, Statistics, MutableState {
 
   val playedGames: Int
 

@@ -1,4 +1,4 @@
-package me.kvdpxne.dtm.data
+package me.kvdpxne.dtm.data.daos
 
 import java.util.UUID
 import me.kvdpxne.dtm.data.repositories.MonumentPositionRepository
@@ -128,7 +128,7 @@ object MonumentPositionDao : MonumentPositionRepository {
     return concurrentTransaction(DatabasesConfiguration.main) {
       MonumentPositionTable.insert {
         it[this.identifier] = monumentPosition.identifier
-        this@MonumentPositionDao.buildMonumentPositionStatement(monumentPosition, it)
+        buildMonumentPositionStatement(monumentPosition, it)
       }.insertedCount
     }
   }
@@ -143,7 +143,7 @@ object MonumentPositionDao : MonumentPositionRepository {
       MonumentPositionTable.update({
         MonumentPositionTable.identifier eq monumentPosition.identifier
       }) {
-        this@MonumentPositionDao.buildMonumentPositionStatement(monumentPosition, it)
+        buildMonumentPositionStatement(monumentPosition, it)
       }
     }
   }

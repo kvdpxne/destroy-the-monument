@@ -1,4 +1,4 @@
-package me.kvdpxne.dtm.data
+package me.kvdpxne.dtm.data.daos
 
 import java.util.UUID
 import kotlinx.coroutines.flow.Flow

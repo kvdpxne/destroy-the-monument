@@ -1,5 +1,7 @@
 package me.kvdpxne.dtm.statistics
 
+import me.kvdpxne.dtm.data.state.BaseMutableState
+
 /**
  * An abstract base class for representing player statistics.
  *
@@ -14,7 +16,7 @@ package me.kvdpxne.dtm.statistics
  *
  * @since 0.1.0
  */
-abstract class AbstractStatistics protected constructor() : Statistics {
+abstract class AbstractStatistics protected constructor() : BaseMutableState(), Statistics {
 
   /**
    * Ensures the sum of a statistic (kills, deaths, etc.), and the provided
@@ -41,6 +43,7 @@ abstract class AbstractStatistics protected constructor() : Statistics {
     if (0 > newValue) {
       return 0
     }
+    this.markAsModified()
     return newValue
   }
 
@@ -69,6 +72,7 @@ abstract class AbstractStatistics protected constructor() : Statistics {
     if (0 > newValue) {
       return 0
     }
+    this.markAsModified()
     return newValue
   }
 

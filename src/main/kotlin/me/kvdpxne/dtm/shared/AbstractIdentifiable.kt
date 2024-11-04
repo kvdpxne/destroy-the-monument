@@ -19,6 +19,25 @@ abstract class AbstractIdentifiable<T : Serializable>(
   override val identifier: T
 ) : Identifiable<T> {
 
+  companion object {
+
+    fun <T> useEquals(
+      other: Any?,
+      identifier: T
+    ): Boolean {
+      if (this === other) {
+        return true
+      }
+
+      other as AbstractIdentifiable<*>
+      return identifier == other.identifier
+    }
+
+    fun <T> useHashCode(identifier: T): Int {
+      return identifier.hashCode()
+    }
+  }
+
 
   /**
    * Compares this object with another for equality.
@@ -34,12 +53,7 @@ abstract class AbstractIdentifiable<T : Serializable>(
   override fun equals(
     other: Any?
   ): Boolean {
-    if (this === other) {
-      return true
-    }
-
-    other as AbstractIdentifiable<*>
-    return this.identifier == other.identifier
+    return useEquals(other, this.identifier)
   }
 
   /**
@@ -52,6 +66,6 @@ abstract class AbstractIdentifiable<T : Serializable>(
    * @since 0.1.0
    */
   override fun hashCode(): Int {
-    return this.identifier.hashCode()
+    return useHashCode(this.identifier)
   }
 }

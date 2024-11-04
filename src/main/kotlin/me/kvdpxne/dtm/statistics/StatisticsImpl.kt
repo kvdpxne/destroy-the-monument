@@ -98,6 +98,8 @@ open class StatisticsImpl(
     this.assists = 0
     this.deaths = 0
     this.destroyedMonuments = 0
+
+    this.markAsModified()
   }
 
   /**

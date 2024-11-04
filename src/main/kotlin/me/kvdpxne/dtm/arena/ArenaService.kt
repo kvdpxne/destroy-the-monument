@@ -3,11 +3,11 @@ package me.kvdpxne.dtm.arena
 import java.util.UUID
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import me.kvdpxne.dtm.data.ArenaDao
-import me.kvdpxne.dtm.data.ArenaMonumentPositionsDao
-import me.kvdpxne.dtm.data.ArenaRevivalPositionsDao
-import me.kvdpxne.dtm.data.MonumentPositionDao
-import me.kvdpxne.dtm.data.RevivalPositionDao
+import me.kvdpxne.dtm.data.daos.ArenaDao
+import me.kvdpxne.dtm.data.daos.ArenaMonumentPositionsDao
+import me.kvdpxne.dtm.data.daos.ArenaRevivalPositionsDao
+import me.kvdpxne.dtm.data.daos.MonumentPositionDao
+import me.kvdpxne.dtm.data.daos.RevivalPositionDao
 import me.kvdpxne.dtm.position.MonumentPosition
 import me.kvdpxne.dtm.position.MonumentPositionImpl
 import me.kvdpxne.dtm.position.RevivalPosition

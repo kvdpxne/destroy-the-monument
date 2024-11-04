@@ -1,4 +1,4 @@
-package me.kvdpxne.dtm.data
+package me.kvdpxne.dtm.data.daos
 
 import java.util.UUID
 import me.kvdpxne.dtm.data.repositories.TeamRepository
@@ -83,7 +83,7 @@ object TeamDao : TeamRepository {
   override suspend fun findTeamByIdentifier(
     identifier: UUID
   ): Team? {
-    return this.findTeamBy {
+    return findTeamBy {
       TeamTable.identifier eq identifier
     }
   }
@@ -92,7 +92,7 @@ object TeamDao : TeamRepository {
     name: String,
     ignoreCase: Boolean
   ): Team? {
-    return this.findTeamBy {
+    return findTeamBy {
       if (ignoreCase) {
         TeamTable.name.lowerCase() eq name.lowercase()
       } else {
@@ -122,7 +122,7 @@ object TeamDao : TeamRepository {
     return concurrentTransaction(DatabasesConfiguration.main) {
       TeamTable.insert {
         it[this.identifier] = team.identifier
-        this@TeamDao.buildTeamStatement(team, it)
+        buildTeamStatement(team, it)
       }.insertedCount
     }
   }
@@ -134,7 +134,7 @@ object TeamDao : TeamRepository {
       TeamTable.update({
         TeamTable.identifier eq team.identifier
       }) {
-        this@TeamDao.buildTeamStatement(team, it)
+        buildTeamStatement(team, it)
       }
     }
   }

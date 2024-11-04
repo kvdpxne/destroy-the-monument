@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.data.tasks
 
 import kotlinx.coroutines.runBlocking
-import me.kvdpxne.dtm.data.UserDao
+import me.kvdpxne.dtm.data.daos.UserDao
 import me.kvdpxne.dtm.shared.debug.Debug
 import me.kvdpxne.dtm.shared.task.AbstractAsynchronousTask
 import me.kvdpxne.dtm.user.LocalUserManager

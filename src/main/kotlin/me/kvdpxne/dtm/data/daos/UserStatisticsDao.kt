@@ -1,4 +1,4 @@
-package me.kvdpxne.dtm.data
+package me.kvdpxne.dtm.data.daos
 
 import me.kvdpxne.dtm.data.repositories.UserStatisticsRepository
 import me.kvdpxne.dtm.data.sources.DatabasesConfiguration
@@ -40,7 +40,7 @@ object UserStatisticsDao : UserStatisticsRepository {
     return concurrentTransaction(DatabasesConfiguration.main) {
       UserStatisticsTable.insert { it: InsertStatement<Number> ->
         it[this.identifier] = userStatistics.identifier
-        this@UserStatisticsDao.buildUserStatisticsStatement(userStatistics, it)
+        buildUserStatisticsStatement(userStatistics, it)
       }.insertedCount
     }
   }
@@ -48,11 +48,15 @@ object UserStatisticsDao : UserStatisticsRepository {
   override suspend fun updateUserStatistics(
     userStatistics: UserStatistics
   ): Int {
+    if (!userStatistics.wasModified) {
+      return 0
+    }
+
     return concurrentTransaction(DatabasesConfiguration.main) {
       UserStatisticsTable.update({
         UserStatisticsTable.identifier eq userStatistics.identifier
       }) { it: UpdateStatement ->
-        this@UserStatisticsDao.buildUserStatisticsStatement(userStatistics, it)
+        buildUserStatisticsStatement(userStatistics, it)
       }
     }
   }

@@ -8,6 +8,25 @@ import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.wallet.Wallet
 
+/**
+ * Implementation of [LocalUser], representing a user with extended in-game
+ * capabilities such as team association, performance management, and messaging.
+ *
+ * This class builds upon [UserImpl] by adding game-specific and local caching
+ * functionality.
+ *
+ * @param name The unique name of the user.
+ * @param displayName The display name shown in the game interface.
+ * @param statistics The user's statistics record, tracking performance and
+ *                   other metrics.
+ * @param wallet The wallet associated with the user, managing in-game currency
+ *               and transactions.
+ * @param currentProfession The profession of the user, defining their abilities
+ *                          and role in the game.
+ * @param identifier The unique identifier of the user, typically a [UUID].
+ *
+ * @since 0.1.0
+ */
 class LocalUserImpl(
   // @formatter:off
   name             : String,
@@ -26,10 +45,24 @@ class LocalUserImpl(
   identifier
 ), LocalUser {
 
+  /**
+   * Lazy-loaded cache for storing temporary or frequently accessed data
+   * specific to this user.
+   *
+   * The cache is instantiated only when accessed for the first time.
+   *
+   * @since 0.1.0
+   */
   private val _cache: LocalUserCache by lazy {
     LocalUserCacheImpl()
   }
 
+  /**
+   * The performer responsible for executing actions and handling
+   * communications on behalf of this user.
+   *
+   * @since 0.1.0
+   */
   private val _performer: LocalUserPerformer = LocalUserPerformerImpl(
     this.identifier,
     this
@@ -52,6 +85,7 @@ class LocalUserImpl(
 
   override fun updateCurrentProfession(profession: Profession) {
     this.currentProfession = profession
+    this.markAsModified()
   }
 
   override fun asLocalUser(): LocalUser {

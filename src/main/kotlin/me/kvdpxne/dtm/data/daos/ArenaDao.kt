@@ -1,4 +1,4 @@
-package me.kvdpxne.dtm.data
+package me.kvdpxne.dtm.data.daos
 
 import java.util.UUID
 import kotlinx.coroutines.launch
@@ -69,16 +69,14 @@ object ArenaDao : ArenaRepository {
 
     runBlocking {
       launch {
-        ArenaMonumentPositionsDao
-          .findArenaMonumentPositionsByArenaIdentifier(identifier)
+        ArenaMonumentPositionsDao.findArenaMonumentPositionsByArenaIdentifier(identifier)
           .collect { monumentPosition: MonumentPosition<Team> ->
             arena.addPositionMonument(monumentPosition)
           }
       }
 
       launch {
-        ArenaRevivalPositionsDao
-          .findArenaRevivalPositionsByArenaIdentifier(identifier)
+        ArenaRevivalPositionsDao.findArenaRevivalPositionsByArenaIdentifier(identifier)
           .collect { revivalPosition: RevivalPosition<Team> ->
             arena.addRevivalPosition(revivalPosition)
           }
@@ -115,7 +113,7 @@ object ArenaDao : ArenaRepository {
   override suspend fun findArenaByIdentifier(
     identifier: UUID
   ): Arena? {
-    return this.findArenaBy {
+    return findArenaBy {
       ArenaTable.identifier eq identifier
     }
   }
@@ -124,7 +122,7 @@ object ArenaDao : ArenaRepository {
     name: String,
     ignoreCase: Boolean
   ): Arena? {
-    return this.findArenaBy {
+    return findArenaBy {
       if (ignoreCase) {
         ArenaTable.name.lowerCase() eq name.lowercase()
       } else {

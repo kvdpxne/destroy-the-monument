@@ -2,7 +2,7 @@ package me.kvdpxne.dtm.team
 
 import java.util.UUID
 import kotlinx.coroutines.runBlocking
-import me.kvdpxne.dtm.data.TeamDao
+import me.kvdpxne.dtm.data.daos.TeamDao
 
 /**
  * @since 0.1.0

@@ -1,4 +1,4 @@
-package me.kvdpxne.dtm.data
+package me.kvdpxne.dtm.data.daos
 
 import me.kvdpxne.dtm.data.repositories.UserWalletRepository
 import me.kvdpxne.dtm.data.sources.DatabasesConfiguration
@@ -36,7 +36,7 @@ object UserWalletDao : UserWalletRepository {
     return concurrentTransaction(DatabasesConfiguration.main) {
       UserWalletTable.insert {
         it[this.identifier] = userWallet.identifier
-        this@UserWalletDao.buildUserWalletStatement(userWallet, it)
+        buildUserWalletStatement(userWallet, it)
       }.insertedCount
     }
   }
@@ -44,11 +44,15 @@ object UserWalletDao : UserWalletRepository {
   override suspend fun updateUserWallet(
     userWallet: Wallet
   ): Int {
+    if (!userWallet.wasModified) {
+      return 0
+    }
+
     return concurrentTransaction(DatabasesConfiguration.main) {
       UserWalletTable.update({
         UserWalletTable.identifier eq userWallet.identifier
       }) {
-        this@UserWalletDao.buildUserWalletStatement(userWallet, it)
+        buildUserWalletStatement(userWallet, it)
       }
     }
   }

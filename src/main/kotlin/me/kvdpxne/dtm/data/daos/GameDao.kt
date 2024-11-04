@@ -1,4 +1,4 @@
-package me.kvdpxne.dtm.data
+package me.kvdpxne.dtm.data.daos
 
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
@@ -52,16 +52,14 @@ object GameDao : GameRepository {
 
     runBlocking {
       launch {
-        GameTeamsDao
-          .findGameTeamsByGameIdentifier(identifier)
+        GameTeamsDao.findGameTeamsByGameIdentifier(identifier)
           .collect { team: Team ->
             teams[team.identifier] = team
           }
       }
 
       launch {
-        GameArenasDao
-          .findGameArenasByGameIdentifier(identifier)
+        GameArenasDao.findGameArenasByGameIdentifier(identifier)
           .collect { arena: Arena ->
             arenas[arena.identifier] = arena
           }
@@ -107,7 +105,7 @@ object GameDao : GameRepository {
   override suspend fun findGameByIdentifier(
     identifier: UUID
   ): Game<Team>? {
-    return this.findGameBy {
+    return findGameBy {
       GameTable.identifier eq identifier
     }
   }
@@ -116,7 +114,7 @@ object GameDao : GameRepository {
     name: String,
     ignoreCase: Boolean
   ): Game<Team>? {
-    return this.findGameBy {
+    return findGameBy {
       if (ignoreCase) {
         GameTable.name.lowerCase() eq name.lowercase()
       } else {
@@ -146,7 +144,7 @@ object GameDao : GameRepository {
     return concurrentTransaction(DatabasesConfiguration.main) {
       GameTable.insert {
         it[this.identifier] = game.identifier
-        this@GameDao.buildGameStatement(game, it)
+        buildGameStatement(game, it)
       }.insertedCount
     }
   }
@@ -158,7 +156,7 @@ object GameDao : GameRepository {
       GameTable.update({
         GameTable.identifier eq game.identifier
       }) {
-        this@GameDao.buildGameStatement(game, it)
+        buildGameStatement(game, it)
       }
     }
   }

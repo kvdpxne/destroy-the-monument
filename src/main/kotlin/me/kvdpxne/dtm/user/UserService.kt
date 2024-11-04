@@ -2,7 +2,7 @@ package me.kvdpxne.dtm.user
 
 import java.util.UUID
 import kotlinx.coroutines.runBlocking
-import me.kvdpxne.dtm.data.UserDao
+import me.kvdpxne.dtm.data.daos.UserDao
 
 object UserService {
 

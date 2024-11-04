@@ -1,4 +1,4 @@
-package me.kvdpxne.dtm.data
+package me.kvdpxne.dtm.data.daos
 
 import java.util.UUID
 import me.kvdpxne.dtm.data.repositories.UserRepository
@@ -115,7 +115,7 @@ object UserDao : UserRepository {
       UserTable
         .innerJoin(UserStatisticsTable)
         .innerJoin(UserWalletTable)
-        .select(this.fields)
+        .select(fields)
         .map { row: ResultRow ->
           row.toUser()
         }
@@ -160,7 +160,7 @@ object UserDao : UserRepository {
   override suspend fun findUserByIdentifier(
     identifier: UUID
   ): User? {
-    return this.findUserBy {
+    return findUserBy {
       UserTable.identifier eq identifier
     }
   }
@@ -172,7 +172,7 @@ object UserDao : UserRepository {
     name: String,
     ignoreCase: Boolean
   ): User? {
-    return this.findUserBy {
+    return findUserBy {
       if (ignoreCase) {
         UserTable.name.lowerCase() eq name.lowercase()
       } else {
@@ -187,7 +187,7 @@ object UserDao : UserRepository {
     val count: Int = concurrentTransaction(DatabasesConfiguration.main) {
       UserTable.insert {
         it[this.identifier] = user.identifier
-        this@UserDao.buildUserStatement(user, it)
+        buildUserStatement(user, it)
       }.insertedCount
     }
 
@@ -201,16 +201,20 @@ object UserDao : UserRepository {
   override suspend fun updateUser(
     user: User
   ): Int {
-    val count: Int = concurrentTransaction(DatabasesConfiguration.main) {
-      UserTable.update({
-        UserTable.identifier eq user.identifier
-      }) {
-        this@UserDao.buildUserStatement(user, it)
+    var count = 0
+
+    if (user.wasModified) {
+      count += concurrentTransaction(DatabasesConfiguration.main) {
+        UserTable.update({
+          UserTable.identifier eq user.identifier
+        }) {
+          buildUserStatement(user, it)
+        }
       }
     }
 
-    UserStatisticsDao.updateUserStatistics(user.statistics)
-    UserWalletDao.updateUserWallet(user.wallet)
+    count += UserStatisticsDao.updateUserStatistics(user.statistics)
+    count += UserWalletDao.updateUserWallet(user.wallet)
 
     return count
   }

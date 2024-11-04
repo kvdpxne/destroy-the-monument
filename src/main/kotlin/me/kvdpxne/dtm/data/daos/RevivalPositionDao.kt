@@ -1,4 +1,4 @@
-package me.kvdpxne.dtm.data
+package me.kvdpxne.dtm.data.daos
 
 import java.util.UUID
 import me.kvdpxne.dtm.data.repositories.RevivalPositionRepository
@@ -138,7 +138,7 @@ object RevivalPositionDao : RevivalPositionRepository {
     return concurrentTransaction(DatabasesConfiguration.main) {
       RevivalPositionTable.insert { it: InsertStatement<Number> ->
         it[this.identifier] = revivalPosition.identifier
-        this@RevivalPositionDao.buildMonumentPositionStatement(revivalPosition, it)
+        buildMonumentPositionStatement(revivalPosition, it)
       }.insertedCount
     }
   }
@@ -150,7 +150,7 @@ object RevivalPositionDao : RevivalPositionRepository {
       RevivalPositionTable.update({
         RevivalPositionTable.identifier eq revivalPosition.identifier
       }) {
-        this@RevivalPositionDao.buildMonumentPositionStatement(revivalPosition, it)
+        buildMonumentPositionStatement(revivalPosition, it)
       }
     }
   }
