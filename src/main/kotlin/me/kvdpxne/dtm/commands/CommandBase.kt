@@ -28,6 +28,7 @@ fun createBaseCommand(): Command<Performer> {
       createAbilityCommand(),
       createArenaCommand(),
       createCoinsCommand(),
+      createDebugCommand(),
       createGameCommand(),
       createHelpCommand(),
       createJoinCommand(),
