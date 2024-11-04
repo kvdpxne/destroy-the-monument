@@ -8,6 +8,7 @@ import me.kvdpxne.dtm.command.CommandManager
 import me.kvdpxne.dtm.commands.createBaseCommand
 import me.kvdpxne.dtm.commands.createGlobalChatCommand
 import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.data.tasks.AsynchronousUserUpdateTask
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.GameService
 import me.kvdpxne.dtm.listeners.BlockBreakListener
@@ -129,10 +130,12 @@ class DestroyTheMonument : JavaPlugin() {
   private fun registerPacketListeners(
     vararg listeners: PacketListener
   ) {
-    val protocolManager: ProtocolManager = ProtocolLibrary.getProtocolManager()
+    if (Configuration.USE_PROTOCOL_LIB) {
+      val protocolManager: ProtocolManager = ProtocolLibrary.getProtocolManager()
 
-    for (listener: PacketListener in listeners) {
-      protocolManager.addPacketListener(listener)
+      for (listener: PacketListener in listeners) {
+        protocolManager.addPacketListener(listener)
+      }
     }
   }
 
@@ -288,6 +291,13 @@ class DestroyTheMonument : JavaPlugin() {
       // Dodaje obiekt użytkownika do lokalnej pamięci.
       LocalUserManager.addUser(user)
     }
+
+    this.server.scheduler.runTaskTimerAsynchronously(
+      this,
+      AsynchronousUserUpdateTask,
+      0L,
+      5L * 60L * 20L
+    )
   }
 
   /**
@@ -305,7 +315,9 @@ class DestroyTheMonument : JavaPlugin() {
     GameManager.removeGames()
 
     //
-    ProtocolLibrary.getProtocolManager().removePacketListeners(this)
+    if (Configuration.USE_PROTOCOL_LIB) {
+      ProtocolLibrary.getProtocolManager().removePacketListeners(this)
+    }
 
     Debug.log {
       "The plugin has been properly disabled."
