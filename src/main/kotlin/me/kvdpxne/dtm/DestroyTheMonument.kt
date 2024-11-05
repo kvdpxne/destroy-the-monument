@@ -130,12 +130,10 @@ class DestroyTheMonument : JavaPlugin() {
   private fun registerPacketListeners(
     vararg listeners: PacketListener
   ) {
-    if (Configuration.USE_PROTOCOL_LIB) {
-      val protocolManager: ProtocolManager = ProtocolLibrary.getProtocolManager()
+    val protocolManager: ProtocolManager = ProtocolLibrary.getProtocolManager()
 
-      for (listener: PacketListener in listeners) {
-        protocolManager.addPacketListener(listener)
-      }
+    for (listener: PacketListener in listeners) {
+      protocolManager.addPacketListener(listener)
     }
   }
 
@@ -156,27 +154,27 @@ class DestroyTheMonument : JavaPlugin() {
    * @since 0.1.0
    */
   override fun onLoad() {
-    if (!VersionCreator.getBukkitVersion().isEqual(10710)) {
-      arrayOf(
-        "An error occurred while trying to load the plugin.",
-        "Error: Incorrect Minecraft release",
-        "",
-        "The currently used version of the plugin requires a",
-        "Minecraft release codenamed \"v1_7_R4\".",
-        "",
-        "We recommend using the Spigot server platform with the",
-        "code name \"b1657\" to get full compatibility with the",
-        "current version of the plugin.",
-        "",
-        "If you think the error should not occur please contact us.",
-        Constants.GITHUB_ISSUES
-      ).forEach { message: String ->
-        this.logger.severe(message)
-      }
-
-      this.isDisabling = true
-      return
-    }
+//    if (!VersionCreator.getBukkitVersion().isEqual(10710)) {
+//      arrayOf(
+//        "An error occurred while trying to load the plugin.",
+//        "Error: Incorrect Minecraft release",
+//        "",
+//        "The currently used version of the plugin requires a",
+//        "Minecraft release codenamed \"v1_7_R4\".",
+//        "",
+//        "We recommend using the Spigot server platform with the",
+//        "code name \"b1657\" to get full compatibility with the",
+//        "current version of the plugin.",
+//        "",
+//        "If you think the error should not occur please contact us.",
+//        Constants.GITHUB_ISSUES
+//      ).forEach { message: String ->
+//        this.logger.severe(message)
+//      }
+//
+//      this.isDisabling = true
+//      return
+//    }
 
     //
     Debug.initialize(this.logger)
@@ -256,11 +254,13 @@ class DestroyTheMonument : JavaPlugin() {
       WeatherChangeListener
     )
 
-    //
-    this.registerPacketListeners(
-      PacketPlayInBlockDigListener,
-      PacketPlayInSettingsListener
-    )
+    if (Configuration.USE_PROTOCOL_LIB) {
+      //
+      this.registerPacketListeners(
+        PacketPlayInBlockDigListener,
+        PacketPlayInSettingsListener
+      )
+    }
 
     //
     CommandManager.addCommands(
