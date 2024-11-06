@@ -17,6 +17,9 @@ import me.kvdpxne.dtm.shared.world.toLocation
 import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.team.TeammateImpl
+import me.kvdpxne.dtm.translation.TranslationService
+import me.kvdpxne.dtm.translation.message.MessageBuilder
+import me.kvdpxne.dtm.translation.message.MessageKeys
 import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -700,6 +703,12 @@ class LocalGameImpl(
     this._hostages.values.forEach { user: LocalUser ->
       user.sendMessages(*messages)
     }
+  }
+
+  override fun constructMessage(messageKey: MessageKeys): MessageBuilder {
+    return TranslationService.chains()
+      .receivers(this._hostages.values.map { it.performer })
+      .message(messageKey)
   }
 
   override fun toString(): String {

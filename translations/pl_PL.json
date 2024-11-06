@@ -1,4 +1,20 @@
 {
+  "arena": {
+    "map": {
+      "block": {
+        "breaking": {
+          "spawn": "&cNie możesz niszczyć bloków na spawnie.",
+          "monument": {
+            "self": "&cNie możesz zniszczyć monumentu swojej drużyny."
+          }
+        },
+        "placing": {
+          "limit": "&cOsiągnełeś możliwy limit budowania na tej mapie.",
+          "spawn": "&cNie możesz stawiać bloków na spawnie."
+        }
+      }
+    }
+  },
   "command": {
     "ability": {
       "deplete": "&7Twoja umiejętność została anulowana.",
@@ -50,5 +66,18 @@
       "remove": "&7Drużyna o nazwie &6{TEAM_NAME} &7została usunięta z gry o nazwie &6{GAME_NAME}&7."
     },
     "wand": "&7Do twojego ekwipunku został dodany magiczny patyk."
+  },
+  "game": {
+    "starting": {
+      "countdown": {
+        "standard": "&7Pozostało &6{REMAINING_TIME} &7sekund do startu gry.",
+        "faster": "&7Gra wystartuje za &6{REMAINING_TIME} &7sekund.",
+        "finish": "&7Gra właśnie wystartowała, powodzenia &6:)",
+        "cancelled": [
+          "&7Odliczanie do wystartowania gry zostało anulowane.",
+          "&7Powód: &cNiewystarczająca liczba graczy."
+        ]
+      }
+    }
   }
 }

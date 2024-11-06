@@ -1,4 +1,20 @@
 {
+  "arena": {
+    "map": {
+      "block": {
+        "breaking": {
+          "spawn": "&cYou cannot break blocks at the spawn.",
+          "monument": {
+            "self": "&cYou cannot destroy your team's monument."
+          }
+        },
+        "placing": {
+          "limit": "&cYou have reached the building limit on this map.",
+          "spawn": "&cYou cannot place blocks at the spawn."
+        }
+      }
+    }
+  },
   "command": {
     "ability": {
       "deplete": "&7Your ability has been canceled.",
@@ -50,5 +66,18 @@
       "remove": "&7The team named &6{TEAM_NAME} &7has been removed from the game named &6{GAME_NAME}&7."
     },
     "wand": "&7A magic wand has been added to your inventory."
+  },
+  "game": {
+    "starting": {
+      "countdown": {
+        "standard": "&7There are &6{REMAINING_TIME} &7seconds left until the game starts.",
+        "faster": "&7The game will start in &6{REMAINING_TIME} &7seconds.",
+        "finish": "&7The game has just started, good luck &6:)",
+        "cancelled": [
+          "&7The game start countdown has been canceled.",
+          "&7Reason: &cInsufficient number of players."
+        ]
+      }
+    }
   }
 }

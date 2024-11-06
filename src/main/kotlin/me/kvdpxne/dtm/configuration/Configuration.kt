@@ -68,14 +68,6 @@ object Configuration {
 
   const val NO_FOUND_TEAM = "&cBłąd&8: &7Drużyna o nazwie &c{TEAM_NAME} &7nie istnieje."
 
-  const val SPAWN_BLOCK_BREAK_DENIED_MESSAGE = "&6&lDTM &7> &cNie możesz niszczyć bloków na spawnie."
-
-  const val SPAWN_BLOCK_PLACEMENT_DENIED_MESSAGE = "&6&lDTM &7> &cNie możesz stawiać bloków na spawnie."
-
-  const val BUILD_HEIGHT_LIMIT_MESSAGE = "&6&lDTM &7> &cOsiągnełeś możliwy limit budowania na tej mapie."
-
-  const val FSF = "&6&lDTM &7> &fNie możesz zniszczyć monumentu swojej drużyny."
-
   val GAME_END_MESSAGE = arrayOf(
     "",
     "&6&lDTM &7> &fGra została zakończona.",

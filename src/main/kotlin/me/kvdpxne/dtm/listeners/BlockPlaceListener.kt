@@ -7,6 +7,8 @@ import me.kvdpxne.dtm.shared.event.cancel
 import me.kvdpxne.dtm.shared.material.hasInventory
 import me.kvdpxne.dtm.shared.material.isMonument
 import me.kvdpxne.dtm.shared.player.localUser
+import me.kvdpxne.dtm.translation.TranslationService
+import me.kvdpxne.dtm.translation.message.MessageKeys
 import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.Material
 import org.bukkit.event.EventHandler
@@ -61,9 +63,10 @@ object BlockPlaceListener : Listener {
 
     if (84 < location.y) {
       event.cancel()
-      user.sendConfiguredMessage { configuration: Configuration ->
-        configuration.BUILD_HEIGHT_LIMIT_MESSAGE
-      }
+      TranslationService.chains()
+        .receiver(user.performer)
+        .message(MessageKeys.ARENA_MAP_BLOCK_PLACING_LIMIT)
+        .send()
       return
     }
 
@@ -76,9 +79,12 @@ object BlockPlaceListener : Listener {
         )
       ) {
         event.cancel()
-        user.sendConfiguredMessage { configuration: Configuration ->
-          configuration.SPAWN_BLOCK_PLACEMENT_DENIED_MESSAGE
-        }
+
+        TranslationService.chains()
+          .receiver(user.performer)
+          .message(MessageKeys.ARENA_MAP_BLOCK_PLACING_SPAWN)
+          .send()
+
         return
       }
     }

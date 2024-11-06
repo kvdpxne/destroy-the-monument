@@ -5,6 +5,7 @@ import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.shared.Communicative
 import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.team.Teammate
+import me.kvdpxne.dtm.translation.TranslatableCommunicative
 import me.kvdpxne.dtm.user.LocalUser
 
 /**
@@ -16,7 +17,7 @@ import me.kvdpxne.dtm.user.LocalUser
  *
  * @since 0.1.0
  */
-interface LocalGame : Game<LocalTeam>, Communicative {
+interface LocalGame : Game<LocalTeam>, Communicative, TranslatableCommunicative {
 
   /**
    * A list of hostages currently in the game.

@@ -13,6 +13,7 @@ import java.util.stream.Collectors
 import kotlin.io.path.nameWithoutExtension
 import kotlin.io.path.readText
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
@@ -113,6 +114,7 @@ object TranslationService {
       when (value) {
         is JsonObject -> map.putAll(this.flattenJson(value, newKey))
         is JsonPrimitive -> map[MessageKey.of(newKey)] = value.content
+        is JsonArray -> map[MessageKey.of(newKey)] = ""
         else -> throw TypeCastException("Unsupported value type ${value.javaClass}")
       }
     }

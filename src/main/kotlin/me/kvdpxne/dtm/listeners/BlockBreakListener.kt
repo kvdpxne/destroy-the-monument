@@ -23,6 +23,8 @@ import me.kvdpxne.dtm.shared.task.runSynchronousDelayedTask
 import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.team.Team
 import me.kvdpxne.dtm.team.Teammate
+import me.kvdpxne.dtm.translation.TranslationService
+import me.kvdpxne.dtm.translation.message.MessageKeys
 import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.Location
 import org.bukkit.block.Block
@@ -116,9 +118,12 @@ object BlockBreakListener : Listener {
         )
       ) {
         event.cancel()
-        user.sendConfiguredMessage { configuration: Configuration ->
-          configuration.SPAWN_BLOCK_BREAK_DENIED_MESSAGE
-        }
+
+        TranslationService.chains()
+          .receiver(user.performer)
+          .message(MessageKeys.ARENA_MAP_BLOCK_BREAKING_SPAWN)
+          .send()
+
         return
       }
     }
@@ -174,9 +179,10 @@ object BlockBreakListener : Listener {
     //
     if (killerTeam == monumentBelongs) {
       event.cancel()
-      user.sendConfiguredMessage { configuration: Configuration ->
-        configuration.FSF
-      }
+      TranslationService.chains()
+        .receiver(user.performer)
+        .message(MessageKeys.ARENA_MAP_BLOCK_BREAKING_MONUMENT_SELF)
+        .send()
       return
     }
 

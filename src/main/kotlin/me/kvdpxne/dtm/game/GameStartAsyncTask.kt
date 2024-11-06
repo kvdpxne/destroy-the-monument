@@ -4,6 +4,8 @@ import me.kvdpxne.dtm.configuration.Configuration
 import me.kvdpxne.dtm.shared.task.runSynchronousTask
 import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.team.Teammate
+import me.kvdpxne.dtm.translation.formatter.Formatter
+import me.kvdpxne.dtm.translation.message.MessageKeys
 import org.bukkit.scheduler.BukkitRunnable
 
 /**
@@ -53,18 +55,31 @@ internal class GameStartAsyncTask internal constructor(
 
       runSynchronousTask {
         this.game.start()
+        this.game.constructMessage(MessageKeys.GAME_STARTING_COUNTDOWN_FINISH)
+          .send()
       }
       return
     }
 
     if (5 >= this.remainingSeconds) {
-      this.game.sendMessage("&6&lDTM &7> &7Gra wystartuje za &6${this.remainingSeconds} &7sekund.")
+      this.game.constructMessage(MessageKeys.GAME_STARTING_COUNTDOWN_FASTER)
+        .formatter(
+          Formatter.begin(1)
+            .with("REMAINING_TIME", this.remainingSeconds)
+        )
+        .send()
+
       this.decrese()
       return
     }
 
     if (0 == this.remainingSeconds % 10) {
-      this.game.sendMessage("&6&lDTM &7> &7Pozostało &6${this.remainingSeconds} &7sekund do startu gry.")
+      this.game.constructMessage(MessageKeys.GAME_STARTING_COUNTDOWN_STANDARD)
+        .formatter(
+          Formatter.begin(1)
+            .with("REMAINING_TIME", this.remainingSeconds)
+        )
+        .send()
       this.decrese()
       return
     }
