@@ -29,6 +29,12 @@ object WeatherChangeListener : Listener {
       return
     }
 
+    //
+    //
+    if (!event.toWeatherState()) {
+      return
+    }
+
     // Obiekt światu, na którym zmieniła się pogoda.
     val world: World = event.world
 

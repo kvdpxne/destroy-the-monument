@@ -1,13 +1,13 @@
 package me.kvdpxne.dtm.shared.item
 
-import java.lang.reflect.Constructor
-import java.lang.reflect.Field
-import java.lang.reflect.Method
 import kotlin.random.Random
-import me.kvdpxne.dtm.shared.text.colorize
 import me.kvdpxne.dtm.shared.attributes.GenericAttribute
 import me.kvdpxne.dtm.shared.attributes.Operations
+import me.kvdpxne.dtm.shared.reflection.FieldAccessor
+import me.kvdpxne.dtm.shared.reflection.MethodInvoker
+import me.kvdpxne.dtm.shared.reflection.PrimitiveTypes
 import me.kvdpxne.dtm.shared.reflection.Reflection
+import me.kvdpxne.dtm.shared.text.colorize
 import org.bukkit.Color
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
@@ -46,7 +46,7 @@ class ItemBuilder private constructor(
   fun generation(
     generation: Int
   ): ItemBuilder {
-    if (0 < this.itemStack.type.maxDurability) {
+    if (this.itemStack.hasDurability()) {
       throw IllegalArgumentException("This item has no other generations.")
     }
 
@@ -70,7 +70,7 @@ class ItemBuilder private constructor(
   fun durability(
     durability: Int
   ): ItemBuilder {
-    if (0 >= this.itemStack.type.maxDurability) {
+    if (!this.itemStack.hasDurability()) {
       throw IllegalStateException("The item has no durability.")
     }
 
@@ -161,72 +161,83 @@ class ItemBuilder private constructor(
     amount: Double,
     operation: Int = Operations.ADD
   ): ItemBuilder {
-    // org.bukkit.craftbukkit.v1_7_R4.inventory.CraftItemStack
+
     val craftItemStackClass: Class<*> = Reflection.getCraftBukkitClass("inventory.CraftItemStack")
-    val asNMSCopyMethod: Method = craftItemStackClass.getMethod("asNMSCopy", this.itemStack.javaClass)
 
-    // net.minecraft.server.v1_7_R4.ItemStack
-    val nmsItemStack: Any = asNMSCopyMethod.invoke(null, this.itemStack)
-    val nmsItemStackClass: Class<*> = nmsItemStack.javaClass
-    val tagField: Field = nmsItemStackClass.getField("tag")
-    val hasTagMethod: Method = nmsItemStackClass.getMethod("hasTag")
-    val hasTag: Boolean = hasTagMethod.invoke(nmsItemStack) as Boolean
+    val minecraftItemStack: Any = Reflection
+      .getMethod(craftItemStackClass, "asNMSCopy", null, arrayOf(this.itemStack.javaClass))
+      .invoke(null, this.itemStack)!!
 
-    // net.minecraft.server.v1_7_R4.NBTTagCompound
-    val nbtTagCompoundClass: Class<*> = Reflection.getNmsClass("NBTTagCompound")
-    val nbtTagCompoundConstructor: Constructor<*> = nbtTagCompoundClass.getConstructor()
+    val nbtTagCompoundFieldAccessor: FieldAccessor = Reflection.getField(minecraftItemStack.javaClass, "tag")
+    var nbtTagCompound: Any? = nbtTagCompoundFieldAccessor.get(minecraftItemStack)
 
-    if (!hasTag) {
-      val nbtTagCompound: Any = nbtTagCompoundConstructor.newInstance()
-      tagField.set(nmsItemStack, nbtTagCompound)
+    val nbtTagCompoundClass: Class<*> = if (null == nbtTagCompound) {
+      val nbtTagCompoundClass: Class<*> = Reflection.getMinecraftClass("NBTTagCompound")
+      val newNbtTagCompoundClass: Any = Reflection.getConstructor(nbtTagCompoundClass).invoke()
+
+      nbtTagCompound = newNbtTagCompoundClass
+      nbtTagCompoundFieldAccessor.set(minecraftItemStack, newNbtTagCompoundClass)
+
+      nbtTagCompoundClass
+    } else {
+      nbtTagCompound.javaClass
     }
 
-    val tag: Any = tagField.get(nmsItemStack)
-    val tagClass: Class<*> = tag.javaClass
-    val hasKeyOfTypeMethod: Method = tagClass.getMethod("hasKeyOfType", String::class.java, Int::class.java)
-    val hasKeyOfType: Boolean = hasKeyOfTypeMethod.invoke(tag, "AttributeModifiers", 9) as Boolean
+    val hasKeyOfType: Boolean = Reflection.getMethod(nbtTagCompoundClass, "hasKeyOfType", PrimitiveTypes.BOOLEAN, arrayOf(PrimitiveTypes.STRING, PrimitiveTypes.INT))
+      .invoke(nbtTagCompound,"AttributeModifiers", 9) as Boolean
 
-    // net.minecraft.server.v1_7_R4.NBTBase
-    val nbtBaseClass: Class<*> = Reflection.getNmsClass("NBTBase")
+    val nbtTagList: Any
+    val nbtTagListClass: Class<*> = if (!hasKeyOfType) {
+      val clazz: Class<*> = Reflection.getMinecraftClass("NBTTagList")
+      val fs: Any = Reflection.getConstructor(clazz).invoke()
 
-    if (!hasKeyOfType) {
-      // net.minecraft.server.v1_7_R4.NBTTagList
-      val nbtTagListClass: Class<*> = Reflection.getNmsClass("NBTTagList")
-      val nbtTagListConstructor: Constructor<*> = nbtTagListClass.getConstructor()
-      val nbtTagList: Any = nbtTagListConstructor.newInstance()
+      nbtTagList = fs
+      clazz
+    } else {
+      nbtTagList = Reflection.getMethod(nbtTagCompoundClass, "get", null, arrayOf(PrimitiveTypes.STRING))
+        .invoke(nbtTagCompound, "AttributeModifiers") as Any
 
-      val setMethod: Method = tagClass.getMethod("set", String::class.java, nbtBaseClass)
-      setMethod.invoke(tag, "AttributeModifiers", nbtTagList)
+      nbtTagList.javaClass
     }
 
-    val nbtTagCompound: Any = nbtTagCompoundConstructor.newInstance()
-    val setStringMethod: Method = nbtTagCompoundClass.getMethod("setString", String::class.java, String::class.java)
-    val setDoubleMethod: Method = nbtTagCompoundClass.getMethod("setDouble", String::class.java, Double::class.java)
-    val setIntMethod: Method = nbtTagCompoundClass.getMethod("setInt", String::class.java, Int::class.java)
-    val setLongMethod: Method = nbtTagCompoundClass.getMethod("setLong", String::class.java, Long::class.java)
+    val newNbtTagCompoundClass: Any = Reflection.getConstructor(nbtTagCompoundClass).invoke()
 
-    setStringMethod.invoke(nbtTagCompound, "AttributeName", attribute)
-    setStringMethod.invoke(nbtTagCompound, "Name", attribute)
-    setDoubleMethod.invoke(nbtTagCompound, "Amount", amount)
-    setIntMethod.invoke(nbtTagCompound, "Operation", operation)
+    val setStringMethodInvoker: MethodInvoker = Reflection
+      .getMethod(nbtTagCompoundClass,"setString", null, arrayOf(PrimitiveTypes.STRING, PrimitiveTypes.STRING))
+
+    setStringMethodInvoker.invoke(newNbtTagCompoundClass,"AttributeName", attribute)
+    setStringMethodInvoker.invoke(newNbtTagCompoundClass,"Name", attribute)
+
+    Reflection
+      .getMethod(nbtTagCompoundClass, "setDouble", null, arrayOf(PrimitiveTypes.STRING, PrimitiveTypes.DOUBLE))
+      .invoke(newNbtTagCompoundClass,"Amount", amount)
+
+    Reflection
+      .getMethod(nbtTagCompoundClass, "setInt", null, arrayOf(PrimitiveTypes.STRING, PrimitiveTypes.INT))
+      .invoke(newNbtTagCompoundClass,"Operation", operation)
+
+    val setLongMethodInvoker: MethodInvoker = Reflection
+      .getMethod(nbtTagCompoundClass, "setLong", null, arrayOf(PrimitiveTypes.STRING, PrimitiveTypes.LONG))
 
     val time: Long = System.currentTimeMillis()
 
-    setLongMethod.invoke(nbtTagCompound, "UUIDLeast", Random.nextLong())
-    setLongMethod.invoke(nbtTagCompound, "UUIDMost", time.shl(16).or(Random.nextLong().and(65535L)))
+    setLongMethodInvoker.invoke(newNbtTagCompoundClass, "UUIDLeast", Random.nextLong())
+    setLongMethodInvoker.invoke(newNbtTagCompoundClass,"UUIDMost", time.shl(16).or(Random.nextLong().and(65535L)))
 
-    val getListMethod: Method = tagClass.getMethod("getList", String::class.java, Int::class.java)
+    val nbtTagBaseClass: Class<*> = Reflection.getMinecraftClass("NBTBase")
 
-    val nbtTagList: Any = getListMethod.invoke(tag, "AttributeModifiers", 10) as Any
-    val nbtTagListClass: Class<*> = nbtTagList.javaClass
-    val addMethod: Method = nbtTagListClass.getMethod("add", nbtBaseClass)
+    Reflection
+      .getMethod(nbtTagListClass, "add", null, arrayOf(nbtTagBaseClass))
+      .invoke(nbtTagList, newNbtTagCompoundClass)
 
-    addMethod.invoke(nbtTagList, nbtTagCompound)
+    Reflection
+      .getMethod(nbtTagCompoundClass, "set", null, arrayOf(PrimitiveTypes.STRING, nbtTagBaseClass))
+      .invoke(nbtTagCompound, "AttributeModifiers", nbtTagList)
 
-    val asBukkitCopyMethod: Method = craftItemStackClass.getMethod("asBukkitCopy", nmsItemStackClass)
-    val bukkitItemStack: ItemStack = asBukkitCopyMethod.invoke(null, nmsItemStack) as ItemStack
+    this.itemStack = Reflection
+      .getMethod(craftItemStackClass, "asBukkitCopy", null, arrayOf(PrimitiveTypes.STRING, minecraftItemStack.javaClass))
+      .invoke(null, minecraftItemStack) as ItemStack
 
-    this.itemStack = bukkitItemStack
     return this
   }
 
@@ -234,40 +245,39 @@ class ItemBuilder private constructor(
    * @since 0.1.0
    */
   fun unbreakable(): ItemBuilder {
-    if (0.toShort() == this.itemStack.type.maxDurability) {
+    if (!this.itemStack.hasDurability()) {
       return this
     }
 
-    // org.bukkit.craftbukkit.v1_7_R4.inventory.CraftItemStack
     val craftItemStackClass: Class<*> = Reflection.getCraftBukkitClass("inventory.CraftItemStack")
-    val asNMSCopyMethod: Method = craftItemStackClass.getMethod("asNMSCopy", this.itemStack.javaClass)
 
-    // net.minecraft.server.v1_7_R4.ItemStack
-    val nmsItemStack: Any = asNMSCopyMethod.invoke(null, this.itemStack)
-    val nmsItemStackClass: Class<*> = nmsItemStack.javaClass
-    val tagField: Field = nmsItemStackClass.getField("tag")
-    val hasTagMethod: Method = nmsItemStackClass.getMethod("hasTag")
-    val hasTag: Boolean = hasTagMethod.invoke(nmsItemStack) as Boolean
+    val minecraftItemStack: Any = Reflection
+      .getMethod(craftItemStackClass, "asNMSCopy", null, arrayOf(this.itemStack.javaClass))
+      .invoke(null, this.itemStack)!!
 
-    if (!hasTag) {
-      // net.minecraft.server.v1_7_R4.NBTTagCompound
-      val nbtTagCompoundClass: Class<*> = Reflection.getNmsClass("NBTTagCompound")
-      val nbtTagCompoundConstructor: Constructor<*> = nbtTagCompoundClass.getConstructor()
-      val nbtTagCompound: Any = nbtTagCompoundConstructor.newInstance()
+    val nbtTagCompoundFieldAccessor: FieldAccessor = Reflection.getField(minecraftItemStack.javaClass, "tag")
+    var nbtTagCompound: Any? = nbtTagCompoundFieldAccessor.get(minecraftItemStack)
 
-      tagField.set(nmsItemStack, nbtTagCompound)
+    val nbtTagCompoundClass: Class<*> = if (null == nbtTagCompound) {
+      val nbtTagCompoundClass: Class<*> = Reflection.getMinecraftClass("NBTTagCompound")
+      val newNbtTagCompoundClass: Any = Reflection.getConstructor(nbtTagCompoundClass).invoke()
+
+      nbtTagCompound = newNbtTagCompoundClass
+      nbtTagCompoundFieldAccessor.set(minecraftItemStack, newNbtTagCompoundClass)
+
+      nbtTagCompoundClass
+    } else {
+      nbtTagCompound.javaClass
     }
 
-    val nbtTagCompound: Any = tagField.get(nmsItemStack)
-    val nbtTagCompoundClass: Class<*> = nbtTagCompound.javaClass
-    val setByteMethod: Method = nbtTagCompoundClass.getMethod("setByte", String::class.java, Byte::class.java)
+    Reflection
+      .getMethod(nbtTagCompoundClass, "setByte", null, arrayOf(PrimitiveTypes.STRING, PrimitiveTypes.BYTE))
+      .invoke(nbtTagCompound, "Unbreakable", 1.toByte())
 
-    setByteMethod.invoke(nbtTagCompound, "Unbreakable", 1.toByte())
+    this.itemStack = Reflection
+      .getMethod(craftItemStackClass, "asBukkitCopy", null, arrayOf(minecraftItemStack.javaClass))
+      .invoke(null, minecraftItemStack) as ItemStack
 
-    val asBukkitCopyMethod: Method = craftItemStackClass.getMethod("asBukkitCopy", nmsItemStackClass)
-    val bukkitItemStack: ItemStack = asBukkitCopyMethod.invoke(null, nmsItemStack) as ItemStack
-
-    this.itemStack = bukkitItemStack
     return this
   }
 

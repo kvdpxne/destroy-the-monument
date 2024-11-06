@@ -1,5 +1,6 @@
 package me.kvdpxne.dtm.shared.item
 
+import me.kvdpxne.dtm.shared.material.hasDurability
 import me.kvdpxne.dtm.shared.material.isArmor
 import me.kvdpxne.dtm.shared.material.isLeatherArmor
 import org.bukkit.Material
@@ -24,7 +25,7 @@ fun ItemStack?.isNullOrTypeAir(): Boolean {
  * @since 0.1.0
  */
 fun ItemStack.hasDurability(): Boolean {
-  return 0 < this.type.maxDurability && 1 == this.type.maxStackSize
+  return this.type.hasDurability()
 }
 
 /**

@@ -27,6 +27,7 @@ import me.kvdpxne.dtm.listeners.PlayerInventoryInteractListener
 import me.kvdpxne.dtm.listeners.PlayerItemConsumeListener
 import me.kvdpxne.dtm.listeners.PlayerJoinListener
 import me.kvdpxne.dtm.listeners.PlayerKickListener
+import me.kvdpxne.dtm.listeners.PlayerLoginListener
 import me.kvdpxne.dtm.listeners.PlayerPrepareCraftItemListener
 import me.kvdpxne.dtm.listeners.PlayerPrepareItemEnchantListener
 import me.kvdpxne.dtm.listeners.PlayerQuitListener
@@ -243,6 +244,7 @@ class DestroyTheMonument : JavaPlugin() {
       PlayerItemConsumeListener,
       PlayerJoinListener,
       PlayerKickListener,
+      PlayerLoginListener,
       PlayerPrepareCraftItemListener,
       PlayerPrepareItemEnchantListener,
       PlayerQuitListener,

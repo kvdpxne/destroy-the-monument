@@ -164,12 +164,12 @@ fun Player.respawn() {
   }
 
   // net.minecraft.server.v1_7_R4.EnumClientCommand
-  val enumClientCommandClass: Class<*> = Reflection.getNmsClass("EnumClientCommand")
+  val enumClientCommandClass: Class<*> = Reflection.getMinecraftClass("EnumClientCommand")
   val enumClientCommandField: Field = enumClientCommandClass.getDeclaredField("PERFORM_RESPAWN")
   val enumClientCommand: Any = enumClientCommandField.get(null)
 
   // net.minecraft.server.v1_7_R4.PacketPlayInClientCommand
-  val packetPlayInClientCommandClass: Class<*> = Reflection.getNmsClass("PacketPlayInClientCommand")
+  val packetPlayInClientCommandClass: Class<*> = Reflection.getMinecraftClass("PacketPlayInClientCommand")
   val packetPlayInClientCommandConstructor: Constructor<*> = packetPlayInClientCommandClass.getConstructor(enumClientCommandClass)
   val packetPlayInClientCommand: Any = packetPlayInClientCommandConstructor.newInstance(enumClientCommand)
 

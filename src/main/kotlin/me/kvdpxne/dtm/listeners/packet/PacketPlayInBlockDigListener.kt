@@ -4,6 +4,7 @@ import com.comphenix.protocol.PacketType
 import com.comphenix.protocol.events.PacketAdapter
 import com.comphenix.protocol.events.PacketContainer
 import com.comphenix.protocol.events.PacketEvent
+import com.comphenix.protocol.wrappers.EnumWrappers.PlayerDigType
 import me.kvdpxne.dtm.DestroyTheMonument
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.gui.createProfessionSelectionGui
@@ -11,6 +12,7 @@ import me.kvdpxne.dtm.shared.player.localUser
 import me.kvdpxne.dtm.shared.player.resetExperienceBar
 import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.user.LocalUser
+import me.kvdpxne.notchity.VersionCreator
 import org.bukkit.entity.Player
 
 /**
@@ -24,12 +26,22 @@ object PacketPlayInBlockDigListener : PacketAdapter(
   override fun onPacketReceiving(event: PacketEvent) {
     val packet: PacketContainer = event.packet
 
-    val type: Int = packet.integers.readSafely(4)
-      ?: return
+    if (VersionCreator.getBukkitVersion().isOlderThanOrEqual(10710)) {
+      val type: Int = packet.integers.readSafely(4)
+        ?: return
 
-    //
-    if (4 != type) {
-      return
+      //
+      if (4 != type) {
+        return
+      }
+    } else {
+      val digType: PlayerDigType = packet.playerDigTypes.readSafely(0)
+        ?: return
+
+      //
+      if (PlayerDigType.DROP_ITEM != digType) {
+        return
+      }
     }
 
     val player: Player = event.player

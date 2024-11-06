@@ -2,6 +2,7 @@ package me.kvdpxne.dtm.shared.material
 
 import me.kvdpxne.dtm.configuration.Configuration
 import me.kvdpxne.dtm.shared.item.ItemBuilder
+import me.kvdpxne.dtm.shared.item.hasDurability
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 
@@ -37,6 +38,10 @@ fun Material.asItem(
  */
 fun Material.toBuilder(): ItemBuilder {
   return ItemBuilder.begin(ItemStack(this))
+}
+
+fun Material.hasDurability(): Boolean {
+  return 0 < this.maxDurability && 1 == this.maxStackSize
 }
 
 /**

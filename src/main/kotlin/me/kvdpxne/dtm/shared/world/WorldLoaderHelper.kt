@@ -4,6 +4,7 @@ import java.io.File
 import java.lang.reflect.Field
 import java.lang.reflect.Method
 import me.kvdpxne.dtm.shared.reflection.Reflection
+import me.kvdpxne.notchity.VersionCreator
 import org.bukkit.Bukkit
 import org.bukkit.World
 import org.bukkit.World.Environment
@@ -16,21 +17,27 @@ object WorldLoaderHelper {
     world.fullTime = 6000L
 
     // org.bukkit.craftbukkit.v1_7_R4.CraftWorld
-    val craftWorldClass: Class<*> = Reflection.getCraftBukkitClass("CraftWorld")
-    val craftWorld: Any = craftWorldClass.cast(world)
-    val getHandleField: Method = craftWorldClass.getMethod("getHandle")
+    if (VersionCreator.getBukkitVersion().isOlderThanOrEqual(10710)) {
+      val craftWorldClass: Class<*> = Reflection.getCraftBukkitClass("CraftWorld")
+      val craftWorld: Any = craftWorldClass.cast(world)
+      val getHandleField: Method = craftWorldClass.getMethod("getHandle")
 
-    // net.minecraft.server.v1_7_R4.WorldServer
-    val nmsWorldServer: Any = getHandleField.invoke(craftWorld)
-    val nmsWorldServerClass: Class<*> = nmsWorldServer.javaClass
+      // net.minecraft.server.v1_7_R4.WorldServer
+      val nmsWorldServer: Any = getHandleField.invoke(craftWorld)
+      val nmsWorldServerClass: Class<*> = nmsWorldServer.javaClass
 
-    // net.minecraft.server.v1_7_R4.WorldData
-    val nmsWorldDataField: Field = nmsWorldServerClass.getField("worldData")
-    val nmsWorldData: Any = nmsWorldDataField.get(nmsWorldServer)
-    val nmsWorldDataClass: Class<*> = nmsWorldData.javaClass
-    val setStormMethod: Method = nmsWorldDataClass.getMethod("setStorm", Boolean::class.java)
+      // net.minecraft.server.v1_7_R4.WorldData
+      val nmsWorldDataField: Field = nmsWorldServerClass.getField("worldData")
+      val nmsWorldData: Any = nmsWorldDataField.get(nmsWorldServer)
+      val nmsWorldDataClass: Class<*> = nmsWorldData.javaClass
+      val setStormMethod: Method = nmsWorldDataClass.getMethod("setStorm", Boolean::class.java)
 
-    setStormMethod.invoke(nmsWorldData, false)
+      setStormMethod.invoke(nmsWorldData, false)
+      return
+    }
+
+    world.setStorm(false)
+    world.weatherDuration = Int.MAX_VALUE
   }
 
   /**
