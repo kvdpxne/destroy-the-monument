@@ -15,7 +15,7 @@ import me.kvdpxne.dtm.shared.reflection.Reflection
 import me.kvdpxne.dtm.shared.world.WorldsHolder
 import me.kvdpxne.dtm.user.LocalUser
 import me.kvdpxne.dtm.user.LocalUserManager
-import me.kvdpxne.dtm.user.UserException
+import me.kvdpxne.dtm.user.UserNotFoundException
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Location
@@ -170,7 +170,8 @@ fun Player.respawn() {
 
   // net.minecraft.server.v1_7_R4.PacketPlayInClientCommand
   val packetPlayInClientCommandClass: Class<*> = Reflection.getMinecraftClass("PacketPlayInClientCommand")
-  val packetPlayInClientCommandConstructor: Constructor<*> = packetPlayInClientCommandClass.getConstructor(enumClientCommandClass)
+  val packetPlayInClientCommandConstructor: Constructor<*> =
+    packetPlayInClientCommandClass.getConstructor(enumClientCommandClass)
   val packetPlayInClientCommand: Any = packetPlayInClientCommandConstructor.newInstance(enumClientCommand)
 
   // org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer
@@ -187,6 +188,21 @@ fun Player.respawn() {
   aMethod.invoke(playerConnection, packetPlayInClientCommand)
 }
 
+/**
+ * Retrieves the [LocalUser] associated with this [Player].
+ *
+ * This property provides a way to access the [LocalUser] instance that
+ * corresponds to the current [Player] within the game's user management
+ * system. It leverages the [LocalUserManager] to perform a lookup based on
+ * the player's unique identifier.
+ *
+ * @throws UserNotFoundException if no [LocalUser] is found for the player's
+ *         unique identifier. This exception indicates that the player is not
+ *         currently registered as a local user in the system, which might
+ *         occur if they have not logged in or have not been added
+ *         to the [LocalUserManager].
+ *
+ * @since 0.1.0
+ */
 val Player.localUser: LocalUser
   get() = LocalUserManager.findUserByIdentifier(this.uniqueId)
-    ?: throw UserException()

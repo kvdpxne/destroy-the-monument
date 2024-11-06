@@ -18,6 +18,8 @@ object Configuration {
     }
   }
 
+  const val USER_MANAGER_INITIAL_CAPACITY = 24
+
   const val DEBUG_IN_CONSOLE = false
 
   const val DEBUG_IN_GAME = false
