@@ -39,6 +39,7 @@ dependencies {
 
   implementation(libraries.bundles.exposed.fixed)
   implementation(libraries.kotlinx.serialization.json)
+  implementation(libraries.kotlinx.serialization.kaml)
 
   implementation(libraries.postgresql)
 
@@ -88,7 +89,7 @@ tasks {
 
   processResources {
     //
-    dependsOn("processTranslations")
+    dependsOn("processConfigurations", "processTranslations")
 
     val properties = mapOf(
       "description" to rootProject.description,
@@ -114,6 +115,25 @@ tasks {
 
   shadowJar {
     archiveClassifier.set("bukkit")
+  }
+
+  register("processConfigurations") {
+    description = "Copies to resources configuration files."
+
+    doLast {
+      val source = layout.projectDirectory.dir("configurations2/").asFile
+      val target = layout.buildDirectory.dir("resources/main/configurations2/").get().asFile
+
+      if (!target.exists()) {
+        target.mkdirs()
+      }
+
+      source.walkTopDown()
+        .filter { it.isFile && it.extension == "yml" }
+        .forEach {
+          it.copyTo(File(target, it.name), overwrite = true)
+        }
+    }
   }
 
   register("processTranslations") {
@@ -156,7 +176,7 @@ tasks {
       exec {
         workingDir = outputDirectory
         executable = "java"
-        args("-jar", fileName)
+        args("-jar", "bukkit-1.8.8.jar")
         standardInput = System.`in`
       }
     }
