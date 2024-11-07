@@ -1,21 +1,19 @@
 package me.kvdpxne.dtm.listeners
 
-import java.lang.reflect.Method
 import kotlin.random.Random
 import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.configuration.Configuration
 import me.kvdpxne.dtm.game.LocalGame
-import me.kvdpxne.dtm.profession.Ability
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.shared.player.localUser
-import me.kvdpxne.dtm.team.LocalTeam
-import me.kvdpxne.dtm.team.Teammate
+import me.kvdpxne.dtm.shared.reflection.Reflection
 import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.entity.Arrow
 import org.bukkit.entity.Player
+import org.bukkit.entity.Projectile
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.ProjectileHitEvent
@@ -70,7 +68,7 @@ object ProjectileHitListener : Listener {
     location: Location,
     radius: Int
   ) {
-    for (block: Block in this.sphere(location, radius)) {
+    for (block: Block in sphere(location, radius)) {
       //
       if (Material.AIR != block.type) {
         continue
@@ -105,78 +103,73 @@ object ProjectileHitListener : Listener {
   fun handleProjectileHit(
     event: ProjectileHitEvent
   ) {
-    val projectile = event.entity
+    //
+    val projectile: Projectile = event.entity
+
+    //
     if (projectile !is Arrow) {
       return
     }
 
-    lateinit var shooter: ProjectileSource
-    for (method: Method in projectile::class.java.methods) {
-      if ("getShooter" == method.name && ProjectileSource::class.java == method.returnType) {
-        shooter = method.invoke(projectile) as ProjectileSource
-      }
-    }
+    //
+    val shooter: ProjectileSource = Reflection
+      .getMethod(Projectile::class.java, "getShooter", ProjectileSource::class.java)
+      .invoke(projectile) as ProjectileSource
 
+    //
     if (shooter !is Player) {
       return
     }
 
     //
-    val user: LocalUser = shooter.localUser ?: return
+    val user: LocalUser = shooter.localUser
 
     //
     val game: LocalGame = user.game ?: return
 
     //
+    if (!game.isRunning && !game.isEnding) {
+      return
+    }
+
+    //
     val arena: Arena = game.currentArena ?: return
 
     //
-    if (!game.isRunning) {
+    if (!ProjectileLaunchListener.projectiles.contains(projectile.entityId)) {
       return
     }
 
     //
-    val team: LocalTeam = game.findTeamByHostage(user) ?: return
+    val profession: Profession = game.findTeammateByHostage(user)
+      ?.currentProfession
+      ?: return
 
-    //
-    val teammate: Teammate = team.getTeammate(user) ?: return
+    when (profession.name) {
+      "archer" -> {
+        val location = projectile.location
+        createExplosion(
+          location,
+          3.975F,
+          !arena.revivalPositions.any {
+            it.isNear(
+              location.x,
+              location.y,
+              location.z,
+              Configuration.RADIUS_OF_EXPLOSION_INTERACTION + Math.PI
+            )
+          }
+        )
+      }
 
-    // Current profession
-    val profession: Profession = teammate.currentProfession
-
-    //
-    val ability: Ability = profession.ability ?: return
-
-    //
-    if (!ability.isActive) {
-      return
+      "pyro" -> {
+        createConflagration(
+          projectile.location,
+          5
+        )
+      }
     }
 
-    if ("archer" == profession.name) {
-      val location = projectile.location
-      this.createExplosion(
-        location,
-        3.975F,
-        !arena.revivalPositions.any {
-          it.isNear(
-            location.x,
-            location.y,
-            location.z,
-            Configuration.RADIUS_OF_EXPLOSION_INTERACTION + Math.PI
-          )
-        }
-      )
-      ability.renewDelayed(shooter)
-      return
-    }
-
-    if ("pyro" == profession.name) {
-      this.createConflagration(
-        projectile.location,
-        5
-      )
-      ability.renewDelayed(shooter)
-      return
-    }
+    ProjectileLaunchListener.projectiles.remove(projectile.entityId)
   }
 }

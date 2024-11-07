@@ -34,9 +34,11 @@ import me.kvdpxne.dtm.listeners.PlayerQuitListener
 import me.kvdpxne.dtm.listeners.PlayerRespawnListener
 import me.kvdpxne.dtm.listeners.PlayerToggleFlightListener
 import me.kvdpxne.dtm.listeners.ProjectileHitListener
+import me.kvdpxne.dtm.listeners.ProjectileLaunchListener
 import me.kvdpxne.dtm.listeners.WeatherChangeListener
 import me.kvdpxne.dtm.listeners.packet.PacketPlayInBlockDigListener
 import me.kvdpxne.dtm.listeners.packet.PacketPlayInSettingsListener
+import me.kvdpxne.dtm.listeners.packet.PacketPlayOutEntityDestroyListener
 import me.kvdpxne.dtm.profession.ProfessionManager
 import me.kvdpxne.dtm.professions.createArcher
 import me.kvdpxne.dtm.professions.createAssassin
@@ -56,7 +58,6 @@ import me.kvdpxne.dtm.user.LocalUserManager
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserBuilder
 import me.kvdpxne.dtm.user.UserService
-import me.kvdpxne.notchity.VersionCreator
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
 import org.bukkit.generator.ChunkGenerator
@@ -252,6 +253,7 @@ class DestroyTheMonument : JavaPlugin() {
       PlayerToggleFlightListener,
 
       ProjectileHitListener,
+      ProjectileLaunchListener,
 
       WeatherChangeListener
     )
@@ -260,7 +262,8 @@ class DestroyTheMonument : JavaPlugin() {
       //
       this.registerPacketListeners(
         PacketPlayInBlockDigListener,
-        PacketPlayInSettingsListener
+        PacketPlayInSettingsListener,
+        PacketPlayOutEntityDestroyListener
       )
     }
 
