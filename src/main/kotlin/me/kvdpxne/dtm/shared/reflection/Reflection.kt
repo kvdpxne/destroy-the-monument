@@ -102,8 +102,8 @@ object Reflection {
   fun getMethod(
     clazz: Class<*>,
     methodName: String,
-    returnType: Class<*>?,
-    parameterTypes: Array<Class<*>>?
+    returnType: Class<*>? = null,
+    parameterTypes: Array<Class<*>>? = null
   ): MethodInvoker {
     require(methodName.isNotBlank()) {
       ""
