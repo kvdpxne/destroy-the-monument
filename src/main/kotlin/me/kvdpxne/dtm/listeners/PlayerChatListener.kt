@@ -2,7 +2,7 @@ package me.kvdpxne.dtm.listeners
 
 import java.util.logging.Logger
 import me.kvdpxne.dtm.DestroyTheMonument
-import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.shared.event.cancel
 import me.kvdpxne.dtm.shared.player.localUser
@@ -80,7 +80,7 @@ object PlayerChatListener : Listener {
     //
     team.first.sendMessage("${this.formatTeammate(team.second)}&7: &f$message")
 
-    if (Configuration.TRACE_MESSAGES_IN_GAME) {
+    if (GeneralConfiguration.TRACE_MESSAGES_IN_GAME) {
       val logger: Logger = DestroyTheMonument.instance?.logger ?: return
 
       val professionName: String = team.second.currentProfession.displayName

@@ -2,7 +2,7 @@ package me.kvdpxne.dtm.listeners
 
 import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.shared.text.colorize
-import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.position.MonumentPosition
 import me.kvdpxne.dtm.position.RevivalPosition
@@ -114,7 +114,7 @@ object BlockBreakListener : Listener {
           location.x,
           location.y,
           location.z,
-          Configuration.RADIUS_OF_BLOCK_INTERACTION
+          GeneralConfiguration.RADIUS_OF_BLOCK_INTERACTION
         )
       ) {
         event.cancel()
@@ -138,7 +138,7 @@ object BlockBreakListener : Listener {
       return
     }
 
-    if (Configuration.BLOCK_PLAT_DROPS) {
+    if (GeneralConfiguration.BLOCK_PLAT_DROPS) {
       // Obiekt bloku, który znajduje się na osi Y + 1 od osi Y obiektu bloku,
       // który został zniszczony.
       val upperBlock: Block = block.getRelative(BlockFace.UP)
@@ -257,14 +257,14 @@ object BlockBreakListener : Listener {
     }
 
     // Creates and registers a synchronous delayed game completion task
-    runSynchronousDelayedTask(Configuration.GAME_END_DELAY * 20L) {
+    runSynchronousDelayedTask(GeneralConfiguration.GAME_END_DELAY * 20L) {
       game.stop()
     }
 
     // Cancels the task of the game arena timer
     cancelTask(game.timerTaskIdentifier)
 
-    game.sendConfiguredMessages { configuration: Configuration ->
+    game.sendConfiguredMessages { configuration: GeneralConfiguration ->
       configuration.GAME_END_MESSAGE
     }
   }

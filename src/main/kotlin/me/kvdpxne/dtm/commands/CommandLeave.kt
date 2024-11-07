@@ -3,7 +3,7 @@ package me.kvdpxne.dtm.commands
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.CommandException
-import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.shared.player.equipA
 import me.kvdpxne.dtm.shared.player.moveToLobby
@@ -19,7 +19,7 @@ fun createLeaveCommand(): Command<LocalUserPerformer> {
     .handler { performer, _ ->
       // Obiekt lokalnej gry, do której jest przypisany użytkownik.
       val localGame: LocalGame = performer.user.game
-        ?: throw CommandException(Configuration.NO_IN_GAME_MESSAGE)
+        ?: throw CommandException(GeneralConfiguration.NO_IN_GAME_MESSAGE)
 
       //
       if (localGame.isInArena(performer.user)) {

@@ -8,7 +8,7 @@ import com.comphenix.protocol.wrappers.EnumWrappers
 import java.lang.reflect.Constructor
 import java.lang.reflect.Field
 import java.lang.reflect.Method
-import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.shared.debug.Debug
 import me.kvdpxne.dtm.shared.item.ItemsClipboard
 import me.kvdpxne.dtm.shared.reflection.Reflection
@@ -154,7 +154,7 @@ fun Player.respawn() {
     return
   }
 
-  if (Configuration.USE_PROTOCOL_LIB) {
+  if (GeneralConfiguration.USE_PROTOCOL_LIB) {
     val protocolManager: ProtocolManager = ProtocolLibrary.getProtocolManager()
     val packet: PacketContainer = protocolManager.createPacket(PacketType.Play.Client.CLIENT_COMMAND)
 

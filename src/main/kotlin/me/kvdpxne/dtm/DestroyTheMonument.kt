@@ -3,11 +3,13 @@ package me.kvdpxne.dtm
 import com.comphenix.protocol.ProtocolLibrary
 import com.comphenix.protocol.ProtocolManager
 import com.comphenix.protocol.events.PacketListener
+import java.nio.file.Path
 import me.kvdpxne.dico.Dico
 import me.kvdpxne.dtm.command.CommandManager
 import me.kvdpxne.dtm.commands.createBaseCommand
 import me.kvdpxne.dtm.commands.createGlobalChatCommand
-import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.configuration.ConfigurationManager
+import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.data.tasks.AsynchronousUserUpdateTask
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.GameService
@@ -50,6 +52,7 @@ import me.kvdpxne.dtm.professions.createPyro
 import me.kvdpxne.dtm.professions.createScout
 import me.kvdpxne.dtm.professions.createSpecialist
 import me.kvdpxne.dtm.shared.debug.Debug
+import me.kvdpxne.dtm.shared.io.Files2
 import me.kvdpxne.dtm.shared.reflection.Reflection
 import me.kvdpxne.dtm.shared.text.BukkitTextFormatter
 import me.kvdpxne.dtm.shared.world.VoidChunkGenerator
@@ -156,6 +159,9 @@ class DestroyTheMonument : JavaPlugin() {
    * @since 0.1.0
    */
   override fun onLoad() {
+    //
+    Debug.initialize(this.logger)
+
 //    if (!VersionCreator.getBukkitVersion().isEqual(10710)) {
 //      arrayOf(
 //        "An error occurred while trying to load the plugin.",
@@ -179,14 +185,21 @@ class DestroyTheMonument : JavaPlugin() {
 //    }
 
     //
-    Debug.initialize(this.logger)
+    val directoryPath: Path = this.dataFolder.toPath()
+    Files2.createDirectoryIfNotExists(directoryPath)
+
+    //
+    ConfigurationManager.moveConfigurations(directoryPath)
+
+    //
+    ConfigurationManager.loadConfigurations(directoryPath)
 
     //
     instance = this
 
     PluginContext.textFormatter = BukkitTextFormatter
 
-    if (Configuration.USE_PROTOCOL_LIB) {
+    if (GeneralConfiguration.USE_PROTOCOL_LIB) {
       ProtocolLibrary.getProtocolManager()
     } else {
       Reflection
@@ -258,7 +271,7 @@ class DestroyTheMonument : JavaPlugin() {
       WeatherChangeListener
     )
 
-    if (Configuration.USE_PROTOCOL_LIB) {
+    if (GeneralConfiguration.USE_PROTOCOL_LIB) {
       //
       this.registerPacketListeners(
         PacketPlayInBlockDigListener,
@@ -320,7 +333,7 @@ class DestroyTheMonument : JavaPlugin() {
     GameManager.removeGames()
 
     //
-    if (Configuration.USE_PROTOCOL_LIB) {
+    if (GeneralConfiguration.USE_PROTOCOL_LIB) {
       ProtocolLibrary.getProtocolManager().removePacketListeners(this)
     }
 
@@ -345,7 +358,7 @@ class DestroyTheMonument : JavaPlugin() {
     name: String,
     identifier: String
   ): ChunkGenerator {
-    if (Configuration.OVERRIDE_DEFAULT_CHUNK_GENERATOR) {
+    if (GeneralConfiguration.OVERRIDE_DEFAULT_CHUNK_GENERATOR) {
       return VoidChunkGenerator.INSTANCE
     }
 

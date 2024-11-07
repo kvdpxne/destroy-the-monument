@@ -3,7 +3,7 @@ package me.kvdpxne.dtm.user
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
-import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.shared.debug.Debug
 
 /**
@@ -23,7 +23,7 @@ object LocalUserManager {
    * @since 0.1.0
    */
   private val _usersByIdentifier: ConcurrentMap<UUID, User> =
-    ConcurrentHashMap(Configuration.USER_MANAGER_INITIAL_CAPACITY)
+    ConcurrentHashMap(GeneralConfiguration.USER_MANAGER_INITIAL_CAPACITY)
 
   /**
    * Concurrent map to store users by their names in lowercase format.
@@ -31,7 +31,7 @@ object LocalUserManager {
    * @since 0.1.0
    */
   private val _usersByName: ConcurrentMap<String, User> =
-    ConcurrentHashMap(Configuration.USER_MANAGER_INITIAL_CAPACITY)
+    ConcurrentHashMap(GeneralConfiguration.USER_MANAGER_INITIAL_CAPACITY)
 
   /**
    * Returns a list of all registered users in the system.

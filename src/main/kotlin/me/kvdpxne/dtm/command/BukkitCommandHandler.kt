@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.command
 
-import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.shared.player.localUser
 import me.kvdpxne.dtm.translation.TranslationService
 import me.kvdpxne.dtm.translation.formatter.Formatter
@@ -35,7 +35,7 @@ internal class BukkitCommandHandler internal constructor(
     label: String,
     arguments: Array<String>
   ): Boolean {
-    if (Configuration.USE_FA_F) {
+    if (GeneralConfiguration.USE_FA_F) {
       if (!testPermissionSilent(commandSender)) {
         TranslationService.chains()
           .receiver(commandSender.asPerformer())

@@ -2,7 +2,7 @@ package me.kvdpxne.dtm.shared.world
 
 import java.lang.ref.Reference
 import java.lang.ref.WeakReference
-import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import org.bukkit.World
 
 /**
@@ -14,7 +14,7 @@ object WorldsHolder {
    * @since 0.1.0
    */
   private val _lobbyWorld: Reference<World> by lazy {
-    WeakReference(WorldLoaderHelper.getWorld(Configuration.LOBBY_WORLD_NAME))
+    WeakReference(WorldLoaderHelper.getWorld(GeneralConfiguration.LOBBY_WORLD_NAME))
   }
 
   /**

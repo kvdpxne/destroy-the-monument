@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.game
 
-import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.shared.task.runSynchronousTask
 import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.team.Teammate
@@ -33,7 +33,7 @@ internal class GameStartAsyncTask internal constructor(
   }
 
   override fun run() {
-    if (Configuration.MIN_TEAMMATES_SIZE > this.game.numberOfHostagesEnrolled) {
+    if (GeneralConfiguration.MIN_TEAMMATES_SIZE > this.game.numberOfHostagesEnrolled) {
       this.game.setAsInitialized()
       this.cancel()
 

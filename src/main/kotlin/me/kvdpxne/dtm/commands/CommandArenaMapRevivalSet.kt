@@ -6,7 +6,7 @@ import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.command.Parameters
-import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.position.RevivalPositionImpl
 import me.kvdpxne.dtm.team.Team
 import me.kvdpxne.dtm.team.TeamService
@@ -36,7 +36,7 @@ fun createArenaMapRevivalSetCommand(): Command<LocalUserPerformer> {
       //
       val arena: Arena = ArenaService.findArenaByName(arenaName)
         ?: throw CommandException(
-          Configuration.NO_FOUND_ARENA
+          GeneralConfiguration.NO_FOUND_ARENA
             .replace("{ARENA_NAME}", arenaName)
         )
 

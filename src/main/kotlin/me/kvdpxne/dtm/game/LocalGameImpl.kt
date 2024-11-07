@@ -3,7 +3,7 @@ package me.kvdpxne.dtm.game
 import java.util.UUID
 import me.kvdpxne.dtm.DestroyTheMonument
 import me.kvdpxne.dtm.arena.Arena
-import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.scoreboard.createServerScoreboard
 import me.kvdpxne.dtm.scoreboard.createServerTeam
 import me.kvdpxne.dtm.scoreboard.initScoreboard
@@ -181,7 +181,7 @@ class LocalGameImpl(
    */
   private fun shouldStart() {
     if (!this.isInitialized ||
-      Configuration.MIN_TEAMMATES_SIZE > this.numberOfHostagesEnrolled
+      GeneralConfiguration.MIN_TEAMMATES_SIZE > this.numberOfHostagesEnrolled
     ) {
       return
     }

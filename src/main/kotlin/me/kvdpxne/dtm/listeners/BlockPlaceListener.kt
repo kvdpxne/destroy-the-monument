@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.listeners
 
-import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.position.RevivalPosition
 import me.kvdpxne.dtm.shared.event.cancel
@@ -75,7 +75,7 @@ object BlockPlaceListener : Listener {
           location.x,
           location.y,
           location.z,
-          Configuration.RADIUS_OF_BLOCK_INTERACTION
+          GeneralConfiguration.RADIUS_OF_BLOCK_INTERACTION
         )
       ) {
         event.cancel()

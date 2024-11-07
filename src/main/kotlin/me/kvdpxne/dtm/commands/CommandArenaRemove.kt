@@ -7,7 +7,7 @@ import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
-import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameService
 import me.kvdpxne.dtm.team.Team
@@ -39,7 +39,7 @@ fun createArenaRemoveCommand(): Command<Performer> {
       //
       val arena: Arena = ArenaService.findArenaByName(arenaName)
         ?: throw CommandException(
-          Configuration.NO_FOUND_ARENA
+          GeneralConfiguration.NO_FOUND_ARENA
             .replace("{ARENA_NAME}", arenaName)
         )
 
@@ -49,7 +49,7 @@ fun createArenaRemoveCommand(): Command<Performer> {
       // Obiekt gry znaleziony na podstawie unikatowej nazwy gry.
       val game: Game<Team> = GameService.findGameByName(gameName)
         ?: throw CommandException(
-          Configuration.NO_FOUND_GAME
+          GeneralConfiguration.NO_FOUND_GAME
             .replace("{GAME_NAME}", gameName)
         )
 

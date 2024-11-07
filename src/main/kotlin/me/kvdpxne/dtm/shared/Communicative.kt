@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.shared
 
-import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.configuration.GeneralConfiguration
 
 /**
  * Defines an object capable of sending messages to a performer.
@@ -39,11 +39,11 @@ interface Communicative {
     this.sendMessages(*messages())
   }
 
-  fun sendConfiguredMessage(servedMessage: (Configuration) -> String) {
-    this.sendMessage(servedMessage(Configuration))
+  fun sendConfiguredMessage(servedMessage: (GeneralConfiguration) -> String) {
+    this.sendMessage(servedMessage(GeneralConfiguration))
   }
 
-  fun sendConfiguredMessages(servedMessages: (Configuration) -> Array<out String>) {
-    this.sendMessages(*servedMessages(Configuration))
+  fun sendConfiguredMessages(servedMessages: (GeneralConfiguration) -> Array<out String>) {
+    this.sendMessages(*servedMessages(GeneralConfiguration))
   }
 }

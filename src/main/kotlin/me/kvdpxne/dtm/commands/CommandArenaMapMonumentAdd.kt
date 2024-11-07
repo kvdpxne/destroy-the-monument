@@ -6,7 +6,7 @@ import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.command.Parameters
-import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.position.BlockPosition
 import me.kvdpxne.dtm.position.MonumentPositionImpl
 import me.kvdpxne.dtm.team.Team
@@ -43,7 +43,7 @@ fun createArenaMapMonumentAddCommand(): Command<LocalUserPerformer> {
       //
       val arena: Arena = ArenaService.findArenaByName(arenaName)
         ?: throw CommandException(
-          Configuration.NO_FOUND_ARENA
+          GeneralConfiguration.NO_FOUND_ARENA
             .replace("{ARENA_NAME}", arenaName)
         )
 
@@ -53,7 +53,7 @@ fun createArenaMapMonumentAddCommand(): Command<LocalUserPerformer> {
       //
       val team: Team = TeamService.findTeamByName(teamName)
         ?: throw CommandException(
-          Configuration.NO_FOUND_TEAM
+          GeneralConfiguration.NO_FOUND_TEAM
             .replace("{TEAM_NAME}", teamName)
         )
 

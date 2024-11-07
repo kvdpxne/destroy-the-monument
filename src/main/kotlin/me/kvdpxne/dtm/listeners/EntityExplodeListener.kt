@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.listeners
 
-import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
@@ -67,7 +67,7 @@ object EntityExplodeListener : Listener {
             location.x,
             location.y,
             location.z,
-            Configuration.RADIUS_OF_EXPLOSION_INTERACTION
+            GeneralConfiguration.RADIUS_OF_EXPLOSION_INTERACTION
           )
         ) {
           continue

@@ -5,7 +5,7 @@ import java.lang.ref.WeakReference
 import java.util.Locale
 import java.util.UUID
 import me.kvdpxne.dtm.shared.text.colorize
-import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.translation.TranslationService
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -43,7 +43,7 @@ class LocalUserPerformerImpl(
     }
 
     //
-    if (Configuration.OP_F && this.isOperator) {
+    if (GeneralConfiguration.OP_F && this.isOperator) {
       return true
     }
 

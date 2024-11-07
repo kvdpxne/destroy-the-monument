@@ -1,0 +1,17 @@
+# NOTE: These settings apply globally for the plugin. If the debug settings
+# are manually changed using the /debug command in-game, they will revert to
+# the values specified in this file after a server restart.
+
+# This option controls whether debugging information should be printed to
+# the server console.
+#
+# If set to true, debugging data will appear in the console.
+# If set to false, no debug output will be shown in the console.
+consolePrintOutput: false
+
+# This option controls whether debugging information should be printed in
+# the in-game chat for players with OP permissions.
+#
+# If set to true, debug information will be visible to OP players in the chat.
+# If set to false, debug information will not appear in the game chat.
+gamePrintOutput: false

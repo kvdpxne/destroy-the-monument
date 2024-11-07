@@ -3,7 +3,7 @@ package me.kvdpxne.dtm.listeners
 import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.arena.ArenaException
 import me.kvdpxne.dtm.shared.text.colorize
-import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.scoreboard.updateCoinCount
 import me.kvdpxne.dtm.scoreboard.updateDeathCount
@@ -125,7 +125,7 @@ object PlayerDeathListener : Listener {
 
     // Uruchamia opóźnione o X milisekund synchroniczne zadanie odrodzenia
     // obiektu gracza, który umarł.
-    runSynchronousDelayedTask(Configuration.REVIVAL_PLAYER_DELAY) {
+    runSynchronousDelayedTask(GeneralConfiguration.REVIVAL_PLAYER_DELAY) {
       victim.respawn()
     }
 

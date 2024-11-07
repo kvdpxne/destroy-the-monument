@@ -3,6 +3,7 @@ dico = "d2facc69c4"
 dokka = "1.9.20"
 exposed = "0.56.0"
 exposed-fixed = "fix-class-loader-SNAPSHOT"
+kaml = "0.62.2"
 kotlin = "2.0.21"
 kotlinx-coroutines = "1.9.0"
 kotlinx-serialization = "1.7.3"
@@ -31,6 +32,7 @@ exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "e
 exposed-jdbc-fixed = { module = "com.github.makeevrserg.Exposed-fix-class-loader:exposed-jdbc", version.ref = "exposed-fixed" }
 kotlinx-coroutines-jvm = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-jvm", version.ref = "kotlinx-coroutines" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+kotlinx-serialization-kaml = { module = "com.charleskorn.kaml:kaml", version.ref = "kaml" }
 notchity = { module = "com.github.kvdpxne:notchity", version.ref = "notchity" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
 protocollib-legacy = { module = "com.comphenix.protocol:ProtocolLib-Legacy", version.ref = "protocollib-legacy" }

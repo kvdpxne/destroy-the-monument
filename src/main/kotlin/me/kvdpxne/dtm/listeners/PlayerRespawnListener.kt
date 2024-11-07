@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.listeners
 
-import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.shared.player.localUser
@@ -87,7 +87,7 @@ object PlayerRespawnListener : Listener {
 
     //
     runSynchronousDelayedTask(2L) {
-      player.noDamageTicks = 20 * Configuration.REVIVAL_PLAYER_PROTECTION_DELAY
+      player.noDamageTicks = 20 * GeneralConfiguration.REVIVAL_PLAYER_PROTECTION_DELAY
     }
   }
 }

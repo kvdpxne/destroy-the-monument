@@ -1,8 +1,7 @@
 package me.kvdpxne.dtm.shared.material
 
-import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.shared.item.ItemBuilder
-import me.kvdpxne.dtm.shared.item.hasDurability
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 
@@ -279,5 +278,5 @@ fun Material.isArmor(): Boolean {
 }
 
 fun Material.isMonument(): Boolean {
-  return Configuration.MONUMENT_TYPE == this
+  return GeneralConfiguration.MONUMENT_TYPE == this
 }

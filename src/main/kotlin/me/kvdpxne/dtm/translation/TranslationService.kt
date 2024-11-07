@@ -1,11 +1,7 @@
 package me.kvdpxne.dtm.translation
 
-import java.io.FileNotFoundException
 import java.io.IOException
-import java.net.URI
 import java.net.URISyntaxException
-import java.net.URL
-import java.nio.file.FileSystems
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.Locale
@@ -18,6 +14,7 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonObject
+import me.kvdpxne.dtm.shared.io.Files2
 import me.kvdpxne.dtm.translation.message.MessageBuilder
 import me.kvdpxne.dtm.translation.message.MessageKey
 
@@ -77,23 +74,10 @@ object TranslationService {
   // Get all paths from a folder that inside the JAR file
   @Throws(URISyntaxException::class, IOException::class)
   private fun openDirectory(): List<Pair<JsonObject, String>> {
-
-    val classLoader: ClassLoader = this::class.java.classLoader
-    val resource: URL = classLoader.getResource("translations")
-      ?: throw FileNotFoundException("No translations found.")
-
-    // A is project directory
-    // B is working directory
-    // C is jar file name with extension
-    // jar:file:/[A]/[B]/plugins/[C]!/translations/
-    val rawPath: String = resource.toString()
-
-    val environments: Map<String, String> = emptyMap()
-    val arrays: List<String> = rawPath.split('!')
-
-    return FileSystems.newFileSystem(URI.create(arrays[0]), environments).use {
-      val path: Path = it.getPath(arrays[1])
-
+    return Files2.fs(
+      this::class.java.classLoader,
+      "translations"
+    ) { _, path ->
       //
       Files.walk(path)
         .filter(Files::isRegularFile)

@@ -3,7 +3,7 @@ package me.kvdpxne.dtm.translation.message
 import java.util.Locale
 import me.kvdpxne.dtm.Constants
 import me.kvdpxne.dtm.command.Performer
-import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.shared.text.colorize
 import me.kvdpxne.dtm.translation.TranslationService
 import me.kvdpxne.dtm.translation.formatter.Formatter
@@ -75,7 +75,7 @@ class MessageBuilder {
       val locale: Locale = receiver.locale
       val message: String = this.messages[locale] ?: continue
 
-      val formattedMessage: String = if (Configuration.USE_PREFIX) {
+      val formattedMessage: String = if (GeneralConfiguration.USE_PREFIX) {
         "&6&l${Constants.NAME} &8>&r $message"
       } else {
         message

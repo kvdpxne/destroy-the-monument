@@ -2,7 +2,7 @@ package me.kvdpxne.dtm.listeners
 
 import kotlin.random.Random
 import me.kvdpxne.dtm.arena.Arena
-import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.shared.player.localUser
@@ -156,7 +156,7 @@ object ProjectileHitListener : Listener {
               location.x,
               location.y,
               location.z,
-              Configuration.RADIUS_OF_EXPLOSION_INTERACTION + Math.PI
+              GeneralConfiguration.RADIUS_OF_EXPLOSION_INTERACTION + Math.PI
             )
           }
         )

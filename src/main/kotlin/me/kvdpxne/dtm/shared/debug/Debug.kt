@@ -2,7 +2,7 @@ package me.kvdpxne.dtm.shared.debug
 
 import java.util.logging.Logger
 import me.kvdpxne.dico.Dico
-import me.kvdpxne.dtm.configuration.Configuration
+import me.kvdpxne.dtm.configuration.DebugConfiguration
 import org.bukkit.entity.Player
 
 /**
@@ -24,14 +24,18 @@ object Debug {
    *
    * @since 0.1.0
    */
-  private var _printInConsole: Boolean = Configuration.DEBUG_IN_CONSOLE
+  @Suppress("SuspiciousVarProperty")
+  private var _printInConsole: Boolean = DebugConfiguration.consolePrintOutput
+    get() = DebugConfiguration.consolePrintOutput
 
   /**
    * Whether to print debug messages in-game to OP players.
    *
    * @since 0.1.0
    */
-  private var _printInGame: Boolean = Configuration.DEBUG_IN_GAME
+  @Suppress("SuspiciousVarProperty")
+  private var _printInGame: Boolean = DebugConfiguration.gamePrintOutput
+    get() = DebugConfiguration.gamePrintOutput
 
   /**
    * Gets whether debug messages are printed to the console.
