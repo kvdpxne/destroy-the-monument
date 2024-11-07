@@ -48,7 +48,7 @@ object CommandGameStop {
           }
 
           val game = performer.user.game
-          stopGame(game as LocalGame, performer)
+          stopGame(game, performer)
           return@handler
         }
 
