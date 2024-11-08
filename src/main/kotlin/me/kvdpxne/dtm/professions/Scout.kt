@@ -7,8 +7,8 @@ import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionBuilder
 import me.kvdpxne.dtm.shared.item.ItemsClipboard.ITEM_TOOL_AXE
 import me.kvdpxne.dtm.shared.item.ItemsClipboard.ITEM_TOOL_PICKAXE
-import me.kvdpxne.dtm.shared.item.toBuilder
 import me.kvdpxne.dtm.shared.material.toBuilder
+import me.kvdpxne.dtm.shared.task.runSynchronousTask
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.potion.PotionEffectType
@@ -44,7 +44,9 @@ fun createScout(): Profession = ProfessionBuilder()
   .icon(Material.FISHING_ROD)
   .effect(PotionEffectType.SPEED, 1)
   .ability(30, false) {
-    it.allowFlight = true
+    runSynchronousTask {
+      it.allowFlight = true
+    }
   }
   .enabled()
   .build()
