@@ -18,7 +18,8 @@ import me.kvdpxne.dtm.listeners.BlockBurnListener
 import me.kvdpxne.dtm.listeners.BlockPistonExtendListener
 import me.kvdpxne.dtm.listeners.BlockPlaceListener
 import me.kvdpxne.dtm.listeners.BlockSpreadListener
-import me.kvdpxne.dtm.listeners.EntityDamageListener
+import me.kvdpxne.dtm.listeners.EntityDamageByBlockListener
+import me.kvdpxne.dtm.listeners.EntityDamageByEntityListener
 import me.kvdpxne.dtm.listeners.EntityExplodeListener
 import me.kvdpxne.dtm.listeners.PlayerChatListener
 import me.kvdpxne.dtm.listeners.PlayerCraftItemListener
@@ -254,7 +255,8 @@ class DestroyTheMonument : JavaPlugin() {
       BlockPlaceListener,
       BlockSpreadListener,
 
-      EntityDamageListener,
+      EntityDamageByBlockListener,
+      EntityDamageByEntityListener,
       EntityExplodeListener,
 
       PlayerChatListener,

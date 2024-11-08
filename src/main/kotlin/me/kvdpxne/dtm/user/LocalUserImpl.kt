@@ -81,7 +81,7 @@ class LocalUserImpl(
     get() = this.game?.findTeamByHostage(this)
 
   override val teammate: Teammate?
-    get() = this.team?.getTeammate(this)
+    get() = this.game?.findTeammateByHostage(this)
 
   override fun updateCurrentProfession(profession: Profession) {
     this.currentProfession = profession

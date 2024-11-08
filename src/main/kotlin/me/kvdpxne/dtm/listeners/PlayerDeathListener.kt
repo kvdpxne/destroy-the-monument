@@ -4,6 +4,9 @@ import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.arena.ArenaException
 import me.kvdpxne.dtm.shared.text.colorize
 import me.kvdpxne.dtm.configuration.GeneralConfiguration
+import me.kvdpxne.dtm.damage.Damage
+import me.kvdpxne.dtm.damage.DamageManager
+import me.kvdpxne.dtm.damage.DamageOwner
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.scoreboard.updateCoinCount
 import me.kvdpxne.dtm.scoreboard.updateDeathCount
@@ -14,6 +17,7 @@ import me.kvdpxne.dtm.shared.task.runSynchronousDelayedTask
 import me.kvdpxne.dtm.shared.world.WorldsHolder
 import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.user.LocalUser
+import me.kvdpxne.dtm.user.LocalUserManager
 import org.bukkit.World
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -75,6 +79,29 @@ object PlayerDeathListener : Listener {
   private fun addAndUpdateDeaths(teammate: Teammate) {
     teammate.addDeath()
     updateDeathCount(teammate.fastBoard, teammate.statistics.deaths)
+  }
+
+  fun handleAssists(
+    victim: LocalUser,
+    damageOwner: DamageOwner,
+  ) {
+    val iterator: MutableIterator<Damage> = damageOwner.history.iterator()
+
+    while (iterator.hasNext()) {
+      val damage: Damage = iterator.next()
+      val attacker: LocalUser? = LocalUserManager.findUserByIdentifierOrNull(damage.attacker)
+
+      if (null == attacker) {
+        iterator.remove()
+        continue
+      }
+
+      attacker.statistics.addAssists()
+      attacker.teammate?.statistics?.addAssists()
+    }
+
+    //
+    damageOwner.removeDamages()
   }
 
   /**
@@ -149,12 +176,17 @@ object PlayerDeathListener : Listener {
     // przypisana do drużynowego, który zginął.
     victimTeammate.currentProfession.ability?.cancelCooldown()
 
+    //
+    val damageOwner: DamageOwner = DamageManager.findFs(victim.uniqueId)
+
     // Jeżeli obiekt gracza, który jest zabójcą nie istnieje to obiekt gracza,
     // który jest ofiarą popełnij samobójstwo.
     if (null == victim.killer) {
       // VICTIM_KIT_NAME VICTIM_USER_NAME ACTION
       // Zwiadowca       currant          zginął
       event.deathMessage = this.createTeammateSuicideMessage(victimTeammate)
+
+      this.handleAssists(victimUser, damageOwner)
 
       //
       this.addAndUpdateDeaths(victimTeammate)
@@ -177,6 +209,8 @@ object PlayerDeathListener : Listener {
 
     killerUser.wallet.addCoins(20)
     updateCoinCount(killerTeammate.fastBoard, killerUser.wallet.coins)
+
+    this.handleAssists(victimUser, damageOwner)
 
     this.addAndUpdateDeaths(victimTeammate)
     this.addAndUpdateKills(killerTeammate)
