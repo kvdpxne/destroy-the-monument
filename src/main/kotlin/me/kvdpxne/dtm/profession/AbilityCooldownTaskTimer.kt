@@ -22,7 +22,7 @@ class AbilityCooldownTaskTimer(
   /**
    * @since 0.1.0
    */
-  private val part = 1.0F / this.remainingSeconds
+  private val part = 1.0F / (this.remainingSeconds + 1)
 
   /**
    * @since 0.1.0
