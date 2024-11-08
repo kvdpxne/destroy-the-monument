@@ -11,8 +11,10 @@ import me.kvdpxne.dtm.scoreboard.updateKillCount
 import me.kvdpxne.dtm.shared.player.localUser
 import me.kvdpxne.dtm.shared.player.respawn
 import me.kvdpxne.dtm.shared.task.runSynchronousDelayedTask
+import me.kvdpxne.dtm.shared.world.WorldsHolder
 import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.user.LocalUser
+import org.bukkit.World
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -84,6 +86,15 @@ object PlayerDeathListener : Listener {
   fun handlePlayerDeath(
     event: PlayerDeathEvent
   ) {
+    val world: World = event.entity.world
+    val lobbyWorld: World? = WorldsHolder.lobbyWorld
+
+    if (world == lobbyWorld) {
+      event.keepInventory = true
+      event.droppedExp = 0
+      return
+    }
+
     // Obiekt gracza, który umarł
     val victim: Player = event.entity
 

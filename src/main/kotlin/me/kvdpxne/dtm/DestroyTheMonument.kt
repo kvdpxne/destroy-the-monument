@@ -14,8 +14,10 @@ import me.kvdpxne.dtm.data.tasks.AsynchronousUserUpdateTask
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.GameService
 import me.kvdpxne.dtm.listeners.BlockBreakListener
+import me.kvdpxne.dtm.listeners.BlockBurnListener
 import me.kvdpxne.dtm.listeners.BlockPistonExtendListener
 import me.kvdpxne.dtm.listeners.BlockPlaceListener
+import me.kvdpxne.dtm.listeners.BlockSpreadListener
 import me.kvdpxne.dtm.listeners.EntityDamageListener
 import me.kvdpxne.dtm.listeners.EntityExplodeListener
 import me.kvdpxne.dtm.listeners.PlayerChatListener
@@ -61,6 +63,7 @@ import me.kvdpxne.dtm.user.LocalUserManager
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserBuilder
 import me.kvdpxne.dtm.user.UserService
+import me.kvdpxne.notchity.VersionCreator
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
 import org.bukkit.generator.ChunkGenerator
@@ -162,27 +165,31 @@ class DestroyTheMonument : JavaPlugin() {
     //
     Debug.initialize(this.logger)
 
-//    if (!VersionCreator.getBukkitVersion().isEqual(10710)) {
-//      arrayOf(
-//        "An error occurred while trying to load the plugin.",
-//        "Error: Incorrect Minecraft release",
-//        "",
-//        "The currently used version of the plugin requires a",
-//        "Minecraft release codenamed \"v1_7_R4\".",
-//        "",
-//        "We recommend using the Spigot server platform with the",
-//        "code name \"b1657\" to get full compatibility with the",
-//        "current version of the plugin.",
-//        "",
-//        "If you think the error should not occur please contact us.",
-//        Constants.GITHUB_ISSUES
-//      ).forEach { message: String ->
-//        this.logger.severe(message)
-//      }
-//
-//      this.isDisabling = true
-//      return
-//    }
+    //
+    val version: Int = VersionCreator.getBukkitVersion().number
+
+    //
+    if (10700 > version || 10900 < version) {
+      arrayOf(
+        "An error occurred while trying to load the plugin.",
+        "Error: Incorrect Minecraft release",
+        "",
+        "The currently used version of the plugin requires a",
+        "Minecraft release codenamed \"v1_7_R4\".",
+        "",
+        "We recommend using the Spigot server platform with the",
+        "code name \"b1657\" to get full compatibility with the",
+        "current version of the plugin.",
+        "",
+        "If you think the error should not occur please contact us.",
+        Constants.GITHUB_ISSUES
+      ).forEach { message: String ->
+        this.logger.severe(message)
+      }
+
+      this.isDisabling = true
+      return
+    }
 
     //
     val directoryPath: Path = this.dataFolder.toPath()
@@ -195,18 +202,19 @@ class DestroyTheMonument : JavaPlugin() {
     ConfigurationManager.loadConfigurations(directoryPath)
 
     //
+    TranslationService.loadTranslations()
+
+    //
     instance = this
 
     PluginContext.textFormatter = BukkitTextFormatter
 
+    //
     if (GeneralConfiguration.USE_PROTOCOL_LIB) {
       ProtocolLibrary.getProtocolManager()
     } else {
       Reflection
     }
-
-    //
-    TranslationService.loadTranslations()
 
     try {
       GameService
@@ -241,8 +249,10 @@ class DestroyTheMonument : JavaPlugin() {
     // for the plugin to function properly.
     this.registerListeners(
       BlockBreakListener,
+      BlockBurnListener,
       BlockPistonExtendListener,
       BlockPlaceListener,
+      BlockSpreadListener,
 
       EntityDamageListener,
       EntityExplodeListener,

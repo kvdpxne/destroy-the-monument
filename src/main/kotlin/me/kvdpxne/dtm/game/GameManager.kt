@@ -43,6 +43,12 @@ object GameManager {
     return _games[identifier]
   }
 
+  fun findGameByArena(identifier: UUID): Collection<LocalGame> {
+    return this._games.values
+      .map { it as LocalGame }
+      .filter { it.currentArena?.identifier == identifier }
+  }
+
   /**
    * Tries to find a [Game] by [Game.name].
    */

@@ -11,7 +11,12 @@ package me.kvdpxne.dtm.arena
  *
  * @since 0.1.0
  */
-class ArenaMapUnloadException(message: String) : ArenaException(message) {
+open class ArenaMapUnloadException(
+  // @formatter:off
+  message: String     = "",
+  cause  : Throwable? = null
+  // @formatter:on
+) : ArenaException(message, cause) {
 
   companion object {
 

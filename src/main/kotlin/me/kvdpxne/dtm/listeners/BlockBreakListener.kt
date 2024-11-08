@@ -256,6 +256,8 @@ object BlockBreakListener : Listener {
       this.updateTeammate(it, ItemsClipboard.WON)
     }
 
+    game.setAsEnding()
+
     // Creates and registers a synchronous delayed game completion task
     runSynchronousDelayedTask(GeneralConfiguration.GAME_END_DELAY * 20L) {
       game.stop()

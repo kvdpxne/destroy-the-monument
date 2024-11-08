@@ -11,7 +11,12 @@ package me.kvdpxne.dtm.arena
  *
  * @since 0.1.0
  */
-open class ArenaException(message: String) : RuntimeException(message) {
+open class ArenaException(
+  // @formatter:off
+  message: String     = "",
+  cause  : Throwable? = null
+  // @formatter:on
+) : RuntimeException(message, cause) {
 
   companion object {
 

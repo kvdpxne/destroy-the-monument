@@ -3,6 +3,7 @@ package me.kvdpxne.dtm.game
 import java.util.UUID
 import me.kvdpxne.dtm.DestroyTheMonument
 import me.kvdpxne.dtm.arena.Arena
+import me.kvdpxne.dtm.arena.ArenaManager
 import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.scoreboard.createServerScoreboard
 import me.kvdpxne.dtm.scoreboard.createServerTeam
@@ -538,6 +539,8 @@ class LocalGameImpl(
     //
     val arena = this.nextArena()
 
+    ArenaManager.addArena(arena)
+
     //
     val bukkitTeamScoreboard = createServerScoreboard()
 
@@ -607,7 +610,7 @@ class LocalGameImpl(
    * @since 0.1.0
    */
   override fun stop() {
-    check(this.isRunning) {
+    check(this.isRunning || this.isEnding) {
       "Game cannot be stopped because it is not currently running."
     }
 
@@ -640,6 +643,8 @@ class LocalGameImpl(
     }
 
     try {
+      ArenaManager.removeArena(this._currentArena!!)
+
       this._currentArena!!.map!!.unload()
       this._currentArena!!.monumentPositions.forEach {
         it.restore()
