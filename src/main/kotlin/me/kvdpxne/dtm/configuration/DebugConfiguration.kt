@@ -32,7 +32,7 @@ object DebugConfiguration : Configuration {
     val map: YamlMap = node.yamlMap
 
     this.consolePrintOutput = map.getScalar("consolePrintOutput")!!.toBoolean()
-    this.gamePrintOutput = map.getScalar("consolePrintOutput")!!.toBoolean()
+    this.gamePrintOutput = map.getScalar("gamePrintOutput")!!.toBoolean()
 
     Debug.log {
       "The ${this.name} configuration file has been loaded."
