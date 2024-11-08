@@ -8,6 +8,9 @@ import me.kvdpxne.dtm.DestroyTheMonument
 import me.kvdpxne.dtm.listeners.ProjectileLaunchListener
 
 /**
+ * Listens for packets that destroy entities on the server side, and removes
+ * projectiles that are marked for removal from the active projectile list.
+ *
  * @since 0.1.0
  */
 object PacketPlayOutEntityDestroyListener : PacketAdapter(
@@ -16,20 +19,27 @@ object PacketPlayOutEntityDestroyListener : PacketAdapter(
 ) {
 
   /**
+   * Triggered when a packet is being sent to destroy entities on the
+   * server side. Checks if any of the entities to be destroyed are tracked
+   * projectiles, and removes them from the projectile list if found.
+   *
+   * @param event The packet event representing the entity destruction packet.
    * @since 0.1.0
    */
   override fun onPacketSending(
     event: PacketEvent
   ) {
-    // net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy
+    // Obtain the PacketContainer for the entity destroy packet.
     val packet: PacketContainer = event.packet
 
+    // Retrieve the array of entity identifiers targeted for destruction.
     val entities: IntArray = packet.integerArrays.read(0)
 
-    for (identifier: Int in entities) {
-      for (projectile: Int in ProjectileLaunchListener.projectiles) {
-        if (identifier == projectile) {
-          ProjectileLaunchListener.projectiles.remove(identifier)
+    for (entity: Int in entities) {
+      val iterator: MutableIterator<Int> = ProjectileLaunchListener.projectiles.iterator()
+      while (iterator.hasNext()) {
+        if (entity == iterator.next()) {
+          iterator.remove()
         }
       }
     }
