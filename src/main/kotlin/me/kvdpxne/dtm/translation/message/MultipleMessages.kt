@@ -6,26 +6,21 @@ import me.kvdpxne.dtm.translation.formatter.Formatter
  * @since 0.1.0
  */
 class MultipleMessages(
-  override var content: Array<String>
-) : Message<Array<String>> {
-
-  /**
-   * @since 0.1.0
-   */
-  override val isArray: Boolean
-    get() = true
+  override val content: Collection<String>
+) : Message<Collection<String>> {
 
   /**
    * @since 0.1.0
    */
   override fun format(
     formatter: Formatter
-  ) {
+  ): Message<Collection<String>> {
+    val newContent: MutableList<String> = ArrayList(this.content.size)
     for ((field: String, value: String) in formatter.replaceable) {
-      var i = 0
       for (contentLine: String in this.content) {
-        this.content[++i] = contentLine.replace("{$field}", value)
+        newContent.add(contentLine.replace(field, value))
       }
     }
+    return MultipleMessages(newContent)
   }
 }

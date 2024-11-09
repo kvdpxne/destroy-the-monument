@@ -14,7 +14,7 @@ import me.kvdpxne.dtm.translation.sender.SendChoices
  */
 class MessageFormatterChains internal constructor(
   // @formatter:off
-  private val receivers: List<Performer>,
+  private val receivers: MutableCollection<Performer>,
   private val messages : MutableMap<Locale, Message<*>>
   // @formatter:on
 ) {
@@ -25,8 +25,9 @@ class MessageFormatterChains internal constructor(
   fun format(
     formatter: Formatter
   ): SendChoices {
-    for ((_: Locale, message: Message<*>) in this.messages) {
-      message.format(formatter)
+    for ((locale: Locale, message: Message<*>) in this.messages) {
+      val formattedMessage: Message<*> = message.format(formatter)
+      this.messages[locale] = formattedMessage
     }
     return SendChoices(this.receivers, this.messages)
   }

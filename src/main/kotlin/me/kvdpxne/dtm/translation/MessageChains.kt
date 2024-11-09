@@ -13,8 +13,8 @@ import me.kvdpxne.dtm.user.LocalUserPerformer
  */
 class MessageChains internal constructor(
   // @formatter:off
-  private val receivers: List<Performer>,
-  private val messages : MutableMap<Locale, Message<*>> = mutableMapOf()
+  private val receivers: MutableCollection<Performer>,
+  private val messages : MutableMap<Locale, Message<*>> = HashMap()
   // @formatter:on
 ) {
 

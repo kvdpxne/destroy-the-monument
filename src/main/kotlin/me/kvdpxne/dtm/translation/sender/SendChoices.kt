@@ -9,15 +9,17 @@ import me.kvdpxne.dtm.translation.message.Message
  */
 class SendChoices(
   // @formatter:off
-  private val performers: Collection<Performer>,
-  private val messages  : Map<Locale, Message<*>>
+  private val performers: MutableCollection<Performer>,
+  private val messages  : MutableMap<Locale, Message<*>>
   // @formatter:on
 ) {
 
   /**
    * @since 0.1.0
    */
-  fun useChat(addPrefix: Boolean = false): ToChat {
+  fun useChat(
+    addPrefix: Boolean = false
+  ): ToChat {
     return ToChat(this.performers, this.messages, addPrefix)
   }
 }

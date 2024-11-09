@@ -12,8 +12,8 @@ import me.kvdpxne.dtm.translation.message.Message
  */
 abstract class AbstractSendable protected constructor(
   // @formatter:off
-  protected val receivers: Collection<Performer>,
-  protected val messages : Map<Locale, Message<*>>
+  protected val receivers: MutableCollection<Performer>,
+  protected val messages : MutableMap<Locale, Message<*>>
   // @formatter:on
 ) : Sendable {
 

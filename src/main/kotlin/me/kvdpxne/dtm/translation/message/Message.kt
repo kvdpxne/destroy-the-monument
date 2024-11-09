@@ -23,14 +23,6 @@ interface Message<T> {
   val content: T
 
   /**
-   * Indicates whether the message content is an array.
-   *
-   * @return `true` if the content is an array, `false` otherwise.
-   * @since 0.1.0
-   */
-  val isArray: Boolean
-
-  /**
    * Formats the content using the provided [formatter]. This method allows
    * customization of the message's output, supporting different formats or
    * languages.
@@ -38,5 +30,7 @@ interface Message<T> {
    * @param formatter The formatter to apply to the message content.
    * @since 0.1.0
    */
-  fun format(formatter: Formatter)
+  fun format(
+    formatter: Formatter
+  ): Message<T>
 }

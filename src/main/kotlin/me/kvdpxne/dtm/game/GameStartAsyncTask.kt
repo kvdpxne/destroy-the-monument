@@ -1,6 +1,7 @@
 package me.kvdpxne.dtm.game
 
 import me.kvdpxne.dtm.configuration.GeneralConfiguration
+import me.kvdpxne.dtm.shared.player.resetExperienceBarLevel
 import me.kvdpxne.dtm.shared.task.runSynchronousTask
 import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.team.Teammate
@@ -21,7 +22,7 @@ internal class GameStartAsyncTask internal constructor(
   // @formatter:on
 ) : BukkitRunnable() {
 
-  private fun decrese() {
+  private fun decrease() {
     for (team: LocalTeam in this.game.teams) {
       for (teammate: Teammate in team.teammates) {
         teammate.user.performer.player?.level = this.remainingSeconds
@@ -36,16 +37,22 @@ internal class GameStartAsyncTask internal constructor(
       this.game.setAsInitialized()
       this.cancel()
 
-      this.game.constructMessage(EnumMessageKey.GAME_STARTING_COUNTDOWN_CANCELLED)
+      this.game.prepareMessage(EnumMessageKey.GAME_STARTING_COUNTDOWN_CANCELLED)
         .withoutFormat()
         .useChat()
         .send()
+
+      for (team: LocalTeam in this.game.teams) {
+        for (teammate: Teammate in team.teammates) {
+          teammate.user.performer.player?.resetExperienceBarLevel()
+        }
+      }
 
       return
     }
 
     //
-    if (!this.game.isInitialized) {
+    if (this.game.isRunning || this.game.isStopping) {
       this.cancel()
       return
     }
@@ -55,7 +62,7 @@ internal class GameStartAsyncTask internal constructor(
 
       runSynchronousTask {
         this.game.start()
-        this.game.constructMessage(EnumMessageKey.GAME_STARTING_COUNTDOWN_FINISH)
+        this.game.prepareMessage(EnumMessageKey.GAME_STARTING_COUNTDOWN_FINISH)
           .withoutFormat()
           .useChat()
           .send()
@@ -64,7 +71,7 @@ internal class GameStartAsyncTask internal constructor(
     }
 
     if (5 >= this.remainingSeconds) {
-      this.game.constructMessage(EnumMessageKey.GAME_STARTING_COUNTDOWN_FASTER)
+      this.game.prepareMessage(EnumMessageKey.GAME_STARTING_COUNTDOWN_FASTER)
         .format(
           Formatter.begin(1)
             .with("REMAINING_TIME", this.remainingSeconds)
@@ -72,12 +79,12 @@ internal class GameStartAsyncTask internal constructor(
         .useChat()
         .send()
 
-      this.decrese()
+      this.decrease()
       return
     }
 
     if (0 == this.remainingSeconds % 10) {
-      this.game.constructMessage(EnumMessageKey.GAME_STARTING_COUNTDOWN_STANDARD)
+      this.game.prepareMessage(EnumMessageKey.GAME_STARTING_COUNTDOWN_STANDARD)
         .format(
           Formatter.begin(1)
             .with("REMAINING_TIME", this.remainingSeconds)
@@ -85,10 +92,10 @@ internal class GameStartAsyncTask internal constructor(
         .useChat()
         .send()
 
-      this.decrese()
+      this.decrease()
       return
     }
 
-    this.decrese()
+    this.decrease()
   }
 }

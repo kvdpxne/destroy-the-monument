@@ -69,7 +69,7 @@ internal object FlattenJson {
       messages.add(linePrimitive.content)
     }
 
-    return MultipleMessages(messages.toTypedArray())
+    return MultipleMessages(messages.toList())
   }
 
   /**

@@ -23,7 +23,7 @@ import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.team.TeammateImpl
 import me.kvdpxne.dtm.translation.MessageFormatterChains
 import me.kvdpxne.dtm.translation.TranslationService
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.MessageKey
 import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -714,10 +714,10 @@ class LocalGameImpl(
     }
   }
 
-  override fun constructMessage(messageKey: EnumMessageKey): MessageFormatterChains {
+  override fun prepareMessage(key: MessageKey): MessageFormatterChains {
     return TranslationService.chains()
       .receivers(this._hostages.values.map { it.performer })
-      .message(messageKey)
+      .message(key)
   }
 
   override fun toString(): String {

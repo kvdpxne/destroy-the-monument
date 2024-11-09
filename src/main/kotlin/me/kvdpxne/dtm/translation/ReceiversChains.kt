@@ -13,7 +13,7 @@ class ReceiversChains internal constructor() {
   fun receivers(
     receivers: Iterable<Performer>
   ): MessageChains {
-    return MessageChains(receivers.toList())
+    return MessageChains(receivers.toMutableList())
   }
 
   /**
@@ -22,7 +22,7 @@ class ReceiversChains internal constructor() {
   fun receivers(
     receivers: Array<Performer>
   ): MessageChains {
-    return MessageChains(receivers.toList())
+    return MessageChains(receivers.toMutableList())
   }
 
   /**
@@ -31,6 +31,6 @@ class ReceiversChains internal constructor() {
   fun receiver(
     performer: Performer
   ): MessageChains {
-    return MessageChains(listOf(performer))
+    return MessageChains(mutableListOf(performer))
   }
 }
