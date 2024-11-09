@@ -9,7 +9,7 @@ import me.kvdpxne.dtm.team.TeamImpl
 import me.kvdpxne.dtm.team.TeamService
 import me.kvdpxne.dtm.translation.TranslationService
 import me.kvdpxne.dtm.translation.formatter.Formatter
-import me.kvdpxne.dtm.translation.message.MessageKeys
+import me.kvdpxne.dtm.translation.message.EnumMessageKey
 
 /**
  * @since 0.1.0
@@ -40,11 +40,12 @@ fun createTeamCreateCommand(): Command<Performer> {
 
       TranslationService.chains()
         .receiver(performer)
-        .message(MessageKeys.COMMAND_TEAM_CREATE)
-        .formatter(
+        .message(EnumMessageKey.COMMAND_TEAM_CREATE)
+        .format(
           Formatter.begin(1)
             .with("TEAM_NAME", team.name)
         )
+        .useChat()
         .send()
     }
     .build()

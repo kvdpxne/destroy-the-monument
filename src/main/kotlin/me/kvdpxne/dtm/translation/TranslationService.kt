@@ -1,40 +1,67 @@
 package me.kvdpxne.dtm.translation
 
-import java.io.IOException
-import java.net.URISyntaxException
-import java.nio.file.Files
-import java.nio.file.Path
 import java.util.Locale
-import java.util.stream.Collectors
-import kotlin.io.path.nameWithoutExtension
-import kotlin.io.path.readText
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonPrimitive
-import kotlinx.serialization.json.jsonObject
-import me.kvdpxne.dtm.shared.io.Files2
-import me.kvdpxne.dtm.translation.message.MessageBuilder
-import me.kvdpxne.dtm.translation.message.MessageKey
+import me.kvdpxne.dtm.shared.debug.Debug
 
-
+/**
+ * Service responsible for managing translations by locale.
+ * Provides methods to load, retrieve, and manage locale-specific messages.
+ *
+ * @since 0.1.0
+ */
 object TranslationService {
 
-  val localeMessages: MutableMap<Locale, LocaleMessages> = mutableMapOf()
+  /**
+   * @since 0.1.0
+   */
+  private val receiversChains: ReceiversChains by lazy {
+    ReceiversChains()
+  }
+
+  private val _localeMessages: MutableMap<Locale, LocaleMessages> = mutableMapOf()
   var defaultLocale: Locale = Locale.US
 
   /**
-   * @param locale
+   * Provides a list of all loaded locale messages.
+   *
    * @since 0.1.0
    */
-  fun findLocalMessagesOrNull(locale: Locale): LocaleMessages? {
-    return this.localeMessages[locale]
+  val localeMessages: Collection<LocaleMessages>
+    get() = this._localeMessages.values.toList()
+
+  /**
+   * Returns the number of loaded locale messages.
+   *
+   * @since 0.1.0
+   */
+  val size: Int
+    get() = this._localeMessages.size
+
+  /**
+   * Provides access to the chain of receivers for translations.
+   *
+   * @since 0.1.0
+   */
+  fun chains(): ReceiversChains {
+    return this.receiversChains
   }
 
   /**
-   * @param locale
-   * @throws IllegalArgumentException
+   * Finds locale-specific messages or returns null if not found.
+   *
+   * @param locale The locale to retrieve messages for.
+   * @since 0.1.0
+   */
+  fun findLocalMessagesOrNull(locale: Locale): LocaleMessages? {
+    return this._localeMessages[locale]
+  }
+
+  /**
+   * Finds locale-specific messages or throws an exception if not found.
+   *
+   * @param locale The locale to retrieve messages for.
+   * @throws IllegalArgumentException If the specified locale is not found.
+   *
    * @since 0.1.0
    */
   fun findLocalMessages(locale: Locale): LocaleMessages {
@@ -44,16 +71,23 @@ object TranslationService {
   }
 
   /**
-   * @param locale
+   * Finds locale-specific messages, returning the default locale messages if the specified locale is not found.
+   *
+   * @param locale The locale to retrieve messages for.
+   *
    * @since 0.1.0
    */
   fun findLocalMessagesOrDefaultOrNull(locale: Locale): LocaleMessages? {
-    return this.localeMessages[locale]
-      ?: this.localeMessages[this.defaultLocale]
+    return this._localeMessages[locale]
+      ?: this._localeMessages[this.defaultLocale]
   }
 
   /**
-   * @param locale
+   * Finds locale-specific messages or defaults, throwing an exception if both are not found.
+   *
+   * @param locale The locale to retrieve messages for.
+   * @throws IllegalArgumentException If neither the specified locale nor the default locale is found.
+   *
    * @since 0.1.0
    */
   fun findLocalMessagesOrDefault(locale: Locale): LocaleMessages {
@@ -62,78 +96,56 @@ object TranslationService {
     }
   }
 
-  private fun openFile(path: Path): Pair<JsonObject, String> {
-    val texts: String = path.readText()
-
-    val jsonElement: JsonObject = Json.parseToJsonElement(texts).jsonObject
-    val fileName: String = path.nameWithoutExtension
-
-    return Pair(jsonElement, fileName)
-  }
-
-  // Get all paths from a folder that inside the JAR file
-  @Throws(URISyntaxException::class, IOException::class)
-  private fun openDirectory(): List<Pair<JsonObject, String>> {
-    return Files2.fs(
-      this::class.java.classLoader,
-      "translations"
-    ) { _, path ->
-      //
-      Files.walk(path)
-        .filter(Files::isRegularFile)
-        .map(TranslationService::openFile)
-        .collect(Collectors.toList())
-    }
-  }
-
-  private fun flattenJson(
-    jsonObject: JsonObject,
-    prefix: String = ""
-  ): Map<MessageKey, String> {
-    val map = mutableMapOf<MessageKey, String>()
-
-    for ((key: String, value: JsonElement) in jsonObject) {
-      val newKey: String = if (prefix.isEmpty()) key else "${prefix}_$key"
-
-      when (value) {
-        is JsonObject -> map.putAll(this.flattenJson(value, newKey))
-        is JsonPrimitive -> map[MessageKey.of(newKey)] = value.content
-        is JsonArray -> map[MessageKey.of(newKey)] = ""
-        else -> throw TypeCastException("Unsupported value type ${value.javaClass}")
-      }
-    }
-
-    return map
-  }
-
+  /**
+   * Loads translations from the source and populates `_localeMessages`.
+   *
+   * @since 0.1.0
+   */
   fun loadTranslations() {
-    for ((element: JsonObject, key: String) in this.openDirectory()) {
-
-      val locale: Locale = try {
-        Locales.fromString(key)
-      } catch (exception: Throwable) {
-        this.defaultLocale
-      }
-
-      val messages: Map<MessageKey, String> = this.flattenJson(element).toMap()
-      val localeMessages = LocaleMessages(locale, messages)
-
-      this.localeMessages[locale] = localeMessages
+    for (localeMessages: LocaleMessages in InsideJsonReader.read()) {
+      this._localeMessages[localeMessages.locale] = localeMessages
     }
   }
 
   /**
+   * Reloads translations for a specific locale.
+   *
+   * @param locale The locale to reload translations for.
+   *
+   * @since 0.1.0
+   */
+  fun reloadTranslation(locale: Locale) {
+    val updatedMessages: LocaleMessages = InsideJsonReader.read(locale.toString())
+    this._localeMessages[locale] = updatedMessages
+
+    Debug.log {
+      "Reloaded translations for locale: $locale"
+    }
+  }
+
+  /**
+   * Reloads all translations from the source.
+   *
    * @since 0.1.0
    */
   fun reloadTranslations() {
-    //
-    this.localeMessages.clear()
-
-    //
     this.loadTranslations()
+
+    Debug.log {
+      "Reloaded all translations."
+    }
   }
 
-  fun chains(): MessageBuilder {
-    return MessageBuilder()
+  /**
+   * Clears all loaded translations from memory.
+   *
+   * @since 0.1.0
+   */
+  fun clearTranslations() {
+    this._localeMessages.clear()
+
+    Debug.log {
+      "Cleared all loaded translations."
+    }
   }
 }

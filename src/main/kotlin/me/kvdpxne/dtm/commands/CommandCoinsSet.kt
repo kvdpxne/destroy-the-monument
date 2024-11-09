@@ -9,7 +9,7 @@ import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.translation.TranslationService
 import me.kvdpxne.dtm.translation.formatter.Formatter
-import me.kvdpxne.dtm.translation.message.MessageKeys
+import me.kvdpxne.dtm.translation.message.EnumMessageKey
 import me.kvdpxne.dtm.user.LocalUserPerformer
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserService
@@ -45,12 +45,13 @@ fun createCoinsSetCommand(): Command<Performer> {
 
         TranslationService.chains()
           .receiver(performer)
-          .message(MessageKeys.COMMAND_COINS_SET_SELF)
-          .formatter(
+          .message(EnumMessageKey.COMMAND_COINS_SET_SELF)
+          .format(
             Formatter.begin(2)
               .with("OLD_VALUE", oldValue)
               .with("NEW_VALUE", value)
           )
+          .useChat()
           .send()
 
         return@handler
@@ -66,13 +67,14 @@ fun createCoinsSetCommand(): Command<Performer> {
 
         TranslationService.chains()
           .receiver(performer)
-          .message(MessageKeys.COMMAND_COINS_SET_OTHERS)
-          .formatter(
+          .message(EnumMessageKey.COMMAND_COINS_SET_OTHERS)
+          .format(
             Formatter.begin(3)
               .with("OLD_VALUE", oldValue)
               .with("NEW_VALUE", value)
               .with("USER_NAME", user.name)
           )
+          .useChat()
           .send()
 
         return@handler

@@ -7,7 +7,7 @@ import me.kvdpxne.dtm.profession.ProfessionManager
 import me.kvdpxne.dtm.shared.event.cancel
 import me.kvdpxne.dtm.shared.item.ItemsClipboard
 import me.kvdpxne.dtm.shared.item.ItemBuilder
-import me.kvdpxne.dtm.shared.player.equipB
+import me.kvdpxne.dtm.shared.player.equipItemsOfTeamSelection
 import me.kvdpxne.dtm.shared.player.reset
 import me.kvdpxne.dtm.shared.item.toBuilder
 import me.kvdpxne.dtm.shared.material.toBuilder
@@ -233,7 +233,7 @@ fun createGameSelectionGui(user: LocalUser): Gui {
       player.closeInventory()
       player.reset()
 
-      player.equipB()
+      player.equipItemsOfTeamSelection()
 
       createTeamSelectionGui(game, user).open(player)
     }

@@ -1,5 +1,6 @@
 package me.kvdpxne.dtm.user
 
+import java.util.Locale
 import java.util.UUID
 import me.kvdpxne.dtm.data.state.MutableState
 import me.kvdpxne.dtm.profession.Profession
@@ -44,6 +45,20 @@ interface User : Identifiable<PlayerUuid>, Nameable, MutableState {
    * @since 0.1.0
    */
   val currentProfession: Profession
+
+  /**
+   * The locale of the user, which determines the language and region-specific
+   * settings used for communication with the user. This can be modified to
+   * update the user’s preferred language settings.
+   *
+   * @since 0.1.0
+   */
+  val locale: Locale
+
+  /**
+   *
+   */
+  fun updateLocale(locale: Locale)
 
   /**
    * Converts the current user instance into a [LocalUser], representing a more

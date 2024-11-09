@@ -1,9 +1,11 @@
 package me.kvdpxne.dtm.user
 
+import java.util.Locale
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionManager
 import me.kvdpxne.dtm.shared.Buildable
 import me.kvdpxne.dtm.shared.PlayerUuid
+import me.kvdpxne.dtm.translation.TranslationService
 import me.kvdpxne.dtm.wallet.Wallet
 import me.kvdpxne.dtm.wallet.WalletImpl
 import org.bukkit.entity.Player
@@ -27,6 +29,7 @@ class UserBuilder private constructor(
   private var statistics       : UserStatistics? = null
   private var wallet           : Wallet?         = null
   private var currentProfession: Profession?     = null
+  private var locale           : Locale?         = null
   // @formatter:on
 
   companion object {
@@ -77,6 +80,13 @@ class UserBuilder private constructor(
     return this
   }
 
+  fun locale(
+    locale: Locale
+  ): UserBuilder {
+    this.locale = locale
+    return this
+  }
+
   override fun build(): User {
     return UserImpl(
       this.name,
@@ -84,6 +94,7 @@ class UserBuilder private constructor(
       this.statistics ?: UserStatisticsImpl(),
       this.wallet ?: WalletImpl(),
       this.currentProfession ?: ProfessionManager.randomProfession,
+      this.locale ?: TranslationService.defaultLocale,
       this.identifier
     )
   }

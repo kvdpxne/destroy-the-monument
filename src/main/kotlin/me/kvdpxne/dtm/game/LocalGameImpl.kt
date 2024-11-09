@@ -13,7 +13,7 @@ import me.kvdpxne.dtm.shared.PlayerUuid
 import me.kvdpxne.dtm.shared.StylishToStringBuilder
 import me.kvdpxne.dtm.shared.TeamUuid
 import me.kvdpxne.dtm.shared.debug.Debug
-import me.kvdpxne.dtm.shared.player.equipB
+import me.kvdpxne.dtm.shared.player.equipItemsOfTeamSelection
 import me.kvdpxne.dtm.shared.player.reset
 import me.kvdpxne.dtm.shared.task.cancelTask
 import me.kvdpxne.dtm.shared.text.toSingleLines
@@ -21,9 +21,9 @@ import me.kvdpxne.dtm.shared.world.toLocation
 import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.team.TeammateImpl
+import me.kvdpxne.dtm.translation.MessageFormatterChains
 import me.kvdpxne.dtm.translation.TranslationService
-import me.kvdpxne.dtm.translation.message.MessageBuilder
-import me.kvdpxne.dtm.translation.message.MessageKeys
+import me.kvdpxne.dtm.translation.message.EnumMessageKey
 import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -640,7 +640,7 @@ class LocalGameImpl(
         player.scoreboard = Bukkit.getScoreboardManager().mainScoreboard
 
         player.reset()
-        player.equipB()
+        player.equipItemsOfTeamSelection()
       }
 
       it.removeTeammates()
@@ -714,7 +714,7 @@ class LocalGameImpl(
     }
   }
 
-  override fun constructMessage(messageKey: MessageKeys): MessageBuilder {
+  override fun constructMessage(messageKey: EnumMessageKey): MessageFormatterChains {
     return TranslationService.chains()
       .receivers(this._hostages.values.map { it.performer })
       .message(messageKey)

@@ -7,7 +7,7 @@ import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.profession.Ability
 import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.translation.TranslationService
-import me.kvdpxne.dtm.translation.message.MessageKeys
+import me.kvdpxne.dtm.translation.message.EnumMessageKey
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
 /**
@@ -30,7 +30,9 @@ fun createAbilityDepleteCommand(): Command<LocalUserPerformer> {
 
       TranslationService.chains()
         .receiver(performer)
-        .message(MessageKeys.COMMAND_ABILITY_DEPLETE)
+        .message(EnumMessageKey.COMMAND_ABILITY_DEPLETE)
+        .withoutFormat()
+        .useChat()
         .send()
     }
     .build()

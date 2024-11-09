@@ -28,6 +28,7 @@ object UserTable : Table(En.USER) {
   //
   val name: Column<String> = varchar(Efn.NAME, 16)
   val profession: Column<String> = varchar(Efn.PROFESSION_NAME, 24)
+  val locale: Column<String?> = char(Efn.LOCALE, 5).nullable()
 
   //
   override val primaryKey: PrimaryKey = PrimaryKey(this.identifier)

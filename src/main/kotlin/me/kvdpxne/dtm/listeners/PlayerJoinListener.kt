@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.listeners
 
-import me.kvdpxne.dtm.shared.player.equipA
+import me.kvdpxne.dtm.shared.player.equipItemsOfGameSelection
 import me.kvdpxne.dtm.shared.player.moveToLobby
 import me.kvdpxne.dtm.shared.player.reset
 import me.kvdpxne.dtm.shared.task.runSynchronousDelayedTask
@@ -29,6 +29,6 @@ object PlayerJoinListener : Listener {
     player.reset()
 
     //
-    player.equipA()
+    player.equipItemsOfGameSelection()
   }
 }

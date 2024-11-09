@@ -5,7 +5,7 @@ import me.kvdpxne.dtm.gui.createProfessionSelectionGui
 import me.kvdpxne.dtm.gui.createTeamSelectionGui
 import me.kvdpxne.dtm.shared.item.ItemsClipboard
 import me.kvdpxne.dtm.shared.event.cancel
-import me.kvdpxne.dtm.shared.player.equipA
+import me.kvdpxne.dtm.shared.player.equipItemsOfGameSelection
 import me.kvdpxne.dtm.shared.block.isMonument
 import me.kvdpxne.dtm.shared.item.isNullOrTypeAir
 import me.kvdpxne.dtm.shared.event.isRightClick
@@ -71,7 +71,7 @@ object PlayerInteractListener : Listener {
         if (null == game) {
           event.cancel()
           player.reset()
-          player.equipA()
+          player.equipItemsOfGameSelection()
           player.updateInventory()
           return
         }
@@ -79,7 +79,7 @@ object PlayerInteractListener : Listener {
         event.cancel()
         game.removeHostage(user)
         player.reset()
-        player.equipA()
+        player.equipItemsOfGameSelection()
         player.updateInventory()
         return
       }

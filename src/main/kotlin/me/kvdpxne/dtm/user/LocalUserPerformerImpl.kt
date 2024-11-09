@@ -27,7 +27,8 @@ class LocalUserPerformerImpl(
   override val player: Player?
     get() = this._player.get()
 
-  override var locale: Locale = TranslationService.defaultLocale
+  override val locale: Locale
+    get() = this.user.locale
 
   override val isOnline: Boolean
     get() = this.player?.isOnline ?: false

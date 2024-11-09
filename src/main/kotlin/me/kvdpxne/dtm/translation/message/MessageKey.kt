@@ -34,7 +34,7 @@ class MessageKey private constructor(
      * @since 0.1.0
      */
     private val messageKeys: ConcurrentMap<String, MessageKey> =
-      ConcurrentHashMap(MessageKeys.entries.size)
+      ConcurrentHashMap(EnumMessageKey.entries.size)
 
     /**
      * A counter used to generate a unique index for each new [MessageKey].

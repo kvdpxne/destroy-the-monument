@@ -4,7 +4,7 @@ import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.shared.player.localUser
 import me.kvdpxne.dtm.translation.TranslationService
 import me.kvdpxne.dtm.translation.formatter.Formatter
-import me.kvdpxne.dtm.translation.message.MessageKeys
+import me.kvdpxne.dtm.translation.message.EnumMessageKey
 import me.kvdpxne.dtm.user.LocalUserPerformer
 import org.bukkit.command.CommandSender
 import org.bukkit.command.defaults.BukkitCommand
@@ -39,11 +39,12 @@ internal class BukkitCommandHandler internal constructor(
       if (!testPermissionSilent(commandSender)) {
         TranslationService.chains()
           .receiver(commandSender.asPerformer())
-          .message(MessageKeys.COMMAND_INSUFFICIENT_PRIVILEGES)
-          .formatter(
+          .message(EnumMessageKey.COMMAND_INSUFFICIENT_PRIVILEGES)
+          .format(
             Formatter.begin(1)
               .with("PRIVILEGE_NAME", this.permission)
           )
+          .useChat()
           .send()
 
         return true

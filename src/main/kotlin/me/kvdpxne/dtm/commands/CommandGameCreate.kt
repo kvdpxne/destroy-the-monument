@@ -10,7 +10,7 @@ import me.kvdpxne.dtm.game.GameService
 import me.kvdpxne.dtm.team.Team
 import me.kvdpxne.dtm.translation.TranslationService
 import me.kvdpxne.dtm.translation.formatter.Formatter
-import me.kvdpxne.dtm.translation.message.MessageKeys
+import me.kvdpxne.dtm.translation.message.EnumMessageKey
 
 /**
  * @since 0.1.0
@@ -34,11 +34,12 @@ fun createGameCreateCommand(): Command<Performer> {
 
       TranslationService.chains()
         .receiver(performer)
-        .message(MessageKeys.COMMAND_GAME_CREATE)
-        .formatter(
+        .message(EnumMessageKey.COMMAND_GAME_CREATE)
+        .format(
           Formatter.begin(1)
             .with("GAME_NAME", game.name)
         )
+        .useChat()
         .send()
     }
     .build()

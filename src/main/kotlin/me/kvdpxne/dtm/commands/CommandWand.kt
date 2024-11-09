@@ -4,7 +4,7 @@ import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.shared.item.ItemsClipboard
 import me.kvdpxne.dtm.translation.TranslationService
-import me.kvdpxne.dtm.translation.message.MessageKeys
+import me.kvdpxne.dtm.translation.message.EnumMessageKey
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
 /**
@@ -19,7 +19,9 @@ fun createWandCommand(): Command<LocalUserPerformer> {
 
       TranslationService.chains()
         .receiver(performer)
-        .message(MessageKeys.COMMAND_WAND)
+        .message(EnumMessageKey.COMMAND_WAND)
+        .withoutFormat()
+        .useChat()
         .send()
     }
     .build()

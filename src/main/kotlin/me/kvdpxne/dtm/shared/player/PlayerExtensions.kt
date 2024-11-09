@@ -109,17 +109,26 @@ fun Player.setItem(
   }
 }
 
+/**
+ * @since 0.1.0
+ */
 fun Player.fill(item: ItemStack) {
   repeat(36) { i: Int ->
     this.inventory.setItem(i, item)
   }
 }
 
-fun Player.equipA() {
+/**
+ * @since 0.1.0
+ */
+fun Player.equipItemsOfGameSelection() {
   this.setItem(0, ItemsClipboard.ITEM_GAME_JOIN)
 }
 
-fun Player.equipB() {
+/**
+ * @since 0.1.0
+ */
+fun Player.equipItemsOfTeamSelection() {
   this.setItem(0, ItemsClipboard.ITEM_TEAM_SELECT)
   this.setItem(1, ItemsClipboard.ITEM_PROFESSION_SELECT)
   this.setItem(8, ItemsClipboard.ITEM_GAME_LEAVE)

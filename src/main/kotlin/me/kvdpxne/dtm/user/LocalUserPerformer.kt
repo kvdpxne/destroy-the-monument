@@ -43,7 +43,7 @@ interface LocalUserPerformer : Identifiable<PlayerUuid>, Communicative, Performe
    *
    * @since 0.1.0
    */
-  var locale: Locale
+  val locale: Locale
 
   /**
    * Indicates whether the user is currently online. Returns `true` if the user

@@ -5,7 +5,7 @@ import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.game.LocalGame
-import me.kvdpxne.dtm.shared.player.equipA
+import me.kvdpxne.dtm.shared.player.equipItemsOfGameSelection
 import me.kvdpxne.dtm.shared.player.moveToLobby
 import me.kvdpxne.dtm.shared.player.reset
 import me.kvdpxne.dtm.user.LocalUserPerformer
@@ -33,7 +33,7 @@ fun createLeaveCommand(): Command<LocalUserPerformer> {
       //
       performer.player?.reset()
       performer.player?.moveToLobby()
-      performer.player?.equipA()
+      performer.player?.equipItemsOfGameSelection()
 
       performer.sendMessage("You left the game.")
     }

@@ -4,6 +4,9 @@ object EntityFieldNames {
 
   const val IDENTIFIER = "identifier"
   const val NAME = "name"
+
+  // User
+  const val LOCALE = "locale"
   const val PROFESSION_NAME = "profession"
 
   // User

@@ -1,5 +1,6 @@
 package me.kvdpxne.dtm.user
 
+import java.util.Locale
 import java.util.UUID
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.LocalGame
@@ -24,6 +25,7 @@ import me.kvdpxne.dtm.wallet.Wallet
  *               and transactions.
  * @param currentProfession The profession of the user, defining their abilities
  *                          and role in the game.
+ * @param locale
  * @param identifier The unique identifier of the user, typically a [UUID].
  *
  * @since 0.1.0
@@ -35,6 +37,7 @@ class LocalUserImpl(
   statistics       : UserStatistics,
   wallet           : Wallet,
   currentProfession: Profession,
+  locale           : Locale,
   identifier       : PlayerUuid
   // @formatter:on
 ) : UserImpl(
@@ -43,6 +46,7 @@ class LocalUserImpl(
   statistics,
   wallet,
   currentProfession,
+  locale,
   identifier
 ), LocalUser {
 

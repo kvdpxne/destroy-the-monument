@@ -1,9 +1,8 @@
 package me.kvdpxne.dtm.translation
 
-import me.kvdpxne.dtm.translation.message.MessageBuilder
-import me.kvdpxne.dtm.translation.message.MessageKeys
+import me.kvdpxne.dtm.translation.message.EnumMessageKey
 
 interface TranslatableCommunicative {
 
-  fun constructMessage(messageKey: MessageKeys): MessageBuilder
+  fun constructMessage(messageKey: EnumMessageKey): MessageFormatterChains
 }

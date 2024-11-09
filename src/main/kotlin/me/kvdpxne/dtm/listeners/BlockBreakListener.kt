@@ -24,7 +24,7 @@ import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.team.Team
 import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.translation.TranslationService
-import me.kvdpxne.dtm.translation.message.MessageKeys
+import me.kvdpxne.dtm.translation.message.EnumMessageKey
 import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.Location
 import org.bukkit.block.Block
@@ -121,7 +121,9 @@ object BlockBreakListener : Listener {
 
         TranslationService.chains()
           .receiver(user.performer)
-          .message(MessageKeys.ARENA_MAP_BLOCK_BREAKING_SPAWN)
+          .message(EnumMessageKey.ARENA_MAP_BLOCK_BREAKING_SPAWN)
+          .withoutFormat()
+          .useChat()
           .send()
 
         return
@@ -181,8 +183,11 @@ object BlockBreakListener : Listener {
       event.cancel()
       TranslationService.chains()
         .receiver(user.performer)
-        .message(MessageKeys.ARENA_MAP_BLOCK_BREAKING_MONUMENT_SELF)
+        .message(EnumMessageKey.ARENA_MAP_BLOCK_BREAKING_MONUMENT_SELF)
+        .withoutFormat()
+        .useChat()
         .send()
+
       return
     }
 

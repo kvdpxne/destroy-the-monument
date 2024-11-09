@@ -7,7 +7,7 @@ import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.shared.StylishToStringBuilder
 import me.kvdpxne.dtm.shared.collections.QueuingPair
 import me.kvdpxne.dtm.shared.collections.toQueuingPair
-import me.kvdpxne.dtm.shared.player.equipB
+import me.kvdpxne.dtm.shared.player.equipItemsOfTeamSelection
 import me.kvdpxne.dtm.shared.player.moveToLobby
 import me.kvdpxne.dtm.shared.player.reset
 import me.kvdpxne.dtm.statistics.StatisticsImpl
@@ -72,7 +72,7 @@ class TeammateImpl(
 
     player.reset()
     player.moveToLobby()
-    player.equipB()
+    player.equipItemsOfTeamSelection()
   }
 
   override fun toString(): String {

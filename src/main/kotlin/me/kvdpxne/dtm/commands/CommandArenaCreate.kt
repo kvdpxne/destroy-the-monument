@@ -9,7 +9,7 @@ import me.kvdpxne.dtm.arena.ArenaService
 import me.kvdpxne.dtm.arena.ArenaImpl
 import me.kvdpxne.dtm.translation.TranslationService
 import me.kvdpxne.dtm.translation.formatter.Formatter
-import me.kvdpxne.dtm.translation.message.MessageKeys
+import me.kvdpxne.dtm.translation.message.EnumMessageKey
 
 /**
  * @since 0.1.0
@@ -34,11 +34,12 @@ fun createArenaCreateCommand(): Command<Performer> {
 
       TranslationService.chains()
         .receiver(performer)
-        .message(MessageKeys.COMMAND_ARENA_CREATE)
-        .formatter(
+        .message(EnumMessageKey.COMMAND_ARENA_CREATE)
+        .format(
           Formatter.begin(1)
             .with("ARENA_NAME", arena.name)
         )
+        .useChat()
         .send()
     }
     .build()

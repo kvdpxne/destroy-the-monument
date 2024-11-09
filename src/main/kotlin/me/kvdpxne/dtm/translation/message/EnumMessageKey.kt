@@ -1,6 +1,9 @@
 package me.kvdpxne.dtm.translation.message
 
-enum class MessageKeys : MessageKeyProvider {
+/**
+ * @since 0.1.0
+ */
+enum class EnumMessageKey : MessageKeyProvider {
 
   ARENA_MAP_BLOCK_BREAKING_SPAWN,
   ARENA_MAP_BLOCK_PLACING_LIMIT,
@@ -37,6 +40,9 @@ enum class MessageKeys : MessageKeyProvider {
   GAME_STARTING_COUNTDOWN_CANCELLED
   ;
 
+  /**
+   * @since 0.1.0
+   */
   override val messageKey: MessageKey
     get() = MessageKey.of(this.name)
 }

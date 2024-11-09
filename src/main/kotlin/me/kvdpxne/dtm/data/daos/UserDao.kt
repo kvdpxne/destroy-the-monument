@@ -1,5 +1,6 @@
 package me.kvdpxne.dtm.data.daos
 
+import java.util.Locale
 import java.util.UUID
 import me.kvdpxne.dtm.data.repositories.UserRepository
 import me.kvdpxne.dtm.data.sources.DatabasesConfiguration
@@ -8,6 +9,8 @@ import me.kvdpxne.dtm.data.tables.UserTable
 import me.kvdpxne.dtm.data.tables.UserWalletTable
 import me.kvdpxne.dtm.data.transactions.concurrentTransaction
 import me.kvdpxne.dtm.profession.ProfessionManager
+import me.kvdpxne.dtm.translation.Locales
+import me.kvdpxne.dtm.translation.TranslationService
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserImpl
 import me.kvdpxne.dtm.user.UserStatisticsImpl
@@ -34,6 +37,7 @@ object UserDao : UserRepository {
     UserTable.walletIdentifier,
     UserTable.name,
     UserTable.profession,
+    UserTable.locale,
     UserStatisticsTable.kills,
     UserStatisticsTable.assists,
     UserStatisticsTable.deaths,
@@ -72,6 +76,7 @@ object UserDao : UserRepository {
     //
     val name: String = this[UserTable.name]
     val professionName: String = this[UserTable.profession]
+    val locale: Locale = this[UserTable.locale]?.let { Locales.fromString(it) } ?: TranslationService.defaultLocale
 
     return UserImpl(
       name,
@@ -93,6 +98,7 @@ object UserDao : UserRepository {
       ),
       ProfessionManager.findProfessionByName(professionName)
         ?: ProfessionManager.randomProfession,
+      locale,
       identifier
     )
   }
@@ -107,6 +113,7 @@ object UserDao : UserRepository {
 
       builder[this.name] = user.name
       builder[this.profession] = user.currentProfession.name
+      builder[this.locale] = "${user.locale.language}_${user.locale.country}"
     }
   }
 

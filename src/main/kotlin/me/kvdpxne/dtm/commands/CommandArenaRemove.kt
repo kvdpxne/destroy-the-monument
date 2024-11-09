@@ -13,7 +13,7 @@ import me.kvdpxne.dtm.game.GameService
 import me.kvdpxne.dtm.team.Team
 import me.kvdpxne.dtm.translation.TranslationService
 import me.kvdpxne.dtm.translation.formatter.Formatter
-import me.kvdpxne.dtm.translation.message.MessageKeys
+import me.kvdpxne.dtm.translation.message.EnumMessageKey
 
 /**
  * @since 0.1.0
@@ -57,12 +57,13 @@ fun createArenaRemoveCommand(): Command<Performer> {
 
       TranslationService.chains()
         .receiver(performer)
-        .message(MessageKeys.COMMAND_ARENA_REMOVE)
-        .formatter(
+        .message(EnumMessageKey.COMMAND_ARENA_REMOVE)
+        .format(
           Formatter.begin(2)
             .with("ARENA_NAME", arena.name)
             .with("GAME_NAME", game.name)
         )
+        .useChat()
         .send()
     }
     .build()

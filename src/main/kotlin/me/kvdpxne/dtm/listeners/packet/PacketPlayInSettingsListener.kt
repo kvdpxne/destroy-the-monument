@@ -30,6 +30,6 @@ object PacketPlayInSettingsListener : PacketAdapter(
       TranslationService.defaultLocale
     }
 
-    event.player.localUser.performer.locale = locale
+    event.player.localUser.updateLocale(locale)
   }
 }

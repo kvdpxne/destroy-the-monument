@@ -5,7 +5,7 @@ import me.kvdpxne.dtm.shared.task.runSynchronousTask
 import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.translation.formatter.Formatter
-import me.kvdpxne.dtm.translation.message.MessageKeys
+import me.kvdpxne.dtm.translation.message.EnumMessageKey
 import org.bukkit.scheduler.BukkitRunnable
 
 /**
@@ -17,7 +17,6 @@ import org.bukkit.scheduler.BukkitRunnable
 internal class GameStartAsyncTask internal constructor(
   // @formatter:off
   private val game            : LocalGame,
-  private val force           : Boolean   = false,
   private var remainingSeconds: Int       = 30
   // @formatter:on
 ) : BukkitRunnable() {
@@ -37,15 +36,16 @@ internal class GameStartAsyncTask internal constructor(
       this.game.setAsInitialized()
       this.cancel()
 
-      this.game.sendMessages(
-        "&6&lDTM &7> &7Odliczanie do wystartowania gry zostało wstrzymane.",
-        "&6&lDTM &7> &7Powód: &cNiewystarczająca liczba graczy."
-      )
+      this.game.constructMessage(EnumMessageKey.GAME_STARTING_COUNTDOWN_CANCELLED)
+        .withoutFormat()
+        .useChat()
+        .send()
+
       return
     }
 
     //
-    if (this.game.isRunning || this.game.isStopping) {
+    if (!this.game.isInitialized) {
       this.cancel()
       return
     }
@@ -55,18 +55,21 @@ internal class GameStartAsyncTask internal constructor(
 
       runSynchronousTask {
         this.game.start()
-        this.game.constructMessage(MessageKeys.GAME_STARTING_COUNTDOWN_FINISH)
+        this.game.constructMessage(EnumMessageKey.GAME_STARTING_COUNTDOWN_FINISH)
+          .withoutFormat()
+          .useChat()
           .send()
       }
       return
     }
 
     if (5 >= this.remainingSeconds) {
-      this.game.constructMessage(MessageKeys.GAME_STARTING_COUNTDOWN_FASTER)
-        .formatter(
+      this.game.constructMessage(EnumMessageKey.GAME_STARTING_COUNTDOWN_FASTER)
+        .format(
           Formatter.begin(1)
             .with("REMAINING_TIME", this.remainingSeconds)
         )
+        .useChat()
         .send()
 
       this.decrese()
@@ -74,12 +77,14 @@ internal class GameStartAsyncTask internal constructor(
     }
 
     if (0 == this.remainingSeconds % 10) {
-      this.game.constructMessage(MessageKeys.GAME_STARTING_COUNTDOWN_STANDARD)
-        .formatter(
+      this.game.constructMessage(EnumMessageKey.GAME_STARTING_COUNTDOWN_STANDARD)
+        .format(
           Formatter.begin(1)
             .with("REMAINING_TIME", this.remainingSeconds)
         )
+        .useChat()
         .send()
+
       this.decrese()
       return
     }

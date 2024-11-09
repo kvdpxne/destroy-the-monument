@@ -1,10 +1,12 @@
 package me.kvdpxne.dtm.user
 
+import java.util.Locale
 import java.util.UUID
 import me.kvdpxne.dtm.data.state.BaseIdentifiableMutableState
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.shared.PlayerUuid
 import me.kvdpxne.dtm.shared.StylishToStringBuilder
+import me.kvdpxne.dtm.shared.debug.Debug
 import me.kvdpxne.dtm.wallet.Wallet
 
 /**
@@ -21,6 +23,7 @@ import me.kvdpxne.dtm.wallet.Wallet
  *               transaction multipliers.
  * @param currentProfession The user's current profession, which may impact
  *                          their in-game role.
+ * @param locale
  * @param identifier A unique [UUID] identifier for the user.
  *
  * @since 0.1.0
@@ -32,9 +35,20 @@ open class UserImpl internal constructor(
   override val statistics       : UserStatistics,
   override val wallet           : Wallet,
   override var currentProfession: Profession,
+  override var locale           : Locale,
                identifier       : PlayerUuid
   // @formatter:on
 ) : BaseIdentifiableMutableState<PlayerUuid>(identifier), User {
+
+  override fun updateLocale(locale: Locale) {
+    val previous: Locale = this.locale
+    this.locale = locale
+
+    Debug.log {
+      "User ${this.name} changed the locale from ${previous.displayName} " +
+        "to ${locale.displayName}."
+    }
+  }
 
   override fun asLocalUser(): LocalUser {
     return LocalUserImpl(
@@ -43,6 +57,7 @@ open class UserImpl internal constructor(
       this.statistics,
       this.wallet,
       this.currentProfession,
+      this.locale,
       this.identifier
     )
   }
@@ -66,6 +81,7 @@ open class UserImpl internal constructor(
       .add("statistics", this.statistics)
       .add("wallet", this.wallet)
       .add("currentProfession", this.currentProfession)
+      .add("locale", this.locale)
       .build()
   }
 }
