@@ -7,6 +7,7 @@ import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.gui.GuiHolder
 import me.kvdpxne.dtm.shared.event.cancel
 import me.kvdpxne.dtm.shared.world.WorldsHolder
+import org.bukkit.GameMode
 import org.bukkit.World
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -45,18 +46,20 @@ object PlayerInventoryClickListener : Listener {
     val lobbyWorld: World? = WorldsHolder.lobbyWorld
 
     if (world == lobbyWorld) {
+      if (GameMode.CREATIVE == event.whoClicked.gameMode) {
+        return
+      }
+
       event.cancel()
       return
     }
 
     val arena: Arena? = ArenaManager.findArenaByWorldIdentifierOrNull(world.uid)
-    println(arena)
     if (world != arena?.map?.world) {
       return
     }
 
     for (game: LocalGame in GameManager.findGameByArena(arena.identifier)) {
-      println(game)
       if (!game.isRunning) {
         event.cancel()
       }
