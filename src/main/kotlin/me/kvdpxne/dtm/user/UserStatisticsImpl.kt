@@ -36,6 +36,20 @@ class UserStatisticsImpl(
 ) : IdentifiableStatisticsImpl(kills, assists, deaths, destroyedMonuments,
   identifier), UserStatistics {
 
+  init {
+    require(0 <= this.playedGames) {
+      "Invalid played games count: played games cannot be negative."
+    }
+
+    require(0 <= this.gamesWon) {
+      "Invalid games won count: games won cannot be negative."
+    }
+
+    require(0 <= this.gamesLost) {
+      "Invalid games lost count: games lost cannot be negative."
+    }
+  }
+
   override fun addPlayedGames(playedGames: Int) {
     this.playedGames = this.add(this.playedGames, playedGames)
   }
@@ -46,6 +60,18 @@ class UserStatisticsImpl(
 
   override fun addGamesLost(gamesLost: Int) {
     this.gamesLost = this.add(this.gamesLost, gamesLost)
+  }
+
+  override fun subtractPlayedGames(playedGames: Int) {
+    this.playedGames = this.subtract(this.playedGames, playedGames)
+  }
+
+  override fun subtractGamesWon(gamesWon: Int) {
+    this.gamesWon = this.subtract(this.gamesWon, gamesWon)
+  }
+
+  override fun subtractGamesLost(gamesLost: Int) {
+    this.gamesLost = this.subtract(this.gamesLost, gamesLost)
   }
 
   override fun reset() {

@@ -43,12 +43,23 @@ interface Statistics : Measurable {
   /**
    * The player's Kill/Death Ratio (KDR), calculated as kills divided by deaths.
    *
-   * If the player has zero deaths, the KDR may be calculated differently to
-   * avoid division by zero.
+   * Provides an insight into the player's performance in combat. If the player
+   * has zero deaths, an alternative calculation may be used to avoid
+   * division by zero.
    *
    * @since 0.1.0
    */
   val kdr: Float
+
+  /**
+   * Kill/Death/Assist Ratio (KDAR), incorporating kills, deaths, and assists.
+   *
+   * This metric offers a more comprehensive measure of the player's combat
+   * performance by factoring in assists along with kills and deaths.
+   *
+   * @since 0.1.0
+   */
+  val kdar: Float
 
   /**
    * Adds a specified number of kills to the player's statistics.
@@ -119,6 +130,9 @@ interface Statistics : Measurable {
   /**
    * Resets all statistics, including kills, assists, deaths, and destroyed
    * monuments, to their initial values.
+   *
+   * Use this method to clear or reset player data for a new season, match,
+   * or for administrative purposes.
    *
    * @since 0.1.0
    */

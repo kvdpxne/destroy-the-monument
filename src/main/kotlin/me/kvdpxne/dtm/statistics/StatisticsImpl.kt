@@ -27,52 +27,42 @@ open class StatisticsImpl(
   // @formatter:on
 ) : AbstractStatistics() {
 
-  /**
-   * @since 0.1.0
-   */
+  init {
+    require(0 <= this.kills) {
+      "Invalid kills count: kills cannot be negative."
+    }
+
+    require(0 <= this.assists) {
+      "Invalid assists count: assists cannot be negative."
+    }
+
+    require(0 <= this.deaths) {
+      "Invalid deaths count: deaths cannot be negative."
+    }
+
+    require(0 <= this.destroyedMonuments) {
+      "Invalid destroyed monuments count: destroyed monuments cannot be negative."
+    }
+  }
+
   override val kdr: Float
+    get() = String.format("%.3f", this.kills / this.deaths).toFloat()
+
+  override val kdar: Float
     get() = String.format("%.3f", (this.kills + this.assists) / this.deaths).toFloat()
 
-  /**
-   * Increments the number of kills by 1 (or a specified value).
-   *
-   * @param kills The number of kills to add (defaults to 1)
-   *
-   * @since 0.1.0
-   */
   override fun addKills(kills: Int) {
     this.kills = this.add(this.kills, kills)
   }
 
-  /**
-   * Increments the number of assists by 1 (or a specified value).
-   *
-   * @param assists The number of assists to add (defaults to 1)
-   *
-   * @since 0.1.0
-   */
   override fun addAssists(assists: Int) {
     this.assists = this.add(this.assists, assists)
   }
 
-  /**
-   * Increments the number of deaths by 1 (or a specified value).
-   *
-   * @param deaths The number of deaths to add (defaults to 1)
-   *
-   * @since 0.1.0
-   */
   override fun addDeaths(deaths: Int) {
     this.deaths = this.add(this.deaths, deaths)
   }
 
-  /**
-   * Increments the number of destroyed monuments by 1 (or a specified value).
-   *
-   * @param destroyedMonuments The number of destroyed monuments to add (defaults to 1)
-   *
-   * @since 0.1.0
-   */
   override fun addDestroyedMonuments(destroyedMonuments: Int) {
     this.destroyedMonuments = this.add(this.destroyedMonuments, destroyedMonuments)
   }
