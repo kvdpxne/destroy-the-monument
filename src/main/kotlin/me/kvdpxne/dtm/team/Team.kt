@@ -1,16 +1,16 @@
 package me.kvdpxne.dtm.team
 
-import java.util.UUID
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.shared.Identifiable
 import me.kvdpxne.dtm.shared.Nameable
+import me.kvdpxne.dtm.shared.TeamUuid
 import org.bukkit.ChatColor
 import org.bukkit.DyeColor
 
 /**
  * @since 0.1.0
  */
-interface Team : Identifiable<UUID>, Nameable {
+interface Team : Identifiable<TeamUuid>, Nameable {
 
   /**
    * @since 0.1.0

@@ -1,9 +1,9 @@
 package me.kvdpxne.dtm.user
 
-import java.util.UUID
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionManager
 import me.kvdpxne.dtm.shared.Buildable
+import me.kvdpxne.dtm.shared.PlayerUuid
 import me.kvdpxne.dtm.wallet.Wallet
 import me.kvdpxne.dtm.wallet.WalletImpl
 import org.bukkit.entity.Player
@@ -17,7 +17,7 @@ import org.bukkit.entity.Player
  */
 class UserBuilder private constructor(
   // @formatter:off
-  private val identifier : UUID,
+  private val identifier : PlayerUuid,
   private val name       : String,
   private val displayName: String
   // @formatter:on
@@ -38,7 +38,7 @@ class UserBuilder private constructor(
      * @since 0.1.0
      */
     fun create(
-      identifier: UUID,
+      identifier: PlayerUuid,
       name: String
     ): UserBuilder {
       return UserBuilder(identifier, name.lowercase(), name)

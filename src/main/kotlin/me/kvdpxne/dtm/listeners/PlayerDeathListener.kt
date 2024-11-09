@@ -177,7 +177,7 @@ object PlayerDeathListener : Listener {
     victimTeammate.currentProfession.ability?.cancelCooldown()
 
     //
-    val damageOwner: DamageOwner = DamageManager.findFs(victim.uniqueId)
+    val damageOwner: DamageOwner = DamageManager.computeDamageOwnerIfAbsent(victim.uniqueId)
 
     // Jeżeli obiekt gracza, który jest zabójcą nie istnieje to obiekt gracza,
     // który jest ofiarą popełnij samobójstwo.

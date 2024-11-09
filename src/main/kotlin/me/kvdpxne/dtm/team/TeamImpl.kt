@@ -3,15 +3,16 @@ package me.kvdpxne.dtm.team
 import java.util.UUID
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.shared.AbstractIdentifiable
+import me.kvdpxne.dtm.shared.StatisticsUuid
 import me.kvdpxne.dtm.shared.StylishToStringBuilder
 
 open class TeamImpl(
   // @formatter:off
   override val name      : String,
   override val color     : TeamColor,
-               identifier: UUID = UUID.randomUUID()
+               identifier: StatisticsUuid = UUID.randomUUID()
   // @formatter:on
-) : AbstractIdentifiable<UUID>(identifier), Team {
+) : AbstractIdentifiable<StatisticsUuid>(identifier), Team {
 
   override val game: Game<out Team>
     get() = TODO("Not yet implemented")

@@ -5,6 +5,7 @@ import me.kvdpxne.dtm.data.state.MutableState
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.shared.Identifiable
 import me.kvdpxne.dtm.shared.Nameable
+import me.kvdpxne.dtm.shared.PlayerUuid
 import me.kvdpxne.dtm.wallet.Wallet
 
 /**
@@ -16,7 +17,7 @@ import me.kvdpxne.dtm.wallet.Wallet
  *
  * @since 0.1.0
  */
-interface User : Identifiable<UUID>, Nameable, MutableState {
+interface User : Identifiable<PlayerUuid>, Nameable, MutableState {
 
   /**
    * Holds the user's performance and engagement metrics, represented by

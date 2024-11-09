@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.arena
 
-import java.util.UUID
+import me.kvdpxne.dtm.shared.WorldUuid
 import me.kvdpxne.dtm.shared.world.WorldLoaderHelper
 import org.bukkit.Bukkit
 import org.bukkit.World
@@ -14,7 +14,7 @@ import org.bukkit.World
 class ArenaMapImpl(
   // @formatter:off
   override var name      : String,
-  override var identifier: UUID
+  override var identifier: WorldUuid
   // @formatter:on
 ) : ArenaMap {
 

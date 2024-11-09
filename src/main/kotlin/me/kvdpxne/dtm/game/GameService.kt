@@ -1,11 +1,11 @@
 package me.kvdpxne.dtm.game
 
-import java.util.UUID
 import kotlinx.coroutines.runBlocking
 import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.data.daos.GameArenasDao
 import me.kvdpxne.dtm.data.daos.GameDao
 import me.kvdpxne.dtm.data.daos.GameTeamsDao
+import me.kvdpxne.dtm.shared.GameUuid
 import me.kvdpxne.dtm.team.Team
 
 /**
@@ -28,7 +28,7 @@ object GameService {
    * @since 0.1.0
    */
   fun findGameByIdentifier(
-    identifier: UUID
+    identifier: GameUuid
   ): Game<Team>? {
     return runBlocking {
       GameDao.findGameByIdentifier(identifier)

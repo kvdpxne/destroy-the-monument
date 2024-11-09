@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.position
 
-import java.util.UUID
 import me.kvdpxne.dtm.shared.Identifiable
+import me.kvdpxne.dtm.shared.MonumentPositionUuid
 import me.kvdpxne.dtm.team.Team
 import me.kvdpxne.dtm.team.Teamable
 
@@ -9,7 +9,7 @@ import me.kvdpxne.dtm.team.Teamable
  * @since 0.1.0
  */
 interface MonumentPosition<T : Team> :
-  Identifiable<UUID>, BlockPosition, Teamable<T> {
+  Identifiable<MonumentPositionUuid>, BlockPosition, Teamable<T> {
 
   /**
    * @since 0.1.0

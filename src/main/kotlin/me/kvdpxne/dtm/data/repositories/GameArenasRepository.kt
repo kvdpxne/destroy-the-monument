@@ -1,9 +1,9 @@
 package me.kvdpxne.dtm.data.repositories
 
-import java.util.UUID
 import kotlinx.coroutines.flow.Flow
 import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.game.Game
+import me.kvdpxne.dtm.shared.GameUuid
 import me.kvdpxne.dtm.team.Team
 
 /**
@@ -17,7 +17,7 @@ interface GameArenasRepository {
    * @since 0.1.0
    */
   suspend fun findGameArenasByGameIdentifier(
-    identifier: UUID
+    identifier: GameUuid
   ): Flow<Arena>
 
   /**

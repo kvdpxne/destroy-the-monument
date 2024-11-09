@@ -1,14 +1,14 @@
 package me.kvdpxne.dtm.user
 
-import java.util.UUID
 import kotlinx.coroutines.runBlocking
 import me.kvdpxne.dtm.data.daos.UserDao
+import me.kvdpxne.dtm.shared.PlayerUuid
 
 object UserService {
 
   fun findNames(): List<String> {
     return runBlocking {
-      UserDao.getUsersNames()
+      UserDao.findUsersNames()
     }
   }
 
@@ -16,7 +16,7 @@ object UserService {
    * @since 0.1.0
    */
   fun findUserByIdentifier(
-    identifier: UUID
+    identifier: PlayerUuid
   ): User? {
     return runBlocking {
       UserDao.findUserByIdentifier(identifier)
@@ -51,7 +51,7 @@ object UserService {
    * @since 0.1.0
    */
   fun createUser(
-    identifier: UUID,
+    identifier: PlayerUuid,
     name: String
   ): User {
     //

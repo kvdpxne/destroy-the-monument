@@ -4,6 +4,7 @@ import java.util.UUID
 import me.kvdpxne.dtm.position.MonumentPosition
 import me.kvdpxne.dtm.position.RevivalPosition
 import me.kvdpxne.dtm.shared.AbstractIdentifiable
+import me.kvdpxne.dtm.shared.ArenaUuid
 import me.kvdpxne.dtm.team.Team
 
 /**
@@ -18,7 +19,7 @@ class ArenaImpl(
                map       : ArenaMap? = null,
                identifier: UUID      = UUID.randomUUID()
   // @formatter:on
-) : AbstractIdentifiable<UUID>(identifier), Arena {
+) : AbstractIdentifiable<ArenaUuid>(identifier), Arena {
 
   /**
    * Map of positions for each team where teammates will be spawned after death
@@ -26,12 +27,12 @@ class ArenaImpl(
    *
    * @since 0.1.0
    */
-  val _revivalPositions: MutableMap<UUID, RevivalPosition<Team>> = mutableMapOf()
+  val _revivalPositions: MutableMap<ArenaUuid, RevivalPosition<Team>> = mutableMapOf()
 
   /**
    * @since 0.1.0
    */
-  val _monumentPositions: MutableMap<UUID, MutableSet<MonumentPosition<Team>>> = mutableMapOf()
+  val _monumentPositions: MutableMap<ArenaUuid, MutableSet<MonumentPosition<Team>>> = mutableMapOf()
 
   /**
    * @since 0.1.0

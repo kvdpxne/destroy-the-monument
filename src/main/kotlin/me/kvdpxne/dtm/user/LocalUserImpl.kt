@@ -4,6 +4,7 @@ import java.util.UUID
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.profession.Profession
+import me.kvdpxne.dtm.shared.PlayerUuid
 import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.wallet.Wallet
@@ -34,7 +35,7 @@ class LocalUserImpl(
   statistics       : UserStatistics,
   wallet           : Wallet,
   currentProfession: Profession,
-  identifier       : UUID
+  identifier       : PlayerUuid
   // @formatter:on
 ) : UserImpl(
   name,

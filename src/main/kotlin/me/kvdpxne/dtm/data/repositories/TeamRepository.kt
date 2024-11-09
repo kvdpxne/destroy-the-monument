@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.data.repositories
 
-import java.util.UUID
+import me.kvdpxne.dtm.shared.TeamUuid
 import me.kvdpxne.dtm.team.Team
 
 interface TeamRepository {
@@ -16,7 +16,7 @@ interface TeamRepository {
    * @since 0.1.0
    */
   suspend fun findTeamByIdentifier(
-    identifier: UUID
+    identifier: TeamUuid
   ): Team?
 
   /**
@@ -54,6 +54,6 @@ interface TeamRepository {
    * @since 0.1.0
    */
   suspend fun deleteTeamByIdentifier(
-    identifier: UUID
+    identifier: TeamUuid
   ): Int
 }

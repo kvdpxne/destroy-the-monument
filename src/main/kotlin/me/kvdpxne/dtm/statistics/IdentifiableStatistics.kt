@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.statistics
 
-import java.util.UUID
 import me.kvdpxne.dtm.shared.Identifiable
+import me.kvdpxne.dtm.shared.StatisticsUuid
 
 /**
  * Defines a contract for player statistics that can be measured, compared,
@@ -14,4 +14,4 @@ import me.kvdpxne.dtm.shared.Identifiable
  *
  * @since 0.1.0
  */
-interface IdentifiableStatistics : Identifiable<UUID>, Statistics
+interface IdentifiableStatistics : Identifiable<StatisticsUuid>, Statistics

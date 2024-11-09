@@ -65,7 +65,7 @@ object EntityDamageByEntityListener : Listener {
       return
     }
 
-    val damageOwner: DamageOwner = DamageManager.findFs(victim.uniqueId)
+    val damageOwner: DamageOwner = DamageManager.computeDamageOwnerIfAbsent(victim.uniqueId)
     damageOwner.addDamage(attacker.uniqueId, this.getDamage(event))
   }
 }

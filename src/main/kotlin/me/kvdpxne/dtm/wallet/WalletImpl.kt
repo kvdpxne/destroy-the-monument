@@ -3,6 +3,7 @@ package me.kvdpxne.dtm.wallet
 import java.util.UUID
 import me.kvdpxne.dtm.data.state.BaseIdentifiableMutableState
 import me.kvdpxne.dtm.shared.StylishToStringBuilder
+import me.kvdpxne.dtm.shared.WalletUuid
 
 /**
  * Implementation of the [Wallet] interface, representing a wallet with a
@@ -26,7 +27,7 @@ class WalletImpl(
   initialMultiplier: Float = 1.0F,
   identifier       : UUID  = UUID.randomUUID(),
   // @formatter:on
-) : BaseIdentifiableMutableState<UUID>(identifier), Wallet {
+) : BaseIdentifiableMutableState<WalletUuid>(identifier), Wallet {
 
   /**
    * Backing field for the [coins] property, initially set to [initialCoins].

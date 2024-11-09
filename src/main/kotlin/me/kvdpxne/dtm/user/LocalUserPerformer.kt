@@ -1,10 +1,10 @@
 package me.kvdpxne.dtm.user
 
 import java.util.Locale
-import java.util.UUID
 import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.shared.Communicative
 import me.kvdpxne.dtm.shared.Identifiable
+import me.kvdpxne.dtm.shared.PlayerUuid
 import org.bukkit.entity.Player
 
 /**
@@ -17,7 +17,7 @@ import org.bukkit.entity.Player
  *
  * @since 0.1.0
  */
-interface LocalUserPerformer : Identifiable<UUID>, Communicative, Performer {
+interface LocalUserPerformer : Identifiable<PlayerUuid>, Communicative, Performer {
 
   /**
    * The [LocalUser] instance associated with this performer, providing access

@@ -123,7 +123,7 @@ object UserDao : UserRepository {
     }
   }
 
-  override suspend fun getUsersNames(): List<String> {
+  override suspend fun findUsersNames(): List<String> {
     return concurrentTransaction(DatabasesConfiguration.main) {
       UserTable
         .select(UserTable.name)
@@ -184,16 +184,17 @@ object UserDao : UserRepository {
   override suspend fun insertUser(
     user: User
   ): Int {
-    val count: Int = concurrentTransaction(DatabasesConfiguration.main) {
+    var count = 0
+
+    count += UserStatisticsDao.insertUserStatistics(user.statistics)
+    count += UserWalletDao.insertUserWallet(user.wallet)
+
+    count += concurrentTransaction(DatabasesConfiguration.main) {
       UserTable.insert {
         it[this.identifier] = user.identifier
         buildUserStatement(user, it)
       }.insertedCount
     }
-
-    //
-    UserStatisticsDao.insertUserStatistics(user.statistics)
-    UserWalletDao.insertUserWallet(user.wallet)
 
     return count
   }

@@ -3,6 +3,7 @@ package me.kvdpxne.dtm.user
 import java.util.UUID
 import me.kvdpxne.dtm.data.state.BaseIdentifiableMutableState
 import me.kvdpxne.dtm.profession.Profession
+import me.kvdpxne.dtm.shared.PlayerUuid
 import me.kvdpxne.dtm.shared.StylishToStringBuilder
 import me.kvdpxne.dtm.wallet.Wallet
 
@@ -31,9 +32,9 @@ open class UserImpl internal constructor(
   override val statistics       : UserStatistics,
   override val wallet           : Wallet,
   override var currentProfession: Profession,
-               identifier       : UUID
+               identifier       : PlayerUuid
   // @formatter:on
-) : BaseIdentifiableMutableState<UUID>(identifier), User {
+) : BaseIdentifiableMutableState<PlayerUuid>(identifier), User {
 
   override fun asLocalUser(): LocalUser {
     return LocalUserImpl(

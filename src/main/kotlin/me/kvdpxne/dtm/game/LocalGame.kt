@@ -3,6 +3,7 @@ package me.kvdpxne.dtm.game
 import java.util.UUID
 import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.shared.Communicative
+import me.kvdpxne.dtm.shared.GameUuid
 import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.translation.TranslatableCommunicative
@@ -172,7 +173,7 @@ interface LocalGame : Game<LocalTeam>, Communicative, TranslatableCommunicative 
    * @since 0.1.0
    */
   fun findHostageByIdentifier(
-    identifier: UUID
+    identifier: GameUuid
   ): LocalUser?
 
   /**

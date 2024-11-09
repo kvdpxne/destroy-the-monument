@@ -1,10 +1,10 @@
 package me.kvdpxne.dtm.arena
 
-import java.util.UUID
+import me.kvdpxne.dtm.position.BlockPosition
 import me.kvdpxne.dtm.position.MonumentPosition
 import me.kvdpxne.dtm.position.RevivalPosition
+import me.kvdpxne.dtm.shared.ArenaUuid
 import me.kvdpxne.dtm.shared.Identifiable
-import me.kvdpxne.dtm.position.BlockPosition
 import me.kvdpxne.dtm.team.Team
 
 /**
@@ -16,7 +16,7 @@ import me.kvdpxne.dtm.team.Team
  *
  * @since 0.1.0
  */
-interface Arena : Identifiable<UUID> {
+interface Arena : Identifiable<ArenaUuid> {
 
   /**
    * The name of the arena.

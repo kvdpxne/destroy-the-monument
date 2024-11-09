@@ -1,8 +1,8 @@
 package me.kvdpxne.dtm.data.repositories
 
-import java.util.UUID
 import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.arena.ArenaMap
+import me.kvdpxne.dtm.shared.ArenaUuid
 
 /**
  * @since 0.1.0
@@ -22,7 +22,7 @@ interface ArenaRepository {
    * @since 0.1.0
    */
   suspend fun findArenaByIdentifier(
-    identifier: UUID
+    identifier: ArenaUuid
   ): Arena?
 
   /**
@@ -62,7 +62,7 @@ interface ArenaRepository {
    * @since 0.1.0
    */
   suspend fun deleteArenaByIdentifier(
-    identifier: UUID
+    identifier: ArenaUuid
   ): Int
 
   /**

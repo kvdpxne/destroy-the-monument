@@ -1,17 +1,17 @@
 package me.kvdpxne.dtm.damage
 
-import java.util.UUID
+import me.kvdpxne.dtm.shared.PlayerUuid
 import me.kvdpxne.dtm.shared.debug.Debug
 
 class DamageOwner(
   // @formatter:off
-  val owner  : UUID,
+  val owner  : PlayerUuid,
   val history: MutableSet<Damage> = mutableSetOf(),
   // @formatter:on
 ) {
 
   fun addDamage(
-    attacker: UUID,
+    attacker: PlayerUuid,
     damages: Double
   ) {
     if (this.owner == attacker) {

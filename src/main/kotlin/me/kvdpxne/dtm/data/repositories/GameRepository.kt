@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.data.repositories
 
-import java.util.UUID
 import me.kvdpxne.dtm.game.Game
+import me.kvdpxne.dtm.shared.GameUuid
 import me.kvdpxne.dtm.team.Team
 
 /**
@@ -20,7 +20,7 @@ interface GameRepository {
    * @since 0.1.0
    */
   suspend fun findGameByIdentifier(
-    identifier: UUID
+    identifier: GameUuid
   ): Game<Team>?
 
   /**
@@ -58,7 +58,7 @@ interface GameRepository {
    * @since 0.1.0
    */
   suspend fun deleteGameByIdentifier(
-    identifier: UUID
+    identifier: GameUuid
   ): Int
 
   /**

@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.damage
 
-import java.util.UUID
+import me.kvdpxne.dtm.shared.PlayerUuid
 import me.kvdpxne.dtm.shared.StylishToStringBuilder
 
 /**
@@ -16,7 +16,7 @@ import me.kvdpxne.dtm.shared.StylishToStringBuilder
  */
 class Damage internal constructor(
   // @formatter:off
-  val attacker        : UUID,
+  val attacker        : PlayerUuid,
       damages         : Double,
       lastInteractTime: Long = System.currentTimeMillis()
   // @formatter:on

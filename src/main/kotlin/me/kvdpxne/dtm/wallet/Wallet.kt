@@ -3,6 +3,7 @@ package me.kvdpxne.dtm.wallet
 import java.util.UUID
 import me.kvdpxne.dtm.data.state.MutableState
 import me.kvdpxne.dtm.shared.Identifiable
+import me.kvdpxne.dtm.shared.WalletUuid
 
 /**
  * Represents a wallet that holds a balance of coins and allows for
@@ -14,7 +15,7 @@ import me.kvdpxne.dtm.shared.Identifiable
  *
  * @since 0.1.0
  */
-interface Wallet : Comparable<Wallet>, Identifiable<UUID>, MutableState {
+interface Wallet : Comparable<Wallet>, Identifiable<WalletUuid>, MutableState {
 
   /**
    * The current number of coins held in the wallet. This value can be modified

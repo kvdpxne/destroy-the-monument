@@ -1,6 +1,5 @@
 package me.kvdpxne.dtm.arena
 
-import java.util.UUID
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import me.kvdpxne.dtm.data.daos.ArenaDao
@@ -11,6 +10,7 @@ import me.kvdpxne.dtm.data.daos.RevivalPositionDao
 import me.kvdpxne.dtm.position.MonumentPosition
 import me.kvdpxne.dtm.position.MonumentPositionImpl
 import me.kvdpxne.dtm.position.RevivalPosition
+import me.kvdpxne.dtm.shared.ArenaUuid
 import me.kvdpxne.dtm.shared.debug.Debug
 import me.kvdpxne.dtm.team.Team
 
@@ -32,7 +32,7 @@ object ArenaService {
    * @since 0.1.0
    */
   fun findArenaByIdentifier(
-    identifier: UUID
+    identifier: ArenaUuid
   ): Arena? {
     return runBlocking {
       ArenaDao.findArenaByIdentifier(identifier)
@@ -117,7 +117,7 @@ object ArenaService {
   }
 
   fun deleteArenaByIdentifier(
-    identifier: UUID
+    identifier: ArenaUuid
   ): Boolean {
     val arena: Arena = this.findArenaByIdentifier(identifier)
       ?: return false

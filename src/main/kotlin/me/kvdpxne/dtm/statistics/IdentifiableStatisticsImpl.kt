@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.statistics
 
-import java.util.UUID
+import me.kvdpxne.dtm.shared.StatisticsUuid
 
 /**
  * A concrete base class for representing basic player statistics with a unique
@@ -29,7 +29,7 @@ open class IdentifiableStatisticsImpl protected constructor(
                 assists           : Int,
                 deaths            : Int,
                 destroyedMonuments: Int,
-   override val identifier        : UUID
+   override val identifier        : StatisticsUuid
   // @formatter:on
 ) : StatisticsImpl(kills, assists, deaths, destroyedMonuments), IdentifiableStatistics {
 

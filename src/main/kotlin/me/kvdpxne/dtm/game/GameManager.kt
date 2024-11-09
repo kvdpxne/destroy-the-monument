@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.game
 
-import java.util.UUID
 import me.kvdpxne.dtm.arena.Arena
+import me.kvdpxne.dtm.shared.GameUuid
 import me.kvdpxne.dtm.shared.debug.Debug
 import me.kvdpxne.dtm.team.Team
 import me.kvdpxne.dtm.user.LocalUser
@@ -11,7 +11,7 @@ object GameManager {
   /**
    * @since 0.1.0
    */
-  private val _games: MutableMap<UUID, Game<Team>> = mutableMapOf()
+  private val _games: MutableMap<GameUuid, Game<Team>> = mutableMapOf()
 
   init {
     // TODO Delete in the future.
@@ -38,12 +38,12 @@ object GameManager {
    * Tries to find a [Game] by [Game.identifier].
    */
   fun findGameByIdentifier(
-    identifier: UUID
+    identifier: GameUuid
   ): Game<*>? {
     return _games[identifier]
   }
 
-  fun findGameByArena(identifier: UUID): Collection<LocalGame> {
+  fun findGameByArena(identifier: GameUuid): Collection<LocalGame> {
     return this._games.values
       .map { it as LocalGame }
       .filter { it.currentArena?.identifier == identifier }

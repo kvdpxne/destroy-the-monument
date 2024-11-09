@@ -3,16 +3,16 @@ package me.kvdpxne.dtm.user
 import java.lang.ref.Reference
 import java.lang.ref.WeakReference
 import java.util.Locale
-import java.util.UUID
-import me.kvdpxne.dtm.shared.text.colorize
 import me.kvdpxne.dtm.configuration.GeneralConfiguration
+import me.kvdpxne.dtm.shared.PlayerUuid
+import me.kvdpxne.dtm.shared.text.colorize
 import me.kvdpxne.dtm.translation.TranslationService
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
 class LocalUserPerformerImpl(
   // @formatter:off
-  override val identifier: UUID,
+  override val identifier: PlayerUuid,
   override val user      : LocalUser
   // @formatter:on
 ) : LocalUserPerformer {

@@ -1,9 +1,11 @@
 package me.kvdpxne.dtm.game
 
-import java.util.UUID
 import me.kvdpxne.dtm.arena.Arena
+import me.kvdpxne.dtm.shared.ArenaUuid
+import me.kvdpxne.dtm.shared.GameUuid
 import me.kvdpxne.dtm.shared.Identifiable
 import me.kvdpxne.dtm.shared.Nameable
+import me.kvdpxne.dtm.shared.TeamUuid
 import me.kvdpxne.dtm.team.Team
 
 /**
@@ -14,7 +16,7 @@ import me.kvdpxne.dtm.team.Team
  *
  * @since 0.1.0
  */
-interface Game<T : Team> : Identifiable<UUID>, Nameable {
+interface Game<T : Team> : Identifiable<GameUuid>, Nameable {
 
   /**
    * The collection of teams participating in the game.
@@ -78,7 +80,7 @@ interface Game<T : Team> : Identifiable<UUID>, Nameable {
    * @return The team if found, or `null` if no matching team exists.
    * @since 0.1.0
    */
-  fun findTeamByIdentifier(identifier: UUID): T?
+  fun findTeamByIdentifier(identifier: TeamUuid): T?
 
   /**
    * Finds an arena by its unique identifier.
@@ -87,7 +89,7 @@ interface Game<T : Team> : Identifiable<UUID>, Nameable {
    * @return The arena if found, or `null` if no matching arena exists.
    * @since 0.1.0
    */
-  fun findArenaByIdentifier(identifier: UUID): Arena?
+  fun findArenaByIdentifier(identifier: ArenaUuid): Arena?
 
   /**
    * Converts the current game instance to a [LocalGame].

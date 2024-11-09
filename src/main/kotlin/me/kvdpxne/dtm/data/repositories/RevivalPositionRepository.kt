@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.data.repositories
 
-import java.util.UUID
 import me.kvdpxne.dtm.position.RevivalPosition
+import me.kvdpxne.dtm.shared.RevivalPositionUuid
 import me.kvdpxne.dtm.team.Team
 
 /**
@@ -26,7 +26,7 @@ interface RevivalPositionRepository {
    * @since 0.1.0
    */
   suspend fun findRevivalPositionByIdentifier(
-    identifier: UUID
+    identifier: RevivalPositionUuid
   ): RevivalPosition<Team>?
 
   /**
@@ -55,7 +55,7 @@ interface RevivalPositionRepository {
    * @since 0.1.0
    */
   suspend fun deleteRevivalPositionByIdentifier(
-    identifier: UUID
+    identifier: RevivalPositionUuid
   ): Int
 
   /**

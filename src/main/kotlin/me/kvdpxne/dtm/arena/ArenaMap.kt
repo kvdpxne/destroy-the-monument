@@ -1,8 +1,7 @@
 package me.kvdpxne.dtm.arena
 
-import java.util.UUID
-import kotlin.jvm.Throws
 import me.kvdpxne.dtm.shared.Identifiable
+import me.kvdpxne.dtm.shared.WorldUuid
 import org.bukkit.World
 
 /**
@@ -13,7 +12,7 @@ import org.bukkit.World
  *
  * @since 0.1.0
  */
-interface ArenaMap : Identifiable<UUID> {
+interface ArenaMap : Identifiable<WorldUuid> {
 
   /**
    * The name of the map.

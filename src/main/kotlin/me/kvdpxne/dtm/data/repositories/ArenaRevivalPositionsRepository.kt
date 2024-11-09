@@ -4,6 +4,7 @@ import java.util.UUID
 import kotlinx.coroutines.flow.Flow
 import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.position.RevivalPosition
+import me.kvdpxne.dtm.shared.ArenaUuid
 import me.kvdpxne.dtm.team.Team
 
 /**
@@ -17,7 +18,7 @@ interface ArenaRevivalPositionsRepository {
    * @since 0.1.0
    */
   suspend fun findArenaRevivalPositionsByArenaIdentifier(
-    identifier: UUID
+    identifier: ArenaUuid
   ): Flow<RevivalPosition<Team>>
 
   /**

@@ -1,6 +1,5 @@
 package me.kvdpxne.dtm.game
 
-import java.util.UUID
 import me.kvdpxne.dtm.DestroyTheMonument
 import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.arena.ArenaManager
@@ -8,7 +7,11 @@ import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.scoreboard.createServerScoreboard
 import me.kvdpxne.dtm.scoreboard.createServerTeam
 import me.kvdpxne.dtm.scoreboard.initScoreboard
+import me.kvdpxne.dtm.shared.ArenaUuid
+import me.kvdpxne.dtm.shared.GameUuid
+import me.kvdpxne.dtm.shared.PlayerUuid
 import me.kvdpxne.dtm.shared.StylishToStringBuilder
+import me.kvdpxne.dtm.shared.TeamUuid
 import me.kvdpxne.dtm.shared.debug.Debug
 import me.kvdpxne.dtm.shared.player.equipB
 import me.kvdpxne.dtm.shared.player.reset
@@ -36,9 +39,9 @@ import org.bukkit.Location
 class LocalGameImpl(
   // @formatter:off
   name      : String,
-  teams     : Map<UUID, LocalTeam>,
-  arenas    : Map<UUID, Arena>,
-  identifier: UUID
+  teams     : Map<TeamUuid, LocalTeam>,
+  arenas    : Map<ArenaUuid, Arena>,
+  identifier: GameUuid
   // @formatter:on
 ) : GameImpl<LocalTeam>(
   name,
@@ -51,7 +54,7 @@ class LocalGameImpl(
   /**
    * @since 0.1.0
    */
-  private val _hostages: MutableMap<UUID, LocalUser> = mutableMapOf()
+  private val _hostages: MutableMap<PlayerUuid, LocalUser> = mutableMapOf()
 
   private var _currentArena: Arena? = null
 
@@ -250,7 +253,7 @@ class LocalGameImpl(
    * @since 0.1.0
    */
   override fun findHostageByIdentifier(
-    identifier: UUID
+    identifier: PlayerUuid
   ): LocalUser? {
     return this._hostages[identifier]
   }

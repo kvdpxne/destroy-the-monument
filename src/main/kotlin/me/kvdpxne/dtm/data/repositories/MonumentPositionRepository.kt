@@ -2,6 +2,7 @@ package me.kvdpxne.dtm.data.repositories
 
 import java.util.UUID
 import me.kvdpxne.dtm.position.MonumentPosition
+import me.kvdpxne.dtm.shared.MonumentPositionUuid
 import me.kvdpxne.dtm.team.Team
 
 /**
@@ -38,7 +39,7 @@ interface MonumentPositionRepository {
    * @since 0.1.0
    */
   suspend fun findMonumentPositionByIdentifier(
-    identifier: UUID
+    identifier: MonumentPositionUuid
   ): MonumentPosition<Team>?
 
   /**
@@ -73,7 +74,7 @@ interface MonumentPositionRepository {
    * @since 0.1.0
    */
   suspend fun deleteMonumentPositionByIdentifier(
-    identifier: UUID
+    identifier: MonumentPositionUuid
   ): Int
 
   /**

@@ -1,9 +1,9 @@
 package me.kvdpxne.dtm.user
 
-import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 import me.kvdpxne.dtm.configuration.GeneralConfiguration
+import me.kvdpxne.dtm.shared.PlayerUuid
 import me.kvdpxne.dtm.shared.debug.Debug
 
 /**
@@ -22,7 +22,7 @@ object LocalUserManager {
    *
    * @since 0.1.0
    */
-  private val _usersByIdentifier: ConcurrentMap<UUID, User> =
+  private val _usersByIdentifier: ConcurrentMap<PlayerUuid, User> =
     ConcurrentHashMap(GeneralConfiguration.USER_MANAGER_INITIAL_CAPACITY)
 
   /**
@@ -58,7 +58,7 @@ object LocalUserManager {
    * @since 0.1.0
    */
   fun findUserByIdentifierOrNull(
-    identifier: UUID
+    identifier: PlayerUuid
   ): LocalUser? {
     return this._usersByIdentifier[identifier] as LocalUser?
   }
@@ -73,7 +73,7 @@ object LocalUserManager {
    * @since 0.1.0
    */
   fun findUserByIdentifier(
-    identifier: UUID
+    identifier: PlayerUuid
   ): LocalUser {
     return this.findUserByIdentifierOrNull(identifier)
       ?: throw UserNotFoundException(

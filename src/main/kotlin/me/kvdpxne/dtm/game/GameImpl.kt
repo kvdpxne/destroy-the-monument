@@ -3,7 +3,10 @@ package me.kvdpxne.dtm.game
 import java.util.UUID
 import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.shared.AbstractIdentifiable
+import me.kvdpxne.dtm.shared.ArenaUuid
+import me.kvdpxne.dtm.shared.GameUuid
 import me.kvdpxne.dtm.shared.StylishToStringBuilder
+import me.kvdpxne.dtm.shared.TeamUuid
 import me.kvdpxne.dtm.shared.debug.Debug
 import me.kvdpxne.dtm.team.Team
 
@@ -22,25 +25,25 @@ open class GameImpl<T : Team>(
   // @formatter:off
   override val name       : String,
   override val displayName: String,
-               teams      : Map<UUID, T>     = mutableMapOf(),
-               arenas     : Map<UUID, Arena> = mutableMapOf(),
-               identifier : UUID             = UUID.randomUUID()
+               teams      : Map<TeamUuid, T>      = mutableMapOf(),
+               arenas     : Map<ArenaUuid, Arena> = mutableMapOf(),
+               identifier : GameUuid              = UUID.randomUUID()
   // @formatter:on
-) : AbstractIdentifiable<UUID>(identifier), Game<T> {
+) : AbstractIdentifiable<GameUuid>(identifier), Game<T> {
 
   /**
    * A mutable map holding the teams in the game.
    *
    * @since 0.1.0
    */
-  protected val _teams: MutableMap<UUID, T> = teams.toMutableMap()
+  protected val _teams: MutableMap<TeamUuid, T> = teams.toMutableMap()
 
   /**
    * A mutable map holding the arenas in the game.
    *
    * @since 0.1.0
    */
-  protected val _arenas: MutableMap<UUID, Arena> = arenas.toMutableMap()
+  protected val _arenas: MutableMap<ArenaUuid, Arena> = arenas.toMutableMap()
 
   override val teams: Collection<T>
     get() = this._teams.values.toList()
@@ -62,11 +65,11 @@ open class GameImpl<T : Team>(
     return this._arenas.containsValue(arena)
   }
 
-  override fun findTeamByIdentifier(identifier: UUID): T? {
+  override fun findTeamByIdentifier(identifier: TeamUuid): T? {
     return this._teams[identifier]
   }
 
-  override fun findArenaByIdentifier(identifier: UUID): Arena? {
+  override fun findArenaByIdentifier(identifier: ArenaUuid): Arena? {
     return this._arenas[identifier]
   }
 
@@ -126,7 +129,7 @@ open class GameImpl<T : Team>(
       name = this.name,
 
       //
-      teams = this._teams.mapValues { (_: UUID, team: Team) ->
+      teams = this._teams.mapValues { (_: TeamUuid, team: Team) ->
         team.toLocalTeam()
       }.toMap(),
 
