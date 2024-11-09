@@ -190,6 +190,7 @@ class LocalGameImpl(
       return
     }
 
+    this.setAsStarting()
     GameStartAsyncTask(this)
       .runTaskTimerAsynchronously(DestroyTheMonument.instance, 10L, 20L)
   }
