@@ -8,7 +8,7 @@ package me.kvdpxne.dtm.shared.task
  *
  * @since 0.1.0
  */
-abstract class AbstractAsynchronousTask : AbstractTask() {
+abstract class AsynchronousTask : AbstractTask() {
 
   /**
    * Indicates that the task is asynchronous.

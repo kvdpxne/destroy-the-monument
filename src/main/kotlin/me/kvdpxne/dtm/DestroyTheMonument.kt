@@ -93,8 +93,19 @@ class DestroyTheMonument : JavaPlugin() {
      *
      * @since 0.1.0
      */
-    var instance: DestroyTheMonument? = null
-      private set
+    private var _instance: DestroyTheMonument? = null
+
+    /**
+     * @since 0.1.0
+     */
+    val instance: DestroyTheMonument
+      get() {
+
+        return requireNotNull(this._instance) {
+          "You cannot access the DTM plugin instance because the plugin " +
+            "is currently disabled."
+        }
+      }
   }
 
   /**
@@ -206,7 +217,7 @@ class DestroyTheMonument : JavaPlugin() {
     TranslationService.loadTranslations()
 
     //
-    instance = this
+    _instance = this
 
     PluginContext.textFormatter = BukkitTextFormatter
 
@@ -354,7 +365,7 @@ class DestroyTheMonument : JavaPlugin() {
     }
 
     //
-    instance = null
+    _instance = null
 
     //
     Debug.destroy()

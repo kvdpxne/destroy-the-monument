@@ -15,6 +15,7 @@ import me.kvdpxne.dtm.shared.TeamUuid
 import me.kvdpxne.dtm.shared.debug.Debug
 import me.kvdpxne.dtm.shared.player.equipItemsOfTeamSelection
 import me.kvdpxne.dtm.shared.player.reset
+import me.kvdpxne.dtm.shared.task.Tasks
 import me.kvdpxne.dtm.shared.task.cancelTask
 import me.kvdpxne.dtm.shared.text.toSingleLines
 import me.kvdpxne.dtm.shared.world.toLocation
@@ -66,6 +67,9 @@ class LocalGameImpl(
    * @since 0.1.0
    */
   private var spectators: Int = 0
+
+  @Volatile
+  private var countdownTask: GameCountdownTask? = null
 
   @Volatile
   var timerTask: LocalGameTimerTask? = null
@@ -190,9 +194,18 @@ class LocalGameImpl(
       return
     }
 
+    var countdownTask: GameCountdownTask? = this.countdownTask
+    if (null == countdownTask) {
+      countdownTask = GameCountdownTask(this)
+      this.countdownTask = countdownTask
+    } else {
+      if (countdownTask.remainingSeconds < 10) {
+        countdownTask.remainingSeconds += GeneralConfiguration.FSFFF
+      }
+    }
+
     this.setAsStarting()
-    GameStartAsyncTask(this)
-      .runTaskTimerAsynchronously(DestroyTheMonument.instance, 10L, 20L)
+    Tasks.runAsynchronousRepeatingTask(20L, countdownTask)
   }
 
   /**
@@ -544,6 +557,7 @@ class LocalGameImpl(
     val arena = this.nextArena()
 
     ArenaManager.addArena(arena)
+    this.countdownTask = null
 
     //
     val bukkitTeamScoreboard = createServerScoreboard()

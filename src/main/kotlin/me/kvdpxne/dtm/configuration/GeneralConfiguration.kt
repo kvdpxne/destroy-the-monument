@@ -37,6 +37,10 @@ object GeneralConfiguration : Configuration {
 
   const val MIN_TEAMMATES_SIZE = 2
 
+  val FSFS = 30
+
+  val FSFFF = 10
+
   var OP_F = true
 
   var BLOCK_PLAT_DROPS = true

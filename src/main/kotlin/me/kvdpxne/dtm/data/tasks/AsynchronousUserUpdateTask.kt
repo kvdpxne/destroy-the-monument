@@ -3,11 +3,11 @@ package me.kvdpxne.dtm.data.tasks
 import kotlinx.coroutines.runBlocking
 import me.kvdpxne.dtm.data.daos.UserDao
 import me.kvdpxne.dtm.shared.debug.Debug
-import me.kvdpxne.dtm.shared.task.AbstractAsynchronousTask
+import me.kvdpxne.dtm.shared.task.AsynchronousTask
 import me.kvdpxne.dtm.user.LocalUserManager
 import me.kvdpxne.dtm.user.User
 
-object AsynchronousUserUpdateTask : AbstractAsynchronousTask() {
+object AsynchronousUserUpdateTask : AsynchronousTask() {
 
   override fun execute() {
     runBlocking {

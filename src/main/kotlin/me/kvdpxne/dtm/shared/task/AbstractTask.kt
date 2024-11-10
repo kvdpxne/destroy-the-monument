@@ -11,7 +11,7 @@ import java.util.logging.Logger
  *
  * @since 0.1.0
  */
-abstract class AbstractTask : Task, Runnable {
+abstract class AbstractTask internal constructor() : Task, Runnable {
 
   /**
    * The unique identifier of the task.
@@ -21,7 +21,7 @@ abstract class AbstractTask : Task, Runnable {
    * @since 0.1.0
    */
   final override var identifier: Int = 0
-    private set
+    internal set
 
   /**
    * @since 0.1.0
