@@ -235,7 +235,7 @@ class ItemBuilder private constructor(
       .invoke(nbtTagCompound, "AttributeModifiers", nbtTagList)
 
     this.itemStack = Reflection
-      .getMethod(craftItemStackClass, "asBukkitCopy", null, arrayOf(PrimitiveTypes.STRING, minecraftItemStack.javaClass))
+      .getMethod(craftItemStackClass, "asBukkitCopy", null, arrayOf(minecraftItemStack.javaClass))
       .invoke(null, minecraftItemStack) as ItemStack
 
     return this
