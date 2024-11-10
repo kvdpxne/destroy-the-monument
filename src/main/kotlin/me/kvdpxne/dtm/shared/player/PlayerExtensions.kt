@@ -134,6 +134,10 @@ fun Player.equipItemsOfTeamSelection() {
   this.setItem(8, ItemsClipboard.ITEM_GAME_LEAVE)
 }
 
+fun Player.equipItemsOf() {
+  this.setItem(8, ItemsClipboard.ITEM_TEAM_LEAVE)
+}
+
 /**
  * Fills a player's experience bar to its maximum level.
  *

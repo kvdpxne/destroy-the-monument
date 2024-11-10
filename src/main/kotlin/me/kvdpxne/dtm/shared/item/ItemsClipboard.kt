@@ -20,6 +20,12 @@ object ItemsClipboard {
     .name("&c&lOpuść gre")
     .build()
 
+  val ITEM_TEAM_LEAVE: ItemStack by lazy {
+    ItemStack(Material.WEB).toBuilder()
+      .name("&c&lOpuść drużynę")
+      .build()
+  }
+
   val TEAM_LEAVE_ITEM = Material.WEB.toBuilder()
     .name("&c&lOpuść drużynę")
     .build()

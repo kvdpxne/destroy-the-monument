@@ -4,14 +4,14 @@ import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.profession.ProfessionManager
-import me.kvdpxne.dtm.shared.attributes.Attributes
 import me.kvdpxne.dtm.shared.event.cancel
-import me.kvdpxne.dtm.shared.item.ItemsClipboard
 import me.kvdpxne.dtm.shared.item.ItemBuilder
-import me.kvdpxne.dtm.shared.player.equipItemsOfTeamSelection
-import me.kvdpxne.dtm.shared.player.reset
+import me.kvdpxne.dtm.shared.item.ItemsClipboard
 import me.kvdpxne.dtm.shared.item.toBuilder
 import me.kvdpxne.dtm.shared.material.toBuilder
+import me.kvdpxne.dtm.shared.player.equipItemsOf
+import me.kvdpxne.dtm.shared.player.equipItemsOfTeamSelection
+import me.kvdpxne.dtm.shared.player.reset
 import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.user.LocalUser
@@ -138,7 +138,7 @@ fun createTeamSelectionGui(
       game.smallestTeam
     }
 
-
+    (event.whoClicked as Player).equipItemsOf()
 
     val color = team.colorInChat
 
