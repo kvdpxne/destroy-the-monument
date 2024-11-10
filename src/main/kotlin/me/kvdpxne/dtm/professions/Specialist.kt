@@ -46,7 +46,13 @@ fun createSpecialist(): Profession = ProfessionBuilder()
   )
   .icon(
     Material.STONE_SWORD.toBuilder()
-      .enchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
+      .lore(
+        "",
+        "&7- Samuraj",
+        "&7- Barbarzyńca",
+        "&7- Spartanin"
+      )
+      .enchantmentEffect()
       .build()
   )
   .disabled()

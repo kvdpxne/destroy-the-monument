@@ -9,7 +9,6 @@ import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionBuilder
 import me.kvdpxne.dtm.shared.item.ItemsClipboard.ITEM_TOOL_AXE
 import me.kvdpxne.dtm.shared.item.ItemsClipboard.ITEM_TOOL_PICKAXE
-import me.kvdpxne.dtm.shared.item.toBuilder
 import me.kvdpxne.dtm.shared.material.toBuilder
 import org.bukkit.Material
 import org.bukkit.potion.PotionEffectType
@@ -38,7 +37,16 @@ fun createKnight(): Profession = ProfessionBuilder()
     slotItem(Material.POTION, 2, 7),
     slotItem(Material.WOOD, 40, 8),
   )
-  .icon(Material.IRON_SWORD)
+  .icon(
+    Material.IRON_SWORD.toBuilder()
+      .lore(
+        "",
+        "&7- Tarczownik",
+        "&7- Czołg",
+        "&7- Wojownik"
+      )
+      .build()
+  )
   .effect(PotionEffectType.SLOW)
   .disabled()
   .build()

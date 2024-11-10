@@ -9,7 +9,6 @@ import me.kvdpxne.dtm.profession.ProfessionBuilder
 import me.kvdpxne.dtm.shared.item.ItemsClipboard.ITEM_TOOL_AXE
 import me.kvdpxne.dtm.shared.item.ItemsClipboard.ITEM_TOOL_PICKAXE
 import me.kvdpxne.dtm.shared.item.isNullOrTypeAir
-import me.kvdpxne.dtm.shared.item.toBuilder
 import me.kvdpxne.dtm.shared.material.toBuilder
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
@@ -37,7 +36,16 @@ fun createEngineer(): Profession = ProfessionBuilder()
     slotItem(Material.POTION, 2, 7),
     slotItem(Material.COBBLESTONE, 50, 8),
   )
-  .icon(Material.COBBLESTONE)
+  .icon(
+    Material.COBBLESTONE.toBuilder()
+      .lore(
+        "",
+        "&7- Budowniczy",
+        "&7- Teleporter",
+        "&7- Dozownik"
+      )
+      .build()
+  )
   .ability(20, true) {
 
     val inventory = it.inventory

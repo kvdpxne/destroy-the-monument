@@ -9,7 +9,6 @@ import me.kvdpxne.dtm.profession.ProfessionBuilder
 import me.kvdpxne.dtm.shared.item.ItemsClipboard.ITEM_TOOL_AXE
 import me.kvdpxne.dtm.shared.item.ItemsClipboard.ITEM_TOOL_PICKAXE
 import me.kvdpxne.dtm.shared.material.asItem
-import me.kvdpxne.dtm.shared.item.toBuilder
 import me.kvdpxne.dtm.shared.material.toBuilder
 import org.bukkit.Material
 import org.bukkit.inventory.meta.PotionMeta
@@ -51,6 +50,15 @@ fun createMedic(): Profession = ProfessionBuilder()
     slotItem(Material.POTION, 4, 7),
     slotItem(Material.WOOD, 30, 8)
   )
-  .icon(Material.POTION)
+  .icon(
+    Material.POTION.toBuilder()
+      .lore(
+        "",
+        "&7- Medyk polowy",
+        "&7- Medyk bojowy",
+        "&7- Szaman"
+      )
+      .build()
+  )
   .disabled()
   .build()

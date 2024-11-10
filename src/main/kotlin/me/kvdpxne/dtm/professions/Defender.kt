@@ -50,7 +50,13 @@ fun createDefender(): Profession = ProfessionBuilder()
   )
   .icon(
     Material.IRON_SWORD.toBuilder()
-      .enchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
+      .lore(
+        "",
+        "&7- Pancernik",
+        "&7- Budowniczy",
+        "&7- Strzelec"
+      )
+      .enchantmentEffect()
       .build()
   )
   .effect(PotionEffectType.SLOW)

@@ -7,7 +7,6 @@ import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionBuilder
 import me.kvdpxne.dtm.shared.item.ItemsClipboard.ITEM_TOOL_AXE
 import me.kvdpxne.dtm.shared.item.ItemsClipboard.ITEM_TOOL_PICKAXE
-import me.kvdpxne.dtm.shared.item.toBuilder
 import me.kvdpxne.dtm.shared.material.toBuilder
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
@@ -44,7 +43,16 @@ fun createPyro(): Profession = ProfessionBuilder()
     slotItem(Material.WOOD, 20, 8),
     slotItem(Material.ARROW, 1, 17)
   )
-  .icon(Material.FLINT_AND_STEEL)
+  .icon(
+    Material.FLINT_AND_STEEL.toBuilder()
+      .lore(
+        "",
+        "&7- Ognik",
+        "&7- Miotacz ognia",
+        "&7- Snajper"
+      )
+      .build()
+  )
   .effect(PotionEffectType.FIRE_RESISTANCE)
   .ability(40, true)
   .enabled()

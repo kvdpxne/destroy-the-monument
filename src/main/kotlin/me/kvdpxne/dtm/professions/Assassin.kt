@@ -51,7 +51,13 @@ fun createAssassin(): Profession = ProfessionBuilder()
   )
   .icon(
     Material.STICK.toBuilder()
-      .enchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1)
+      .lore(
+        "",
+        "&7- Zatrute ostrze",
+        "&7- Ukryte ostrze",
+        "&7- Granatnik"
+      )
+      .enchantmentEffect()
       .build()
   )
   .disabled()

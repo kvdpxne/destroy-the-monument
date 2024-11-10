@@ -142,6 +142,44 @@ class ItemBuilder private constructor(
     return this
   }
 
+  fun enchantmentEffect(): ItemBuilder {
+    val craftItemStackClass: Class<*> = Reflection.getCraftBukkitClass("inventory.CraftItemStack")
+
+    val minecraftItemStack: Any = Reflection
+      .getMethod(craftItemStackClass, "asNMSCopy", null, arrayOf(this.itemStack.javaClass))
+      .invoke(null, this.itemStack)!!
+
+    val nbtTagCompoundFieldAccessor: FieldAccessor = Reflection.getField(minecraftItemStack.javaClass, "tag")
+    var nbtTagCompound: Any? = nbtTagCompoundFieldAccessor.get(minecraftItemStack)
+
+    val nbtTagCompoundClass: Class<*> = if (null == nbtTagCompound) {
+      val nbtTagCompoundClass: Class<*> = Reflection.getMinecraftClass("NBTTagCompound")
+      val newNbtTagCompoundClass: Any = Reflection.getConstructor(nbtTagCompoundClass).invoke()
+
+      nbtTagCompound = newNbtTagCompoundClass
+      nbtTagCompoundFieldAccessor.set(minecraftItemStack, newNbtTagCompoundClass)
+
+      nbtTagCompoundClass
+    } else {
+      nbtTagCompound.javaClass
+    }
+
+    val clazz: Class<*> = Reflection.getMinecraftClass("NBTTagList")
+    val nbtTagList: Any = Reflection.getConstructor(clazz).invoke()
+
+    val nbtTagBaseClass: Class<*> = Reflection.getMinecraftClass("NBTBase")
+
+    Reflection
+      .getMethod(nbtTagCompoundClass, "set", null, arrayOf(PrimitiveTypes.STRING, nbtTagBaseClass))
+      .invoke(nbtTagCompound, "ench", nbtTagList)
+
+    this.itemStack = Reflection
+      .getMethod(craftItemStackClass, "asBukkitCopy", null, arrayOf(minecraftItemStack.javaClass))
+      .invoke(null, minecraftItemStack) as ItemStack
+
+    return this
+  }
+
   /**
    * @since 0.1.0
    */
@@ -229,6 +267,47 @@ class ItemBuilder private constructor(
     Reflection
       .getMethod(nbtTagListClass, "add", null, arrayOf(nbtTagBaseClass))
       .invoke(nbtTagList, newNbtTagCompoundClass)
+
+    Reflection
+      .getMethod(nbtTagCompoundClass, "set", null, arrayOf(PrimitiveTypes.STRING, nbtTagBaseClass))
+      .invoke(nbtTagCompound, "AttributeModifiers", nbtTagList)
+
+    this.itemStack = Reflection
+      .getMethod(craftItemStackClass, "asBukkitCopy", null, arrayOf(minecraftItemStack.javaClass))
+      .invoke(null, minecraftItemStack) as ItemStack
+
+    return this
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun clearAttributes(): ItemBuilder {
+    val craftItemStackClass: Class<*> = Reflection.getCraftBukkitClass("inventory.CraftItemStack")
+
+    val minecraftItemStack: Any = Reflection
+      .getMethod(craftItemStackClass, "asNMSCopy", null, arrayOf(this.itemStack.javaClass))
+      .invoke(null, this.itemStack)!!
+
+    val nbtTagCompoundFieldAccessor: FieldAccessor = Reflection.getField(minecraftItemStack.javaClass, "tag")
+    var nbtTagCompound: Any? = nbtTagCompoundFieldAccessor.get(minecraftItemStack)
+
+    val nbtTagCompoundClass: Class<*> = if (null == nbtTagCompound) {
+      val nbtTagCompoundClass: Class<*> = Reflection.getMinecraftClass("NBTTagCompound")
+      val newNbtTagCompoundClass: Any = Reflection.getConstructor(nbtTagCompoundClass).invoke()
+
+      nbtTagCompound = newNbtTagCompoundClass
+      nbtTagCompoundFieldAccessor.set(minecraftItemStack, newNbtTagCompoundClass)
+
+      nbtTagCompoundClass
+    } else {
+      nbtTagCompound.javaClass
+    }
+
+    val clazz: Class<*> = Reflection.getMinecraftClass("NBTTagList")
+    val nbtTagList: Any = Reflection.getConstructor(clazz).invoke()
+
+    val nbtTagBaseClass: Class<*> = Reflection.getMinecraftClass("NBTBase")
 
     Reflection
       .getMethod(nbtTagCompoundClass, "set", null, arrayOf(PrimitiveTypes.STRING, nbtTagBaseClass))

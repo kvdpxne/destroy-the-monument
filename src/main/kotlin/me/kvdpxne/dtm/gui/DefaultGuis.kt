@@ -4,6 +4,7 @@ import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.profession.ProfessionManager
+import me.kvdpxne.dtm.shared.attributes.Attributes
 import me.kvdpxne.dtm.shared.event.cancel
 import me.kvdpxne.dtm.shared.item.ItemsClipboard
 import me.kvdpxne.dtm.shared.item.ItemBuilder
@@ -268,7 +269,8 @@ fun createProfessionSelectionGui(user: LocalUser): Gui {
     gui.setItem(
       9 + index,
       profession.icon.toBuilder()
-        .name("&7${profession.displayName}")
+        .name("&e&l${profession.displayName}")
+        .clearAttributes()
         .build()
     ) { event: InventoryClickEvent ->
       if (!profession.enabled) {

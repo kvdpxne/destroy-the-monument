@@ -44,6 +44,7 @@ object ItemsClipboard {
 
   val ITEM_PROFESSION_SELECT = Material.IRON_AXE.toBuilder()
     .name("&e&lWybierz profesje")
+    .clearAttributes()
     .build()
 
    val LOSE = Material.DEAD_BUSH.toBuilder()

@@ -8,7 +8,6 @@ import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionBuilder
 import me.kvdpxne.dtm.shared.item.ItemsClipboard.ITEM_TOOL_AXE
 import me.kvdpxne.dtm.shared.item.ItemsClipboard.ITEM_TOOL_PICKAXE
-import me.kvdpxne.dtm.shared.item.toBuilder
 import me.kvdpxne.dtm.shared.material.toBuilder
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
@@ -44,7 +43,16 @@ fun createArcher(): Profession = ProfessionBuilder()
     slotItem(Material.WOOD, 30, 8),
     slotItem(Material.ARROW, 1, 17)
   )
-  .icon(Material.BOW)
+  .icon(
+    Material.BOW.toBuilder()
+      .lore(
+        "",
+        "&7- Truciciel",
+        "&7- Bombowiec",
+        "&7- Pajęczak"
+      )
+      .build()
+  )
   .ability(40, true)
   .enabled()
   .build()

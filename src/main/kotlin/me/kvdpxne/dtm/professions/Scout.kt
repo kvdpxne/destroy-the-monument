@@ -41,7 +41,16 @@ fun createScout(): Profession = ProfessionBuilder()
     slotItem(Material.POTION, 2, 7),
     slotItem(Material.WOOD, 45, 8)
   )
-  .icon(Material.FISHING_ROD)
+  .icon(
+    Material.FISHING_ROD.toBuilder()
+      .lore(
+        "",
+        "&7- Parkourowiec",
+        "&7- Farmer",
+        "&7- Kamikadze"
+      )
+      .build()
+  )
   .effect(PotionEffectType.SPEED, 1)
   .ability(30, false) {
     runSynchronousTask {
