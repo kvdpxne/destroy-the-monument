@@ -8,6 +8,7 @@ import me.kvdpxne.dico.Dico
 import me.kvdpxne.dtm.command.CommandManager
 import me.kvdpxne.dtm.commands.createBaseCommand
 import me.kvdpxne.dtm.commands.createGlobalChatCommand
+import me.kvdpxne.dtm.commands.createVoteCommand
 import me.kvdpxne.dtm.configuration.ConfigurationManager
 import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.data.tasks.AsynchronousUserUpdateTask
@@ -306,7 +307,8 @@ class DestroyTheMonument : JavaPlugin() {
     //
     CommandManager.addCommands(
       createBaseCommand(),
-      createGlobalChatCommand()
+      createGlobalChatCommand(),
+      createVoteCommand()
     )
 
     ProfessionManager.addProfessions(

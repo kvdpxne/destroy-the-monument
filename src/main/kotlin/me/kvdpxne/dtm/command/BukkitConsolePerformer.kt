@@ -5,7 +5,7 @@ import org.bukkit.Bukkit
 /**
  * @since 0.1.0
  */
-internal class BukkitConsolePerformer private constructor(): ConsolePerformer {
+internal class BukkitConsolePerformer private constructor() : ConsolePerformer {
 
   companion object {
 

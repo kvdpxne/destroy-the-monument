@@ -46,6 +46,8 @@ interface Arena : Identifiable<ArenaUuid> {
    */
   val map: ArenaMap?
 
+  val monumentCount: Int
+
   /**
    * Retrieves the revival position for a specified team.
    *

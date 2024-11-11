@@ -63,13 +63,13 @@ object GameManager {
   /**
    *
    */
-  fun <T : Team, G : Game<T>> findByUser(user: LocalUser): G? {
+  fun findByUser(user: LocalUser): LocalGame? {
     return _games.values.find {
       if (it is LocalGame) {
         return@find it.isInGame(user)
       }
       return@find false
-    } as G?
+    } as LocalGame?
   }
 
   fun addArenaToGame(

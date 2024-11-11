@@ -51,6 +51,9 @@ class ArenaImpl(
   override val monumentPositions: List<MonumentPosition<out Team>>
     get() = this._monumentPositions.values.flatten().toList()
 
+  override val monumentCount: Int
+    get() = this._monumentPositions.values.size
+
   /**
    * @since 0.1.0
    */

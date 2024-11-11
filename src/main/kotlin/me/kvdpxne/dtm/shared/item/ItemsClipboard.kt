@@ -26,6 +26,13 @@ object ItemsClipboard {
       .build()
   }
 
+  val VOTE_ITEM: ItemStack by lazy {
+    ItemStack(Material.INK_SACK).toBuilder()
+      .generation(2)
+      .name("&e&lZagłosuj na mapę")
+      .build()
+  }
+
   val TEAM_LEAVE_ITEM = Material.WEB.toBuilder()
     .name("&c&lOpuść drużynę")
     .build()

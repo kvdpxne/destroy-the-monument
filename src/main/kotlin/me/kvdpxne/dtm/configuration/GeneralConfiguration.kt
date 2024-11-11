@@ -39,7 +39,10 @@ object GeneralConfiguration : Configuration {
 
   val FSFS = 30
 
-  val FSFFF = 10
+  /**
+   * @since 0.1.0
+   */
+  val EXTRA_SECONDS = 10
 
   var OP_F = true
 

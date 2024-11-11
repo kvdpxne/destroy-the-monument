@@ -21,7 +21,7 @@ import org.bukkit.entity.Player
  */
 internal class GameCountdownTask internal constructor(
   // @formatter:off
-  internal val game            : LocalGame,
+  private  val game            : LocalGame,
   internal var remainingSeconds: Int = GeneralConfiguration.FSFS
   // @formatter:on
 ) : AsynchronousTask() {

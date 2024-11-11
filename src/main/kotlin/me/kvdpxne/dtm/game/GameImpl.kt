@@ -36,14 +36,14 @@ open class GameImpl<T : Team>(
    *
    * @since 0.1.0
    */
-  protected val _teams: MutableMap<TeamUuid, T> = teams.toMutableMap()
+  internal val _teams: MutableMap<TeamUuid, T> = teams.toMutableMap()
 
   /**
    * A mutable map holding the arenas in the game.
    *
    * @since 0.1.0
    */
-  protected val _arenas: MutableMap<ArenaUuid, Arena> = arenas.toMutableMap()
+  internal val _arenas: MutableMap<ArenaUuid, Arena> = arenas.toMutableMap()
 
   override val teams: Collection<T>
     get() = this._teams.values.toList()

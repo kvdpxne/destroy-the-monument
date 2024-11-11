@@ -1,8 +1,12 @@
 package me.kvdpxne.dtm.game
 
+import kotlin.random.Random
 import me.kvdpxne.dtm.DestroyTheMonument
 import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.arena.ArenaManager
+import me.kvdpxne.dtm.arena.voting.ArenaVoting
+import me.kvdpxne.dtm.arena.voting.ArenaVotingRegistry
+import me.kvdpxne.dtm.arena.voting.ArenaVotingRegistryImpl
 import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.scoreboard.createServerScoreboard
 import me.kvdpxne.dtm.scoreboard.createServerTeam
@@ -13,6 +17,7 @@ import me.kvdpxne.dtm.shared.PlayerUuid
 import me.kvdpxne.dtm.shared.StylishToStringBuilder
 import me.kvdpxne.dtm.shared.TeamUuid
 import me.kvdpxne.dtm.shared.debug.Debug
+import me.kvdpxne.dtm.shared.item.ItemsClipboard
 import me.kvdpxne.dtm.shared.player.equipItemsOfTeamSelection
 import me.kvdpxne.dtm.shared.player.reset
 import me.kvdpxne.dtm.shared.task.Tasks
@@ -24,6 +29,8 @@ import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.team.TeammateImpl
 import me.kvdpxne.dtm.translation.MessageFormatterChains
 import me.kvdpxne.dtm.translation.TranslationService
+import me.kvdpxne.dtm.translation.formatter.Formatter
+import me.kvdpxne.dtm.translation.message.EnumMessageKey
 import me.kvdpxne.dtm.translation.message.MessageKey
 import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.Bukkit
@@ -57,8 +64,20 @@ class LocalGameImpl(
    */
   private val _hostages: MutableMap<PlayerUuid, LocalUser> = mutableMapOf()
 
-  private var _currentArena: Arena? = null
+  /**
+   * @since 0.1.0
+   */
+  internal var _votingRegistry: ArenaVotingRegistry? = null
 
+  /**
+   * @since 0.1.0
+   */
+  @Volatile
+  internal var _currentArena: Arena? = null
+
+  /**
+   * @since 0.1.0
+   */
   private var _state: Int = GameStates.INITIALIZED
 
   /**
@@ -66,10 +85,10 @@ class LocalGameImpl(
    *
    * @since 0.1.0
    */
-  private var spectators: Int = 0
+  private var _spectators: Int = 0
 
   @Volatile
-  private var countdownTask: GameCountdownTask? = null
+  internal var countdownTask: GameCountdownTask? = null
 
   @Volatile
   var timerTask: LocalGameTimerTask? = null
@@ -79,53 +98,35 @@ class LocalGameImpl(
    */
   override var timerTaskIdentifier: Int = -1
 
-  /**
-   * @since 0.1.0
-   */
-  override val currentArena: Arena?
-    get() = this._currentArena
-
-  /**
-   * @since 0.1.0
-   */
-  override val state: Int
-    get() = this._state
-
-  /**
-   * @since 0.1.0
-   */
   override val hostages: List<LocalUser>
     get() = this._hostages.values.toList()
 
-  /**
-   * @since 0.1.0
-   */
   override val smallestTeam: LocalTeam
     get() = this._teams.values.minBy(LocalTeam::size)
 
-  /**
-   * @since 0.1.0
-   */
   override val largestTeam: LocalTeam
     get() = this._teams.values.maxBy(LocalTeam::size)
 
-  /**
-   * @since 0.1.0
-   */
   override val randomTeam: LocalTeam
     get() = this._teams.values.random()
 
-  /**
-   * @since 0.1.0
-   */
+  override val votingRegistry: ArenaVotingRegistry?
+    get() = this._votingRegistry
+
+  override val currentArena: Arena?
+    get() = this._currentArena
+
+  override val state: Int
+    get() = this._state
+
+  override val numberOfSpectators: Int
+    get() = this._spectators
+
   override val numberOfHostages: Int
     get() = this._hostages.size
 
-  /**
-   * @since 0.1.0
-   */
   override val numberOfHostagesEnrolled: Int
-    get() = this._hostages.size - this.spectators
+    get() = this._hostages.size - this._spectators
 
   /**
    * @since 0.1.0
@@ -138,23 +139,14 @@ class LocalGameImpl(
       }
     }
 
-  /**
-   * @since 0.1.0
-   */
   override fun setAsInitialized() {
     this._state = GameStates.INITIALIZED
   }
 
-  /**
-   * @since 0.1.0
-   */
   override fun setAsStarting() {
     this._state = GameStates.STARTING
   }
 
-  /**
-   * @since 0.1.0
-   */
   override fun setAsRunning() {
     this._state = GameStates.RUNNING
   }
@@ -163,9 +155,6 @@ class LocalGameImpl(
     this._state = GameStates.ENDING
   }
 
-  /**
-   * @since 0.1.0
-   */
   override fun setAsStopping() {
     this._state = GameStates.STOPPING
   }
@@ -173,13 +162,49 @@ class LocalGameImpl(
   /**
    * @since 0.1.0
    */
-  private fun nextArena(): Arena {
-    var arena = this._currentArena
-    if (null != arena) {
-      return arena
+  private fun getRandomArena(): Arena {
+    val arena: Arena? = this._arenas.values.randomOrNull()
+    requireNotNull(arena) {
+      ""
     }
 
-    arena = this._arenas.values.random()
+    this._currentArena = arena
+    return arena
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  private fun getOutvotedArena(): Arena {
+    val votingRegistry: ArenaVotingRegistry? = this._votingRegistry
+    requireNotNull(votingRegistry) {
+      "The voting registry of the arena selection cannot be null."
+    }
+
+    if (0 >= votingRegistry.totalVotes) {
+      return this.getRandomArena()
+    }
+
+    var arena: Arena? = null
+    var i = 0
+    for (arenaVoting: ArenaVoting in votingRegistry.arenas) {
+      val votes: Int = arenaVoting.votes
+      if (votes > i || (votes == i && null == arena)) {
+        arena = arenaVoting.arena
+        i = votes
+        continue
+      }
+
+      if (Random.nextBoolean()) {
+        arena = arenaVoting.arena
+        i = votes
+      }
+    }
+
+    requireNotNull(arena) {
+      ""
+    }
+
     this._currentArena = arena
     return arena
   }
@@ -200,12 +225,53 @@ class LocalGameImpl(
       this.countdownTask = countdownTask
     } else {
       if (countdownTask.remainingSeconds < 10) {
-        countdownTask.remainingSeconds += GeneralConfiguration.FSFFF
+        countdownTask.remainingSeconds += GeneralConfiguration.EXTRA_SECONDS
       }
     }
 
-    this.setAsStarting()
+    var votingRegistry: ArenaVotingRegistry? = this._votingRegistry
+    if (null == votingRegistry) {
+      votingRegistry = ArenaVotingRegistryImpl()
+      this._votingRegistry = votingRegistry
+    } else {
+      votingRegistry.removeArenas()
+    }
+
+    this.prepareMessage(EnumMessageKey.GAME_VOTING_START)
+      .withoutFormat()
+      .useChat()
+      .send()
+
+    for (team: LocalTeam in this._teams.values) {
+      for (teammate: Teammate in team.teammates) {
+        teammate.user.performer.player?.inventory?.setItem(2, ItemsClipboard.VOTE_ITEM)
+      }
+    }
+
+    this.prepareMessage(EnumMessageKey.GAME_VOTING_HINT)
+      .withoutFormat()
+      .useChat()
+      .send()
+
+    val formatter: Formatter = Formatter.begin(2)
+    for (arena: Arena in this._arenas.values) {
+      val index: Int = votingRegistry.addArena(arena)
+      if (-1 == index) {
+        continue
+      }
+
+      this.prepareMessage(EnumMessageKey.GAME_VOTING_CHOICES_ARENA)
+        .format(
+          formatter
+            .with("INDEX", index.toString())
+            .with("ARENA_NAME", arena.name)
+        )
+        .useChat()
+        .send()
+    }
+
     Tasks.runAsynchronousRepeatingTask(20L, countdownTask)
+    this.setAsStarting()
   }
 
   /**
@@ -219,7 +285,7 @@ class LocalGameImpl(
     }
 
     val team = teammate.team
-    val arena = this.nextArena()
+    val arena = this.getRandomArena()
 
     val bukkitTeamScoreboard = createServerScoreboard()
 
@@ -369,11 +435,11 @@ class LocalGameImpl(
    * @since 0.1.0
    */
   private fun increaseSpectators() {
-    val oldValue: Int = this.spectators
-    ++this.spectators
+    val oldValue: Int = this._spectators
+    ++this._spectators
 
     Debug.log {
-      "Spectators increased: $oldValue -> ${this.spectators}"
+      "Spectators increased: $oldValue -> ${this._spectators}"
     }
   }
 
@@ -386,7 +452,7 @@ class LocalGameImpl(
    * @since 0.1.0
    */
   private fun decreaseSpectators() {
-    val oldValue: Int = this.spectators
+    val oldValue: Int = this._spectators
     if (0 > oldValue - 1) {
       Debug.log {
         "Cannot decrease spectators: already at minimum (0)"
@@ -394,9 +460,9 @@ class LocalGameImpl(
       return
     }
 
-    --this.spectators
+    --this._spectators
     Debug.log {
-      "Spectators decreased: $oldValue -> ${this.spectators}"
+      "Spectators decreased: $oldValue -> ${this._spectators}"
     }
   }
 
@@ -492,9 +558,6 @@ class LocalGameImpl(
     return true
   }
 
-  /**
-   * @since 0.1.0
-   */
   override fun removeTeammate(
     team: LocalTeam,
     user: LocalUser
@@ -505,6 +568,17 @@ class LocalGameImpl(
 
     this.increaseSpectators()
     return true
+  }
+
+  override fun removeTeammate(
+    user: LocalUser
+  ): Boolean {
+    for (team: LocalTeam in this._teams.values) {
+      if (this.removeTeammate(team, user)) {
+        return true
+      }
+    }
+    return false
   }
 
   override fun relocateTeammateToTeam(
@@ -541,9 +615,6 @@ class LocalGameImpl(
     teammate.currentProfession.ability?.renewDelayed(player, true)
   }
 
-  /**
-   *
-   */
   override fun start() {
     check(!this.isRunning) {
       "Cannot start the game because it is currently running."
@@ -554,10 +625,41 @@ class LocalGameImpl(
     }
 
     //
-    val arena = this.nextArena()
+    val arena: Arena = if (null != this._votingRegistry) {
+      this.getOutvotedArena()
+    } else {
+      this.getRandomArena()
+    }
 
+    //
     ArenaManager.addArena(arena)
-    this.countdownTask = null
+
+    // If all the conditions for the start of the game have been met then the
+    // voting registry for the selection of the arena should be immediately
+    // deleted from local memory.
+    if (null != this._votingRegistry) {
+      this._votingRegistry?.removeArenas()
+      this._votingRegistry = null
+
+      Debug.log {
+        ""
+      }
+    }
+
+    // If the countdown to the start of the game has been completed then the
+    // countdown task to the start of the game should be immediately
+    // deleted from local memory.
+    if (0 >= (this.countdownTask?.remainingSeconds ?: 1)) {
+      this.countdownTask = null
+
+      Debug.log {
+        """
+          The countdown task to the start of the game with the identifier
+          ${this.identifier} has been deleted from local memory because the
+          game has started.
+        """.toSingleLines()
+      }
+    }
 
     //
     val bukkitTeamScoreboard = createServerScoreboard()
@@ -672,7 +774,7 @@ class LocalGameImpl(
       exception.printStackTrace()
     }
 
-    this.spectators = this._hostages.size
+    this._spectators = this._hostages.size
 
     // Reinitializing
     this.setAsInitialized()

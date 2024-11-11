@@ -1,14 +1,15 @@
 package me.kvdpxne.dtm.listeners
 
+import me.kvdpxne.dtm.gui.createArenaSelectionGui
 import me.kvdpxne.dtm.gui.createGameSelectionGui
 import me.kvdpxne.dtm.gui.createProfessionSelectionGui
 import me.kvdpxne.dtm.gui.createTeamSelectionGui
-import me.kvdpxne.dtm.shared.item.ItemsClipboard
-import me.kvdpxne.dtm.shared.event.cancel
-import me.kvdpxne.dtm.shared.player.equipItemsOfGameSelection
 import me.kvdpxne.dtm.shared.block.isMonument
-import me.kvdpxne.dtm.shared.item.isNullOrTypeAir
+import me.kvdpxne.dtm.shared.event.cancel
 import me.kvdpxne.dtm.shared.event.isRightClick
+import me.kvdpxne.dtm.shared.item.ItemsClipboard
+import me.kvdpxne.dtm.shared.item.isNullOrTypeAir
+import me.kvdpxne.dtm.shared.player.equipItemsOfGameSelection
 import me.kvdpxne.dtm.shared.player.equipItemsOfTeamSelection
 import me.kvdpxne.dtm.shared.player.localUser
 import me.kvdpxne.dtm.shared.player.reset
@@ -16,7 +17,6 @@ import me.kvdpxne.dtm.shared.world.toBlockPosition
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerInteractEvent
-import org.bukkit.inventory.ItemStack
 
 /**
  *
@@ -30,7 +30,7 @@ object PlayerInteractListener : Listener {
   fun handlePlayerInteract(
     event: PlayerInteractEvent
   ) {
-    val itemInHand: ItemStack = event.item
+    val itemInHand = event.item
     if (itemInHand.isNullOrTypeAir()) {
       return
     }
@@ -93,9 +93,19 @@ object PlayerInteractListener : Listener {
         val game = user.game
 
         event.cancel()
-        game?.findTeamByHostage(user)?.removeTeammate(user)
+        game?.removeTeammate(user)
         player.reset()
         player.equipItemsOfTeamSelection()
+        player.updateInventory()
+        return
+      }
+
+      if (itemInHand.isSimilar(ItemsClipboard.VOTE_ITEM)) {
+        val user = player.localUser
+        val game = user.game
+
+        event.cancel()
+        createArenaSelectionGui(game!!, user).open(player)
         player.updateInventory()
         return
       }

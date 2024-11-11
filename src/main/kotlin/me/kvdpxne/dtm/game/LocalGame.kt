@@ -2,6 +2,7 @@ package me.kvdpxne.dtm.game
 
 import java.util.UUID
 import me.kvdpxne.dtm.arena.Arena
+import me.kvdpxne.dtm.arena.voting.ArenaVotingRegistry
 import me.kvdpxne.dtm.shared.Communicative
 import me.kvdpxne.dtm.shared.GameUuid
 import me.kvdpxne.dtm.team.LocalTeam
@@ -49,6 +50,11 @@ interface LocalGame : Game<LocalTeam>, Communicative, TranslatableCommunicative 
   val randomTeam: LocalTeam
 
   /**
+   * @since 0.1.0
+   */
+  val votingRegistry: ArenaVotingRegistry?
+
+  /**
    * The current arena where the game is taking place, if any.
    *
    * @since 0.1.0
@@ -61,6 +67,13 @@ interface LocalGame : Game<LocalTeam>, Communicative, TranslatableCommunicative 
    * @since 0.1.0
    */
   val state: Int
+
+  /**
+   * Number of users present in the game but not currently playing.
+   *
+   * @since 0.1.0
+   */
+  val numberOfSpectators: Int
 
   /**
    * The total number of hostages in the game.
@@ -288,6 +301,13 @@ interface LocalGame : Game<LocalTeam>, Communicative, TranslatableCommunicative 
    */
   fun removeTeammate(
     team: LocalTeam,
+    user: LocalUser
+  ): Boolean
+
+  /**
+   * @since 0.1.0
+   */
+  fun removeTeammate(
     user: LocalUser
   ): Boolean
 

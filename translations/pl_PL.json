@@ -78,6 +78,14 @@
           "&7Powód: &cNiewystarczająca liczba graczy."
         ]
       }
+    },
+    "voting": {
+      "hint": "&7Zagłosuj na mapę wpisując komendę &e/vote [mapa]",
+      "start": "&6Głosowanie rozpoczęte!",
+      "choices": {
+        "arena": "&e&l{INDEX}. &7{ARENA_NAME}"
+      },
+      "cast": "&aPomyślnie oddano głos na mapę."
     }
   }
 }

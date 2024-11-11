@@ -80,7 +80,7 @@ class LocalUserImpl(
     get() = this._performer
 
   override val game: LocalGame?
-    get() = GameManager.findByUser<LocalTeam, LocalGame>(this)
+    get() = GameManager.findByUser(this)
 
   override val team: LocalTeam?
     get() = this.game?.findTeamByHostage(this)

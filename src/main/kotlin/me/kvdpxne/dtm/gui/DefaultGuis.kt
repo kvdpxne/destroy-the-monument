@@ -1,5 +1,8 @@
 package me.kvdpxne.dtm.gui
 
+import me.kvdpxne.dtm.arena.Arena
+import me.kvdpxne.dtm.arena.voting.ArenaVoting
+import me.kvdpxne.dtm.arena.voting.ArenaVotingRegistry
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.LocalGame
@@ -14,6 +17,7 @@ import me.kvdpxne.dtm.shared.player.equipItemsOfTeamSelection
 import me.kvdpxne.dtm.shared.player.reset
 import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.team.Teammate
+import me.kvdpxne.dtm.translation.message.EnumMessageKey
 import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -180,6 +184,53 @@ fun createTeamSelectionGui(
 
     game.sendConfiguredMessage {
       "&6&lDTM &7> &fGracz &6$displayName &fdołączył do drużyny $color&l$polishTeamName&f."
+    }
+  }
+
+  return gui
+}
+
+fun createArenaSelectionGui(
+  game: LocalGame,
+  user: LocalUser
+): Gui {
+
+  val votingRegistry: ArenaVotingRegistry = game.votingRegistry
+    ?: throw IllegalStateException("")
+
+  val fs: IntIterator = when (votingRegistry.size) {
+    2 -> GuiArrangement.TWO_ITEMS_ONE_ROW
+    3 -> GuiArrangement.THREE_ITEMS_ONE_ROW
+    4 -> GuiArrangement.FOUR_ITEMS_ONE_ROW
+    else -> error("Unsported size")
+  }.iterator()
+
+  val gui = Gui("Głosowanie na mapę", Rows.ONE)
+
+  for (votingArena: ArenaVoting in votingRegistry.arenas) {
+    val arena: Arena = votingArena.arena
+
+    gui.setItem(
+      fs.nextInt(),
+      ItemStack(Material.STONE).toBuilder()
+        .name("&6&l${arena.name}")
+        .lore(
+          "",
+          "&7Ilość monumentów: &6${arena.monumentCount}",
+          "&7Odległość między drużynami: &eŚREDNIA",
+          "",
+          "&7&lZagłosuj na swoją ulubioną mapę!"
+        )
+        .build()
+    ) { event: InventoryClickEvent ->
+
+      votingRegistry.castVote(votingArena.identifier, user)
+      event.whoClicked.closeInventory()
+
+      user.performer.prepareMessage(EnumMessageKey.GAME_VOTING_CAST)
+        .withoutFormat()
+        .useChat()
+        .send()
     }
   }
 
