@@ -7,7 +7,6 @@ import me.kvdpxne.dtm.command.ParameterBuilder
 import me.kvdpxne.dtm.command.ParameterValidators
 import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
-import me.kvdpxne.dtm.translation.TranslationService
 import me.kvdpxne.dtm.translation.formatter.Formatter
 import me.kvdpxne.dtm.translation.message.EnumMessageKey
 import me.kvdpxne.dtm.user.LocalUserPerformer
@@ -44,9 +43,7 @@ fun createCoinsAddCommand(): Command<Performer> {
 
         performer.user.wallet.addCoins(value)
 
-        TranslationService.chains()
-          .receiver(performer)
-          .message(EnumMessageKey.COMMAND_COINS_ADD_SELF)
+        performer.prepareMessage(EnumMessageKey.COMMAND_COINS_ADD_SELF)
           .format(
             Formatter.begin(1)
               .with("VALUE", value)
@@ -64,9 +61,7 @@ fun createCoinsAddCommand(): Command<Performer> {
 
       user.wallet.addCoins(value)
 
-      TranslationService.chains()
-        .receiver(performer)
-        .message(EnumMessageKey.COMMAND_COINS_ADD_OTHERS)
+      performer.prepareMessage(EnumMessageKey.COMMAND_COINS_ADD_OTHERS)
         .format(
           Formatter.begin(2)
             .with("USER_NAME", user.name)

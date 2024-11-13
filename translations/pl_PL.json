@@ -11,19 +11,37 @@
         "placing": {
           "limit": "&cOsiągnełeś możliwy limit budowania na tej mapie.",
           "spawn": "&cNie możesz stawiać bloków na spawnie."
-        }
+        },
+        "select": "&7Zaznaczony blok został dodany do tymczasowej pamięci użytkownika."
       }
     }
   },
   "command": {
+    "in": {
+      "game": "Ta komenda może być użyta tylko w grze."
+    },
+    "insufficient": {
+      "privileges": "&cNie posiadasz wystarczających uprawnień &8(&f{PRIVILEGE_NAME}&8) &caby wykonać tą komendę."
+    },
+
     "ability": {
       "deplete": "&7Twoja umiejętność została anulowana.",
       "renew": "&7Twoja umiejętność została odnowiona."
     },
     "arena": {
-      "add": "&7Arena o nazwie &6${ARENA_NAME} &7została dodana do puli aren w grze o nazwie &6${GAME_NAME}&7.",
+      "add": "&7Arena o nazwie &6{ARENA_NAME} &7została dodana do puli aren w grze o nazwie &6{GAME_NAME}&7.",
       "create": "&7Utworzono nową arenę o nazwie &6{ARENA_NAME}&7.",
-      "remove": "&7Arena o nazwie &6{ARENA_NAME} &7została usunięta."
+      "remove": "&7Arena o nazwie &6{ARENA_NAME} &7została usunięta.",
+      "map": {
+        "monument": {
+          "add": "&7Dodano nowy blok monumentu dla drużyny {TEAM_NAME} &7na arenie o nazwie &6{ARENA_NAME}&7.",
+          "remove": "&7Usunięto blok monumentu z drużyny {TEAM_NAME} &7na arenie o nazwie &6{ARENA_NAME}&7."
+        },
+        "revival": {
+          "set": "&7Ustawiono punkt odrodzenia dla drużyny {TEAM_NAME} &7na arenie o nazwie &6{ARENA_NAME}&7."
+        },
+        "set": "&7Przypisano mapę o nazwię &6{WORLD_NAME} &7do areny o nazwię &6{ARENA_NAME}&7."
+      }
     },
     "coins": {
       "add": {
@@ -57,13 +75,25 @@
       "create": "&7Utworzono nową gre o nazwie &6{GAME_NAME}&7.",
       "remove": "&7Gra o nazwie &6{GAME_NAME} &7została usunięta."
     },
-    "insufficient": {
-      "privileges": "&cNie posiadasz wystarczających uprawnień &8(&f{PRIVILEGE_NAME}&8) &caby wykonać tą komendę."
-    },
+    "start": "&7Pomyślnie wymuszono start gry o nazwię &6{GAME_NAME}&7.",
+    "stop": "&7Pomyślnie wymuszono zatrzymanie gry o nazwię &6{GAME_NAME}&7.",
+    "position": [
+      "&7Twoja obecna pozycja to:",
+      "&7Świat: &6{WORLD_NAME}",
+      "&7X: &6{X}",
+      "&7Y: &6{Y}",
+      "&7Z: &6{Z}",
+      "&7Pitch: &6{PITCH}",
+      "&7Yaw: &6{YAW}"
+    ],
     "team": {
       "add": "&7Drużyna o nazwie &6{TEAM_NAME} &7została dodana do gry o nazwie &6{GAME_NAME}&7.",
       "create": "&7Utworzono nową drużynę o nazwie &6{TEAM_NAME}&7.",
       "remove": "&7Drużyna o nazwie &6{TEAM_NAME} &7została usunięta z gry o nazwie &6{GAME_NAME}&7."
+    },
+    "teleport": {
+      "to": "&7Zostałeś przeniesiony na świat o nazwie &6{WORLD_NAME}&7.",
+      "back": "&7Zostałeś przeniesiony na świat, na którym byłeś wcześniej."
     },
     "wand": "&7Do twojego ekwipunku został dodany magiczny patyk."
   },
@@ -87,5 +117,19 @@
       },
       "cast": "&aPomyślnie oddano głos na mapę."
     }
+  },
+  "gui": {
+    "select": {
+      "game": "Wybierz grę",
+      "profession": "Wybierz swoją profesje",
+      "team": "Wybierz drużynę"
+    },
+    "arena": [
+      "",
+      "&7Ilość monumentów: &6{MONUMENT_COUNT}",
+      "&7Odległość między drużynami: &e{ARENA_SIZE}",
+      "",
+      "&7&lZagłosuj na swoją ulubioną mapę!"
+    ]
   }
 }

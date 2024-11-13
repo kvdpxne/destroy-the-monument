@@ -38,9 +38,7 @@ fun createTeamCreateCommand(): Command<Performer> {
 
       TeamService.createTeam(team)
 
-      TranslationService.chains()
-        .receiver(performer)
-        .message(EnumMessageKey.COMMAND_TEAM_CREATE)
+      performer.prepareMessage(EnumMessageKey.COMMAND_TEAM_CREATE)
         .format(
           Formatter.begin(1)
             .with("TEAM_NAME", team.name)

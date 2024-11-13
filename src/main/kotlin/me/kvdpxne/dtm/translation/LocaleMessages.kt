@@ -4,6 +4,8 @@ import java.util.Locale
 import me.kvdpxne.dtm.shared.StylishToStringBuilder
 import me.kvdpxne.dtm.translation.message.Message
 import me.kvdpxne.dtm.translation.message.MessageKey
+import me.kvdpxne.dtm.translation.message.MultipleMessages
+import me.kvdpxne.dtm.translation.message.SingleMessage
 
 /**
  * Holds messages specific to a particular [Locale], facilitating localized
@@ -45,6 +47,30 @@ class LocaleMessages(
    */
   fun findMessage(key: MessageKey): Message<*> {
     return requireNotNull(this.findMessageOrNull(key)) {
+      "Message with key '$key' not found in locale '${locale.displayName}'."
+    }
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun <T> findRawMessageOrNull(key: MessageKey): T? {
+    val message: Message<*> = this.findMessageOrNull(key)
+      ?: return null
+
+    @Suppress("UNCHECKED_CAST", "IMPLICIT_CAST_TO_ANY")
+    return when (message) {
+      is SingleMessage -> message.content
+      is MultipleMessages -> message.content
+      else -> error("")
+    } as T
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun <T> findRawMessage(key: MessageKey): T {
+    return requireNotNull(this.findRawMessageOrNull(key)) {
       "Message with key '$key' not found in locale '${locale.displayName}'."
     }
   }

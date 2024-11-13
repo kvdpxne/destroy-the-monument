@@ -54,9 +54,7 @@ fun createTeamAddCommand(): Command<Performer> {
       //
       GameService.insertGameTeam(game, team)
 
-      TranslationService.chains()
-        .receiver(performer)
-        .message(EnumMessageKey.COMMAND_TEAM_ADD)
+      performer.prepareMessage(EnumMessageKey.COMMAND_TEAM_ADD)
         .format(
           Formatter.begin(2)
             .with("TEAM_NAME", team.name)

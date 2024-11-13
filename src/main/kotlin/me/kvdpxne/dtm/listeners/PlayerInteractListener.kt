@@ -1,9 +1,9 @@
 package me.kvdpxne.dtm.listeners
 
-import me.kvdpxne.dtm.gui.createArenaSelectionGui
-import me.kvdpxne.dtm.gui.createGameSelectionGui
-import me.kvdpxne.dtm.gui.createProfessionSelectionGui
-import me.kvdpxne.dtm.gui.createTeamSelectionGui
+import me.kvdpxne.dtm.guis.createArenaSelectionGui
+import me.kvdpxne.dtm.guis.createGameSelectionGui
+import me.kvdpxne.dtm.guis.createProfessionSelectionGui
+import me.kvdpxne.dtm.guis.createTeamSelectionGui
 import me.kvdpxne.dtm.shared.block.isMonument
 import me.kvdpxne.dtm.shared.event.cancel
 import me.kvdpxne.dtm.shared.event.isRightClick
@@ -14,6 +14,8 @@ import me.kvdpxne.dtm.shared.player.equipItemsOfTeamSelection
 import me.kvdpxne.dtm.shared.player.localUser
 import me.kvdpxne.dtm.shared.player.reset
 import me.kvdpxne.dtm.shared.world.toBlockPosition
+import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerInteractEvent
@@ -132,12 +134,15 @@ object PlayerInteractListener : Listener {
     }
 
     //
-    val user = player.localUser ?: return
+    val user: LocalUser = player.localUser
 
     //
     user.cache.selectedMonumentPosition = block.location.toBlockPosition()
 
     //
-    player.sendMessage("Added block located in ${block.location} to temporary storage.")
+    user.performer.prepareMessage(EnumMessageKey.ARENA_MAP_BLOCK_SELECT)
+      .withoutFormat()
+      .useChat()
+      .send()
   }
 }

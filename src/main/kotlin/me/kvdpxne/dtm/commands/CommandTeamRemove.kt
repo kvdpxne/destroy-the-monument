@@ -50,9 +50,7 @@ fun createTeamRemoveCommand(): Command<Performer> {
       //
       GameService.deleteGameTeam(game, team)
 
-      TranslationService.chains()
-        .receiver(performer)
-        .message(EnumMessageKey.COMMAND_TEAM_REMOVE)
+      performer.prepareMessage(EnumMessageKey.COMMAND_TEAM_REMOVE)
         .format(
           Formatter.begin(2)
             .with("TEAM_NAME", team.name)

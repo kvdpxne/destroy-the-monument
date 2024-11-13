@@ -3,6 +3,7 @@ package me.kvdpxne.dtm.commands
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.shared.world.toLocation
+import me.kvdpxne.dtm.translation.message.EnumMessageKey
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
 /**
@@ -22,7 +23,10 @@ fun createTeleportBackCommand(): Command<LocalUserPerformer> {
       }
 
       player.teleport(position.toLocation())
-      player.sendMessage("You have been moved to an earlier position.")
+      performer.prepareMessage(EnumMessageKey.COMMAND_TELEPORT_BACK)
+        .withoutFormat()
+        .useChat()
+        .send()
     }
     .build()
 }

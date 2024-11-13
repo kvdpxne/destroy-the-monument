@@ -8,6 +8,8 @@ import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.team.LocalTeam
+import me.kvdpxne.dtm.translation.formatter.Formatter
+import me.kvdpxne.dtm.translation.message.EnumMessageKey
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
 object CommandGameStart {
@@ -21,7 +23,13 @@ object CommandGameStart {
 
     game.start()
 
-    user.sendMessage("The game ${game.name} has started.")
+    user.prepareMessage(EnumMessageKey.COMMAND_START)
+      .format(
+        Formatter.begin(1)
+          .with("GAME_NAME", game.name)
+      )
+      .useChat()
+      .send()
   }
 
   fun createStartCommand(): Command<Performer> {

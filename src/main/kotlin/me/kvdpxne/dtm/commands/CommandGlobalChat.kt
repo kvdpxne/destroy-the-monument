@@ -37,7 +37,7 @@ fun createGlobalChatCommand(): Command<LocalUserPerformer> {
       localGame.sendMessage("&7[&6G&7] &6$name&7: &f$message")
 
       if (GeneralConfiguration.TRACE_GLOBAL_MESSAGES_IN_GAME) {
-        DestroyTheMonument.instance?.logger?.info(
+        DestroyTheMonument.instance.logger.info(
           "[${localGame.name}] [G] $name: $message"
         )
       }

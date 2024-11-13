@@ -2,8 +2,8 @@ package me.kvdpxne.dtm.commands
 
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
-import me.kvdpxne.dtm.gui.createGameSelectionGui
-import me.kvdpxne.dtm.gui.createTeamSelectionGui
+import me.kvdpxne.dtm.guis.createGameSelectionGui
+import me.kvdpxne.dtm.guis.createTeamSelectionGui
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
 /**

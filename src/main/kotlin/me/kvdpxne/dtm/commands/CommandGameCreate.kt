@@ -32,9 +32,7 @@ fun createGameCreateCommand(): Command<Performer> {
 
       GameService.insertGame(game)
 
-      TranslationService.chains()
-        .receiver(performer)
-        .message(EnumMessageKey.COMMAND_GAME_CREATE)
+      performer.prepareMessage(EnumMessageKey.COMMAND_GAME_CREATE)
         .format(
           Formatter.begin(1)
             .with("GAME_NAME", game.name)

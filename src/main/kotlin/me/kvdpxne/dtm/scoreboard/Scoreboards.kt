@@ -1,12 +1,84 @@
 package me.kvdpxne.dtm.scoreboard
 
 import fr.mrmicky.fastboard.FastBoard
+import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.shared.text.colorize
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import org.bukkit.scoreboard.Scoreboard
 import org.bukkit.scoreboard.Team
+
+object Scoreboards {
+
+  val FORMATTED_TITLE: String by lazy {
+    "&7[&6&lDTM&7]".colorize
+  }
+
+  fun fsf(
+    player: Player,
+    signed: Int,
+    online: Int,
+    coins: Long
+  ) {
+    FastBoard(player).let {
+      it.updateTitle(FORMATTED_TITLE)
+      it.updateLines(
+        listOf(
+          "&7Start gry: &e&l00:30",
+          "",
+          "&7Max: &6&lbez limitu",
+          "&7Min: &6&l2",
+          "",
+          "&7Zapisani: &6&l${signed}",
+          "&7Online: &6&l${online}",
+          "",
+          "&eOczekiwanie na",
+          "&eminimalną liczbę",
+          "&egraczy.",
+          "",
+          "",
+          "&7Monety:",
+          "&6&l$coins"
+        ).colorize
+      )
+    }
+  }
+
+  fun fsf(
+    player: Player,
+    time: Int,
+    fsf: Collection<Arena>,
+    signed: Int,
+    online: Int,
+    coins: Long
+  ) {
+    FastBoard(player).let {
+      it.updateTitle("&7[&6&lDTM&7]".colorize)
+      it.updateLines(
+        listOf(
+          "&7Start gry: &e&l00:$time",
+          "",
+          "&7Max: &6&lbez limitu",
+          "&7Min: &6&l2",
+          "",
+          "&7Zapisani: &6&l${signed}",
+          "&7Online: &6&l${online}",
+          "",
+          "&7Głosowanie na mapę:"
+        ).colorize
+      )
+
+      for ((index: Int, arena: Arena) in fsf.withIndex()) {
+        it.updateLine(9 + index, "&7$index. &e${arena.name}".colorize)
+      }
+
+      it.updateLine(13, "&7Monety:".colorize)
+      it.updateLine(14, "&6&l$coins".colorize)
+    }
+  }
+}
+
 
 fun createServerScoreboard(): Scoreboard {
   return Bukkit.getScoreboardManager().newScoreboard

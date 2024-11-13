@@ -42,9 +42,7 @@ fun createCoinsSubtractCommand(): Command<Performer> {
 
         performer.user.wallet.subtractCoins(value)
 
-        TranslationService.chains()
-          .receiver(performer)
-          .message(EnumMessageKey.COMMAND_COINS_SUBTRACT_SELF)
+        performer.prepareMessage(EnumMessageKey.COMMAND_COINS_SUBTRACT_SELF)
           .format(
             Formatter.begin(1)
               .with("VALUE", value)
@@ -65,9 +63,7 @@ fun createCoinsSubtractCommand(): Command<Performer> {
 
         user.wallet.subtractCoins(value)
 
-        TranslationService.chains()
-          .receiver(performer)
-          .message(EnumMessageKey.COMMAND_COINS_SUBTRACT_OTHERS)
+        performer.prepareMessage(EnumMessageKey.COMMAND_COINS_SUBTRACT_OTHERS)
           .format(
             Formatter.begin(2)
               .with("USER_NAME", user.name)

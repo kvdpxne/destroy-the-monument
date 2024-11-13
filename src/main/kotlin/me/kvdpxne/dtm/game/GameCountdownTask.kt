@@ -1,7 +1,9 @@
 package me.kvdpxne.dtm.game
 
 import me.kvdpxne.dtm.configuration.GeneralConfiguration
+import me.kvdpxne.dtm.scoreboard.Scoreboards
 import me.kvdpxne.dtm.shared.debug.Debug
+import me.kvdpxne.dtm.shared.player.localUser
 import me.kvdpxne.dtm.shared.player.resetExperienceBar
 import me.kvdpxne.dtm.shared.player.resetExperienceBarLevel
 import me.kvdpxne.dtm.shared.task.AsynchronousTask
@@ -45,6 +47,15 @@ internal class GameCountdownTask internal constructor(
   private fun decreaseRemainingSeconds() {
     this.enrolledPlayers { player: Player? ->
       player?.level = this.remainingSeconds
+
+      Scoreboards.fsf(
+        player!!,
+        this.remainingSeconds,
+        this.game.arenas,
+        this.game.numberOfHostagesEnrolled,
+        this.game.numberOfHostages,
+        player.localUser.wallet.coins
+      )
     }
 
     --this.remainingSeconds

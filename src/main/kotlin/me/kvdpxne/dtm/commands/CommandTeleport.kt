@@ -6,6 +6,8 @@ import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.shared.world.WorldLoaderHelper
 import me.kvdpxne.dtm.shared.world.toEntityPosition
+import me.kvdpxne.dtm.translation.formatter.Formatter
+import me.kvdpxne.dtm.translation.message.EnumMessageKey
 import me.kvdpxne.dtm.user.LocalUserPerformer
 import org.bukkit.World
 
@@ -22,10 +24,10 @@ fun createTeleportCommand(): Command<LocalUserPerformer> {
         .build()
     )
     .handler { performer, parameters ->
-      //
+      // The unique name of the world container
       val worldName: String = parameters[0] as String
 
-      //
+      // The world found
       val world: World = WorldLoaderHelper.getWorld(worldName)
         ?: throw CommandException("World named \"$worldName\" does not exist.")
 
@@ -33,6 +35,14 @@ fun createTeleportCommand(): Command<LocalUserPerformer> {
 
       performer.user.cache.teleportationHistory.addLast(player.location.toEntityPosition())
       player.teleport(world.spawnLocation)
+
+      performer.prepareMessage(EnumMessageKey.COMMAND_TELEPORT_TO)
+        .format(
+          Formatter.begin(1)
+            .with("WORLD_NAME", world.name)
+        )
+        .useChat()
+        .send()
     }
     .build()
 }

@@ -59,9 +59,7 @@ fun createArenaAddCommand(): Command<Performer> {
       //
       GameManager.addArenaToGame(game, arena)
 
-      TranslationService.chains()
-        .receiver(performer)
-        .message(EnumMessageKey.COMMAND_ARENA_ADD)
+      performer.prepareMessage(EnumMessageKey.COMMAND_ARENA_ADD)
         .format(
           Formatter.begin(2)
             .with("ARENA_NAME", arena.name)

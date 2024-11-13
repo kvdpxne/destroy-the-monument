@@ -10,6 +10,8 @@ import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.position.RevivalPositionImpl
 import me.kvdpxne.dtm.team.Team
 import me.kvdpxne.dtm.team.TeamService
+import me.kvdpxne.dtm.translation.formatter.Formatter
+import me.kvdpxne.dtm.translation.message.EnumMessageKey
 import me.kvdpxne.dtm.user.LocalUserPerformer
 import org.bukkit.Location
 
@@ -50,11 +52,8 @@ fun createArenaMapRevivalSetCommand(): Command<LocalUserPerformer> {
       //
       val location: Location = performer.player!!.location
 
-      //
-      //
       ArenaService.insertArenaRevivalPosition(
         arena,
-        //
         RevivalPositionImpl(
           location.x,
           location.y,
@@ -65,7 +64,14 @@ fun createArenaMapRevivalSetCommand(): Command<LocalUserPerformer> {
         )
       )
 
-      performer.sendMessage("")
+      performer.prepareMessage(EnumMessageKey.COMMAND_ARENA_MAP_REVIVAL_SET)
+        .format(
+          Formatter.begin(2)
+            .with("TEAM_NAME", team.displayName)
+            .with("ARENA_NAME", arena.name)
+        )
+        .useChat()
+        .send()
     }
     .build()
 }

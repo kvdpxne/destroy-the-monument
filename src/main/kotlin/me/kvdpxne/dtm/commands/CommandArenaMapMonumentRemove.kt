@@ -10,6 +10,8 @@ import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.position.BlockPosition
 import me.kvdpxne.dtm.position.MonumentPosition
 import me.kvdpxne.dtm.team.Team
+import me.kvdpxne.dtm.translation.formatter.Formatter
+import me.kvdpxne.dtm.translation.message.EnumMessageKey
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
 /**
@@ -47,9 +49,14 @@ fun createArenaMapMonumentRemoveCommand(): Command<LocalUserPerformer> {
       //
       ArenaService.deleteArenaMonumentPosition(arena, monumentPosition)
 
-      performer.sendMessage(
-        "&6&lDTM &7> &7Usunięto monument z areny."
-      )
+      performer.prepareMessage(EnumMessageKey.COMMAND_ARENA_MAP_MONUMENT_REMOVE)
+        .format(
+          Formatter.begin(2)
+            .with("TEAM_NAME", monumentPosition.team.displayName)
+            .with("ARENA_NAME", arena.name)
+        )
+        .useChat()
+        .send()
     }
     .build()
 }

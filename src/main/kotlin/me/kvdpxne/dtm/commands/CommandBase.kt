@@ -12,14 +12,17 @@ fun createBaseCommand(): Command<Performer> {
    * /dtm ability
    * /dtm arena
    * /dtm coins
+   * /dtm debug
    * /dtm game
    * /dtm help
    * /dtm join <GAME_NAME|TEAM_NAME>
    * /dtm kit
    * /dtm leave
    * /dtm position
+   * /dtm team
    * /dtm teleport <MAP_NAME>
    * /dtm teleportBack
+   * /dtm version
    * /dtm wand
    */
   return CommandBuilder.begin<Performer>("dtm")

@@ -2,14 +2,12 @@ package me.kvdpxne.dtm.translation.sender
 
 import java.util.Locale
 import me.kvdpxne.dtm.Constants
-import me.kvdpxne.dtm.command.ConsolePerformer
 import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.configuration.GeneralConfiguration
-import me.kvdpxne.dtm.translation.TranslationService
+import me.kvdpxne.dtm.translation.locale
 import me.kvdpxne.dtm.translation.message.Message
 import me.kvdpxne.dtm.translation.message.MultipleMessages
 import me.kvdpxne.dtm.translation.message.SingleMessage
-import me.kvdpxne.dtm.user.LocalUserPerformer
 
 /**
  * A message sender that sends messages to performers, optionally with a prefix.
@@ -67,7 +65,7 @@ class ToChat(
     addPrefix: Boolean
   ) {
     val message: Message<*> = this.messages[locale]
-      ?: throw IllegalStateException("No message found for locale $locale.")
+      ?: error("No message found for locale $locale.")
 
     if (message is SingleMessage) {
       this.send(performer, message.content, addPrefix)
@@ -81,9 +79,7 @@ class ToChat(
       return
     }
 
-    throw IllegalStateException(
-      "Unsupported message type: ${message::class.simpleName}"
-    )
+    error("Unsupported message type: ${message::class.simpleName}")
   }
 
   /**
@@ -99,14 +95,7 @@ class ToChat(
     val iterator: MutableIterator<Performer> = this.receivers.iterator()
     while (iterator.hasNext()) {
       val performer: Performer = iterator.next()
-
-      val locale = when (performer) {
-        is LocalUserPerformer -> performer.locale
-        is ConsolePerformer -> TranslationService.defaultLocale
-        else -> throw IllegalStateException(
-          "Unsupported receiver type: ${performer::class.simpleName}"
-        )
-      }
+      val locale: Locale = performer.locale
 
       this.send(performer, locale, shouldAddPrefix)
       iterator.remove()

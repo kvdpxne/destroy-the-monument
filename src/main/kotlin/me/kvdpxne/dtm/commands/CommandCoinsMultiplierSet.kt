@@ -44,9 +44,7 @@ fun createCoinsMultiplierSetCommand(): Command<Performer> {
         val oldMultiplier = performer.user.wallet.multiplier
         performer.user.wallet.multiplier = value
 
-        TranslationService.chains()
-          .receiver(performer)
-          .message(EnumMessageKey.COMMAND_COINS_MULTIPLIER_SET_SELF)
+        performer.prepareMessage(EnumMessageKey.COMMAND_COINS_MULTIPLIER_SET_SELF)
           .format(
             Formatter.begin(2)
               .with("OLD_VALUE", oldMultiplier)
@@ -66,9 +64,7 @@ fun createCoinsMultiplierSetCommand(): Command<Performer> {
         val oldMultiplier = user.wallet.multiplier
         user.wallet.multiplier = value
 
-        TranslationService.chains()
-          .receiver(performer)
-          .message(EnumMessageKey.COMMAND_COINS_MULTIPLIER_SET_OTHERS)
+        performer.prepareMessage(EnumMessageKey.COMMAND_COINS_MULTIPLIER_SET_OTHERS)
           .format(
             Formatter.begin(3)
               .with("USER_NAME", user.name)

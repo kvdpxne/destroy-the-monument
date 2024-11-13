@@ -43,9 +43,7 @@ fun createCoinsSetCommand(): Command<Performer> {
         val oldValue: Long = performer.user.wallet.coins
         performer.user.wallet.coins = value
 
-        TranslationService.chains()
-          .receiver(performer)
-          .message(EnumMessageKey.COMMAND_COINS_SET_SELF)
+        performer.prepareMessage(EnumMessageKey.COMMAND_COINS_SET_SELF)
           .format(
             Formatter.begin(2)
               .with("OLD_VALUE", oldValue)
@@ -65,9 +63,7 @@ fun createCoinsSetCommand(): Command<Performer> {
         val oldValue: Long = user.wallet.coins
         user.wallet.coins = value
 
-        TranslationService.chains()
-          .receiver(performer)
-          .message(EnumMessageKey.COMMAND_COINS_SET_OTHERS)
+        performer.prepareMessage(EnumMessageKey.COMMAND_COINS_SET_OTHERS)
           .format(
             Formatter.begin(3)
               .with("OLD_VALUE", oldValue)

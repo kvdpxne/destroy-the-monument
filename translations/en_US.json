@@ -11,11 +11,20 @@
         "placing": {
           "limit": "&cYou have reached the building limit on this map.",
           "spawn": "&cYou cannot place blocks at the spawn."
-        }
+        },
+        "select": "&7The selected block has been added to the user's temporary memory."
       }
     }
   },
   "command": {
+
+    "in": {
+      "game": "This command can only be used in-game."
+    },
+    "insufficient": {
+      "privileges": "&cYou do not have sufficient privileges &8(&f{PRIVILEGE_NAME}&8) &cto execute this command."
+    },
+
     "ability": {
       "deplete": "&7Your ability has been canceled.",
       "renew": "&7Your ability has been renewed."
@@ -23,7 +32,17 @@
     "arena": {
       "add": "&7The arena named &6${ARENA_NAME} &7has been added to the pool of arenas in the game named &6${GAME_NAME}&7.",
       "create": "&7A new arena named &6{ARENA_NAME}&7 has been created.",
-      "remove": "&7The arena named &6{ARENA_NAME} &7has been removed."
+      "remove": "&7The arena named &6{ARENA_NAME} &7has been removed.",
+      "map": {
+        "monument": {
+          "add": "&7Added a new monument block for team {TEAM_NAME} &7on the arena named &6{ARENA_NAME}&7.",
+          "remove": "&7Removed a monument block from team {TEAM_NAME} &7on the arena named &6{ARENA_NAME}&7."
+        },
+        "revival": {
+          "set": "&7Set the spawn point for team {TEAM_NAME} &7on the arena named &6{ARENA_NAME}&7."
+        },
+        "set": "&7Assigned the map named &6{WORLD_NAME} &7to the arena named &6{ARENA_NAME}&7."
+      }
     },
     "coins": {
       "add": {
@@ -57,13 +76,25 @@
       "create": "&7A new game named &6{GAME_NAME}&7 has been created.",
       "remove": "&7The game named &6{GAME_NAME} &7has been removed."
     },
-    "insufficient": {
-      "privileges": "&cYou do not have sufficient privileges &8(&f{PRIVILEGE_NAME}&8) &cto execute this command."
-    },
+    "start": "&7Successfully forced the start of the game named &6{GAME_NAME}&7.",
+    "stop": "&7Successfully forced the stop of the game named &6{GAME_NAME}&7.",
+    "position": [
+      "&7Your current position is:",
+      "&7World: &6{WORLD_NAME}",
+      "&7X: &6{X}",
+      "&7Y: &6{Y}",
+      "&7Z: &6{Z}",
+      "&7Pitch: &6{PITCH}",
+      "&7Yaw: &6{YAW}"
+    ],
     "team": {
       "add": "&7The team named &6{TEAM_NAME} &7has been added to the game named &6{GAME_NAME}&7.",
       "create": "&7A new team named &6{TEAM_NAME}&7 has been created.",
       "remove": "&7The team named &6{TEAM_NAME} &7has been removed from the game named &6{GAME_NAME}&7."
+    },
+    "teleport": {
+      "to": "&7You have been teleported to the world named &6{WORLD_NAME}&7.",
+      "back": "&7You have been teleported back to the world you were previously in."
     },
     "wand": "&7A magic wand has been added to your inventory."
   },
@@ -78,6 +109,28 @@
           "&7Reason: &cInsufficient number of players."
         ]
       }
+    },
+    "voting": {
+      "hint": "&7Vote for a map by typing the command &e/vote [map]",
+      "start": "&6Voting has started!",
+      "choices": {
+        "arena": "&e&l{INDEX}. &7{ARENA_NAME}"
+      },
+      "cast": "&aYou have successfully voted for the map."
     }
+  },
+  "gui": {
+    "select": {
+      "game": "Select a game",
+      "profession": "Select your profession",
+      "team": "Select a team"
+    },
+    "arena": [
+      "",
+      "&7Number of monuments: &6{MONUMENT_COUNT}",
+      "&7Distance between teams: &e{ARENA_SIZE}",
+      "",
+      "&7&lVote for your favorite map!"
+    ]
   }
 }

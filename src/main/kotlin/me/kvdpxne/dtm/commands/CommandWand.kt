@@ -17,9 +17,7 @@ fun createWandCommand(): Command<LocalUserPerformer> {
     .handler { performer, _ ->
       performer.player?.inventory?.addItem(ItemsClipboard.ITEM_WAND)
 
-      TranslationService.chains()
-        .receiver(performer)
-        .message(EnumMessageKey.COMMAND_WAND)
+      performer.prepareMessage(EnumMessageKey.COMMAND_WAND)
         .withoutFormat()
         .useChat()
         .send()

@@ -6,7 +6,6 @@ import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.profession.Ability
 import me.kvdpxne.dtm.team.Teammate
-import me.kvdpxne.dtm.translation.TranslationService
 import me.kvdpxne.dtm.translation.message.EnumMessageKey
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
@@ -25,9 +24,7 @@ fun createAbilityRenewCommand(): Command<LocalUserPerformer> {
 
       ability.renew(performer.player!!)
 
-      TranslationService.chains()
-        .receiver(performer)
-        .message(EnumMessageKey.COMMAND_ABILITY_RENEW)
+      performer.prepareMessage(EnumMessageKey.COMMAND_ABILITY_RENEW)
         .withoutFormat()
         .useChat()
         .send()

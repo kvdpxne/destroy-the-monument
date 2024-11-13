@@ -8,6 +8,8 @@ import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.team.LocalTeam
+import me.kvdpxne.dtm.translation.formatter.Formatter
+import me.kvdpxne.dtm.translation.message.EnumMessageKey
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
 object CommandGameStop {
@@ -29,7 +31,13 @@ object CommandGameStop {
       return
     }
 
-    performer.sendMessage("The ${game.name} game has been stopped.")
+    performer.prepareMessage(EnumMessageKey.COMMAND_STOP)
+      .format(
+        Formatter.begin(1)
+          .with("GAME_NAME", game.name)
+      )
+      .useChat()
+      .send()
   }
 
   fun createStopCommand(): Command<Performer> {

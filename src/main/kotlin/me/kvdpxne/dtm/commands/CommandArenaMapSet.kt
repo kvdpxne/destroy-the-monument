@@ -10,6 +10,8 @@ import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.arena.ArenaService
 import me.kvdpxne.dtm.arena.ArenaMapImpl
 import me.kvdpxne.dtm.shared.world.WorldLoaderHelper
+import me.kvdpxne.dtm.translation.formatter.Formatter
+import me.kvdpxne.dtm.translation.message.EnumMessageKey
 import org.bukkit.World
 
 fun createArenaMapSetCommand(): Command<Performer> {
@@ -45,7 +47,14 @@ fun createArenaMapSetCommand(): Command<Performer> {
 
       ArenaService.updateArenaMap(arena, ArenaMapImpl(world.name, world.uid))
 
-      performer.sendMessage("&6&lDTM &7> &7Przypisano mapę o nazwię &a$worldName &7do areny o nazwie: &a$arenaName&7.")
+      performer.prepareMessage(EnumMessageKey.COMMAND_ARENA_MAP_SET)
+        .format(
+          Formatter.begin(2)
+            .with("WORLD_NAME", world.name)
+            .with("ARENA_NAME", arena.name)
+        )
+        .useChat()
+        .send()
     }
     .build()
 }

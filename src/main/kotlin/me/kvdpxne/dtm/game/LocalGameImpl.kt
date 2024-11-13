@@ -8,6 +8,7 @@ import me.kvdpxne.dtm.arena.voting.ArenaVoting
 import me.kvdpxne.dtm.arena.voting.ArenaVotingRegistry
 import me.kvdpxne.dtm.arena.voting.ArenaVotingRegistryImpl
 import me.kvdpxne.dtm.configuration.GeneralConfiguration
+import me.kvdpxne.dtm.scoreboard.Scoreboards
 import me.kvdpxne.dtm.scoreboard.createServerScoreboard
 import me.kvdpxne.dtm.scoreboard.createServerTeam
 import me.kvdpxne.dtm.scoreboard.initScoreboard
@@ -480,6 +481,15 @@ class LocalGameImpl(
       "${user.name} user has been added to the ${this.name} game."
     }
 
+    for (hostage: LocalUser in this._hostages.values) {
+      Scoreboards.fsf(
+        hostage.performer.player!!,
+        this.numberOfHostagesEnrolled,
+        this.numberOfHostages,
+        hostage.wallet.coins
+      )
+    }
+
     return true
   }
 
@@ -529,6 +539,16 @@ class LocalGameImpl(
     // Jeżeli podany użytkownik został pomyślnie dodany do podanej drużyny, to
     // liczba spektatorów zostanie zmniejszona o 1.
     this.decreaseSpectators()
+
+    for (hostage: LocalUser in this._hostages.values) {
+      Scoreboards.fsf(
+        hostage.performer.player!!,
+        this.numberOfHostagesEnrolled,
+        this.numberOfHostages,
+        hostage.wallet.coins
+      )
+    }
+
 
     //
     this.shouldStart()

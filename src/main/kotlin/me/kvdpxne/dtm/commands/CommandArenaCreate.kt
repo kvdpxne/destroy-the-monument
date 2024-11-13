@@ -1,13 +1,12 @@
 package me.kvdpxne.dtm.commands
 
+import me.kvdpxne.dtm.arena.Arena
+import me.kvdpxne.dtm.arena.ArenaImpl
+import me.kvdpxne.dtm.arena.ArenaService
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
-import me.kvdpxne.dtm.arena.Arena
-import me.kvdpxne.dtm.arena.ArenaService
-import me.kvdpxne.dtm.arena.ArenaImpl
-import me.kvdpxne.dtm.translation.TranslationService
 import me.kvdpxne.dtm.translation.formatter.Formatter
 import me.kvdpxne.dtm.translation.message.EnumMessageKey
 
@@ -32,9 +31,7 @@ fun createArenaCreateCommand(): Command<Performer> {
       //
       ArenaService.insertArena(arena)
 
-      TranslationService.chains()
-        .receiver(performer)
-        .message(EnumMessageKey.COMMAND_ARENA_CREATE)
+      performer.prepareMessage(EnumMessageKey.COMMAND_ARENA_CREATE)
         .format(
           Formatter.begin(1)
             .with("ARENA_NAME", arena.name)

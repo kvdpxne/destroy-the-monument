@@ -58,7 +58,12 @@ internal class BukkitCommandHandler internal constructor(
     try {
       if (this.command.javaClass.isAssignableFrom(LocalUserPerformer::class.java)) {
         if (commandSender !is Player) {
-          commandSender.sendMessage("This command can only be used in the game.")
+          TranslationService.chains()
+            .receiver(commandSender.asPerformer())
+            .message(EnumMessageKey.COMMAND_IN_GAME)
+            .withoutFormat()
+            .useChat()
+            .send()
           return true
         }
 
