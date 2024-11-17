@@ -44,3 +44,6 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "destroy-the-monument"
+
+include(":api")
+include(":common")
