@@ -31,13 +31,16 @@ fun createArenaMapMonumentListCommand(): Command<Performer> {
           it.team.name
         }
         .forEach {
-          chains.format(
-            formatter
-              .with("TEAM_NAME", it.team.name)
-              .with("X", it.x)
-              .with("Y", it.y)
-              .with("Z", it.z)
-          ).useChat().send()
+          chains.copy()
+            .format(
+              formatter
+                .with("TEAM_NAME", it.team.name)
+                .with("X", it.x)
+                .with("Y", it.y)
+                .with("Z", it.z)
+            )
+            .useChat()
+            .send()
         }
     }
     .build()

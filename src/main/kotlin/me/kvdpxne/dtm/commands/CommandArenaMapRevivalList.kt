@@ -28,15 +28,18 @@ fun createArenaMapRevivalListCommand(): Command<Performer> {
       val formatter: Formatter = Formatter.begin(6)
 
       for (revivalPosition: RevivalPosition<*> in arena.revivalPositions) {
-        chains.format(
-          formatter
-            .with("TEAM_NAME", revivalPosition.team.name)
-            .with("X", revivalPosition.x)
-            .with("Y", revivalPosition.y)
-            .with("Z", revivalPosition.z)
-            .with("PITCH", revivalPosition.pitch)
-            .with("YAW", revivalPosition.yaw)
-        ).useChat().send()
+        chains.copy()
+          .format(
+            formatter
+              .with("TEAM_NAME", revivalPosition.team.name)
+              .with("X", revivalPosition.x)
+              .with("Y", revivalPosition.y)
+              .with("Z", revivalPosition.z)
+              .with("PITCH", revivalPosition.pitch)
+              .with("YAW", revivalPosition.yaw)
+          )
+          .useChat()
+          .send()
       }
     }
     .build()

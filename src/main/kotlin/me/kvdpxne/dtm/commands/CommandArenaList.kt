@@ -27,7 +27,8 @@ fun createArenaListCommand(): Command<Performer> {
         .send()
 
       for (arena: Arena in arenas) {
-        chains.format(formatter.with("ARENA_NAME", arena.name))
+        chains.copy()
+          .format(formatter.with("ARENA_NAME", arena.name))
           .useChat()
           .send()
       }

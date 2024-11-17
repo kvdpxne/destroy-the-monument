@@ -16,10 +16,12 @@ class MultipleMessages(
     formatter: Formatter
   ): Message<Collection<String>> {
     val newContent: MutableList<String> = ArrayList(this.content.size)
-    for ((field: String, value: String) in formatter.replaceable) {
-      for (contentLine: String in this.content) {
-        newContent.add(contentLine.replace(field, value))
+    for (contentLine: String in this.content) {
+      var newContentLine: String = contentLine
+      for ((field: String, value: String) in formatter.replaceable) {
+        newContentLine = newContentLine.replace(field, value)
       }
+      newContent.add(newContentLine)
     }
     return MultipleMessages(newContent)
   }

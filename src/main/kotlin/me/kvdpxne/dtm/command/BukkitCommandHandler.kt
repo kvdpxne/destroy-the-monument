@@ -2,9 +2,13 @@ package me.kvdpxne.dtm.command
 
 import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.shared.player.localUser
+import me.kvdpxne.dtm.translation.message.MessageHolderException
 import me.kvdpxne.dtm.translation.TranslationService
 import me.kvdpxne.dtm.translation.formatter.Formatter
 import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.Message
+import me.kvdpxne.dtm.translation.message.MultipleMessages
+import me.kvdpxne.dtm.translation.message.SingleMessage
 import me.kvdpxne.dtm.user.LocalUserPerformer
 import org.bukkit.command.CommandSender
 import org.bukkit.command.defaults.BukkitCommand
@@ -21,6 +25,39 @@ internal class BukkitCommandHandler internal constructor(
 
   init {
     this.permission = this.command.permission
+  }
+
+  fun execute(
+    performer: Performer,
+    label: String,
+    arguments: Array<out String>
+  ) {
+    try {
+      this.command.execute(
+        performer,
+        arrayOf(label, *arguments),
+      )
+    } catch (exception: MessageHolderException) {
+      //
+      val message: Message<*> = exception.context
+
+      if (message is SingleMessage) {
+        performer.sendMessage(message.content)
+        return
+      }
+
+      if (message is MultipleMessages) {
+        for (contentLine: String in message.content) {
+          performer.sendMessage(contentLine)
+        }
+        return
+      }
+
+      error("Unknown message: $message")
+    } catch (exception: CommandException) {
+      performer.sendMessage(exception.message.toString())
+      exception.printStackTrace()
+    }
   }
 
   /**
@@ -55,42 +92,27 @@ internal class BukkitCommandHandler internal constructor(
       }
     }
 
-    try {
-      if (this.command.javaClass.isAssignableFrom(LocalUserPerformer::class.java)) {
-        if (commandSender !is Player) {
-          TranslationService.chains()
-            .receiver(commandSender.asPerformer())
-            .message(EnumMessageKey.COMMAND_IN_GAME)
-            .withoutFormat()
-            .useChat()
-            .send()
-          return true
-        }
-
-        this.command.execute(
-          commandSender.localUser.performer,
-          arrayOf(label, *arguments)
-        )
-        return true
-      }
-
+    if (this.command.javaClass.isAssignableFrom(LocalUserPerformer::class.java)) {
       if (commandSender !is Player) {
-        this.command.execute(
-          BukkitConsolePerformer.INSTANCE,
-          arrayOf(label, *arguments)
-        )
+        TranslationService.chains()
+          .receiver(commandSender.asPerformer())
+          .message(EnumMessageKey.COMMAND_IN_GAME)
+          .withoutFormat()
+          .useChat()
+          .send()
         return true
       }
 
-      this.command.execute(
-        commandSender.localUser.performer,
-        arrayOf(label, *arguments)
-      )
+      this.execute(commandSender.localUser.performer, label, arguments)
       return true
-    } catch (exception: CommandException) {
-      commandSender.sendMessage(exception.message)
     }
 
+    if (commandSender !is Player) {
+      this.execute(BukkitConsolePerformer.INSTANCE, label, arguments)
+      return true
+    }
+
+    this.execute(commandSender.localUser.performer, label, arguments)
     return true
   }
 

@@ -1,6 +1,7 @@
 package me.kvdpxne.dtm.translation
 
 import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.MessageHolderException
 import me.kvdpxne.dtm.translation.message.MessageKey
 import me.kvdpxne.dtm.translation.sender.SendChoices
 
@@ -32,7 +33,7 @@ interface TranslatableCommunicative {
     key: MessageKey,
     func: MessageFormatterChains.() -> SendChoices
   ): Nothing {
-    throw Fsss(func(this.prepareMessage(key)).original())
+    throw MessageHolderException(func(this.prepareMessage(key)).original())
   }
 
   /**
