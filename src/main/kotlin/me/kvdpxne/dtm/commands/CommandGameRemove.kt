@@ -10,7 +10,7 @@ import me.kvdpxne.dtm.command.Performer
 fun createGameRemoveCommand(): Command<Performer> {
   return CommandBuilder.begin<Performer>("remove")
     .handler { performer, parameters ->
-      // TODO f
+      // TODO command body
     }
     .build()
 }

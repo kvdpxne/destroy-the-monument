@@ -1,13 +1,14 @@
 package me.kvdpxne.dtm.commands
 
+import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
-import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
-import me.kvdpxne.dtm.configuration.GeneralConfiguration
-import me.kvdpxne.dtm.arena.Arena
-import me.kvdpxne.dtm.arena.ArenaService
+import me.kvdpxne.dtm.position.RevivalPosition
+import me.kvdpxne.dtm.translation.MessageFormatterChains
+import me.kvdpxne.dtm.translation.formatter.Formatter
+import me.kvdpxne.dtm.translation.message.EnumMessageKey
 
 /**
  * @since 0.1.0
@@ -21,23 +22,21 @@ fun createArenaMapRevivalListCommand(): Command<Performer> {
         .build()
     )
     .handler { performer, parameters ->
-      //
-      val arenaName: String = parameters[0] as String
+      val arena: Arena = attemptObtainArena(performer, parameters)
 
-      //
-      val arena: Arena = ArenaService.findArenaByName(arenaName)
-        ?: throw CommandException(
-          GeneralConfiguration.NO_FOUND_ARENA
-            .replace("{ARENA_NAME}", arenaName)
-        )
+      val chains: MessageFormatterChains = performer.prepareMessage(EnumMessageKey.ARENA_MAP_REVIVAL_LIST)
+      val formatter: Formatter = Formatter.begin(6)
 
-      //
-      for (it in arena.revivalPositions) {
-        performer.sendMessages(
-          "Team: ${it.team.name}",
-          "x: ${it.x}, y: ${it.y}, z: ${it.z}",
-          "pitch: ${it.pitch}, yaw: ${it.yaw}"
-        )
+      for (revivalPosition: RevivalPosition<*> in arena.revivalPositions) {
+        chains.format(
+          formatter
+            .with("TEAM_NAME", revivalPosition.team.name)
+            .with("X", revivalPosition.x)
+            .with("Y", revivalPosition.y)
+            .with("Z", revivalPosition.z)
+            .with("PITCH", revivalPosition.pitch)
+            .with("YAW", revivalPosition.yaw)
+        ).useChat().send()
       }
     }
     .build()

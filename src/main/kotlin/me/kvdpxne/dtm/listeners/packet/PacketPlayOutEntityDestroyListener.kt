@@ -5,7 +5,7 @@ import com.comphenix.protocol.events.PacketAdapter
 import com.comphenix.protocol.events.PacketContainer
 import com.comphenix.protocol.events.PacketEvent
 import me.kvdpxne.dtm.DestroyTheMonument
-import me.kvdpxne.dtm.listeners.ProjectileLaunchListener
+import me.kvdpxne.dtm.listeners.entity.ProjectileLaunchListener
 
 /**
  * Listens for packets that destroy entities on the server side, and removes

@@ -2,6 +2,7 @@ package me.kvdpxne.dtm.translation.sender
 
 import java.util.Locale
 import me.kvdpxne.dtm.command.Performer
+import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.translation.locale
 import me.kvdpxne.dtm.translation.message.Message
 import me.kvdpxne.dtm.translation.message.MultipleMessages
@@ -20,7 +21,7 @@ class SendChoices(
   /**
    * @since 0.1.0
    */
-  fun <T> raw(): T {
+  fun original(): Message<*> {
     require(1 == this.performers.size && 1 == this.messages.size) {
       ""
     }
@@ -28,21 +29,33 @@ class SendChoices(
     val locale: Locale = this.performers.first().locale
     val message: Message<*> = this.messages[locale]!!
 
-    @Suppress("UNCHECKED_CAST", "IMPLICIT_CAST_TO_ANY")
-    return when (message) {
-      is SingleMessage -> message.content
-      is MultipleMessages -> message.content
-      else -> error(
-        ""
-      )
-    } as T
+    return message
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  fun <T> raw(): T {
+    val message: Message<*> = this.original()
+
+    if (message is SingleMessage) {
+      @Suppress("UNCHECKED_CAST")
+      return message.content as T
+    }
+
+    if (message is MultipleMessages) {
+      @Suppress("UNCHECKED_CAST")
+      return message.content as T
+    }
+
+    error("")
   }
 
   /**
    * @since 0.1.0
    */
   fun useChat(
-    addPrefix: Boolean = false
+    addPrefix: Boolean = GeneralConfiguration.USE_PREFIX
   ): ToChat {
     return ToChat(this.performers, this.messages, addPrefix)
   }

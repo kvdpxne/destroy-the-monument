@@ -1,9 +1,13 @@
 package me.kvdpxne.dtm.commands
 
+import me.kvdpxne.dtm.arena.Arena
+import me.kvdpxne.dtm.arena.ArenaService
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.Performer
-import me.kvdpxne.dtm.arena.ArenaService
+import me.kvdpxne.dtm.translation.MessageFormatterChains
+import me.kvdpxne.dtm.translation.formatter.Formatter
+import me.kvdpxne.dtm.translation.message.EnumMessageKey
 
 /**
  * @since 0.1.0
@@ -11,15 +15,22 @@ import me.kvdpxne.dtm.arena.ArenaService
 fun createArenaListCommand(): Command<Performer> {
   // Usage: /dtm arena list
   return CommandBuilder.begin<Performer>("list")
-    .handler { performer, _ ->
-      performer.sendMessages(
-        "&6&lDTM &7> &7Lista dostępnych aren:",
-        *ArenaService.findArenas()
-          .map {
-            "&6&lDTM &7> &a${it.name}"
-          }
-          .toTypedArray()
-      )
+    .handler { performer: Performer, _: Array<Any> ->
+      val arenas: Iterable<Arena> = ArenaService.findArenas()
+
+      val chains: MessageFormatterChains = performer.prepareMessage(EnumMessageKey.COMMAND_ARENA_LIST_FORMAT)
+      val formatter: Formatter = Formatter.begin(1)
+
+      performer.prepareMessage(EnumMessageKey.COMMAND_ARENA_LIST_TITLE)
+        .withoutFormat()
+        .useChat()
+        .send()
+
+      for (arena: Arena in arenas) {
+        chains.format(formatter.with("ARENA_NAME", arena.name))
+          .useChat()
+          .send()
+      }
     }
     .build()
 }

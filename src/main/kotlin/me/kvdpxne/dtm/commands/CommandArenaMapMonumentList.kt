@@ -1,13 +1,13 @@
 package me.kvdpxne.dtm.commands
 
+import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
-import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
-import me.kvdpxne.dtm.configuration.GeneralConfiguration
-import me.kvdpxne.dtm.arena.Arena
-import me.kvdpxne.dtm.arena.ArenaService
+import me.kvdpxne.dtm.translation.MessageFormatterChains
+import me.kvdpxne.dtm.translation.formatter.Formatter
+import me.kvdpxne.dtm.translation.message.EnumMessageKey
 
 /**
  * @since 0.1.0
@@ -21,25 +21,23 @@ fun createArenaMapMonumentListCommand(): Command<Performer> {
         .build()
     )
     .handler { performer, parameters ->
-      //
-      val arenaName: String = parameters[0] as String
+      val arena: Arena = attemptObtainArena(performer, parameters)
 
-      //
-      val arena: Arena = ArenaService.findArenaByName(arenaName)
-        ?: throw CommandException(
-          GeneralConfiguration.NO_FOUND_ARENA
-            .replace("{ARENA_NAME}", arenaName)
-        )
+      val chains: MessageFormatterChains = performer.prepareMessage(EnumMessageKey.ARENA_MAP_MONUMENT_LIST)
+      val formatter: Formatter = Formatter.begin(4)
 
       arena.monumentPositions
         .sortedBy {
           it.team.name
         }
         .forEach {
-          performer.sendMessages(
-            "Team: ${it.team.name}",
-            "x: ${it.x}, y: ${it.y}, z: ${it.z}",
-          )
+          chains.format(
+            formatter
+              .with("TEAM_NAME", it.team.name)
+              .with("X", it.x)
+              .with("Y", it.y)
+              .with("Z", it.z)
+          ).useChat().send()
         }
     }
     .build()

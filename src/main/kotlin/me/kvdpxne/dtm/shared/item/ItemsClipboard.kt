@@ -12,6 +12,10 @@ import org.bukkit.inventory.ItemStack
  */
 object ItemsClipboard {
 
+  val AIR_ITEM: ItemStack by lazy {
+    ItemStack(Material.AIR)
+  }
+
   val ITEM_GAME_JOIN = Material.NETHER_STAR.toBuilder()
     .name("&a&lDołącz do gry")
     .build()

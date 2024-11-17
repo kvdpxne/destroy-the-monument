@@ -2,9 +2,12 @@ package me.kvdpxne.dtm.user
 
 import java.util.Locale
 import me.kvdpxne.dtm.command.Performer
+import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.shared.Communicative
 import me.kvdpxne.dtm.shared.Identifiable
 import me.kvdpxne.dtm.shared.PlayerUuid
+import me.kvdpxne.dtm.team.LocalTeam
+import me.kvdpxne.dtm.team.Teammate
 import org.bukkit.entity.Player
 
 /**
@@ -26,6 +29,24 @@ interface LocalUserPerformer : Identifiable<PlayerUuid>, Communicative, Performe
    * @since 0.1.0
    */
   val user: LocalUser
+
+  /**
+   * @since 0.1.0
+   */
+  val game: LocalGame?
+    get() = this.user.game
+
+  /**
+   * @since 0.1.0
+   */
+  val team: LocalTeam?
+    get() = this.user.team
+
+  /**
+   * @since 0.1.0
+   */
+  val teammate: Teammate?
+    get() = this.user.teammate
 
   /**
    * The Bukkit [Player] object representing the user in-game. This may be null

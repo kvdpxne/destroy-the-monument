@@ -10,7 +10,7 @@ import me.kvdpxne.dtm.command.Performer
 fun createGameListCommand(): Command<Performer> {
   return CommandBuilder.begin<Performer>("list")
     .handler { performer, _ ->
-      // TODO
+      // TODO command body
       performer.sendMessages(
         ""
       )

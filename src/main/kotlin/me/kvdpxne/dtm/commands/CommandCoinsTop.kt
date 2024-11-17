@@ -11,7 +11,7 @@ fun createCoinsTopCommand(): Command<Performer> {
   // Usage: /dtm coins top
   return CommandBuilder.begin<Performer>("top")
     .handler { performer, _ ->
-
+      // TODO command body
     }
     .build()
 }

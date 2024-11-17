@@ -2,6 +2,7 @@ package me.kvdpxne.dtm.arena
 
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
+import me.kvdpxne.dtm.configuration.AdvancedConfiguration
 import me.kvdpxne.dtm.shared.WorldUuid
 
 /**
@@ -9,20 +10,40 @@ import me.kvdpxne.dtm.shared.WorldUuid
  */
 object ArenaManager {
 
-  private val _arenaByWorld: ConcurrentMap<WorldUuid, Arena> =
-    ConcurrentHashMap()
+  /**
+   * @since 0.1.0
+   */
+  private val arenaByWorldDelegate: Lazy<ConcurrentMap<WorldUuid, Arena>> = lazy {
+    ConcurrentHashMap(AdvancedConfiguration.ARENA_INITIAL_CAPACITY)
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  private val arenaByWorld: ConcurrentMap<WorldUuid, Arena> by this.arenaByWorldDelegate
 
   /**
    * @since 0.1.0
    */
   val arenas: Collection<Arena>
-    get() = this._arenaByWorld.values.toList()
+    get() {
+      if (this.arenaByWorldDelegate.isInitialized()) {
+        return this.arenaByWorld.values.toList()
+      }
+      return emptyList()
+    }
 
   /**
    * @since 0.1.0
    */
   val size: Int
-    get() = this._arenaByWorld.size
+    get() {
+      if (this.arenaByWorldDelegate.isInitialized()) {
+        return this.arenaByWorld.size
+      }
+
+      return 0
+    }
 
   /**
    * @since 0.1.0
@@ -30,7 +51,11 @@ object ArenaManager {
   fun findArenaByWorldIdentifierOrNull(
     identifier: WorldUuid
   ): Arena? {
-    return this._arenaByWorld[identifier]
+    if (this.arenaByWorldDelegate.isInitialized()) {
+      return this.arenaByWorld[identifier]
+    }
+
+    return null
   }
 
   /**
@@ -53,7 +78,7 @@ object ArenaManager {
   ) {
     val map: ArenaMap? = arena.map
     if (null != map) {
-      this._arenaByWorld[map.identifier] = arena
+      this.arenaByWorld[map.identifier] = arena
     }
   }
 
@@ -63,9 +88,13 @@ object ArenaManager {
   fun removeArena(
     arena: Arena
   ) {
+    if (!this.arenaByWorldDelegate.isInitialized()) {
+      return
+    }
+
     val map: ArenaMap? = arena.map
     if (null != map) {
-      this._arenaByWorld.remove(arena.identifier)
+      this.arenaByWorld.remove(arena.identifier)
     }
   }
 }

@@ -11,4 +11,15 @@ package me.kvdpxne.dtm.command
  *
  * @since 0.1.0
  */
-class CommandException(message: String) : RuntimeException(message)
+open class CommandException(message: Any) : RuntimeException(message.toString()) {
+
+
+  companion object {
+
+    /**
+     * @since 0.1.0
+     */
+    @Suppress("ConstPropertyName")
+    private const val serialVersionUID: Long = 8692778529604702450L
+  }
+}

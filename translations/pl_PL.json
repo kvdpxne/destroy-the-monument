@@ -9,11 +9,49 @@
           }
         },
         "placing": {
-          "limit": "&cOsiągnełeś możliwy limit budowania na tej mapie.",
+          "limit": "&cOsiągnąłeś możliwy limit budowania na tej mapie.",
           "spawn": "&cNie możesz stawiać bloków na spawnie."
         },
+        "no": {
+          "select": [
+            "&7Nie zaznaczono żadnego bloku monumentu.",
+            "&7Użyj &6/dtm wand &7aby móc zaznaczyć blok monumentu."
+          ]
+        },
         "select": "&7Zaznaczony blok został dodany do tymczasowej pamięci użytkownika."
+      },
+      "monument": {
+        "incorrect": {
+          "select": "&7Zaznaczona pozycja bloku nie jest monumentem na tej arenie."
+        },
+        "list": [
+          "&7Drużyna: &6{TEAM_NAME}",
+          "&7X: &6{X}",
+          "&7Y: &6{Y}",
+          "&7Z: &6{Z}"
+        ]
+      },
+      "revival": {
+        "list": [
+          "&7Drużyna: &6{TEAM_NAME}",
+          "&7X: &6{X}",
+          "&7Y: &6{Y}",
+          "&7Z: &6{Z}",
+          "&7Pitch: &6{PITCH}",
+          "&7Yaw: &6{YAW}"
+        ]
       }
+    },
+    "no": {
+      "found": "&7Arena o nazwie &6{ARENA_NAME} &7nie istnieje."
+    }
+  },
+  "must": {
+    "in": {
+      "game": "&7Nie jesteś w grze."
+    },
+    "have": {
+      "ability": "&7Twoja profesja nie posiada umiejętności specjalnej."
     }
   },
   "command": {
@@ -23,7 +61,6 @@
     "insufficient": {
       "privileges": "&cNie posiadasz wystarczających uprawnień &8(&f{PRIVILEGE_NAME}&8) &caby wykonać tą komendę."
     },
-
     "ability": {
       "deplete": "&7Twoja umiejętność została anulowana.",
       "renew": "&7Twoja umiejętność została odnowiona."
@@ -31,6 +68,10 @@
     "arena": {
       "add": "&7Arena o nazwie &6{ARENA_NAME} &7została dodana do puli aren w grze o nazwie &6{GAME_NAME}&7.",
       "create": "&7Utworzono nową arenę o nazwie &6{ARENA_NAME}&7.",
+      "list": {
+        "title": "&7Lista wszystkich dostępnych aren:",
+        "format": "&7{ARENA_NAME}"
+      },
       "remove": "&7Arena o nazwie &6{ARENA_NAME} &7została usunięta.",
       "map": {
         "monument": {
@@ -98,6 +139,13 @@
     "wand": "&7Do twojego ekwipunku został dodany magiczny patyk."
   },
   "game": {
+    "no": {
+      "found": "&7Gra o nazwie &6{GAME_NAME} &7nie istnieje."
+    },
+    "end": [
+      "&7Gra została zakończona.",
+      "&7Za &6{REMAINING_TIME} &7sekund zostaniesz przeniesiony do poczekalni."
+    ],
     "starting": {
       "countdown": {
         "standard": "&7Pozostało &6{REMAINING_TIME} &7sekund do startu gry.",
@@ -131,5 +179,13 @@
       "",
       "&7&lZagłosuj na swoją ulubioną mapę!"
     ]
+  },
+  "team": {
+    "no": {
+      "found": "&7Drużyna o nazwie &6{TEAM_NAME} &7nie istnieje."
+    }
+  },
+  "nonexistent": {
+    "world": "&7Świat o nazwie &6{WORLD_NAME} &7nie istnieje."
   }
 }

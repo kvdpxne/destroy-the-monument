@@ -21,7 +21,9 @@ fun createVoteCommand(): Command<LocalUserPerformer> {
     .handler { performer, parameters ->
       //
       val localGame: LocalGame = performer.user.game
-        ?: throw CommandException("&cBłąd&8: Nie jesteś w grze.")
+        ?: performer.throwMessage(EnumMessageKey.MUST_IN_GAME) {
+          this@throwMessage.withoutFormat()
+        }
 
       val votingRegistry: ArenaVotingRegistry = localGame.votingRegistry
         ?: throw CommandException("Głosowanie nie jest obecnie dostępne.")

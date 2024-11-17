@@ -2,27 +2,23 @@ package me.kvdpxne.dtm.commands
 
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
-import me.kvdpxne.dtm.command.CommandException
-import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.profession.Ability
-import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.translation.message.EnumMessageKey
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
 /**
+ * Usage: `/dtm ability renew`
+ *
  * @since 0.1.0
  */
 fun createAbilityRenewCommand(): Command<LocalUserPerformer> {
-  // Usage: /dtm ability renew
   return CommandBuilder.begin<LocalUserPerformer>("renew")
-    .handler { performer, _ ->
-      val teammate: Teammate = performer.user.teammate
-        ?: throw CommandException(GeneralConfiguration.NO_IN_GAME_MESSAGE)
+    .handler { performer: LocalUserPerformer, _: Array<Any> ->
+      //
+      val ability: Ability = attemptObtainAbility(performer)
 
-      val ability: Ability = teammate.currentProfession.ability
-        ?: throw CommandException(GeneralConfiguration.NO_ABILITY_MESSAGE)
-
-      ability.renew(performer.player!!)
+      //
+      ability.renew(performer.player)
 
       performer.prepareMessage(EnumMessageKey.COMMAND_ABILITY_RENEW)
         .withoutFormat()

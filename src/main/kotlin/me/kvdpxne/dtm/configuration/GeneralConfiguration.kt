@@ -19,6 +19,8 @@ object GeneralConfiguration : Configuration {
     }
   }
 
+  const val BLOCK_ENCHANTING = true
+
   const val USER_MANAGER_INITIAL_CAPACITY = 24
 
   const val USE_FA_F = true
@@ -64,21 +66,6 @@ object GeneralConfiguration : Configuration {
    */
   const val RADIUS_OF_EXPLOSION_INTERACTION = 11.941
 
-  const val NO_IN_GAME_MESSAGE = "&cBłąd: &7Nie jesteś grze."
-
-  const val NO_ABILITY_MESSAGE = "&cBłąd: &7Twoja profesja nie posiada umiejętności specjalnej."
-
-  const val NO_FOUND_ARENA = "&cBłąd&8: &7Arena o nazwie &c{ARENA_NAME} &7nie istnieje."
-
-  const val NO_FOUND_GAME = "&cBłąd&8: &7Gra o nazwie &c{GAME_NAME} &7nie istnieje."
-
-  const val NO_FOUND_TEAM = "&cBłąd&8: &7Drużyna o nazwie &c{TEAM_NAME} &7nie istnieje."
-
-  val GAME_END_MESSAGE = arrayOf(
-    "",
-    "&6&lDTM &7> &fGra została zakończona.",
-    "&6&lDTM &7> &fZa &6$GAME_END_DELAY &fsekund zostaniesz przeniesiony do poczekalni.",
-  )
   override val name: String
     get() = "general"
 

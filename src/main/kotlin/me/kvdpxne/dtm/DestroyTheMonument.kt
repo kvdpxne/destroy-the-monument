@@ -14,37 +14,38 @@ import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.data.tasks.AsynchronousUserUpdateTask
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.GameService
-import me.kvdpxne.dtm.listeners.BlockBreakListener
-import me.kvdpxne.dtm.listeners.BlockBurnListener
-import me.kvdpxne.dtm.listeners.BlockPistonExtendListener
-import me.kvdpxne.dtm.listeners.BlockPlaceListener
-import me.kvdpxne.dtm.listeners.BlockSpreadListener
-import me.kvdpxne.dtm.listeners.EntityDamageByBlockListener
-import me.kvdpxne.dtm.listeners.EntityDamageByEntityListener
-import me.kvdpxne.dtm.listeners.EntityExplodeListener
-import me.kvdpxne.dtm.listeners.PlayerChatListener
-import me.kvdpxne.dtm.listeners.PlayerCraftItemListener
-import me.kvdpxne.dtm.listeners.PlayerDeathListener
-import me.kvdpxne.dtm.listeners.PlayerDropItemListener
-import me.kvdpxne.dtm.listeners.PlayerFoodLevelChangeListener
-import me.kvdpxne.dtm.listeners.PlayerInteractListener
-import me.kvdpxne.dtm.listeners.PlayerInventoryClickListener
-import me.kvdpxne.dtm.listeners.PlayerInventoryInteractListener
-import me.kvdpxne.dtm.listeners.PlayerItemConsumeListener
-import me.kvdpxne.dtm.listeners.PlayerJoinListener
-import me.kvdpxne.dtm.listeners.PlayerKickListener
-import me.kvdpxne.dtm.listeners.PlayerLoginListener
-import me.kvdpxne.dtm.listeners.PlayerPrepareCraftItemListener
-import me.kvdpxne.dtm.listeners.PlayerPrepareItemEnchantListener
-import me.kvdpxne.dtm.listeners.PlayerQuitListener
-import me.kvdpxne.dtm.listeners.PlayerRespawnListener
-import me.kvdpxne.dtm.listeners.PlayerToggleFlightListener
-import me.kvdpxne.dtm.listeners.ProjectileHitListener
-import me.kvdpxne.dtm.listeners.ProjectileLaunchListener
-import me.kvdpxne.dtm.listeners.WeatherChangeListener
+import me.kvdpxne.dtm.listeners.block.BlockBreakListener
+import me.kvdpxne.dtm.listeners.block.BlockBurnListener
+import me.kvdpxne.dtm.listeners.block.BlockPistonExtendListener
+import me.kvdpxne.dtm.listeners.block.BlockPlaceListener
+import me.kvdpxne.dtm.listeners.block.BlockSpreadListener
+import me.kvdpxne.dtm.listeners.entity.EntityDamageByBlockListener
+import me.kvdpxne.dtm.listeners.entity.EntityDamageByEntityListener
+import me.kvdpxne.dtm.listeners.entity.EntityExplodeListener
+import me.kvdpxne.dtm.listeners.entity.ProjectileHitListener
+import me.kvdpxne.dtm.listeners.entity.ProjectileLaunchListener
 import me.kvdpxne.dtm.listeners.packet.PacketPlayInBlockDigListener
 import me.kvdpxne.dtm.listeners.packet.PacketPlayInSettingsListener
 import me.kvdpxne.dtm.listeners.packet.PacketPlayOutEntityDestroyListener
+import me.kvdpxne.dtm.listeners.player.PlayerChatListener
+import me.kvdpxne.dtm.listeners.player.PlayerCraftItemListener
+import me.kvdpxne.dtm.listeners.player.PlayerDeathListener
+import me.kvdpxne.dtm.listeners.player.PlayerDropItemListener
+import me.kvdpxne.dtm.listeners.player.PlayerFoodLevelChangeListener
+import me.kvdpxne.dtm.listeners.player.PlayerInteractListener
+import me.kvdpxne.dtm.listeners.player.PlayerInventoryClickListener
+import me.kvdpxne.dtm.listeners.player.PlayerInventoryInteractListener
+import me.kvdpxne.dtm.listeners.player.PlayerItemConsumeListener
+import me.kvdpxne.dtm.listeners.player.PlayerJoinListener
+import me.kvdpxne.dtm.listeners.player.PlayerKickListener
+import me.kvdpxne.dtm.listeners.player.PlayerLoginListener
+import me.kvdpxne.dtm.listeners.player.PlayerPickupItemListener
+import me.kvdpxne.dtm.listeners.player.PlayerPrepareCraftItemListener
+import me.kvdpxne.dtm.listeners.player.PlayerPrepareItemEnchantListener
+import me.kvdpxne.dtm.listeners.player.PlayerQuitListener
+import me.kvdpxne.dtm.listeners.player.PlayerRespawnListener
+import me.kvdpxne.dtm.listeners.player.PlayerToggleFlightListener
+import me.kvdpxne.dtm.listeners.world.WeatherChangeListener
 import me.kvdpxne.dtm.profession.ProfessionManager
 import me.kvdpxne.dtm.professions.createArcher
 import me.kvdpxne.dtm.professions.createAssassin
@@ -283,6 +284,7 @@ class DestroyTheMonument : JavaPlugin() {
       PlayerJoinListener,
       PlayerKickListener,
       PlayerLoginListener,
+      PlayerPickupItemListener,
       PlayerPrepareCraftItemListener,
       PlayerPrepareItemEnchantListener,
       PlayerQuitListener,

@@ -2,9 +2,10 @@ package me.kvdpxne.dtm.user
 
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
-import me.kvdpxne.dtm.configuration.GeneralConfiguration
+import me.kvdpxne.dtm.configuration.AdvancedConfiguration
 import me.kvdpxne.dtm.shared.PlayerUuid
 import me.kvdpxne.dtm.shared.debug.Debug
+import me.kvdpxne.dtm.shared.text.toSingleLines
 
 /**
  * Singleton object managing [LocalUser] instances.
@@ -18,20 +19,32 @@ import me.kvdpxne.dtm.shared.debug.Debug
 object LocalUserManager {
 
   /**
+   * @since 0.1.0
+   */
+  private val usersByIdentifierDelegate: Lazy<ConcurrentMap<PlayerUuid, User>> = lazy {
+    ConcurrentHashMap(AdvancedConfiguration.USER_INITIAL_CAPACITY)
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  private val usersByNameDelegate: Lazy<ConcurrentMap<String, User>> = lazy {
+    ConcurrentHashMap(AdvancedConfiguration.USER_INITIAL_CAPACITY)
+  }
+
+  /**
    * Concurrent map to store users by their unique identifiers.
    *
    * @since 0.1.0
    */
-  private val _usersByIdentifier: ConcurrentMap<PlayerUuid, User> =
-    ConcurrentHashMap(GeneralConfiguration.USER_MANAGER_INITIAL_CAPACITY)
+  private val usersByIdentifier: ConcurrentMap<PlayerUuid, User> by this.usersByIdentifierDelegate
 
   /**
    * Concurrent map to store users by their names in lowercase format.
    *
    * @since 0.1.0
    */
-  private val _usersByName: ConcurrentMap<String, User> =
-    ConcurrentHashMap(GeneralConfiguration.USER_MANAGER_INITIAL_CAPACITY)
+  private val usersByName: ConcurrentMap<String, User> by this.usersByNameDelegate
 
   /**
    * Returns a list of all registered users in the system.
@@ -39,7 +52,13 @@ object LocalUserManager {
    * @since 0.1.0
    */
   val users: List<User>
-    get() = this._usersByIdentifier.values.toList()
+    get() {
+      if (this.usersByIdentifierDelegate.isInitialized()) {
+        return this.usersByIdentifier.values.toList()
+      }
+
+      return emptyList()
+    }
 
   /**
    * Returns the current number of registered users.
@@ -47,7 +66,20 @@ object LocalUserManager {
    * @since 0.1.0
    */
   val size: Int
-    get() = this._usersByIdentifier.size
+    get() {
+      if (this.usersByIdentifierDelegate.isInitialized()) {
+        return this.usersByIdentifier.size
+      }
+
+      return 0
+    }
+
+  /**
+   * @since 0.1.0
+   */
+  val initialized: Boolean
+    get() = this.usersByIdentifierDelegate.isInitialized()
+      && this.usersByNameDelegate.isInitialized()
 
   /**
    * Attempts to find a [LocalUser] by their unique identifier.
@@ -60,7 +92,11 @@ object LocalUserManager {
   fun findUserByIdentifierOrNull(
     identifier: PlayerUuid
   ): LocalUser? {
-    return this._usersByIdentifier[identifier] as LocalUser?
+    if (this.usersByIdentifierDelegate.isInitialized()) {
+      return this.usersByIdentifier[identifier] as LocalUser?
+    }
+
+    return null
   }
 
   /**
@@ -93,7 +129,11 @@ object LocalUserManager {
   fun findUserByNameOrNull(
     name: String
   ): LocalUser? {
-    return this._usersByName[name.lowercase()] as LocalUser?
+    if (this.usersByNameDelegate.isInitialized()) {
+      return this.usersByName[name.lowercase()] as LocalUser?
+    }
+
+    return null
   }
 
   /**
@@ -129,8 +169,8 @@ object LocalUserManager {
   ) {
     val localUser: LocalUser = user.asLocalUser()
 
-    this._usersByIdentifier[localUser.identifier] = localUser
-    this._usersByName[localUser.name] = localUser
+    this.usersByIdentifier[localUser.identifier] = localUser
+    this.usersByName[localUser.name] = localUser
 
     Debug.log {
       "The user $localUser was added to local storage."
@@ -148,8 +188,12 @@ object LocalUserManager {
   fun removeUser(
     user: User
   ) {
-    this._usersByIdentifier.remove(user.identifier)
-    this._usersByName.remove(user.name)
+    if (!this.initialized) {
+      return
+    }
+
+    this.usersByIdentifier.remove(user.identifier)
+    this.usersByName.remove(user.name)
 
     Debug.log {
       "The user $user was removed from local storage."
@@ -164,8 +208,18 @@ object LocalUserManager {
    * @since 0.1.0
    */
   fun removeUsers() {
-    this._usersByIdentifier.clear()
-    this._usersByName.clear()
+    if (!this.initialized) {
+      Debug.log {
+        """
+          No user was removed from local memory because the local user
+          manager did not require initialization.
+        """.toSingleLines()
+      }
+      return
+    }
+
+    this.usersByIdentifier.clear()
+    this.usersByName.clear()
 
     Debug.log {
       "All users have been removed from local storage."

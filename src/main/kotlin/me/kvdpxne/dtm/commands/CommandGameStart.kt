@@ -45,7 +45,9 @@ object CommandGameStart {
         if (parameters.isEmpty()) {
           //
           if (performer !is LocalUserPerformer) {
-            throw CommandException("Command is not accessible from the console.")
+            performer.throwMessage(EnumMessageKey.COMMAND_IN_GAME) {
+              this@throwMessage.withoutFormat()
+            }
           }
 
           val game = performer.user.game
@@ -57,7 +59,7 @@ object CommandGameStart {
         val gameName: String = parameters[0] as String
 
         //
-        val game: LocalGame = GameManager.findGameByName<LocalTeam, LocalGame>(gameName)
+        val game: LocalGame = GameManager.findGameByNameOrNull(gameName)
           ?: throw CommandException("")
 
         startGame(game, performer)

@@ -2,12 +2,9 @@ package me.kvdpxne.dtm.commands
 
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
-import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
-import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.game.Game
-import me.kvdpxne.dtm.game.GameService
 import me.kvdpxne.dtm.team.Team
 
 /**
@@ -22,15 +19,8 @@ fun createTeamListCommand(): Command<Performer> {
         .build()
     )
     .handler { performer, parameters ->
-      // Unikatowa nazwa obiektu gry przechowywanej w bazie danych.
-      val gameName: String = parameters[0] as String
-
       // Obiekt gry znaleziony na podstawie unikatowej nazwy gry.
-      val game: Game<Team> = GameService.findGameByName(gameName)
-        ?: throw CommandException(
-          GeneralConfiguration.NO_FOUND_GAME
-            .replace("{GAME_NAME}", gameName)
-        )
+      val game: Game<Team> = attemptObtainGame(performer, parameters)
 
       performer.sendMessages(
         "&6&lDTM &7> &7Drużyny przypisane do gry o nazwie &6${game.name}&7:",

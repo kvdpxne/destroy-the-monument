@@ -2,9 +2,7 @@ package me.kvdpxne.dtm.commands
 
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
-import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.command.Parameters
-import me.kvdpxne.dtm.shared.world.WorldLoaderHelper
 import me.kvdpxne.dtm.shared.world.toEntityPosition
 import me.kvdpxne.dtm.translation.formatter.Formatter
 import me.kvdpxne.dtm.translation.message.EnumMessageKey
@@ -24,12 +22,8 @@ fun createTeleportCommand(): Command<LocalUserPerformer> {
         .build()
     )
     .handler { performer, parameters ->
-      // The unique name of the world container
-      val worldName: String = parameters[0] as String
-
       // The world found
-      val world: World = WorldLoaderHelper.getWorld(worldName)
-        ?: throw CommandException("World named \"$worldName\" does not exist.")
+      val world: World = attemptObtainWorld(performer, parameters)
 
       val player = performer.player ?: return@handler
 

@@ -41,6 +41,7 @@ fun createBaseCommand(): Command<Performer> {
       createTeamCommand(),
       createTeleportCommand(),
       createTeleportBackCommand(),
+      createUserCommand(),
       createVersionCommand(),
       createWandCommand()
     )

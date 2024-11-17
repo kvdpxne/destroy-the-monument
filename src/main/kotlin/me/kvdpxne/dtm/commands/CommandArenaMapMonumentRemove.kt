@@ -4,9 +4,7 @@ import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.arena.ArenaService
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
-import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.command.Parameters
-import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.position.BlockPosition
 import me.kvdpxne.dtm.position.MonumentPosition
 import me.kvdpxne.dtm.team.Team
@@ -27,24 +25,16 @@ fun createArenaMapMonumentRemoveCommand(): Command<LocalUserPerformer> {
     )
     .handler { performer, parameters ->
       //
-      val position: BlockPosition = performer.user.cache.selectedMonumentPosition
-        ?: throw CommandException(
-          "&cBŁĄD: &7Nie wybrano zaznaczono żadnego bloku monumentu.\n" +
-            "&eINFO: &7Użyj &a/dtm wand &7aby móc zaznaczyć blok monumentu."
-        )
-
-      // Unikatowa nazwa obiektu "Arena".
-      val arenaName: String = parameters[0] as String
+      val position: BlockPosition = attemptObtainSelectedBlockPosition(performer)
 
       //
-      val arena: Arena = ArenaService.findArenaByName(arenaName)
-        ?: throw CommandException(
-          GeneralConfiguration.NO_FOUND_ARENA
-            .replace("{ARENA_NAME}", arenaName)
-        )
+      val arena: Arena = attemptObtainArena(performer, parameters)
 
+      //
       val monumentPosition: MonumentPosition<Team> = arena.getMonumentPosition(position)
-        ?: throw CommandException("&cBłąd&8: &7Zaznaczona pozycja bloku nie jest monumentem na tej arenie.")
+        ?: performer.throwMessage(EnumMessageKey.ARENA_MAP_MONUMENT_INCORRECT_SELECT) {
+          this@throwMessage.withoutFormat()
+        }
 
       //
       ArenaService.deleteArenaMonumentPosition(arena, monumentPosition)

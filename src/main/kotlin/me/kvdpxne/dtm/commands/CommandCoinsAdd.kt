@@ -2,16 +2,13 @@ package me.kvdpxne.dtm.commands
 
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
-import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.command.ParameterBuilder
 import me.kvdpxne.dtm.command.ParameterValidators
 import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.translation.formatter.Formatter
 import me.kvdpxne.dtm.translation.message.EnumMessageKey
-import me.kvdpxne.dtm.user.LocalUserPerformer
 import me.kvdpxne.dtm.user.User
-import me.kvdpxne.dtm.user.UserService
 
 /**
  * @since 0.1.0
@@ -36,12 +33,11 @@ fun createCoinsAddCommand(): Command<Performer> {
 
       if (1 == parameters.size) {
 
-        if (performer !is LocalUserPerformer) {
-          performer.sendMessage("Komenda nie może zostać użyta w konsoli.")
-          return@handler
-        }
+        //
+        val user: User = attemptObtainUserAsSelf(performer)
 
-        performer.user.wallet.addCoins(value)
+        //
+        user.wallet.addCoins(value)
 
         performer.prepareMessage(EnumMessageKey.COMMAND_COINS_ADD_SELF)
           .format(
@@ -54,11 +50,10 @@ fun createCoinsAddCommand(): Command<Performer> {
         return@handler
       }
 
-      val userName: String = parameters[1] as String
+      //
+      val user: User = attemptObtainUser(performer, parameters, 1)
 
-      val user: User = UserService.findUserByName(userName)
-        ?: throw CommandException("Nie znaleziono użytkownika.")
-
+      //
       user.wallet.addCoins(value)
 
       performer.prepareMessage(EnumMessageKey.COMMAND_COINS_ADD_OTHERS)

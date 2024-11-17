@@ -3,11 +3,11 @@ package me.kvdpxne.dtm.commands
 import me.kvdpxne.dtm.DestroyTheMonument
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
-import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.command.ParameterBuilder
 import me.kvdpxne.dtm.command.ParameterValidators
 import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.game.LocalGame
+import me.kvdpxne.dtm.translation.message.EnumMessageKey
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
 /**
@@ -27,7 +27,9 @@ fun createGlobalChatCommand(): Command<LocalUserPerformer> {
     .handler { performer, parameters ->
       //
       val localGame: LocalGame = performer.user.game
-        ?: throw CommandException("&cBłąd&8: Nie jesteś w grze.")
+        ?: performer.throwMessage(EnumMessageKey.MUST_IN_GAME) {
+          this@throwMessage.withoutFormat()
+        }
 
       val name: String = performer.name
       val message: String = (parameters[0] as Array<*>).joinToString(" ") {

@@ -23,6 +23,7 @@ import org.bukkit.World
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause
 import org.bukkit.inventory.ItemStack
+import org.bukkit.potion.PotionEffect
 
 fun Player.reset() {
   this.inventory.also {
@@ -30,8 +31,8 @@ fun Player.reset() {
     it.armorContents = arrayOfNulls(it.armorContents.size)
   }
 
-  this.activePotionEffects.forEach {
-    this.removePotionEffect(it.type)
+  for (potionEffect: PotionEffect in this.activePotionEffects) {
+    this.removePotionEffect(potionEffect.type)
   }
 
   this.resetMaxHealth()
@@ -86,10 +87,6 @@ fun Player.moveToLobby() {
       // Prawdopodobnie
       //
       ?: throw NullPointerException("The world is not loaded!")
-
-    Debug.log {
-      "No lobby world found."
-    }
   }
 
   //

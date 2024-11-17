@@ -2,15 +2,11 @@ package me.kvdpxne.dtm.commands
 
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
-import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
-import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameService
 import me.kvdpxne.dtm.team.Team
-import me.kvdpxne.dtm.team.TeamService
-import me.kvdpxne.dtm.translation.TranslationService
 import me.kvdpxne.dtm.translation.formatter.Formatter
 import me.kvdpxne.dtm.translation.message.EnumMessageKey
 
@@ -28,24 +24,10 @@ fun createTeamRemoveCommand(): Command<Performer> {
     )
     .handler { performer, parameters ->
       //
-      val teamName: String = parameters[0] as String
-
-      //
-      val team: Team = TeamService.findTeamByName(teamName)
-        ?: throw CommandException(
-          GeneralConfiguration.NO_FOUND_TEAM
-            .replace("{TEAM_NAME}", teamName)
-        )
-
-      // Unikatowa nazwa obiektu gry przechowywanej w bazie danych.
-      val gameName: String = parameters[1] as String
+      val team: Team = attemptObtainTeam(performer, parameters)
 
       // Obiekt gry znaleziony na podstawie unikatowej nazwy gry.
-      val game: Game<Team> = GameService.findGameByName(gameName)
-        ?: throw CommandException(
-          GeneralConfiguration.NO_FOUND_GAME
-            .replace("{GAME_NAME}", gameName)
-        )
+      val game: Game<Team> = attemptObtainGame(performer, parameters, 1)
 
       //
       GameService.deleteGameTeam(game, team)

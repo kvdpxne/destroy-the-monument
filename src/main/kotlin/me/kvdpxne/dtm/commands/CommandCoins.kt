@@ -17,7 +17,7 @@ fun createCoinsCommand(): Command<Performer> {
    * /dtm coins top
    */
   return CommandBuilder.begin<Performer>("coins")
-    .aliases("money", "balance", "bal")
+    .aliases("money", "mon", "balance", "bal")
     .hub()
     .children(
       createCoinsAddCommand(),

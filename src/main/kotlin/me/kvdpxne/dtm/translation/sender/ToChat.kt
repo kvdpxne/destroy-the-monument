@@ -3,8 +3,6 @@ package me.kvdpxne.dtm.translation.sender
 import java.util.Locale
 import me.kvdpxne.dtm.Constants
 import me.kvdpxne.dtm.command.Performer
-import me.kvdpxne.dtm.configuration.GeneralConfiguration
-import me.kvdpxne.dtm.translation.locale
 import me.kvdpxne.dtm.translation.message.Message
 import me.kvdpxne.dtm.translation.message.MultipleMessages
 import me.kvdpxne.dtm.translation.message.SingleMessage
@@ -18,11 +16,11 @@ import me.kvdpxne.dtm.translation.message.SingleMessage
  *
  * @since 0.1.0
  */
-class ToChat(
+open class ToChat internal constructor(
   // @formatter:off
-              receivers: MutableCollection<Performer>,
-              messages : MutableMap<Locale, Message<*>>,
-  private val addPrefix: Boolean
+                receivers: MutableCollection<Performer>,
+                messages : MutableMap<Locale, Message<*>>,
+  protected val addPrefix: Boolean
   // @formatter:on
 ) : AbstractSendable(receivers, messages) {
 
@@ -36,6 +34,14 @@ class ToChat(
     private val FORMATTED_PREFIX: String by lazy {
       "&6&l${Constants.NAME} &8>&r"
     }
+  }
+
+  protected fun constructMessage(rawMessage: String): String {
+    if (this.addPrefix) {
+      return "$FORMATTED_PREFIX $rawMessage"
+    }
+
+    return rawMessage
   }
 
   /**
@@ -64,8 +70,7 @@ class ToChat(
     locale: Locale,
     addPrefix: Boolean
   ) {
-    val message: Message<*> = this.messages[locale]
-      ?: error("No message found for locale $locale.")
+    val message: Message<*> = super.findMessage(locale)
 
     if (message is SingleMessage) {
       this.send(performer, message.content, addPrefix)
@@ -89,18 +94,8 @@ class ToChat(
    * @since 0.1.0
    */
   override fun send() {
-    val shouldAddPrefix: Boolean = GeneralConfiguration.USE_PREFIX
-      || this.addPrefix
-
-    val iterator: MutableIterator<Performer> = this.receivers.iterator()
-    while (iterator.hasNext()) {
-      val performer: Performer = iterator.next()
-      val locale: Locale = performer.locale
-
-      this.send(performer, locale, shouldAddPrefix)
-      iterator.remove()
+    super.iterate { receiver, locale ->
+      this.send(receiver, locale, this.addPrefix)
     }
-
-    this.messages.clear()
   }
 }

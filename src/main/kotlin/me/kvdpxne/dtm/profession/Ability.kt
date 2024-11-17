@@ -65,9 +65,13 @@ class Ability(
    * @since 0.1.0
    */
   fun renewDelayed(
-    player: Player,
+    player: Player?,
     a: Boolean = false
   ) {
+    if (null == player) {
+      return
+    }
+
     //
     this.isReady = false
     this.isActive = false
@@ -96,7 +100,11 @@ class Ability(
   /**
    * @since 0.1.0
    */
-  fun renew(player: Player) {
+  fun renew(player: Player?) {
+    if (null == player) {
+      return
+    }
+
     this.cancelCooldown()
 
     this.markReady()

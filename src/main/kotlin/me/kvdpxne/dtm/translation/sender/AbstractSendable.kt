@@ -2,6 +2,7 @@ package me.kvdpxne.dtm.translation.sender
 
 import java.util.Locale
 import me.kvdpxne.dtm.command.Performer
+import me.kvdpxne.dtm.translation.locale
 import me.kvdpxne.dtm.translation.message.Message
 
 /**
@@ -25,5 +26,22 @@ abstract class AbstractSendable protected constructor(
     require(this.messages.isNotEmpty()) {
       "At least one message needs to be defined."
     }
+  }
+
+  protected fun findMessage(locale: Locale): Message<*> {
+    return this.messages[locale]
+      ?: error("No message found for locale $locale.")
+  }
+
+  protected fun iterate(handle: (Performer, Locale) -> Unit) {
+    val iterator: MutableIterator<Performer> = this.receivers.iterator()
+    while (iterator.hasNext()) {
+      val receiver: Performer = iterator.next()
+
+      handle(receiver, receiver.locale)
+      iterator.remove()
+    }
+
+    this.messages.clear()
   }
 }
