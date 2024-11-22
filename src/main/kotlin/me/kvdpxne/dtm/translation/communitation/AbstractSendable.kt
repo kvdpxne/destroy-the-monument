@@ -1,9 +1,8 @@
-package me.kvdpxne.dtm.translation.sender
+package me.kvdpxne.dtm.translation.communitation
 
 import java.util.Locale
-import me.kvdpxne.dtm.command.Performer
-import me.kvdpxne.dtm.translation.locale
 import me.kvdpxne.dtm.translation.message.Message
+import me.kvdpxne.dtm.translation.receiver.Receiver
 
 /**
  * @param receivers
@@ -13,7 +12,7 @@ import me.kvdpxne.dtm.translation.message.Message
  */
 abstract class AbstractSendable protected constructor(
   // @formatter:off
-  protected val receivers: MutableCollection<Performer>,
+  protected val receivers: MutableCollection<Receiver>,
   protected val messages : MutableMap<Locale, Message<*>>
   // @formatter:on
 ) : Sendable {
@@ -33,10 +32,10 @@ abstract class AbstractSendable protected constructor(
       ?: error("No message found for locale $locale.")
   }
 
-  protected fun iterate(handle: (Performer, Locale) -> Unit) {
-    val iterator: MutableIterator<Performer> = this.receivers.iterator()
+  protected fun iterate(handle: (Receiver, Locale) -> Unit) {
+    val iterator: MutableIterator<Receiver> = this.receivers.iterator()
     while (iterator.hasNext()) {
-      val receiver: Performer = iterator.next()
+      val receiver: Receiver = iterator.next()
 
       handle(receiver, receiver.locale)
       iterator.remove()

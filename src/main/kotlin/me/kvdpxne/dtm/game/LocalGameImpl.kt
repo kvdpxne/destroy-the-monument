@@ -28,7 +28,7 @@ import me.kvdpxne.dtm.shared.world.toLocation
 import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.team.TeammateImpl
-import me.kvdpxne.dtm.translation.MessageFormatterChains
+import me.kvdpxne.dtm.translation.chains.MessageFormatterChains
 import me.kvdpxne.dtm.translation.TranslationService
 import me.kvdpxne.dtm.translation.formatter.Formatter
 import me.kvdpxne.dtm.translation.message.EnumMessageKey

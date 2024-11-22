@@ -1,4 +1,4 @@
-package me.kvdpxne.dtm.translation
+package me.kvdpxne.dtm.translation.receiver
 
 import java.util.Locale
 

@@ -7,7 +7,7 @@ import com.comphenix.protocol.events.PacketEvent
 import java.util.Locale
 import me.kvdpxne.dtm.DestroyTheMonument
 import me.kvdpxne.dtm.shared.player.localUser
-import me.kvdpxne.dtm.translation.Locales
+import me.kvdpxne.dtm.translation.locale.Locales
 import me.kvdpxne.dtm.translation.TranslationService
 
 object PacketPlayInSettingsListener : PacketAdapter(

@@ -1,9 +1,9 @@
-package me.kvdpxne.dtm.translation
+package me.kvdpxne.dtm.translation.communitation
 
+import me.kvdpxne.dtm.translation.chains.MessageFormatterChains
 import me.kvdpxne.dtm.translation.message.EnumMessageKey
 import me.kvdpxne.dtm.translation.message.MessageHolderException
 import me.kvdpxne.dtm.translation.message.MessageKey
-import me.kvdpxne.dtm.translation.sender.SendChoices
 
 /**
  * @since 0.1.0

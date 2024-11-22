@@ -1,4 +1,4 @@
-package me.kvdpxne.dtm.translation.sender
+package me.kvdpxne.dtm.translation.communitation
 
 /**
  * @since 0.1.0

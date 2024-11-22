@@ -1,12 +1,12 @@
-package me.kvdpxne.dtm.translation.sender
+package me.kvdpxne.dtm.translation.communitation
 
 import java.util.Locale
 import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.configuration.GeneralConfiguration
-import me.kvdpxne.dtm.translation.locale
 import me.kvdpxne.dtm.translation.message.Message
 import me.kvdpxne.dtm.translation.message.MultipleMessages
 import me.kvdpxne.dtm.translation.message.SingleMessage
+import me.kvdpxne.dtm.translation.receiver.Receiver
 
 /**
  * A class representing the choices of messages to send to a collection of performers.
@@ -15,14 +15,14 @@ import me.kvdpxne.dtm.translation.message.SingleMessage
  * retrieving and formatting these messages for sending to performers (users or consoles). It
  * also allows customization of whether to add prefixes to messages when sending them via chat.
  *
- * @param performers A collection of [Performer] objects to receive the messages.
+ * @param receivers A collection of [Performer] objects to receive the messages.
  * @param messages A map of locales to the respective [Message] objects, representing the localized messages.
  * @since 0.1.0
  */
 class SendChoices(
   // @formatter:off
-  private val performers: MutableCollection<Performer>,
-  private val messages  : MutableMap<Locale, Message<*>>
+  private val receivers: MutableCollection<Receiver>,
+  private val messages : MutableMap<Locale, Message<*>>
   // @formatter:on
 ) {
 
@@ -37,11 +37,11 @@ class SendChoices(
    * @since 0.1.0
    */
   fun original(): Message<*> {
-    require(1 == this.performers.size && 1 == this.messages.size) {
+    require(1 == this.receivers.size && 1 == this.messages.size) {
       "Expected exactly one performer and one message."
     }
 
-    val locale: Locale = this.performers.first().locale
+    val locale: Locale = this.receivers.first().locale
     val message: Message<*> = this.messages[locale]!!
 
     return message
@@ -88,6 +88,6 @@ class SendChoices(
   fun useChat(
     addPrefix: Boolean = GeneralConfiguration.USE_PREFIX
   ): ToChat {
-    return ToChat(this.performers, this.messages, addPrefix)
+    return ToChat(this.receivers, this.messages, addPrefix)
   }
 }

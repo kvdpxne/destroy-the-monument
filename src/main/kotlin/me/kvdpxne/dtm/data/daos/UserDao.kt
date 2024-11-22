@@ -9,7 +9,7 @@ import me.kvdpxne.dtm.data.tables.UserTable
 import me.kvdpxne.dtm.data.tables.UserWalletTable
 import me.kvdpxne.dtm.data.transactions.concurrentTransaction
 import me.kvdpxne.dtm.profession.ProfessionManager
-import me.kvdpxne.dtm.translation.Locales
+import me.kvdpxne.dtm.translation.locale.Locales
 import me.kvdpxne.dtm.translation.TranslationService
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserImpl

@@ -48,7 +48,8 @@ dependencies {
   implementation(libraries.bundles.disco)
   implementation(libraries.notchity)
 
-  compileOnly(libraries.protocollib.legacy)
+  shadow(libraries.protocollib.current)
+  shadow(libraries.protocollib.legacy)
 
   testImplementation(kotlin("test"))
 }

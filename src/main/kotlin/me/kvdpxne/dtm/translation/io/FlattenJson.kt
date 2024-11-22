@@ -1,4 +1,4 @@
-package me.kvdpxne.dtm.translation
+package me.kvdpxne.dtm.translation.io
 
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
@@ -110,12 +110,12 @@ internal object FlattenJson {
     map: MutableMap<MessageKey, Message<*>>
   ): Map<MessageKey, Message<*>> {
     for ((key: String, element: JsonElement) in json) {
-      val newKey: String = this.toKey(key, previousKey)
+      val newKey: String = toKey(key, previousKey)
 
       when (element) {
-        is JsonObject -> map.putAll(this.flattenJsonObject(element, newKey, map))
-        is JsonPrimitive -> map[MessageKey.of(newKey)] = this.toSingleMessage(element)
-        is JsonArray -> map[MessageKey.of(newKey)] = this.toMultipleMessages(element)
+        is JsonObject -> map.putAll(flattenJsonObject(element, newKey, map))
+        is JsonPrimitive -> map[MessageKey.of(newKey)] = toSingleMessage(element)
+        is JsonArray -> map[MessageKey.of(newKey)] = toMultipleMessages(element)
       }
     }
 
@@ -137,7 +137,7 @@ internal object FlattenJson {
     val map: MutableMap<MessageKey, Message<*>> = hashMapOf()
 
     when (root) {
-      is JsonObject -> this.flattenJsonObject(root, "", map)
+      is JsonObject -> flattenJsonObject(root, "", map)
       else -> throw RuntimeException("Unsupported root json type.")
     }
 

@@ -9,7 +9,7 @@ kotlinx-coroutines = "1.9.0"
 kotlinx-serialization = "1.7.3"
 notchity = "cf6803c868"
 postgresql = "42.7.4"
-protocollib-current = "5.1.0"
+protocollib-current = "4.8.0"
 protocollib-legacy = "3.7.0"
 shadow = "8.3.1" # Newer versions require java 11+
 spigot-current-oldest = "1.8-R0.1-SNAPSHOT"
@@ -35,6 +35,7 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 kotlinx-serialization-kaml = { module = "com.charleskorn.kaml:kaml", version.ref = "kaml" }
 notchity = { module = "com.github.kvdpxne:notchity", version.ref = "notchity" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+protocollib-current = { module = "com.comphenix.protocol:ProtocolLib", version.ref = "protocollib-current" }
 protocollib-legacy = { module = "com.comphenix.protocol:ProtocolLib-Legacy", version.ref = "protocollib-legacy" }
 spigot-current-oldest = { module = "org.spigotmc:spigot-api", version.ref = "spigot-current-oldest" }
 spigot-legacy = { module = "org.spigotmc:spigot-api", version.ref = "spigot-legacy" }

@@ -1,4 +1,4 @@
-package me.kvdpxne.dtm.translation.sender
+package me.kvdpxne.dtm.translation.communitation
 
 import java.util.Locale
 import me.kvdpxne.dtm.Constants
@@ -6,6 +6,7 @@ import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.translation.message.Message
 import me.kvdpxne.dtm.translation.message.MultipleMessages
 import me.kvdpxne.dtm.translation.message.SingleMessage
+import me.kvdpxne.dtm.translation.receiver.Receiver
 
 /**
  * A message sender that sends messages to performers, optionally with a prefix.
@@ -18,7 +19,7 @@ import me.kvdpxne.dtm.translation.message.SingleMessage
  */
 open class ToChat internal constructor(
   // @formatter:off
-                receivers: MutableCollection<Performer>,
+                receivers: MutableCollection<Receiver>,
                 messages : MutableMap<Locale, Message<*>>,
   protected val addPrefix: Boolean
   // @formatter:on
@@ -36,50 +37,46 @@ open class ToChat internal constructor(
     }
   }
 
-  protected fun constructMessage(rawMessage: String): String {
-    if (this.addPrefix) {
-      return "$FORMATTED_PREFIX $rawMessage"
-    }
-
-    return rawMessage
-  }
-
   /**
    * Sends a single or multi-line message to a performer, with an optional prefix.
    *
    * @since 0.1.0
    */
   private fun send(
-    performer: Performer,
+    receiver: Receiver,
     rawMessage: String,
     addPrefix: Boolean
   ) {
-    if (!addPrefix) {
-      performer.sendMessage(rawMessage)
+    if (receiver !is Performer) {
       return
     }
 
-    performer.sendMessage("$FORMATTED_PREFIX $rawMessage")
+    if (!addPrefix) {
+      receiver.sendMessage(rawMessage)
+      return
+    }
+
+    receiver.sendMessage("$FORMATTED_PREFIX $rawMessage")
   }
 
   /**
    * @since 0.1.0
    */
   private fun send(
-    performer: Performer,
+    receiver: Receiver,
     locale: Locale,
     addPrefix: Boolean
   ) {
     val message: Message<*> = super.findMessage(locale)
 
     if (message is SingleMessage) {
-      this.send(performer, message.content, addPrefix)
+      this.send(receiver, message.content, addPrefix)
       return
     }
 
     if (message is MultipleMessages) {
       for (contentLine: String in message.content) {
-        this.send(performer, contentLine, addPrefix)
+        this.send(receiver, contentLine, addPrefix)
       }
       return
     }

@@ -1,11 +1,12 @@
-package me.kvdpxne.dtm.translation
+package me.kvdpxne.dtm.translation.chains
 
 import java.util.Locale
 import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.shared.Copyable
+import me.kvdpxne.dtm.translation.communitation.SendChoices
 import me.kvdpxne.dtm.translation.formatter.Formatter
 import me.kvdpxne.dtm.translation.message.Message
-import me.kvdpxne.dtm.translation.sender.SendChoices
+import me.kvdpxne.dtm.translation.receiver.Receiver
 
 /**
  * A class representing a chain of formatted messages to be sent to multiple receivers.
@@ -20,7 +21,7 @@ import me.kvdpxne.dtm.translation.sender.SendChoices
  */
 class MessageFormatterChains internal constructor(
   // @formatter:off
-  private val receivers: MutableCollection<Performer>,
+  private val receivers: MutableCollection<Receiver>,
   private val messages : MutableMap<Locale, Message<*>>
   // @formatter:on
 ) : Copyable<MessageFormatterChains> {

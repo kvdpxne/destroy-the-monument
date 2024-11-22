@@ -1,6 +1,8 @@
 package me.kvdpxne.dtm.command
 
-interface ConsolePerformer : Performer {
+import me.kvdpxne.dtm.translation.receiver.DefaultReceiver
+
+interface ConsolePerformer : Performer, DefaultReceiver {
 
   /**
    * @param permission

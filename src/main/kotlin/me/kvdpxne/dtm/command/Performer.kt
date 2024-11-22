@@ -1,12 +1,13 @@
 package me.kvdpxne.dtm.command
 
 import me.kvdpxne.dtm.shared.Communicative
-import me.kvdpxne.dtm.translation.MessageFormatterChains
-import me.kvdpxne.dtm.translation.TranslatableCommunicative
+import me.kvdpxne.dtm.translation.chains.MessageFormatterChains
+import me.kvdpxne.dtm.translation.communitation.TranslatableCommunicative
 import me.kvdpxne.dtm.translation.TranslationService
 import me.kvdpxne.dtm.translation.message.MessageKey
+import me.kvdpxne.dtm.translation.receiver.Receiver
 
-interface Performer : Communicative, TranslatableCommunicative {
+interface Performer : Receiver, Communicative, TranslatableCommunicative {
 
   val name: String
 

@@ -7,7 +7,7 @@ import me.kvdpxne.dtm.shared.Communicative
 import me.kvdpxne.dtm.shared.GameUuid
 import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.team.Teammate
-import me.kvdpxne.dtm.translation.TranslatableCommunicative
+import me.kvdpxne.dtm.translation.communitation.TranslatableCommunicative
 import me.kvdpxne.dtm.user.LocalUser
 
 /**

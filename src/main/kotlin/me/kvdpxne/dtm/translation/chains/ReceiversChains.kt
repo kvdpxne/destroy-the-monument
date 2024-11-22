@@ -1,6 +1,7 @@
-package me.kvdpxne.dtm.translation
+package me.kvdpxne.dtm.translation.chains
 
 import me.kvdpxne.dtm.command.Performer
+import me.kvdpxne.dtm.translation.receiver.Receiver
 
 /**
  * Utility class for creating message chains with receivers.
@@ -27,7 +28,7 @@ class ReceiversChains internal constructor() {
    * @since 0.1.0
    */
   fun receivers(
-    receivers: Iterable<Performer>
+    receivers: Iterable<Receiver>
   ): MessageChains {
     return MessageChains(receivers.toMutableList())
   }
@@ -44,7 +45,7 @@ class ReceiversChains internal constructor() {
    * @since 0.1.0
    */
   fun receivers(
-    receivers: Array<Performer>
+    vararg receivers: Receiver
   ): MessageChains {
     return MessageChains(receivers.toMutableList())
   }
@@ -52,15 +53,15 @@ class ReceiversChains internal constructor() {
   /**
    * Constructs a [MessageChains] object for a single receiver.
    *
-   * This method creates a chain containing only the specified [performer].
+   * This method creates a chain containing only the specified [receiver].
    *
-   * @param performer A single [Performer] to include in the chain.
+   * @param receiver A single [Performer] to include in the chain.
    * @return A new [MessageChains] object containing the specified performer.
    * @since 0.1.0
    */
   fun receiver(
-    performer: Performer
+    receiver: Receiver
   ): MessageChains {
-    return MessageChains(mutableListOf(performer))
+    return MessageChains(mutableListOf(receiver))
   }
 }

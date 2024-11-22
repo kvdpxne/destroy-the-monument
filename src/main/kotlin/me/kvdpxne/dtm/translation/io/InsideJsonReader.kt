@@ -1,4 +1,4 @@
-package me.kvdpxne.dtm.translation
+package me.kvdpxne.dtm.translation.io
 
 import java.nio.file.Files
 import java.nio.file.Path
@@ -9,6 +9,8 @@ import kotlin.io.path.readText
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import me.kvdpxne.dtm.shared.io.Files2
+import me.kvdpxne.dtm.translation.locale.LocaleMessages
+import me.kvdpxne.dtm.translation.locale.Locales
 
 /**
  * A utility to read locale-specific JSON translation files and parse them into `LocaleMessages`.

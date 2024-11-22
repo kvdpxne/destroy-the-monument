@@ -2,6 +2,9 @@ package me.kvdpxne.dtm.translation
 
 import java.util.Locale
 import me.kvdpxne.dtm.shared.debug.Debug
+import me.kvdpxne.dtm.translation.chains.ReceiversChains
+import me.kvdpxne.dtm.translation.io.InsideJsonReader
+import me.kvdpxne.dtm.translation.locale.LocaleMessages
 
 /**
  * Service responsible for managing translations by locale.

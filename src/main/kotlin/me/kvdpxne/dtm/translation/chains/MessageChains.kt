@@ -1,12 +1,14 @@
-package me.kvdpxne.dtm.translation
+package me.kvdpxne.dtm.translation.chains
 
 import java.util.Locale
 import me.kvdpxne.dtm.command.ConsolePerformer
 import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.shared.Copyable
+import me.kvdpxne.dtm.translation.TranslationService
 import me.kvdpxne.dtm.translation.message.EnumMessageKey
 import me.kvdpxne.dtm.translation.message.Message
 import me.kvdpxne.dtm.translation.message.MessageKey
+import me.kvdpxne.dtm.translation.receiver.Receiver
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
 /**
@@ -22,7 +24,7 @@ import me.kvdpxne.dtm.user.LocalUserPerformer
  */
 class MessageChains internal constructor(
   // @formatter:off
-  private val receivers: MutableCollection<Performer>,
+  private val receivers: MutableCollection<Receiver>,
   private val messages : MutableMap<Locale, Message<*>> = hashMapOf()
   // @formatter:on
 ) : Copyable<MessageChains> {
@@ -44,8 +46,7 @@ class MessageChains internal constructor(
   ) {
     // Attempts to find messages according to the locale provide
     // by the receiver(s).
-    val message: Message<*> = TranslationService
-      .findLocalMessages(locale)
+    val message: Message<*> = TranslationService.findLocalMessages(locale)
       .findMessage(key)
 
     this.messages[locale] = message
