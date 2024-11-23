@@ -9,13 +9,15 @@ import java.lang.reflect.Constructor
 import java.lang.reflect.Field
 import java.lang.reflect.Method
 import me.kvdpxne.dtm.configuration.GeneralConfiguration
-import me.kvdpxne.dtm.shared.debug.Debug
+import me.kvdpxne.dtm.shared.Tick
 import me.kvdpxne.dtm.shared.item.ItemsClipboard
 import me.kvdpxne.dtm.shared.reflection.Reflection
+import me.kvdpxne.dtm.shared.text.colorize
 import me.kvdpxne.dtm.shared.world.WorldsHolder
 import me.kvdpxne.dtm.user.LocalUser
 import me.kvdpxne.dtm.user.LocalUserManager
 import me.kvdpxne.dtm.user.UserNotFoundException
+import net.minecraft.server.v1_8_R3.PacketPlayOutChat
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Location
@@ -159,6 +161,24 @@ fun Player.resetExperienceBarLevel() {
   this.level = 0
 }
 
+fun Player.sendPacket(
+  packet: Any
+) {
+  // org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer
+  val craftPlayerClass: Class<*> = Reflection.getCraftBukkitClass("entity.CraftPlayer")
+  val craftPlayer: Any = craftPlayerClass.cast(this)
+  val getHandleMethod: Method = craftPlayerClass.getMethod("getHandle")
+
+  // net.minecraft.server.v1_7_R4.EntityPlayer
+  val entityPlayer: Any = getHandleMethod.invoke(craftPlayer)
+  val playerConnectionField: Field = entityPlayer.javaClass.getField("playerConnection")
+  val playerConnection: Any = playerConnectionField.get(entityPlayer)
+
+  val aMethod: Method = playerConnection.javaClass.getMethod("sendPacket", Reflection.getMinecraftClass("Packet"))
+
+  aMethod.invoke(playerConnection, packet)
+}
+
 fun Player.respawn() {
   if (!this.isDead || !this.isOnline) {
     return
@@ -180,8 +200,7 @@ fun Player.respawn() {
 
   // net.minecraft.server.v1_7_R4.PacketPlayInClientCommand
   val packetPlayInClientCommandClass: Class<*> = Reflection.getMinecraftClass("PacketPlayInClientCommand")
-  val packetPlayInClientCommandConstructor: Constructor<*> =
-    packetPlayInClientCommandClass.getConstructor(enumClientCommandClass)
+  val packetPlayInClientCommandConstructor: Constructor<*> = packetPlayInClientCommandClass.getConstructor(enumClientCommandClass)
   val packetPlayInClientCommand: Any = packetPlayInClientCommandConstructor.newInstance(enumClientCommand)
 
   // org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer
@@ -196,6 +215,76 @@ fun Player.respawn() {
   val aMethod: Method = playerConnection.javaClass.getMethod("a", packetPlayInClientCommandClass)
 
   aMethod.invoke(playerConnection, packetPlayInClientCommand)
+}
+
+fun Player.send(
+  fadeIn: Tick,
+  show: Tick,
+  fadeOut: Tick,
+  title: String,
+  subtitle: String? = null
+) {
+  val chatBaseComponentClass = Reflection.getMinecraftClass("IChatBaseComponent")
+  val chatSerializerClass = chatBaseComponentClass.declaredClasses[0]
+  val serializeMethod = Reflection.getMethod(chatSerializerClass, "a", chatBaseComponentClass, arrayOf(String::class.java))
+
+  //
+  val packetPlayOutTitleClass: Class<*> = Reflection.getMinecraftClass("PacketPlayOutTitle")
+  val titleActionClass = packetPlayOutTitleClass.declaredClasses[0]
+
+  // Times
+  val times = Reflection.getConstructor(
+    packetPlayOutTitleClass,
+    Int::class.java,
+    Int::class.java,
+    Int::class.java
+  ).invoke(fadeIn, show, fadeOut)
+
+  this.sendPacket(times)
+
+  if (!subtitle.isNullOrBlank()) {
+    val subtitlePacket = Reflection.getConstructor(
+      packetPlayOutTitleClass,
+      titleActionClass,
+      chatBaseComponentClass
+    ).invoke(
+      Reflection.getField(titleActionClass, "SUBTITLE").get(),
+      serializeMethod.invoke(null, "{\"text\": \"${subtitle.colorize}\"}")
+    )
+
+    this.sendPacket(subtitlePacket)
+  }
+
+  val titlePacket = Reflection.getConstructor(
+    packetPlayOutTitleClass,
+    titleActionClass,
+    chatBaseComponentClass
+  ).invoke(
+    Reflection.getField(titleActionClass, "TITLE").get(),
+    serializeMethod.invoke(null, "{\"text\": \"${title.colorize}\"}")
+  )
+
+  this.sendPacket(titlePacket)
+}
+
+fun Player.sendM(
+  content: String,
+  position: Byte = MessagePosition.CHAT
+) {
+  val chatBaseComponentClass = Reflection.getMinecraftClass("IChatBaseComponent")
+  val chatSerializerClass = chatBaseComponentClass.declaredClasses[0]
+  val serializeMethod = Reflection.getMethod(chatSerializerClass, "a", chatBaseComponentClass, arrayOf(String::class.java))
+
+  //
+  val packetPlayOutTitleClass: Class<*> = Reflection.getMinecraftClass("PacketPlayOutChat")
+  val packetPlayOutTitle = Reflection
+    .getConstructor(packetPlayOutTitleClass, chatBaseComponentClass, Byte::class.java)
+    .invoke(
+      serializeMethod.invoke(null, """{"text": "${content.colorize}"}"""),
+      position
+    )
+
+  this.sendPacket(packetPlayOutTitle)
 }
 
 /**

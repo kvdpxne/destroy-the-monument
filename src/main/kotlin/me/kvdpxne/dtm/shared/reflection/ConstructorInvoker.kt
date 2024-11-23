@@ -8,5 +8,5 @@ interface ConstructorInvoker {
   /**
    * @since 0.1.0
    */
-  fun invoke(vararg parameters: Any): Any
+  fun invoke(vararg parameters: Any?): Any
 }

@@ -79,7 +79,7 @@ object Reflection {
 
       val fieldAccessor: FieldAccessor = object : FieldAccessor {
 
-        override fun get(target: Any): Any? {
+        override fun get(target: Any?): Any? {
           return field.get(target)
         }
 
@@ -159,7 +159,7 @@ object Reflection {
 
       val constructorInvoker: ConstructorInvoker = object : ConstructorInvoker {
 
-        override fun invoke(vararg parameters: Any): Any {
+        override fun invoke(vararg parameters: Any?): Any {
           return constructor.newInstance(*parameters)
         }
       }

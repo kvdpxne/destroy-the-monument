@@ -3,6 +3,7 @@ package me.kvdpxne.dtm.translation.communitation
 import java.util.Locale
 import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.configuration.GeneralConfiguration
+import me.kvdpxne.dtm.shared.Tick
 import me.kvdpxne.dtm.translation.message.Message
 import me.kvdpxne.dtm.translation.message.MultipleMessages
 import me.kvdpxne.dtm.translation.message.SingleMessage
@@ -89,5 +90,23 @@ class SendChoices(
     addPrefix: Boolean = GeneralConfiguration.USE_PREFIX
   ): ToChat {
     return ToChat(this.receivers, this.messages, addPrefix)
+  }
+
+  object Where {
+
+    const val BOTH: Byte = 3
+
+    const val SUB_TITLE: Byte = 1
+
+    const val TITLE: Byte = 0
+  }
+
+  fun useTitle(
+    fadeIn: Tick,
+    stay: Tick,
+    fadeOut: Tick,
+    where: Byte = Where.BOTH
+  ) : ToTitle {
+    return ToTitle(this.receivers, this.messages, fadeIn, stay, fadeOut, where)
   }
 }

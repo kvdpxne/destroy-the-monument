@@ -2,7 +2,7 @@ package me.kvdpxne.dtm.shared.reflection
 
 interface FieldAccessor {
 
-  fun get(target: Any): Any?
+  fun get(target: Any? = null): Any?
 
   fun set(target: Any, value: Any): Any
 

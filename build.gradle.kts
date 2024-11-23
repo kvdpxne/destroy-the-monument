@@ -33,6 +33,7 @@ val fileName = "spigot-1.7.10-SNAPSHOT-b1657.jar"
 dependencies {
   try {
     shadow(files("run/$fileName"))
+    shadow(files("run/cache/patched_1.8.8.jar"))
   } catch (_: Exception) {
     shadow(libraries.spigot.legacy)
   }
