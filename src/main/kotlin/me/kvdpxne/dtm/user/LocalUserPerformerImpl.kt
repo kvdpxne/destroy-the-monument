@@ -3,10 +3,8 @@ package me.kvdpxne.dtm.user
 import java.lang.ref.Reference
 import java.lang.ref.WeakReference
 import java.util.Locale
-import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.shared.PlayerUuid
 import me.kvdpxne.dtm.shared.text.colorize
-import me.kvdpxne.dtm.translation.TranslationService
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
@@ -17,15 +15,36 @@ class LocalUserPerformerImpl(
   // @formatter:on
 ) : LocalUserPerformer {
 
-  private val _player: Reference<Player> by lazy {
-    WeakReference(Bukkit.getPlayer(this.identifier))
+  /**
+   * Reference to the associated [Player] object, using a weak reference
+   * for memory efficiency.
+   *
+   * @since 0.1.0
+   */
+  private var _playerReference: Reference<Player>? = null
+
+  /**
+   * Lazily initializes and retrieves the associated player. If the player
+   * is not already cached in the weak reference, it attempts to resolve the
+   * player via Bukkit and caches the result.
+   *
+   * @since 0.1.0
+   */
+  private val _playerLazyDelegate: Lazy<Player?> = lazy {
+    var player: Player? = this._playerReference?.get()
+    if (null != player) {
+      return@lazy player
+    }
+    player = Bukkit.getPlayer(this.identifier)
+    this._playerReference = WeakReference(player)
+    return@lazy player
   }
 
   override val name: String
     get() = this.user.name
 
   override val player: Player?
-    get() = this._player.get()
+    get() = this._playerLazyDelegate.value
 
   override val locale: Locale
     get() = this.user.locale
@@ -41,11 +60,6 @@ class LocalUserPerformerImpl(
   ): Boolean {
     require(permission.isNotBlank()) {
       "The given \"permission\" must not be blank."
-    }
-
-    //
-    if (GeneralConfiguration.OP_F && this.isOperator) {
-      return true
     }
 
     //
