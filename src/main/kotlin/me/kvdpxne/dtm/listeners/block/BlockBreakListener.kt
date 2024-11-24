@@ -4,8 +4,8 @@ import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.shared.text.colorize
 import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.game.LocalGame
-import me.kvdpxne.dtm.position.MonumentPosition
-import me.kvdpxne.dtm.position.RevivalPosition
+import me.kvdpxne.dtm.position.monument.MonumentPosition
+import me.kvdpxne.dtm.position.revival.RevivalPosition
 import me.kvdpxne.dtm.scoreboard.updateFirstMonumentCounter
 import me.kvdpxne.dtm.scoreboard.updateSecondMonumentCounter
 import me.kvdpxne.dtm.shared.item.ItemsClipboard

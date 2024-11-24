@@ -1,9 +1,8 @@
 package me.kvdpxne.dtm.data.repositories
 
-import java.util.UUID
 import kotlinx.coroutines.flow.Flow
 import me.kvdpxne.dtm.arena.Arena
-import me.kvdpxne.dtm.position.RevivalPosition
+import me.kvdpxne.dtm.position.revival.RevivalPosition
 import me.kvdpxne.dtm.shared.ArenaUuid
 import me.kvdpxne.dtm.team.Team
 

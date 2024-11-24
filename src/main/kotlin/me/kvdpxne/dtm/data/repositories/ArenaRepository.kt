@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.data.repositories
 
 import me.kvdpxne.dtm.arena.Arena
-import me.kvdpxne.dtm.arena.ArenaMap
+import me.kvdpxne.dtm.arena.map.ArenaMap
 import me.kvdpxne.dtm.shared.ArenaUuid
 
 /**

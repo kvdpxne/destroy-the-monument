@@ -1,6 +1,7 @@
-package me.kvdpxne.dtm.position
+package me.kvdpxne.dtm.position.revival
 
 import java.util.UUID
+import me.kvdpxne.dtm.position.IdentifiableEntityPositionImpl
 import me.kvdpxne.dtm.team.Team
 
 /**
@@ -22,7 +23,7 @@ class RevivalPositionImpl<T : Team>(
   override var team      : T,
                identifier: UUID = UUID.randomUUID()
   // @formatter:on
-) : BaseIdentifiableEntityPosition(
+) : IdentifiableEntityPositionImpl(
   x = x,
   y = y,
   z = z,

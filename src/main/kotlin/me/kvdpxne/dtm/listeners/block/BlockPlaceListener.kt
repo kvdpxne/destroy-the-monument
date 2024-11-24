@@ -2,7 +2,7 @@ package me.kvdpxne.dtm.listeners.block
 
 import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.game.LocalGame
-import me.kvdpxne.dtm.position.RevivalPosition
+import me.kvdpxne.dtm.position.revival.RevivalPosition
 import me.kvdpxne.dtm.shared.event.cancel
 import me.kvdpxne.dtm.shared.material.hasInventory
 import me.kvdpxne.dtm.shared.material.isMonument

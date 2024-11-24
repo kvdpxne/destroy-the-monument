@@ -9,7 +9,7 @@ import me.kvdpxne.dtm.data.repositories.ArenaRevivalPositionsRepository
 import me.kvdpxne.dtm.data.sources.DatabasesConfiguration
 import me.kvdpxne.dtm.data.tables.ArenaRevivalPositionsTable
 import me.kvdpxne.dtm.data.transactions.concurrentTransaction
-import me.kvdpxne.dtm.position.RevivalPosition
+import me.kvdpxne.dtm.position.revival.RevivalPosition
 import me.kvdpxne.dtm.team.Team
 import org.jetbrains.exposed.sql.ISqlExpressionBuilder
 import org.jetbrains.exposed.sql.ResultRow

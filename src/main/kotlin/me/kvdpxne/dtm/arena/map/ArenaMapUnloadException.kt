@@ -1,4 +1,6 @@
-package me.kvdpxne.dtm.arena
+package me.kvdpxne.dtm.arena.map
+
+import me.kvdpxne.dtm.arena.ArenaException
 
 /**
  * Exception thrown when an error occurs during the unloading of an arena map.
@@ -13,7 +15,7 @@ package me.kvdpxne.dtm.arena
  */
 open class ArenaMapUnloadException(
   // @formatter:off
-  message: String     = "",
+  message: String     = "Failed to unload the arena map.",
   cause  : Throwable? = null
   // @formatter:on
 ) : ArenaException(message, cause) {

@@ -2,7 +2,7 @@ package me.kvdpxne.dtm.position
 
 import java.util.UUID
 
-open class BaseIdentifiableEntityPosition(
+open class IdentifiableEntityPositionImpl(
   // @formatter:off
                x         : Double,
                y         : Double,

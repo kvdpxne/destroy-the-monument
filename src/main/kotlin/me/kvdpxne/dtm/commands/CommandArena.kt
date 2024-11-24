@@ -47,7 +47,7 @@ internal fun attemptObtainArena(
   val name: String = parameters[index] as String
 
   // Obiekt areny znaleziony na podstawie unikatowej nazwy areny.
-  return ArenaService.findArenaByName(name)
+  return ArenaService.findArenaByNameOrNull(name)
     ?: receiver.throwMessage(EnumMessageKey.ARENA_NO_FOUND) {
       this@throwMessage.format(
         Formatter.begin(1)

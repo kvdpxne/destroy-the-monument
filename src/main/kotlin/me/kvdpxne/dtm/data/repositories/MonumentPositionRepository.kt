@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.data.repositories
 
 import java.util.UUID
-import me.kvdpxne.dtm.position.MonumentPosition
+import me.kvdpxne.dtm.position.monument.MonumentPosition
 import me.kvdpxne.dtm.shared.MonumentPositionUuid
 import me.kvdpxne.dtm.team.Team
 

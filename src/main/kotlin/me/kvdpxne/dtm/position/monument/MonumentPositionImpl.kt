@@ -1,6 +1,7 @@
-package me.kvdpxne.dtm.position
+package me.kvdpxne.dtm.position.monument
 
 import java.util.UUID
+import me.kvdpxne.dtm.position.IdentifiableBlockPositionImpl
 import me.kvdpxne.dtm.team.Team
 
 /**
@@ -20,7 +21,7 @@ class MonumentPositionImpl<T : Team>(
   override val team      : T,
                identifier: UUID = UUID.randomUUID()
   // @formatter:on
-) : BaseIdentifiableBlockPosition(
+) : IdentifiableBlockPositionImpl(
   x = x,
   y = y,
   z = z,

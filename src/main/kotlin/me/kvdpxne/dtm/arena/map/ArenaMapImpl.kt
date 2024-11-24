@@ -1,4 +1,4 @@
-package me.kvdpxne.dtm.arena
+package me.kvdpxne.dtm.arena.map
 
 import me.kvdpxne.dtm.shared.WorldUuid
 import me.kvdpxne.dtm.shared.world.WorldLoaderHelper

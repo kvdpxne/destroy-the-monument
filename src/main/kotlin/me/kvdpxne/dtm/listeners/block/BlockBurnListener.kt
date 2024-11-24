@@ -3,7 +3,7 @@ package me.kvdpxne.dtm.listeners.block
 import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.arena.ArenaManager
 import me.kvdpxne.dtm.configuration.GeneralConfiguration
-import me.kvdpxne.dtm.position.RevivalPosition
+import me.kvdpxne.dtm.position.revival.RevivalPosition
 import me.kvdpxne.dtm.shared.event.cancel
 import me.kvdpxne.dtm.shared.world.WorldsHolder
 import org.bukkit.Location

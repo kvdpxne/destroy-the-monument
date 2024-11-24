@@ -9,7 +9,7 @@ import me.kvdpxne.dtm.data.repositories.ArenaMonumentPositionsRepository
 import me.kvdpxne.dtm.data.sources.DatabasesConfiguration
 import me.kvdpxne.dtm.data.tables.ArenaMonumentPositionsTable
 import me.kvdpxne.dtm.data.transactions.concurrentTransaction
-import me.kvdpxne.dtm.position.MonumentPosition
+import me.kvdpxne.dtm.position.monument.MonumentPosition
 import me.kvdpxne.dtm.team.Team
 import org.jetbrains.exposed.sql.ISqlExpressionBuilder
 import org.jetbrains.exposed.sql.ResultRow

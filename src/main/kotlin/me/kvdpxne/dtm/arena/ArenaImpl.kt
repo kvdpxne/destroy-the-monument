@@ -1,10 +1,12 @@
 package me.kvdpxne.dtm.arena
 
 import java.util.UUID
-import me.kvdpxne.dtm.position.MonumentPosition
-import me.kvdpxne.dtm.position.RevivalPosition
+import me.kvdpxne.dtm.arena.map.ArenaMap
+import me.kvdpxne.dtm.position.monument.MonumentPosition
+import me.kvdpxne.dtm.position.revival.RevivalPosition
 import me.kvdpxne.dtm.shared.AbstractIdentifiable
 import me.kvdpxne.dtm.shared.ArenaUuid
+import me.kvdpxne.dtm.shared.StylishToStringBuilder
 import me.kvdpxne.dtm.team.Team
 
 /**
@@ -126,10 +128,11 @@ class ArenaImpl(
   }
 
   override fun toString(): String {
-    return "Arena{" +
-      "name=\"${this.name}\", " +
-      "map=\"${this.map}\", " +
-      "identifier=\"${this.identifier}\"" +
-      "}"
+    return StylishToStringBuilder()
+      .begin("Arena")
+      .add("identifier", this.identifier)
+      .add("name", this.name)
+      .add("map", this.map)
+      .build()
   }
 }

@@ -1,5 +1,6 @@
-package me.kvdpxne.dtm.position
+package me.kvdpxne.dtm.position.revival
 
+import me.kvdpxne.dtm.position.EntityPosition
 import me.kvdpxne.dtm.shared.Identifiable
 import me.kvdpxne.dtm.shared.RevivalPositionUuid
 import me.kvdpxne.dtm.team.Team

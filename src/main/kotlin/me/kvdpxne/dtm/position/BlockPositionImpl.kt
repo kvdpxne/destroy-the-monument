@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.position
 
-open class BaseBlockPosition(
+open class BlockPositionImpl(
   x: Int,
   y: Int,
   z: Int,

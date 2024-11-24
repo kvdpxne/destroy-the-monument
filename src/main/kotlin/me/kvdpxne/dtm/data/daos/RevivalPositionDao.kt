@@ -6,8 +6,8 @@ import me.kvdpxne.dtm.data.sources.DatabasesConfiguration
 import me.kvdpxne.dtm.data.tables.RevivalPositionTable
 import me.kvdpxne.dtm.data.tables.TeamTable
 import me.kvdpxne.dtm.data.transactions.concurrentTransaction
-import me.kvdpxne.dtm.position.RevivalPosition
-import me.kvdpxne.dtm.position.RevivalPositionImpl
+import me.kvdpxne.dtm.position.revival.RevivalPosition
+import me.kvdpxne.dtm.position.revival.RevivalPositionImpl
 import me.kvdpxne.dtm.team.Team
 import me.kvdpxne.dtm.team.TeamColors
 import me.kvdpxne.dtm.team.TeamImpl

@@ -2,7 +2,7 @@ package me.kvdpxne.dtm.position
 
 import java.util.UUID
 
-open class BaseIdentifiableBlockPosition(
+open class IdentifiableBlockPositionImpl(
   x: Int,
   y: Int,
   z: Int,

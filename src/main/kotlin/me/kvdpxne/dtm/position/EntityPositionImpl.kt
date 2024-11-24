@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.position
 
-class BaseEntityPosition(
+class EntityPositionImpl(
   // @formatter:off
                x    : Double,
                y    : Double,

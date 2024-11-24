@@ -6,8 +6,8 @@ import me.kvdpxne.dtm.data.sources.DatabasesConfiguration
 import me.kvdpxne.dtm.data.tables.MonumentPositionTable
 import me.kvdpxne.dtm.data.tables.TeamTable
 import me.kvdpxne.dtm.data.transactions.concurrentTransaction
-import me.kvdpxne.dtm.position.MonumentPosition
-import me.kvdpxne.dtm.position.MonumentPositionImpl
+import me.kvdpxne.dtm.position.monument.MonumentPosition
+import me.kvdpxne.dtm.position.monument.MonumentPositionImpl
 import me.kvdpxne.dtm.team.Team
 import me.kvdpxne.dtm.team.TeamColors
 import me.kvdpxne.dtm.team.TeamImpl

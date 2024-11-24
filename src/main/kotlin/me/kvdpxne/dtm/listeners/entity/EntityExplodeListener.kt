@@ -5,7 +5,7 @@ import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.LocalGame
-import me.kvdpxne.dtm.position.RevivalPosition
+import me.kvdpxne.dtm.position.revival.RevivalPosition
 import me.kvdpxne.dtm.shared.event.cancel
 import me.kvdpxne.dtm.shared.block.hasInventory
 import me.kvdpxne.dtm.shared.block.isPlant

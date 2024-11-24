@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.shared.world
 
-import me.kvdpxne.dtm.position.BaseBlockPosition
-import me.kvdpxne.dtm.position.BaseEntityPosition
+import me.kvdpxne.dtm.position.BlockPositionImpl
+import me.kvdpxne.dtm.position.EntityPositionImpl
 import me.kvdpxne.dtm.position.BlockPosition
 import me.kvdpxne.dtm.position.EntityPosition
 import me.kvdpxne.dtm.position.toWorld
@@ -9,7 +9,7 @@ import org.bukkit.Location
 import org.bukkit.World
 
 fun Location.toBlockPosition(): BlockPosition {
-  return BaseBlockPosition(
+  return BlockPositionImpl(
     this.blockX,
     this.blockY,
     this.blockZ,
@@ -18,7 +18,7 @@ fun Location.toBlockPosition(): BlockPosition {
 }
 
 fun Location.toEntityPosition(): EntityPosition {
-  return BaseEntityPosition(
+  return EntityPositionImpl(
     this.x,
     this.y,
     this.z,

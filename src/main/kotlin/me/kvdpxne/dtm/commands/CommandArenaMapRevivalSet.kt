@@ -5,7 +5,7 @@ import me.kvdpxne.dtm.arena.ArenaService
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.Parameters
-import me.kvdpxne.dtm.position.RevivalPositionImpl
+import me.kvdpxne.dtm.position.revival.RevivalPositionImpl
 import me.kvdpxne.dtm.team.Team
 import me.kvdpxne.dtm.translation.formatter.Formatter
 import me.kvdpxne.dtm.translation.message.EnumMessageKey

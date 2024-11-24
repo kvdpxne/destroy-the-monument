@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.commands
 
 import me.kvdpxne.dtm.arena.Arena
-import me.kvdpxne.dtm.arena.ArenaMapImpl
+import me.kvdpxne.dtm.arena.map.ArenaMapImpl
 import me.kvdpxne.dtm.arena.ArenaService
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder

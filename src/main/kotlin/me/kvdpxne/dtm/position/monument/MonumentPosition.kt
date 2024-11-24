@@ -1,5 +1,6 @@
-package me.kvdpxne.dtm.position
+package me.kvdpxne.dtm.position.monument
 
+import me.kvdpxne.dtm.position.BlockPosition
 import me.kvdpxne.dtm.shared.Identifiable
 import me.kvdpxne.dtm.shared.MonumentPositionUuid
 import me.kvdpxne.dtm.team.Team

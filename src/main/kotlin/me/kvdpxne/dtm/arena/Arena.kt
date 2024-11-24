@@ -1,8 +1,9 @@
 package me.kvdpxne.dtm.arena
 
+import me.kvdpxne.dtm.arena.map.ArenaMap
 import me.kvdpxne.dtm.position.BlockPosition
-import me.kvdpxne.dtm.position.MonumentPosition
-import me.kvdpxne.dtm.position.RevivalPosition
+import me.kvdpxne.dtm.position.monument.MonumentPosition
+import me.kvdpxne.dtm.position.revival.RevivalPosition
 import me.kvdpxne.dtm.shared.ArenaUuid
 import me.kvdpxne.dtm.shared.Identifiable
 import me.kvdpxne.dtm.team.Team

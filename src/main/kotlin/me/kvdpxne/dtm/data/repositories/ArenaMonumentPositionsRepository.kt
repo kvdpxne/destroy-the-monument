@@ -2,7 +2,7 @@ package me.kvdpxne.dtm.data.repositories
 
 import kotlinx.coroutines.flow.Flow
 import me.kvdpxne.dtm.arena.Arena
-import me.kvdpxne.dtm.position.MonumentPosition
+import me.kvdpxne.dtm.position.monument.MonumentPosition
 import me.kvdpxne.dtm.shared.ArenaUuid
 import me.kvdpxne.dtm.team.Team
 

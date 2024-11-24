@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.data.repositories
 
-import me.kvdpxne.dtm.position.RevivalPosition
+import me.kvdpxne.dtm.position.revival.RevivalPosition
 import me.kvdpxne.dtm.shared.RevivalPositionUuid
 import me.kvdpxne.dtm.team.Team
 
