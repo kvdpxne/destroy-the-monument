@@ -39,8 +39,10 @@ fun createHelpCommand(): Command<Performer> {
       }
 
       performer.sendMessages(
-        "Available commands:",
-        *commands.toTypedArray()
+        arrayOf(
+          "Available commands:",
+          *commands.toTypedArray()
+        )
       )
     }
     .build()

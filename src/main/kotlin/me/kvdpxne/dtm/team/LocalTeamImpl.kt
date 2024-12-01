@@ -108,22 +108,18 @@ class LocalTeamImpl(
   }
 
   /**
-   * Alias for [TeammateImpl.sendConfiguredMessage]
-   *
-   * @since 0.1
+   * @since 0.1.0
    */
   override fun sendMessage(
     message: String
   ) {
-    this._teammates.forEach { teammate: Teammate ->
+    for (teammate: Teammate in this._teammates) {
       teammate.sendMessage(message)
     }
   }
 
   /**
-   * Alias for [TeammateImpl.sendConfiguredMessage]
-   *
-   * @since 0.1
+   * @since 0.1.0
    */
   override fun sendMessage(
     message: () -> String
@@ -132,27 +128,31 @@ class LocalTeamImpl(
       return
     }
 
-    val body = message()
-    this._teammates.forEach { teammate: Teammate ->
-      teammate.sendMessage(body)
+    this.sendMessage(message())
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  override fun sendMessages(
+    messages: Array<out String>
+  ) {
+    for (message: String in messages) {
+      this.sendMessage(message)
     }
   }
 
   /**
-   * Alias for [TeammateImpl.sendConfiguredMessages]
-   *
-   * @since 0.1
+   * @since 0.1.0
    */
   override fun sendMessages(
-    vararg messages: String
+    messages: () -> Array<out String>
   ) {
-    if (this._teammates.isEmpty() || messages.isEmpty()) {
+    if (this._teammates.isEmpty()) {
       return
     }
 
-    this._teammates.forEach { teammate: Teammate ->
-      teammate.sendMessages(*messages)
-    }
+    this.sendMessages(messages())
   }
 
   override fun toLocalTeam(): LocalTeam {

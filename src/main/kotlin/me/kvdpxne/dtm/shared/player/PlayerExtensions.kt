@@ -17,7 +17,6 @@ import me.kvdpxne.dtm.shared.world.WorldsHolder
 import me.kvdpxne.dtm.user.LocalUser
 import me.kvdpxne.dtm.user.LocalUserManager
 import me.kvdpxne.dtm.user.UserNotFoundException
-import net.minecraft.server.v1_8_R3.PacketPlayOutChat
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Location

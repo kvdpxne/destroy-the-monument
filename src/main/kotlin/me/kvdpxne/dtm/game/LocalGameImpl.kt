@@ -805,22 +805,18 @@ class LocalGameImpl(
   }
 
   /**
-   * Alias for [User.sendConfiguredMessage]
+   * @since 0.1.0
    */
   override fun sendMessage(
     message: String
   ) {
-    if (this._hostages.isEmpty()) {
-      return
-    }
-
-    this._hostages.values.forEach { user: LocalUser ->
+    for (user: LocalUser in this._hostages.values) {
       user.sendMessage(message)
     }
   }
 
   /**
-   * Alias for [User.sendConfiguredMessage]
+   * @since 0.1.0
    */
   override fun sendMessage(
     message: () -> String
@@ -829,25 +825,31 @@ class LocalGameImpl(
       return
     }
 
-    val body = message()
-    this._hostages.values.forEach { user: LocalUser ->
-      user.sendMessage(body)
+    this.sendMessage(message())
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  override fun sendMessages(
+    messages: Array<out String>
+  ) {
+    for (message: String in messages) {
+      this.sendMessage(message)
     }
   }
 
   /**
-   * Alias for [User.sendConfiguredMessages]
+   * @since 0.1.0
    */
   override fun sendMessages(
-    vararg messages: String
+    messages: () -> Array<out String>
   ) {
-    if (this._hostages.isEmpty() || messages.isEmpty()) {
+    if (this._hostages.isEmpty()) {
       return
     }
 
-    this._hostages.values.forEach { user: LocalUser ->
-      user.sendMessages(*messages)
-    }
+    this.sendMessages(messages())
   }
 
   override fun prepareMessage(key: MessageKey): MessageFormatterChains {

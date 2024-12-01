@@ -104,22 +104,4 @@ interface Teammate : Communicative {
    * @since 0.1.0
    */
   fun leave()
-
-  /**
-   * Alias for [UserStatistics.addDestroyedMonuments]
-   *
-   * @since 0.1
-   */
-  override fun sendMessage(message: String) {
-    this.user.sendMessage(message)
-  }
-
-  /**
-   * Alias for [UserStatistics.addDestroyedMonuments]
-   *
-   * @since 0.1
-   */
-  override fun sendMessages(vararg messages: String) {
-    this.user.sendMessages(*messages)
-  }
 }

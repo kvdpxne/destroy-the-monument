@@ -1,4 +1,39 @@
 {
+  "profession": {
+    "archer": "Łucznik",
+    "assassin": "Asasyn",
+    "defender": "Obrońca",
+    "engineer": "Technik",
+    "knight": "Rycerz",
+    "medic": "Medyk",
+    "pyro": "Pyro",
+    "scout": "Zwiadowca",
+    "specialist": "Specjalista",
+
+    "state": {
+      "available": "&6&lDostępna",
+      "selected": "&a&lWybrana",
+      "unavailable": "&c&lNiedostępna"
+    },
+
+    "select": {
+      "selected": [
+        "&7Przepraszamy ale nie możesz zmienić swojej profesji (&6{CURRENT_PROFESSION_NAME}&7) na",
+        "&7na profesje o nazwie &6{PROFESSION_NAME} &7ponieważ jest",
+        "&7ona aktualnie twoją wybraną profesją."
+      ],
+      "success": "&7Profesja o nazwie &6{PROFESSION_NAME} &7została &apomyślnie &7ustawiona jako domyślna.",
+      "unavailable": "&7Przepraszamy ale profesja o nazwie &6{PROFESSION_NAME} &7jest aktualnie &cniedostępna&7."
+    },
+
+    "change": {
+      "after": {
+        "death": "&7Profesja, która wybrałeś zostanie zmieniona po twojej śmierci."
+      }
+    }
+  },
+
+
   "arena": {
     "map": {
       "block": {

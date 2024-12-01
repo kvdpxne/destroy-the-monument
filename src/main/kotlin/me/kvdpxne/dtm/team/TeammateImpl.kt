@@ -75,6 +75,15 @@ class TeammateImpl(
     player.equipItemsOfTeamSelection()
   }
 
+  /**
+   * @since 0.1.0
+   */
+  override fun sendMessage(
+    message: String
+  ) {
+    this.user.performer.sendMessage(message)
+  }
+
   override fun toString(): String {
     return StylishToStringBuilder()
       .begin("Teammate")

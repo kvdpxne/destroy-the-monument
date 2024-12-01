@@ -2,9 +2,12 @@ package me.kvdpxne.dtm.user
 
 import java.util.Locale
 import me.kvdpxne.dtm.command.Performer
+import me.kvdpxne.dtm.container.ContainerOpener
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.shared.Communicative
 import me.kvdpxne.dtm.shared.Identifiable
+import me.kvdpxne.dtm.shared.PacketHandler
+import me.kvdpxne.dtm.shared.PlayerProvider
 import me.kvdpxne.dtm.shared.PlayerUuid
 import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.team.Teammate
@@ -20,7 +23,13 @@ import org.bukkit.entity.Player
  *
  * @since 0.1.0
  */
-interface LocalUserPerformer : Identifiable<PlayerUuid>, Communicative, Performer {
+interface LocalUserPerformer :
+  Communicative,
+  ContainerOpener<Player>,
+  Identifiable<PlayerUuid>,
+  PacketHandler<Player>,
+  Performer,
+  PlayerProvider<Player> {
 
   /**
    * The [LocalUser] instance associated with this performer, providing access
@@ -55,7 +64,7 @@ interface LocalUserPerformer : Identifiable<PlayerUuid>, Communicative, Performe
    *
    * @since 0.1.0
    */
-  val player: Player?
+  override val player: Player?
 
   /**
    * The locale of the user, which determines the language and region-specific

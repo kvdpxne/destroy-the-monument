@@ -1,8 +1,10 @@
 package me.kvdpxne.dtm.shared.item
 
 import kotlin.random.Random
+import me.kvdpxne.dtm.shared.Copyable
 import me.kvdpxne.dtm.shared.attributes.GenericAttribute
 import me.kvdpxne.dtm.shared.attributes.Operations
+import me.kvdpxne.dtm.shared.material.asItem
 import me.kvdpxne.dtm.shared.reflection.FieldAccessor
 import me.kvdpxne.dtm.shared.reflection.MethodInvoker
 import me.kvdpxne.dtm.shared.reflection.PrimitiveTypes
@@ -18,7 +20,7 @@ import org.bukkit.potion.PotionEffect
 
 class ItemBuilder private constructor(
   private var itemStack: ItemStack
-) {
+): Copyable<ItemBuilder> {
 
   companion object {
 
@@ -27,6 +29,10 @@ class ItemBuilder private constructor(
      */
     fun begin(itemStack: ItemStack): ItemBuilder {
       return ItemBuilder(itemStack)
+    }
+
+    fun begin(name: String): ItemBuilder {
+      return this.begin(Material.valueOf(name.uppercase()).asItem())
     }
   }
 
@@ -360,10 +366,24 @@ class ItemBuilder private constructor(
     return this
   }
 
+  fun raw(): Any {
+    val craftItemStackClass: Class<*> = Reflection.getCraftBukkitClass("inventory.CraftItemStack")
+
+    val minecraftItemStack: Any = Reflection
+      .getMethod(craftItemStackClass, "asNMSCopy", null, arrayOf(this.itemStack.javaClass))
+      .invoke(null, this.itemStack)!!
+
+    return minecraftItemStack
+  }
+
   /**
    * @since 0.1.0
    */
   fun build(): ItemStack {
     return this.itemStack
+  }
+
+  override fun copy(): ItemBuilder {
+    return ItemBuilder(this.itemStack)
   }
 }

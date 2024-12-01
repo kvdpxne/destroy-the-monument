@@ -169,4 +169,10 @@ object Reflection {
 
     throw IllegalStateException()
   }
+
+  fun getConstructor2(
+    clazz: Class<*>, parameterTypes: Array<Class<*>>
+  ): ConstructorInvoker {
+    return this.getConstructor(clazz, *parameterTypes)
+  }
 }

@@ -109,9 +109,11 @@ fun createTeamSelectionGui(
       if (!game.addTeammate(team, user)) {
         event.cancel()
         user.sendMessages(
+          arrayOf(
           "&6&lDTM &7> &cNie możesz dołączyć do drużyny.",
           "&6&lDTM &7> &cPrawdopodobnie jest to błąd, który nie powinien nigdy",
           "&cwystąpić."
+          )
         )
         event.whoClicked.closeInventory()
         return@setItem
@@ -170,9 +172,11 @@ fun createTeamSelectionGui(
     if (!game.addTeammate(team, user)) {
       event.cancel()
       user.sendMessages(
+        arrayOf(
         "&6&lDTM &7> &cNie możesz dołączyć do drużyny.",
         "&6&lDTM &7> &cPrawdopodobnie jest to błąd, który nie powinien nigdy",
         "&cwystąpić."
+        )
       )
       event.whoClicked.closeInventory()
       return@setItem
@@ -181,7 +185,7 @@ fun createTeamSelectionGui(
     val player = event.whoClicked as Player
     player.closeInventory()
 
-    game.sendConfiguredMessage {
+    game.sendMessage {
       "&6&lDTM &7> &fGracz &6$displayName &fdołączył do drużyny $color&l$polishTeamName&f."
     }
   }

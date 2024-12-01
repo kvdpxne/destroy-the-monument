@@ -26,7 +26,10 @@ import me.kvdpxne.dtm.listeners.entity.ProjectileHitListener
 import me.kvdpxne.dtm.listeners.entity.ProjectileLaunchListener
 import me.kvdpxne.dtm.listeners.packet.PacketPlayInBlockDigListener
 import me.kvdpxne.dtm.listeners.packet.PacketPlayInSettingsListener
+import me.kvdpxne.dtm.listeners.packet.PacketPlayInWindowClickListener
+import me.kvdpxne.dtm.listeners.packet.PacketPlayOutCloseWindowListener
 import me.kvdpxne.dtm.listeners.packet.PacketPlayOutEntityDestroyListener
+import me.kvdpxne.dtm.listeners.packet.PacketPlayOutTransactionListener
 import me.kvdpxne.dtm.listeners.player.PlayerChatListener
 import me.kvdpxne.dtm.listeners.player.PlayerCraftItemListener
 import me.kvdpxne.dtm.listeners.player.PlayerDeathListener
@@ -302,7 +305,10 @@ class DestroyTheMonument : JavaPlugin() {
       this.registerPacketListeners(
         PacketPlayInBlockDigListener,
         PacketPlayInSettingsListener,
-        PacketPlayOutEntityDestroyListener
+        PacketPlayInWindowClickListener,
+        PacketPlayOutCloseWindowListener,
+        PacketPlayOutEntityDestroyListener,
+        PacketPlayOutTransactionListener,
       )
     }
 
@@ -335,6 +341,8 @@ class DestroyTheMonument : JavaPlugin() {
 
       // Dodaje obiekt użytkownika do lokalnej pamięci.
       LocalUserManager.addUser(user)
+
+//      PacketLogger.injectPlayer(player)
     }
 
     this.server.scheduler.runTaskTimerAsynchronously(

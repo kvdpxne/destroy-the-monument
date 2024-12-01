@@ -230,7 +230,7 @@ object BlockBreakListener : Listener {
       }
     }
 
-    game.sendMessages {
+    game.sendMessages(fun(): Array<String> {
       val coloredUser = "${killerTeam.colorInChat}${user.name}"
       val coloredMonument = "${monumentBelongs.colorInChat}&l${monumentBelongs.name}".colorize.uppercase()
 
@@ -240,12 +240,12 @@ object BlockBreakListener : Listener {
         else -> "&fPozostało &6${victimTeam.health} &fmonumentów."
       }
 
-      arrayOf(
+      return arrayOf(
         "",
         "&6&lDTM &7> &fGracz $coloredUser &fzniszczył monument drużyny $coloredMonument",
         "&6&lDTM &7> $end"
       )
-    }
+    })
 
     //
     if (0 < victimTeam.health) {

@@ -1,8 +1,8 @@
 package me.kvdpxne.dtm.listeners.player
 
+import me.kvdpxne.dtm.containers.createProfessionsContainer
 import me.kvdpxne.dtm.guis.createArenaSelectionGui
 import me.kvdpxne.dtm.guis.createGameSelectionGui
-import me.kvdpxne.dtm.guis.createProfessionSelectionGui
 import me.kvdpxne.dtm.guis.createTeamSelectionGui
 import me.kvdpxne.dtm.shared.block.isMonument
 import me.kvdpxne.dtm.shared.event.cancel
@@ -66,7 +66,7 @@ object PlayerInteractListener : Listener {
       if (itemInHand.isSimilar(ItemsClipboard.ITEM_PROFESSION_SELECT)) {
         val user = player.localUser
         event.cancel()
-        createProfessionSelectionGui(user).open(player)
+        createProfessionsContainer(user).open(user.performer)
         return
       }
 

@@ -1,4 +1,39 @@
 {
+  "profession": {
+    "archer": "Archer",
+    "assassin": "Assassin",
+    "defender": "Defender",
+    "engineer": "Engineer",
+    "knight": "Knight",
+    "medic": "Medic",
+    "pyro": "Pyro",
+    "scout": "Scout",
+    "specialist": "Specialist",
+
+    "state": {
+      "available": "&6&lAvailable",
+      "selected": "&a&lSelected",
+      "unavailable": "&c&lUnavailable"
+    },
+
+    "select": {
+      "selected": [
+        "&7Sorry, but you cannot change your profession (&6{CURRENT_PROFESSION_NAME}&7) to",
+        "&7the profession named &6{PROFESSION_NAME} &7because it is",
+        "&7currently your selected profession."
+      ],
+      "success": "&7The profession named &6{PROFESSION_NAME} &7has been &asuccessfully &7set as the default.",
+      "unavailable": "&7Sorry, but the profession named &6{PROFESSION_NAME} &7is currently &cunavailable&7."
+    },
+
+    "change": {
+      "after": {
+        "death": "&7The profession you selected will be changed after your death."
+      }
+    }
+  },
+
+
   "arena": {
     "map": {
       "block": {

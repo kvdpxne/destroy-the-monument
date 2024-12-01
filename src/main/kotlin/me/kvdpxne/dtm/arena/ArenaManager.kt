@@ -88,6 +88,16 @@ object ArenaManager {
       return this.arenaByWorld[identifier]
     }
 
+    return null
+  }
+
+  fun findArenaByWorldIdentifier(
+    identifier: WorldUuid
+  ): Arena? {
+    if (this.initialized) {
+      return this.arenaByWorld[identifier]
+    }
+
     error("The arena manager has not yet been initialized.")
   }
 

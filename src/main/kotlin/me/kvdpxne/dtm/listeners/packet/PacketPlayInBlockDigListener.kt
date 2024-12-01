@@ -6,8 +6,8 @@ import com.comphenix.protocol.events.PacketContainer
 import com.comphenix.protocol.events.PacketEvent
 import com.comphenix.protocol.wrappers.EnumWrappers.PlayerDigType
 import me.kvdpxne.dtm.DestroyTheMonument
+import me.kvdpxne.dtm.containers.createProfessionsContainer
 import me.kvdpxne.dtm.game.LocalGame
-import me.kvdpxne.dtm.guis.createProfessionSelectionGui
 import me.kvdpxne.dtm.shared.player.localUser
 import me.kvdpxne.dtm.shared.player.resetExperienceBar
 import me.kvdpxne.dtm.team.Teammate
@@ -54,7 +54,7 @@ object PacketPlayInBlockDigListener : PacketAdapter(
 
     //
     if (player.isSneaking) {
-      createProfessionSelectionGui(user).open(player)
+      createProfessionsContainer(user).open(user.performer)
       return
     }
 

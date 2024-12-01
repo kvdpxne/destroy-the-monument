@@ -1,0 +1,5 @@
+package me.kvdpxne.dtm.container
+
+import org.bukkit.entity.Player
+
+typealias BukkitSlot = Slot<Player>

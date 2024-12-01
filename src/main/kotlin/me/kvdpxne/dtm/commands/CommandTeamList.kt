@@ -23,13 +23,15 @@ fun createTeamListCommand(): Command<Performer> {
       val game: Game<Team> = attemptObtainGame(performer, parameters)
 
       performer.sendMessages(
-        "&6&lDTM &7> &7Drużyny przypisane do gry o nazwie &6${game.name}&7:",
-        *game.teams
-          .sortedBy { it.name }
-          .map {
-            "&8> ${it.displayName}"
-          }
-          .toTypedArray()
+        arrayOf(
+          "&6&lDTM &7> &7Drużyny przypisane do gry o nazwie &6${game.name}&7:",
+          *game.teams
+            .sortedBy { it.name }
+            .map {
+              "&8> ${it.displayName}"
+            }
+            .toTypedArray()
+        )
       )
     }
     .build()

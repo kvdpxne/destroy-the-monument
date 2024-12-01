@@ -179,8 +179,10 @@ internal class CommandImpl<T : Performer> internal constructor(
     // If the command is not executable, don't allow it to be executed
     if (!command.executable) {
       performer.sendMessages(
-        "&7Incorrect use of the &c${command.name} &7command.",
-        "&7Usage: &a${command.usage}"
+        arrayOf(
+          "&7Incorrect use of the &c${command.name} &7command.",
+          "&7Usage: &a${command.usage}"
+        )
       )
       return
     }
@@ -191,8 +193,10 @@ internal class CommandImpl<T : Performer> internal constructor(
     // If there are more arguments for a command that takes no parameters
     if (command.parameters.isEmpty() && idx != arguments.size - 1) {
       performer.sendMessages(
-        "&7The command does not accept any arguments.",
-        "&7Usage: &a${command.usage}"
+        arrayOf(
+          "&7The command does not accept any arguments.",
+          "&7Usage: &a${command.usage}"
+        )
       )
       return
     }
@@ -200,8 +204,10 @@ internal class CommandImpl<T : Performer> internal constructor(
     // If there is a required parameter after the supply of arguments ends, it is absent
     if (arguments.size - idx - 1 < command.parameters.size && command.parameters[arguments.size - idx - 1].required) {
       performer.sendMessages(
-        "Parameter ${command.parameters[arguments.size - idx - 1].name} is required.",
-        "&7Usage: &a${command.usage}"
+        arrayOf(
+          "Parameter ${command.parameters[arguments.size - idx - 1].name} is required.",
+          "&7Usage: &a${command.usage}"
+        )
       )
       return
     }
@@ -222,8 +228,10 @@ internal class CommandImpl<T : Performer> internal constructor(
       // Check if there is a parameter for this index
       if (paramIndex >= command.parameters.size) {
         performer.sendMessages(
-          "Unknown parameter ${arguments[i]}",
-          "&7Usage: &a${command.usage}"
+          arrayOf(
+            "Unknown parameter ${arguments[i]}",
+            "&7Usage: &a${command.usage}"
+          )
         )
         return
       }
@@ -255,8 +263,10 @@ internal class CommandImpl<T : Performer> internal constructor(
 
     if (!command.executable) {
       performer.sendMessages(
-        "&7The command &c${command.name} &7is not executable.",
-        "&7Usage: &a${command.usage}"
+        arrayOf(
+          "&7The command &c${command.name} &7is not executable.",
+          "&7Usage: &a${command.usage}"
+        )
       )
       return
     }

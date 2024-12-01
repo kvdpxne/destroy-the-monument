@@ -100,8 +100,4 @@ class LocalUserImpl(
   override fun sendMessage(message: String) {
     this._performer.sendMessage(message)
   }
-
-  override fun sendMessages(vararg messages: String) {
-    this._performer.sendMessages(*messages)
-  }
 }

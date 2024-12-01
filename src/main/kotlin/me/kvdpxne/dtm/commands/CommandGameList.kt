@@ -11,7 +11,7 @@ fun createGameListCommand(): Command<Performer> {
   return CommandBuilder.begin<Performer>("list")
     .handler { performer, _ ->
       // TODO command body
-      performer.sendMessages(
+      performer.sendMessage(
         ""
       )
     }

@@ -19,6 +19,7 @@ open class Gui(displayName: String, rows: Rows) {
 
   init {
     holder.inventory = this.inventory
+    inventory.title
   }
 
   private fun hasItem(slot: Int): Boolean {
