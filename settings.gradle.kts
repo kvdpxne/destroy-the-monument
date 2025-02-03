@@ -43,4 +43,22 @@ dependencyResolutionManagement {
   repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
 }
 
+arrayOf(
+  "api",
+  "commands:api",
+  "commands:content",
+  "configurations",
+  "core",
+  "data:common",
+  "data:database",
+  "data:fs",
+  "platforms:bukkit"
+).forEach {
+  val name = it.replace(':', '-')
+  val directory = file("./${it.replace(':', '/')}")
+
+  include(name)
+  project(":$name").projectDir = directory
+}
+
 rootProject.name = "destroy-the-monument"

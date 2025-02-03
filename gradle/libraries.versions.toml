@@ -1,36 +1,44 @@
 [versions]
-dico = "d2facc69c4"
-dokka = "1.9.20"
-exposed = "0.56.0"
-exposed-fixed = "fix-class-loader-SNAPSHOT"
-kaml = "0.62.2"
-kotlin = "2.0.21"
-kotlinx-coroutines = "1.9.0"
-kotlinx-serialization = "1.7.3"
-notchity = "cf6803c868"
+dico = "development-SNAPSHOT"
+dokka = "2.0.0"
+exposed = "0.57.0"
+f4b6a3-uuid-creator = "6.0.0"
+kaml = "0.67.0"
+kotlin = "2.1.0"
+kotlinx-coroutines = "1.11.1"
+kotlinx-serialization = "v1.8.0-RC"
+notchity = "development-SNAPSHOT"
 postgresql = "42.7.4"
 protocollib-current = "4.8.0"
 protocollib-legacy = "3.7.0"
-shadow = "8.3.1" # Newer versions require java 11+
+shadow = "8.3.5"
 spigot-current-oldest = "1.8-R0.1-SNAPSHOT"
 spigot-legacy = "1.7.2-R0.1-SNAPSHOT"
-sqlite = "3.46.1.0"
+sqlite = "3.47.1.0"
 thrivi = "13199ef603"
+adarshr-testLogger = "4.0.0"
+
+jetbrains-annotations = "26.0.1"
 
 [plugins]
+adarshr-testLogger = { id = "com.adarshr.test-logger", version.ref = "adarshr-testLogger" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
 
 [libraries]
+
+jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrains-annotations" }
+
+
+f4b6a3-uuid-creator = { module = "com.github.f4b6a3:uuid-creator", version.ref = "f4b6a3-uuid-creator" }
 dico-common = { module = "com.github.kvdpxne.dico:common", version.ref = "dico" }
 dico-core = { module = "com.github.kvdpxne.dico:core", version.ref = "dico" }
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
-exposed-core-fixed = { module = "com.github.makeevrserg.Exposed-fix-class-loader:exposed-core", version.ref = "exposed-fixed" }
 exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
-exposed-jdbc-fixed = { module = "com.github.makeevrserg.Exposed-fix-class-loader:exposed-jdbc", version.ref = "exposed-fixed" }
 kotlinx-coroutines-jvm = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-jvm", version.ref = "kotlinx-coroutines" }
+kotlinx-serialization-cbor = { module = "org.jetbrains.kotlinx:kotlinx-serialization-cbor", version.ref = "kotlinx-serialization" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 kotlinx-serialization-kaml = { module = "com.charleskorn.kaml:kaml", version.ref = "kaml" }
 notchity = { module = "com.github.kvdpxne:notchity", version.ref = "notchity" }
@@ -45,4 +53,3 @@ thrivi = { module = "com.github.kvdpxne:thrivi", version.ref = "thrivi" }
 [bundles]
 disco = ["dico-common", "dico-core"]
 exposed = ["exposed-core", "exposed-jdbc"]
-exposed-fixed = ["exposed-core-fixed", "exposed-jdbc-fixed"]
