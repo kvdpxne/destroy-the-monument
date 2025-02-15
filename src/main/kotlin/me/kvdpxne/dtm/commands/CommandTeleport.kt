@@ -5,7 +5,7 @@ import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.shared.world.toEntityPosition
 import me.kvdpxne.dtm.translation.formatter.Formatter
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 import me.kvdpxne.dtm.user.LocalUserPerformer
 import org.bukkit.World
 
@@ -30,7 +30,7 @@ fun createTeleportCommand(): Command<LocalUserPerformer> {
       performer.user.cache.teleportationHistory.addLast(player.location.toEntityPosition())
       player.teleport(world.spawnLocation)
 
-      performer.prepareMessage(EnumMessageKey.COMMAND_TELEPORT_TO)
+      performer.prepareMessage(EnumTranslationKey.COMMAND_TELEPORT_TO)
         .format(
           Formatter.begin(1)
             .with("WORLD_NAME", world.name)

@@ -7,7 +7,7 @@ package me.kvdpxne.dtm.container
  *
  * @since 0.1.0
  */
-interface Slot<T> {
+interface Slot {
 
   /**
    * The item stored in this slot, or `null` if the slot is empty.
@@ -19,5 +19,5 @@ interface Slot<T> {
   /**
    * @since 0.1.0
    */
-  val handler: SlotHandler<T>?
+  val handler: SlotHandler<*>?
 }

@@ -1,20 +1,19 @@
 [versions]
-dico = "d2facc69c4"
-dokka = "1.9.20"
-exposed = "0.56.0"
-exposed-fixed = "fix-class-loader-SNAPSHOT"
-kaml = "0.62.2"
-kotlin = "2.0.21"
-kotlinx-coroutines = "1.9.0"
-kotlinx-serialization = "1.7.3"
-notchity = "cf6803c868"
-postgresql = "42.7.4"
+dico = "0.1.1"
+dokka = "2.0.0"
+exposed = "0.59.0"
+kaml = "0.72.0"
+kotlin = "2.1.10"
+kotlinx-coroutines = "1.10.1"
+kotlinx-serialization = "1.8.0"
+notchity = "0.2.0"
+postgresql = "42.7.5"
 protocollib-current = "4.8.0"
 protocollib-legacy = "3.7.0"
-shadow = "8.3.1" # Newer versions require java 11+
+shadow = "8.3.6"
 spigot-current-oldest = "1.8-R0.1-SNAPSHOT"
 spigot-legacy = "1.7.2-R0.1-SNAPSHOT"
-sqlite = "3.46.1.0"
+sqlite = "3.49.0.0"
 thrivi = "13199ef603"
 
 [plugins]
@@ -24,16 +23,13 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
 
 [libraries]
-dico-common = { module = "com.github.kvdpxne.dico:common", version.ref = "dico" }
-dico-core = { module = "com.github.kvdpxne.dico:core", version.ref = "dico" }
+dico = { module = "com.github.kvdpxne.dico:core", version.ref = "dico" }
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
-exposed-core-fixed = { module = "com.github.makeevrserg.Exposed-fix-class-loader:exposed-core", version.ref = "exposed-fixed" }
 exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
-exposed-jdbc-fixed = { module = "com.github.makeevrserg.Exposed-fix-class-loader:exposed-jdbc", version.ref = "exposed-fixed" }
 kotlinx-coroutines-jvm = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-jvm", version.ref = "kotlinx-coroutines" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 kotlinx-serialization-kaml = { module = "com.charleskorn.kaml:kaml", version.ref = "kaml" }
-notchity = { module = "com.github.kvdpxne:notchity", version.ref = "notchity" }
+notchity = { module = "com.github.kvdpxne.notchity:bukkit", version.ref = "notchity" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
 protocollib-current = { module = "com.comphenix.protocol:ProtocolLib", version.ref = "protocollib-current" }
 protocollib-legacy = { module = "com.comphenix.protocol:ProtocolLib-Legacy", version.ref = "protocollib-legacy" }
@@ -43,6 +39,4 @@ sqlite = { module = "org.xerial:sqlite-jdbc", version.ref = "sqlite" }
 thrivi = { module = "com.github.kvdpxne:thrivi", version.ref = "thrivi" }
 
 [bundles]
-disco = ["dico-common", "dico-core"]
 exposed = ["exposed-core", "exposed-jdbc"]
-exposed-fixed = ["exposed-core-fixed", "exposed-jdbc-fixed"]

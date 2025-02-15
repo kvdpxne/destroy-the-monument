@@ -3,7 +3,8 @@ package me.kvdpxne.dtm.translation.locale
 import java.util.Locale
 import me.kvdpxne.dtm.shared.StylishToStringBuilder
 import me.kvdpxne.dtm.translation.message.Message
-import me.kvdpxne.dtm.translation.message.MessageKey
+import me.kvdpxne.dtm.translation.BasicTranslationKey
+import me.kvdpxne.dtm.translation.TranslationKey
 import me.kvdpxne.dtm.translation.message.MultipleMessages
 import me.kvdpxne.dtm.translation.message.SingleMessage
 
@@ -12,7 +13,7 @@ import me.kvdpxne.dtm.translation.message.SingleMessage
  * message retrieval and management.
  *
  * @param locale The locale associated with these messages.
- * @param messages A map associating each [MessageKey] with its corresponding
+ * @param messages A map associating each [BasicTranslationKey] with its corresponding
  * localized [Message].
  *
  * @since 0.1.0
@@ -20,7 +21,7 @@ import me.kvdpxne.dtm.translation.message.SingleMessage
 class LocaleMessages(
   // @formatter:off
   val locale  : Locale,
-  val messages: Map<MessageKey, Message<*>>
+  val messages: Map<TranslationKey, Message<*>>
   // @formatter:on
 ) {
 
@@ -32,7 +33,7 @@ class LocaleMessages(
    * @return The message associated with the key, or `null` if not found.
    * @since 0.1.0
    */
-  fun findMessageOrNull(key: MessageKey): Message<*>? {
+  fun findMessageOrNull(key: TranslationKey): Message<*>? {
     return this.messages[key]
   }
 
@@ -45,7 +46,7 @@ class LocaleMessages(
    * @return The message associated with the key.
    * @since 0.1.0
    */
-  fun findMessage(key: MessageKey): Message<*> {
+  fun findMessage(key: TranslationKey): Message<*> {
     return requireNotNull(this.findMessageOrNull(key)) {
       "Message with key '$key' not found in locale '${locale.displayName}'."
     }
@@ -54,7 +55,7 @@ class LocaleMessages(
   /**
    * @since 0.1.0
    */
-  fun <T> findRawMessageOrNull(key: MessageKey): T? {
+  fun <T> findRawMessageOrNull(key: TranslationKey): T? {
     val message: Message<*> = this.findMessageOrNull(key)
       ?: return null
 
@@ -69,7 +70,7 @@ class LocaleMessages(
   /**
    * @since 0.1.0
    */
-  fun <T> findRawMessage(key: MessageKey): T {
+  fun <T> findRawMessage(key: TranslationKey): T {
     return requireNotNull(this.findRawMessageOrNull(key)) {
       "Message with key '$key' not found in locale '${locale.displayName}'."
     }

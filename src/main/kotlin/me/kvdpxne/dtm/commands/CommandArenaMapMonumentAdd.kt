@@ -9,7 +9,7 @@ import me.kvdpxne.dtm.position.BlockPosition
 import me.kvdpxne.dtm.position.monument.MonumentPositionImpl
 import me.kvdpxne.dtm.team.Team
 import me.kvdpxne.dtm.translation.formatter.Formatter
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
 /**
@@ -49,7 +49,7 @@ fun createArenaMapMonumentAddCommand(): Command<LocalUserPerformer> {
         )
       )
 
-      performer.prepareMessage(EnumMessageKey.COMMAND_ARENA_MAP_MONUMENT_ADD)
+      performer.prepareMessage(EnumTranslationKey.COMMAND_ARENA_MAP_MONUMENT_ADD)
         .format(
           Formatter.begin(2)
             .with("TEAM_NAME", team.displayName)

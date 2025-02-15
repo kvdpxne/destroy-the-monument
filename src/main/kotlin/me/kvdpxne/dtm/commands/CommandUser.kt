@@ -4,7 +4,7 @@ import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.translation.formatter.Formatter
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 import me.kvdpxne.dtm.user.LocalUserPerformer
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserService
@@ -33,7 +33,7 @@ internal fun attemptObtainUser(
   val userName: String = parameters[index] as String
 
   val user: User = UserService.findUserByName(userName)
-    ?: receiver.throwMessage(EnumMessageKey.USER_NO_FOUND) {
+    ?: receiver.throwMessage(EnumTranslationKey.USER_NO_FOUND) {
       this@throwMessage.format(
         Formatter.begin(1)
           .with("USER_NAME", userName)
@@ -55,7 +55,7 @@ internal fun attemptObtainUserAsSelf(
     return receiver.user
   }
 
-  receiver.throwMessage(EnumMessageKey.COMMAND_IN_GAME) {
+  receiver.throwMessage(EnumTranslationKey.COMMAND_IN_GAME) {
     this@throwMessage.withoutFormat()
   }
 }

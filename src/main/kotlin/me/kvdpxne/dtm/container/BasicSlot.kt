@@ -6,12 +6,12 @@ package me.kvdpxne.dtm.container
  *
  * @since 0.1.0
  */
-open class BasicSlot<T>(
+open class BasicSlot(
   // @formatter:off
   final override val item   : Any?            = null,
-  final override val handler: SlotHandler<T>? = null
+  final override val handler: SlotHandler<*>? = null
   // @formatter:on
-) : Slot<T> {
+) : Slot {
 
   init {
     if (null != this.item) {
@@ -28,7 +28,7 @@ open class BasicSlot<T>(
     if (this === other) return true
     if (javaClass != other?.javaClass) return false
 
-    other as BasicSlot<*>
+    other as BasicSlot
 
     if (item != other.item) return false
     if (handler != other.handler) return false

@@ -6,7 +6,7 @@ import me.kvdpxne.dtm.shared.Communicative
 import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.translation.chains.MessageFormatterChains
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 
 /**
  * Extends the [User] interface, representing a user with additional localized
@@ -76,7 +76,7 @@ interface LocalUser : User, Communicative {
     profession: Profession
   )
 
-  fun prepareMessage(key: EnumMessageKey): MessageFormatterChains {
+  fun prepareMessage(key: EnumTranslationKey): MessageFormatterChains {
     return this.performer.prepareMessage(key)
   }
 }

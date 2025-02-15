@@ -7,7 +7,7 @@ import me.kvdpxne.dtm.command.CommandException
 import me.kvdpxne.dtm.command.ParameterBuilder
 import me.kvdpxne.dtm.command.ParameterValidators
 import me.kvdpxne.dtm.game.LocalGame
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
 fun createVoteCommand(): Command<LocalUserPerformer> {
@@ -21,7 +21,7 @@ fun createVoteCommand(): Command<LocalUserPerformer> {
     .handler { performer, parameters ->
       //
       val localGame: LocalGame = performer.user.game
-        ?: performer.throwMessage(EnumMessageKey.MUST_IN_GAME) {
+        ?: performer.throwMessage(EnumTranslationKey.MUST_IN_GAME) {
           this@throwMessage.withoutFormat()
         }
 
@@ -31,7 +31,7 @@ fun createVoteCommand(): Command<LocalUserPerformer> {
       val value: Int = parameters[0] as Int
       votingRegistry.castVote(value, performer.user)
 
-      performer.prepareMessage(EnumMessageKey.GAME_VOTING_CAST)
+      performer.prepareMessage(EnumTranslationKey.GAME_VOTING_CAST)
         .withoutFormat()
         .useChat()
         .send()

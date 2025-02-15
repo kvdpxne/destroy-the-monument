@@ -68,4 +68,14 @@ object Constants {
    * @since 0.1.0
    */
   const val GITHUB_RELEASES = "${GITHUB_ISSUES}/releases"
+
+  /**
+   * @since 0.1.0
+   */
+  const val OLDEST_VERSION: Int = 1_007_000
+
+  /**
+   * @since 0.1.0
+   */
+  const val LATEST_VERSION: Int = 1_012_002
 }

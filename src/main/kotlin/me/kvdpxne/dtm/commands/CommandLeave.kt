@@ -6,7 +6,7 @@ import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.shared.player.equipItemsOfGameSelection
 import me.kvdpxne.dtm.shared.player.moveToLobby
 import me.kvdpxne.dtm.shared.player.reset
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
 /**
@@ -18,7 +18,7 @@ fun createLeaveCommand(): Command<LocalUserPerformer> {
     .handler { performer, _ ->
       // Obiekt lokalnej gry, do której jest przypisany użytkownik.
       val localGame: LocalGame = performer.user.game
-        ?: performer.throwMessage(EnumMessageKey.MUST_IN_GAME) {
+        ?: performer.throwMessage(EnumTranslationKey.MUST_IN_GAME) {
           this@throwMessage.withoutFormat()
         }
 

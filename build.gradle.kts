@@ -38,7 +38,7 @@ dependencies {
     shadow(libraries.spigot.legacy)
   }
 
-  implementation(libraries.bundles.exposed.fixed)
+  implementation(libraries.bundles.exposed)
   implementation(libraries.kotlinx.serialization.json)
   implementation(libraries.kotlinx.serialization.kaml)
 
@@ -46,7 +46,7 @@ dependencies {
 
   implementation("fr.mrmicky:fastboard:2.1.2")
 
-  implementation(libraries.bundles.disco)
+  implementation(libraries.dico)
   implementation(libraries.notchity)
 
   shadow(libraries.protocollib.current)

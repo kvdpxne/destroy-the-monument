@@ -12,7 +12,7 @@ import me.kvdpxne.dtm.shared.player.equipItemsOf
 import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.translation.TranslationService
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -27,7 +27,7 @@ fun createTeamSelectionGui(
   val gui = Gui(
     TranslationService
       .findLocalMessagesOrDefault(user.locale)
-      .findRawMessage(EnumMessageKey.GUI_SELECT_TEAM.messageKey),
+      .findRawMessage(EnumTranslationKey.GUI_SELECT_TEAM.messageKey),
     Rows.ONE
   )
 

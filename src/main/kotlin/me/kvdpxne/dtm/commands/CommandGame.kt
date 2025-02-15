@@ -7,7 +7,7 @@ import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameService
 import me.kvdpxne.dtm.team.Team
 import me.kvdpxne.dtm.translation.formatter.Formatter
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 
 /**
  * @since 0.1.0
@@ -49,7 +49,7 @@ internal fun attemptObtainGame(
 
   // Obiekt gry znaleziony na podstawie unikatowej nazwy gry.
   return GameService.findGameByName(gameName)
-    ?: receiver.throwMessage(EnumMessageKey.GAME_NO_FOUND) {
+    ?: receiver.throwMessage(EnumTranslationKey.GAME_NO_FOUND) {
       this@throwMessage.format(
         Formatter.begin(1)
           .with("GAME_NAME", gameName)

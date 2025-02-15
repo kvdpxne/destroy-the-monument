@@ -15,7 +15,7 @@ object ContainerTypes {
    *
    * @since 0.1.0
    */
-  val GENERIC_9X1: ContainerType by lazy {
+  val CHEST: ContainerType by lazy {
     InternalContainerType(0, "minecraft:generic_9x1")
   }
 

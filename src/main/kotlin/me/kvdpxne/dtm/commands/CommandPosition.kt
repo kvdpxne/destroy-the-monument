@@ -3,7 +3,7 @@ package me.kvdpxne.dtm.commands
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.translation.formatter.Formatter
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 import me.kvdpxne.dtm.user.LocalUserPerformer
 import org.bukkit.Location
 
@@ -18,7 +18,7 @@ fun createPositionCommand(): Command<LocalUserPerformer> {
       val location: Location = performer.player?.location
         ?: return@handler
 
-      performer.prepareMessage(EnumMessageKey.COMMAND_POSITION)
+      performer.prepareMessage(EnumTranslationKey.COMMAND_POSITION)
         .format(
           Formatter.begin(6)
             .with("WORLD_NAME", location.world.name)

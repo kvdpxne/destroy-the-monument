@@ -3,7 +3,7 @@ package me.kvdpxne.dtm.commands
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.profession.Ability
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
 /**
@@ -20,7 +20,7 @@ fun createAbilityDepleteCommand(): Command<LocalUserPerformer> {
       //
       ability.renewDelayed(performer.player)
 
-      performer.prepareMessage(EnumMessageKey.COMMAND_ABILITY_DEPLETE)
+      performer.prepareMessage(EnumTranslationKey.COMMAND_ABILITY_DEPLETE)
         .withoutFormat()
         .useChat()
         .send()

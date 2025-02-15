@@ -3,29 +3,29 @@ package me.kvdpxne.dtm.container
 import java.util.UUID
 import me.kvdpxne.dtm.shared.text.toSingleLines
 
-class BasicContainerBuilder<T, U : ContainerOpener<T>> :
-  ContainerBuilder<T, U> {
+open class BasicContainerBuilder<T : ContainerOpener<*>> :
+  ContainerBuilder<T> {
 
   // @formatter:off
   var owner      : UUID?   = null
   var type       : Byte?   = null
   var size       : Byte?   = null
   var displayName: String? = null
-  var slots      : MutableList<IndexedSlot<T>>? = null
+  var slots      : MutableList<IndexedSlot>? = null
   // @formatter:on
 
-  override fun owner(owner: UUID): ContainerBuilder<T, U> {
+  override fun owner(owner: UUID): ContainerBuilder<T> {
     this.owner = owner
     return this
   }
 
-  override fun type(type: ContainerType): ContainerBuilder<T, U> {
+  override fun type(type: ContainerType): ContainerBuilder<T> {
     return this
   }
 
   override fun size(
     size: Int
-  ): ContainerBuilder<T, U> {
+  ): ContainerBuilder<T> {
     require(Rows.MINIMUM <= size && Rows.MAXIMUM >= size) {
       """
         The passed size must be greater than or equal to "${Rows.MINIMUM}" and
@@ -41,7 +41,7 @@ class BasicContainerBuilder<T, U : ContainerOpener<T>> :
 
   override fun displayName(
     displayName: String
-  ): ContainerBuilder<T, U> {
+  ): ContainerBuilder<T> {
     require(32 >= displayName.length) {
       "The passed display name must be shorter than or equal to 32 characters."
     }
@@ -54,18 +54,18 @@ class BasicContainerBuilder<T, U : ContainerOpener<T>> :
     index: Byte,
     item: Any,
     handler: SlotHandler<T>?
-  ): ContainerBuilder<T, U> {
+  ): ContainerBuilder<T> {
     checkNotNull(this.slots) {
       "The container size must be defined before adding slots."
     }
 
-    val slot: IndexedSlot<T> = BasicIndexedSlot(index, item, handler)
+    val slot: IndexedSlot = BasicIndexedSlot(index, item, handler)
     this.slots?.add(slot)
 
     return this
   }
 
-  override fun build(): Container<T, U> {
+  override fun build(): Container<T> {
     return BasicContainer(
       this.owner!!,
       (this.size ?: 9).toInt(),

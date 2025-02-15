@@ -7,7 +7,7 @@ import me.kvdpxne.dtm.command.ParameterValidators
 import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.translation.formatter.Formatter
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 import me.kvdpxne.dtm.user.User
 
 /**
@@ -37,7 +37,7 @@ fun createCoinsSubtractCommand(): Command<Performer> {
         //
         user.wallet.subtractCoins(value)
 
-        performer.prepareMessage(EnumMessageKey.COMMAND_COINS_SUBTRACT_SELF)
+        performer.prepareMessage(EnumTranslationKey.COMMAND_COINS_SUBTRACT_SELF)
           .format(
             Formatter.begin(1)
               .with("VALUE", value)
@@ -54,7 +54,7 @@ fun createCoinsSubtractCommand(): Command<Performer> {
 
         user.wallet.subtractCoins(value)
 
-        performer.prepareMessage(EnumMessageKey.COMMAND_COINS_SUBTRACT_OTHERS)
+        performer.prepareMessage(EnumTranslationKey.COMMAND_COINS_SUBTRACT_OTHERS)
           .format(
             Formatter.begin(2)
               .with("USER_NAME", user.name)

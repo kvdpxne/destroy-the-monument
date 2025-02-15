@@ -9,7 +9,7 @@ import me.kvdpxne.dtm.shared.material.toBuilder
 import me.kvdpxne.dtm.shared.player.equipItemsOfTeamSelection
 import me.kvdpxne.dtm.shared.player.reset
 import me.kvdpxne.dtm.translation.TranslationService
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -24,7 +24,7 @@ fun createGameSelectionGui(user: LocalUser): Gui {
   val gui = Gui.withDecimal(
     TranslationService
       .findLocalMessagesOrDefault(user.locale)
-      .findRawMessage(EnumMessageKey.GUI_SELECT_GAME.messageKey),
+      .findRawMessage(EnumTranslationKey.GUI_SELECT_GAME.messageKey),
     games.size
   )
 

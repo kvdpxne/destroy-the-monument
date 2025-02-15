@@ -2,8 +2,9 @@ package me.kvdpxne.dtm.commands
 
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
-import me.kvdpxne.dtm.guis.createGameSelectionGui
-import me.kvdpxne.dtm.guis.createTeamSelectionGui
+import me.kvdpxne.dtm.containers.createGamesContainer
+import me.kvdpxne.dtm.containers.createTeamsContainer
+import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
 /**
@@ -12,16 +13,15 @@ import me.kvdpxne.dtm.user.LocalUserPerformer
 fun createJoinCommand(): Command<LocalUserPerformer> {
   return CommandBuilder.begin<LocalUserPerformer>("join")
     .handler { performer, _ ->
-      val player = performer.player ?: return@handler
-
-      val game = performer.user.game
+      //
+      val game: LocalGame? = performer.user.game
 
       if (null != game) {
-        createTeamSelectionGui(game, performer.user).open(player)
+        createTeamsContainer(performer.user, game).open(performer)
         return@handler
       }
 
-      createGameSelectionGui(performer.user).open(player)
+      createGamesContainer(performer.user).open(performer)
     }
     .build()
 }

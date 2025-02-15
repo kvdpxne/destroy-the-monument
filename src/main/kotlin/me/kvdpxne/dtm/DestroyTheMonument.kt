@@ -65,11 +65,12 @@ import me.kvdpxne.dtm.shared.reflection.Reflection
 import me.kvdpxne.dtm.shared.text.BukkitTextFormatter
 import me.kvdpxne.dtm.shared.world.VoidChunkGenerator
 import me.kvdpxne.dtm.translation.TranslationService
+import me.kvdpxne.dtm.translation.TranslationKeyRegistry
 import me.kvdpxne.dtm.user.LocalUserManager
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserBuilder
 import me.kvdpxne.dtm.user.UserService
-import me.kvdpxne.notchity.VersionCreator
+import me.kvdpxne.notchity.MinecraftVersionCreator
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
 import org.bukkit.generator.ChunkGenerator
@@ -175,18 +176,41 @@ class DestroyTheMonument : JavaPlugin() {
     this.server.pluginManager.disablePlugin(this)
   }
 
+  private fun check() {
+    if (GeneralConfiguration.CHECK_MINECRAFT_SERVER_VERSION) {
+      this.logger
+      return
+    }
+
+    // The numerical version of the currently running minecraft server.
+    val version: Int = MinecraftVersionCreator.getMinecraftVersion().number
+  }
+
   /**
    * @since 0.1.0
    */
   override fun onLoad() {
-    //
+    // Initializes a primitive logger based on the plugin logger for
+    // debugging purposes and presenting simple information.
     Debug.initialize(this.logger)
 
-    //
-    val version: Int = VersionCreator.getBukkitVersion().number
+    // The numerical version of the currently running minecraft server.
+    val version: Int = MinecraftVersionCreator.getMinecraftVersion().number
 
-    //
-    if (10700 > version || 10900 < version) {
+    /* Checks if the numeric version of the currently running minecraft server
+     * is within the range of supported versions by the plugin.
+     *
+     * If the numeric version is not in this range then the plugin will be
+     * automatically disabled and the corresponding informative message will be
+     * printed in the console. Of course, it is possible to force the plugin on
+     * unsupported versions of the minecraft server but messy errors may occur.
+     *
+     * You can read more about supported versions here:
+     * https://github.com/kvdpxne/destroy-the-monument/wiki/versions
+     */
+    if (GeneralConfiguration.CHECK_MINECRAFT_SERVER_VERSION &&
+      (Constants.OLDEST_VERSION > version || Constants.LATEST_VERSION < version)
+    ) {
       arrayOf(
         "An error occurred while trying to load the plugin.",
         "Error: Incorrect Minecraft release",
@@ -215,10 +239,13 @@ class DestroyTheMonument : JavaPlugin() {
     //
     ConfigurationManager.moveConfigurations(directoryPath)
 
-    //
+    // Loads all configurations from the plugin directory path.
     ConfigurationManager.loadConfigurations(directoryPath)
 
-    //
+    // Registers all the defined translation keys.
+    TranslationKeyRegistry.registerTranslationKeys()
+
+    // Loads all translations and assigns them to translation keys.
     TranslationService.loadTranslations()
 
     //

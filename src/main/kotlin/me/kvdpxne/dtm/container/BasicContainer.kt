@@ -12,19 +12,19 @@ import me.kvdpxne.dtm.shared.text.toSingleLines
  * functionality for interacting with these items and managing the container.
  *
  * @param T The type of items in the container.
- * @param U The type of container opener that can open the container.
+ * @param T The type of container opener that can open the container.
  * @param V The type of items that can be inserted into slots.
  *
  * @since 0.1.0
  */
-open class BasicContainer<T, U : ContainerOpener<T>>(
+open class BasicContainer<T : ContainerOpener<*>>(
   // @formatter:off
         override val owner       : UUID,
   final override val size        : Int,
   final override val displayName : String,
-                     initialSlots: Iterable<IndexedSlot<T>>? = null
+                     initialSlots: Iterable<IndexedSlot>? = null
   // @formatter:on
-) : Container<T, U> {
+) : Container<T> {
 
   companion object {
 
@@ -92,8 +92,8 @@ open class BasicContainer<T, U : ContainerOpener<T>>(
    * @since 0.1.0
    */
   @Suppress("PropertyName")
-  protected val _slots: Lazy<MutableMap<Byte, Slot<T>?>> = lazy {
-    val map: MutableMap<Byte, Slot<T>?> = HashMap(this.size)
+  protected val _slots: Lazy<MutableMap<Byte, Slot?>> = lazy {
+    val map: MutableMap<Byte, Slot?> = HashMap(this.size)
     for (next: Int in 0.rangeUntil(this.size)) {
       map[next.toByte()] = null
     }
@@ -110,7 +110,7 @@ open class BasicContainer<T, U : ContainerOpener<T>>(
     }
 
     if (null != initialSlots) {
-      for (slot: IndexedSlot<T> in initialSlots) {
+      for (slot: IndexedSlot in initialSlots) {
         this._slots.value[slot.index] = BasicSlot(slot.item, slot.handler)
       }
     }
@@ -125,14 +125,14 @@ open class BasicContainer<T, U : ContainerOpener<T>>(
   override val rows: Int
     get() = this.size / 9
 
-  override val slots: Collection<IndexedSlot<T>>
+  override val slots: Collection<IndexedSlot>
     get() {
       if (!this._slots.isInitialized()) {
         return emptyList()
       }
 
       return buildList(this.size) {
-        for ((key: Byte, value: Slot<T>?) in this@BasicContainer._slots.value) {
+        for ((key: Byte, value: Slot?) in this@BasicContainer._slots.value) {
           this.add(BasicIndexedSlot(key, value?.item, value?.handler))
         }
       }
@@ -140,7 +140,7 @@ open class BasicContainer<T, U : ContainerOpener<T>>(
 
   override fun getSlot(
     index: Int
-  ): Slot<T>? {
+  ): Slot? {
     return this._slots.value[index.toByte()]
   }
 
@@ -157,7 +157,7 @@ open class BasicContainer<T, U : ContainerOpener<T>>(
   private fun insertItem(
     index: Byte,
     item: Any?,
-    opener: U
+    opener: T
   ) {
     //
     val packet: Any = PACKET_PLAY_OUT_SET_SLOT.invoke(
@@ -170,7 +170,7 @@ open class BasicContainer<T, U : ContainerOpener<T>>(
   }
 
   override fun insertSlot(
-    slot: IndexedSlot<T>
+    slot: IndexedSlot
   ) {
     this._slots.value[slot.index] = slot
 
@@ -183,8 +183,8 @@ open class BasicContainer<T, U : ContainerOpener<T>>(
   }
 
   override fun insertSlotAndUpdate(
-    slot: IndexedSlot<T>,
-    opener: U
+    slot: IndexedSlot,
+    opener: T
   ) {
     this.insertSlot(slot)
     this.insertItem(slot.index, slot.item, opener)
@@ -208,19 +208,19 @@ open class BasicContainer<T, U : ContainerOpener<T>>(
 
   override fun removeSlotAndUpdate(
     index: Int,
-    opener: U
+    opener: T
   ) {
     this.removeSlot(index)
     this.insertItem(index.toByte(), null, opener)
   }
 
   override fun update(
-    opener: U
+    opener: T
   ) {
     val packet: Any = PACKET_PLAY_OUT_WINDOW_ITEMS.invoke(
       this.identifier,
       buildList(this.size) {
-        for ((key: Byte, slot: Slot<T>?) in this@BasicContainer._slots.value) {
+        for ((key: Byte, slot: Slot?) in this@BasicContainer._slots.value) {
           this.add(key.toInt(), slot?.item)
         }
       }
@@ -240,7 +240,7 @@ open class BasicContainer<T, U : ContainerOpener<T>>(
   }
 
   override fun open(
-    whom: U
+    whom: T
   ) {
     //
     InternalContainerManager.addContainer(this)
@@ -261,7 +261,7 @@ open class BasicContainer<T, U : ContainerOpener<T>>(
     //
     this.update(whom)
 
-    for ((key: Byte, value: Slot<T>?) in this._slots.value) {
+    for ((key: Byte, value: Slot?) in this._slots.value) {
       if (null != value) {
         this.insertItem(key, value.item, whom)
       }
@@ -272,12 +272,12 @@ open class BasicContainer<T, U : ContainerOpener<T>>(
   }
 
   override fun close(
-    whom: U
+    whom: T
   ) {
     TODO("Not yet implemented")
   }
 
-  override fun copy(): Container<T, U> {
+  override fun copy(): Container<T> {
     TODO("Not yet implemented")
   }
 }

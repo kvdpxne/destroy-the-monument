@@ -8,7 +8,7 @@ import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.translation.formatter.Formatter
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 import org.bukkit.World
 
 fun createArenaMapSetCommand(): Command<Performer> {
@@ -33,7 +33,7 @@ fun createArenaMapSetCommand(): Command<Performer> {
 
       ArenaService.updateArenaMap(arena, ArenaMapImpl(world.name, world.uid))
 
-      performer.prepareMessage(EnumMessageKey.COMMAND_ARENA_MAP_SET)
+      performer.prepareMessage(EnumTranslationKey.COMMAND_ARENA_MAP_SET)
         .format(
           Formatter.begin(2)
             .with("WORLD_NAME", world.name)

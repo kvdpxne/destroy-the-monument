@@ -7,13 +7,13 @@ package me.kvdpxne.dtm.container
  *
  * @since 0.1.0
  */
-class BasicIndexedSlot<T>(
+class BasicIndexedSlot(
   // @formatter:off
   override val index  : Byte,
                item   : Any?            = null,
-               handler: SlotHandler<T>? = null
+               handler: SlotHandler<*>? = null
   // @formatter:on
-) : BasicSlot<T>(item, handler), IndexedSlot<T> {
+) : BasicSlot(item, handler), IndexedSlot {
 
   init {
     require(0 <= this.index) {
@@ -30,7 +30,7 @@ class BasicIndexedSlot<T>(
       return false
     }
 
-    other as BasicIndexedSlot<*>
+    other as BasicIndexedSlot
     return this.index == other.index
   }
 

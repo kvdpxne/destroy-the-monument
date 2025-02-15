@@ -8,11 +8,11 @@ import me.kvdpxne.dtm.shared.Nameable
 /**
  * @since 0.1.0
  */
-interface Container<T, U : ContainerOpener<T>> :
-  Copyable<Container<T, U>>,
+interface Container<U : ContainerOpener<*>> :
+  Copyable<Container<U>>,
   Identifiable<Byte>,
   Nameable,
-  Openable<T, U> {
+  Openable<U> {
 
   /**
    * @since 0.1.0
@@ -47,25 +47,25 @@ interface Container<T, U : ContainerOpener<T>> :
   /**
    * @since 0.1.0
    */
-  val slots: Collection<IndexedSlot<T>>
+  val slots: Collection<IndexedSlot>
 
   /**
    * @since 0.1.0
    */
-  fun getSlot(index: Int): Slot<T>?
+  fun getSlot(index: Int): Slot?
 
   /**
    * @since 0.1.0
    */
   fun insertSlot(
-    slot: IndexedSlot<T>
+    slot: IndexedSlot
   )
 
   /**
    * @since 0.1.0
    */
   fun insertSlotAndUpdate(
-    slot: IndexedSlot<T>,
+    slot: IndexedSlot,
     opener: U
   )
 
@@ -92,5 +92,5 @@ interface Container<T, U : ContainerOpener<T>> :
   /**
    * @since 0.1.0
    */
-  override fun copy(): Container<T, U>
+  override fun copy(): Container<U>
 }

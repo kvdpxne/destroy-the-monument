@@ -7,7 +7,7 @@ import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.translation.chains.MessageFormatterChains
 import me.kvdpxne.dtm.translation.formatter.Formatter
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 
 /**
  * @since 0.1.0
@@ -23,7 +23,7 @@ fun createArenaMapMonumentListCommand(): Command<Performer> {
     .handler { performer, parameters ->
       val arena: Arena = attemptObtainArena(performer, parameters)
 
-      val chains: MessageFormatterChains = performer.prepareMessage(EnumMessageKey.ARENA_MAP_MONUMENT_LIST)
+      val chains: MessageFormatterChains = performer.prepareMessage(EnumTranslationKey.ARENA_MAP_MONUMENT_LIST)
       val formatter: Formatter = Formatter.begin(4)
 
       arena.monumentPositions

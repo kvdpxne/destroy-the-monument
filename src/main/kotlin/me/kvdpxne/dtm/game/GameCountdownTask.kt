@@ -12,7 +12,7 @@ import me.kvdpxne.dtm.shared.text.toSingleLines
 import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.translation.formatter.Formatter
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 import org.bukkit.entity.Player
 
 /**
@@ -75,7 +75,7 @@ internal class GameCountdownTask internal constructor(
    * @since 0.1.0
    */
   private fun sendNotification(
-    key: EnumMessageKey
+    key: EnumTranslationKey
   ) {
     this.game.prepareMessage(key)
       .format(
@@ -92,7 +92,7 @@ internal class GameCountdownTask internal constructor(
    * @since 0.1.0
    */
   private fun sendInformation(
-    key: EnumMessageKey
+    key: EnumTranslationKey
   ) {
     this.game.prepareMessage(key)
       .withoutFormat()
@@ -108,7 +108,7 @@ internal class GameCountdownTask internal constructor(
       this.cancel()
       this.game.setAsInitialized()
 
-      this.sendInformation(EnumMessageKey.GAME_STARTING_COUNTDOWN_CANCELLED)
+      this.sendInformation(EnumTranslationKey.GAME_STARTING_COUNTDOWN_CANCELLED)
       this.resetExperience()
 
       return
@@ -136,17 +136,17 @@ internal class GameCountdownTask internal constructor(
         this.game.start()
       }
 
-      this.sendInformation(EnumMessageKey.GAME_STARTING_COUNTDOWN_FINISH)
+      this.sendInformation(EnumTranslationKey.GAME_STARTING_COUNTDOWN_FINISH)
       return
     }
 
     if (5 >= this.remainingSeconds) {
-      this.sendNotification(EnumMessageKey.GAME_STARTING_COUNTDOWN_FASTER)
+      this.sendNotification(EnumTranslationKey.GAME_STARTING_COUNTDOWN_FASTER)
       return
     }
 
     if (0 == this.remainingSeconds % 10) {
-      this.sendNotification(EnumMessageKey.GAME_STARTING_COUNTDOWN_STANDARD)
+      this.sendNotification(EnumTranslationKey.GAME_STARTING_COUNTDOWN_STANDARD)
       return
     }
 

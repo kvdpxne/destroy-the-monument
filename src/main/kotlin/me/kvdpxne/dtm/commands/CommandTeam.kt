@@ -6,7 +6,7 @@ import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.team.Team
 import me.kvdpxne.dtm.team.TeamService
 import me.kvdpxne.dtm.translation.formatter.Formatter
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 
 /**
  * @since 0.1.0
@@ -39,7 +39,7 @@ internal fun attemptObtainTeam(
 
   //
   return TeamService.findTeamByName(teamName)
-    ?: receiver.throwMessage(EnumMessageKey.TEAM_NO_FOUND) {
+    ?: receiver.throwMessage(EnumTranslationKey.TEAM_NO_FOUND) {
       this@throwMessage.format(
         Formatter.begin(1)
           .with("TEAM_NAME", teamName)

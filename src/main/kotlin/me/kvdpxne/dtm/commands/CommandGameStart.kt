@@ -7,9 +7,8 @@ import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.LocalGame
-import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.translation.formatter.Formatter
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
 object CommandGameStart {
@@ -23,7 +22,7 @@ object CommandGameStart {
 
     game.start()
 
-    user.prepareMessage(EnumMessageKey.COMMAND_START)
+    user.prepareMessage(EnumTranslationKey.COMMAND_START)
       .format(
         Formatter.begin(1)
           .with("GAME_NAME", game.name)
@@ -45,7 +44,7 @@ object CommandGameStart {
         if (parameters.isEmpty()) {
           //
           if (performer !is LocalUserPerformer) {
-            performer.throwMessage(EnumMessageKey.COMMAND_IN_GAME) {
+            performer.throwMessage(EnumTranslationKey.COMMAND_IN_GAME) {
               this@throwMessage.withoutFormat()
             }
           }

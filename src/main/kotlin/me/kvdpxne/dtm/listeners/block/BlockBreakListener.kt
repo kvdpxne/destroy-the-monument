@@ -24,8 +24,9 @@ import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.team.Team
 import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.translation.TranslationService
+import me.kvdpxne.dtm.translation.chains.message
 import me.kvdpxne.dtm.translation.formatter.Formatter
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.Location
 import org.bukkit.block.Block
@@ -122,7 +123,7 @@ object BlockBreakListener : Listener {
 
         TranslationService.chains()
           .receiver(user.performer)
-          .message(EnumMessageKey.ARENA_MAP_BLOCK_BREAKING_SPAWN)
+          .message(EnumTranslationKey.ARENA_MAP_BLOCK_BREAKING_SPAWN)
           .withoutFormat()
           .useChat()
           .send()
@@ -184,7 +185,7 @@ object BlockBreakListener : Listener {
       event.cancel()
       TranslationService.chains()
         .receiver(user.performer)
-        .message(EnumMessageKey.ARENA_MAP_BLOCK_BREAKING_MONUMENT_SELF)
+        .message(EnumTranslationKey.ARENA_MAP_BLOCK_BREAKING_MONUMENT_SELF)
         .withoutFormat()
         .useChat()
         .send()
@@ -272,7 +273,7 @@ object BlockBreakListener : Listener {
     // Cancels the task of the game arena timer
     cancelTask(game.timerTaskIdentifier)
 
-    game.prepareMessage(EnumMessageKey.GAME_END)
+    game.prepareMessage(EnumTranslationKey.GAME_END)
       .format(
         Formatter.begin(1)
           .with("REMAINING_TIME", GeneralConfiguration.GAME_END_DELAY)

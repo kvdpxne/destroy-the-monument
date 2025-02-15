@@ -10,4 +10,7 @@ import me.kvdpxne.dtm.shared.PacketHandler
  *
  * @since 0.1.0
  */
-interface ContainerOpener<T> : PacketHandler<T>
+interface ContainerOpener<T> : PacketHandler<T> {
+
+  fun close()
+}

@@ -7,10 +7,11 @@ import com.comphenix.protocol.events.PacketAdapter
 import com.comphenix.protocol.events.PacketContainer
 import com.comphenix.protocol.events.PacketEvent
 import me.kvdpxne.dtm.DestroyTheMonument
-import me.kvdpxne.dtm.container.BukkitContainer
 import me.kvdpxne.dtm.container.InternalContainerManager
+import me.kvdpxne.dtm.container.SlotHandler
 import me.kvdpxne.dtm.container.SlotTypes
 import me.kvdpxne.dtm.shared.player.localUser
+import me.kvdpxne.dtm.user.LocalUserPerformer
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
@@ -25,8 +26,8 @@ object PacketPlayInWindowClickListener : PacketAdapter(
     // PacketPlayInWindowClick
     val packet: PacketContainer = event.packet
 
-    val slot: Int = packet.integers.read(1)
-    if (SlotTypes.OUTSIDE == slot) {
+    val index: Int = packet.integers.read(1)
+    if (SlotTypes.OUTSIDE == index) {
       return
     }
 
@@ -56,7 +57,7 @@ object PacketPlayInWindowClickListener : PacketAdapter(
 
       // item in container
       first.integers.write(0, identifier)
-      first.integers.write(1, slot)
+      first.integers.write(1, index)
       first.itemModifier.write(0, itemStack)
       protocolManager.sendServerPacket(event.player, first)
     }
@@ -64,7 +65,7 @@ object PacketPlayInWindowClickListener : PacketAdapter(
     container.update(event.player.localUser.performer)
     event.player.updateInventory()
 
-    val handler = container.getSlot(slot)?.handler ?: return
-    handler(event.player)
+    val handler = container.getSlot(index)?.handler as? SlotHandler<LocalUserPerformer>? ?: return
+    handler(event.player.localUser.performer)
   }
 }

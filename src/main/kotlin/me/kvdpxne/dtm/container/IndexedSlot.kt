@@ -3,7 +3,7 @@ package me.kvdpxne.dtm.container
 /**
  * @since 0.1.0
  */
-interface IndexedSlot<T> : Slot<T> {
+interface IndexedSlot : Slot {
 
   /**
    * The index of this slot within the container.

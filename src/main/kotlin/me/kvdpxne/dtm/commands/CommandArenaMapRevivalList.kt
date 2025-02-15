@@ -8,7 +8,7 @@ import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.position.revival.RevivalPosition
 import me.kvdpxne.dtm.translation.chains.MessageFormatterChains
 import me.kvdpxne.dtm.translation.formatter.Formatter
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 
 /**
  * @since 0.1.0
@@ -24,7 +24,7 @@ fun createArenaMapRevivalListCommand(): Command<Performer> {
     .handler { performer, parameters ->
       val arena: Arena = attemptObtainArena(performer, parameters)
 
-      val chains: MessageFormatterChains = performer.prepareMessage(EnumMessageKey.ARENA_MAP_REVIVAL_LIST)
+      val chains: MessageFormatterChains = performer.prepareMessage(EnumTranslationKey.ARENA_MAP_REVIVAL_LIST)
       val formatter: Formatter = Formatter.begin(6)
 
       for (revivalPosition: RevivalPosition<*> in arena.revivalPositions) {

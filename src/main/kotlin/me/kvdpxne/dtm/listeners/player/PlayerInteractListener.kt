@@ -1,9 +1,9 @@
 package me.kvdpxne.dtm.listeners.player
 
+import me.kvdpxne.dtm.containers.createGamesContainer
 import me.kvdpxne.dtm.containers.createProfessionsContainer
+import me.kvdpxne.dtm.containers.createTeamsContainer
 import me.kvdpxne.dtm.guis.createArenaSelectionGui
-import me.kvdpxne.dtm.guis.createGameSelectionGui
-import me.kvdpxne.dtm.guis.createTeamSelectionGui
 import me.kvdpxne.dtm.shared.block.isMonument
 import me.kvdpxne.dtm.shared.event.cancel
 import me.kvdpxne.dtm.shared.event.isRightClick
@@ -14,7 +14,7 @@ import me.kvdpxne.dtm.shared.player.equipItemsOfTeamSelection
 import me.kvdpxne.dtm.shared.player.localUser
 import me.kvdpxne.dtm.shared.player.reset
 import me.kvdpxne.dtm.shared.world.toBlockPosition
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -44,7 +44,7 @@ object PlayerInteractListener : Listener {
       if (itemInHand.isSimilar(ItemsClipboard.ITEM_GAME_JOIN)) {
         val user = player.localUser
         event.cancel()
-        createGameSelectionGui(user).open(player)
+        createGamesContainer(user).open(user.performer)
         return
       }
 
@@ -54,12 +54,12 @@ object PlayerInteractListener : Listener {
 
         if (null == game) {
           event.cancel()
-          createGameSelectionGui(user).open(player)
+          createGamesContainer(user).open(user.performer)
           return
         }
 
         event.cancel()
-        createTeamSelectionGui(game, user).open(player)
+        createTeamsContainer(user, game).open(user.performer)
         return
       }
 
@@ -140,7 +140,7 @@ object PlayerInteractListener : Listener {
     user.cache.selectedMonumentPosition = block.location.toBlockPosition()
 
     //
-    user.performer.prepareMessage(EnumMessageKey.ARENA_MAP_BLOCK_SELECT)
+    user.performer.prepareMessage(EnumTranslationKey.ARENA_MAP_BLOCK_SELECT)
       .withoutFormat()
       .useChat()
       .send()

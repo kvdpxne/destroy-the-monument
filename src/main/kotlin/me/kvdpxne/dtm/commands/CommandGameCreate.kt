@@ -8,9 +8,8 @@ import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.game.GameImpl
 import me.kvdpxne.dtm.game.GameService
 import me.kvdpxne.dtm.team.Team
-import me.kvdpxne.dtm.translation.TranslationService
 import me.kvdpxne.dtm.translation.formatter.Formatter
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 
 /**
  * @since 0.1.0
@@ -32,7 +31,7 @@ fun createGameCreateCommand(): Command<Performer> {
 
       GameService.insertGame(game)
 
-      performer.prepareMessage(EnumMessageKey.COMMAND_GAME_CREATE)
+      performer.prepareMessage(EnumTranslationKey.COMMAND_GAME_CREATE)
         .format(
           Formatter.begin(1)
             .with("GAME_NAME", game.name)

@@ -1,13 +1,13 @@
 package me.kvdpxne.dtm.translation.locale
 
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 import me.kvdpxne.dtm.translation.message.Message
 
 /**
  * @since 0.1.0
  */
 fun LocaleMessages.findMessageOrNull(
-  key: EnumMessageKey
+  key: EnumTranslationKey
 ): Message<*>? {
   return this.findMessageOrNull(key.messageKey)
 }
@@ -16,7 +16,7 @@ fun LocaleMessages.findMessageOrNull(
  * @since 0.1.0
  */
 fun LocaleMessages.findMessage(
-  key: EnumMessageKey
+  key: EnumTranslationKey
 ): Message<*> {
   return this.findMessage(key.messageKey)
 }
@@ -25,7 +25,7 @@ fun LocaleMessages.findMessage(
  * @since 0.1.0
  */
 fun <T> LocaleMessages.findRawMessageOrNull(
-  key: EnumMessageKey
+  key: EnumTranslationKey
 ): T? {
   return this.findRawMessageOrNull(key.messageKey)
 }
@@ -34,7 +34,7 @@ fun <T> LocaleMessages.findRawMessageOrNull(
  * @since 0.1.0
  */
 fun <T> LocaleMessages.findRawMessage(
-  key: EnumMessageKey
+  key: EnumTranslationKey
 ): T {
   return this.findRawMessage(key.messageKey)
 }

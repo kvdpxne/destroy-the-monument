@@ -52,6 +52,11 @@ interface LocalGame : Game<LocalTeam>, Communicative, TranslatableCommunicative 
   /**
    * @since 0.1.0
    */
+  val criterionTeam: LocalTeam
+
+  /**
+   * @since 0.1.0
+   */
   val votingRegistry: ArenaVotingRegistry?
 
   /**

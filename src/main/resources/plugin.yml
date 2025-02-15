@@ -5,5 +5,6 @@ api-version: "1.7.10"
 prefix: "DTM"
 author: "kvdpxne"
 description: "${description}"
+load: STARTUP
 website: "https://github.com/kvdpxne/destroy-the-monument"
 softdepend: ["ProtocolLib"]

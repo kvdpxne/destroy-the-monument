@@ -10,7 +10,7 @@ import me.kvdpxne.dtm.gui.Rows
 import me.kvdpxne.dtm.shared.item.toBuilder
 import me.kvdpxne.dtm.translation.TranslationService
 import me.kvdpxne.dtm.translation.formatter.Formatter
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.Material
 import org.bukkit.event.inventory.InventoryClickEvent
@@ -40,7 +40,7 @@ fun createArenaSelectionGui(
   val gui = Gui(
     TranslationService
       .findLocalMessagesOrDefault(user.locale)
-      .findRawMessage(EnumMessageKey.GUI_ARENA_VOTING.messageKey),
+      .findRawMessage(EnumTranslationKey.GUI_ARENA_VOTING.messageKey),
     Rows.ONE
   )
 
@@ -53,7 +53,7 @@ fun createArenaSelectionGui(
         .name("&6&l${arena.name}")
         .lore(
           *user.performer
-            .prepareMessage(EnumMessageKey.GUI_ARENA)
+            .prepareMessage(EnumTranslationKey.GUI_ARENA)
             .format(
               Formatter.begin(2)
                 .with("MONUMENT_COUNT", arena.monumentCount)
@@ -67,7 +67,7 @@ fun createArenaSelectionGui(
       votingRegistry.castVote(votingArena.identifier, user)
       event.whoClicked.closeInventory()
 
-      user.performer.prepareMessage(EnumMessageKey.GAME_VOTING_CAST)
+      user.performer.prepareMessage(EnumTranslationKey.GAME_VOTING_CAST)
         .withoutFormat()
         .useChat()
         .send()

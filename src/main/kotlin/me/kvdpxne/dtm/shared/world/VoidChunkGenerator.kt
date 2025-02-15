@@ -1,8 +1,6 @@
 package me.kvdpxne.dtm.shared.world
 
 import java.util.Random
-import org.bukkit.World
-import org.bukkit.generator.ChunkGenerator
 
 /**
  * A chunk generator that generates empty or "void" chunks, used for creating

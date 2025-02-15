@@ -80,7 +80,7 @@ object Rows {
    * exceeds [MAXIMUM].
    * @since 0.1.0
    */
-  fun findNearestRows(
+  fun nearestRows(
     number: Int,
     checkMaximum: Boolean = true
   ): Int {

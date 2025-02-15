@@ -5,7 +5,7 @@ import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.translation.formatter.Formatter
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 import me.kvdpxne.dtm.user.User
 
 /**
@@ -24,7 +24,7 @@ fun createCoinsShowCommand(): Command<Performer> {
         //
         val user: User = attemptObtainUser(performer, parameters)
 
-        performer.prepareMessage(EnumMessageKey.COMMAND_COINS_SHOW_OTHERS)
+        performer.prepareMessage(EnumTranslationKey.COMMAND_COINS_SHOW_OTHERS)
           .format(
             Formatter.begin(1)
               .with("USER_NAME", user.name)
@@ -39,7 +39,7 @@ fun createCoinsShowCommand(): Command<Performer> {
       //
       val user: User = attemptObtainUserAsSelf(performer)
 
-      performer.prepareMessage(EnumMessageKey.COMMAND_COINS_SHOW_SELF)
+      performer.prepareMessage(EnumTranslationKey.COMMAND_COINS_SHOW_SELF)
         .format(
           Formatter.begin(1)
             .with("VALUE", user.wallet.coins)

@@ -19,6 +19,21 @@ object GeneralConfiguration : Configuration {
     }
   }
 
+  /**
+   * Flag indicating whether the plugin should check for Minecraft server
+   * version compatibility.
+   *
+   * If set to `true` and the server version is unsupported, the plugin will
+   * not be loaded. If set to `false`, the plugin will attempt to load even
+   * with an unsupported server version, but undefined errors may occur due to
+   * potential incompatibility. This setting is intended to allow users to
+   * access newer Minecraft versions more quickly, even if the plugin does not
+   * fully support them.
+   *
+   * @since 0.1.0
+   */
+  val CHECK_MINECRAFT_SERVER_VERSION: Boolean = true
+
   const val BLOCK_ENCHANTING = true
 
   const val USER_MANAGER_INITIAL_CAPACITY = 24

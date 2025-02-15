@@ -4,10 +4,10 @@ import java.util.Locale
 import me.kvdpxne.dtm.command.ConsolePerformer
 import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.shared.Copyable
+import me.kvdpxne.dtm.translation.BasicTranslationKey
+import me.kvdpxne.dtm.translation.TranslationKey
 import me.kvdpxne.dtm.translation.TranslationService
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
 import me.kvdpxne.dtm.translation.message.Message
-import me.kvdpxne.dtm.translation.message.MessageKey
 import me.kvdpxne.dtm.translation.receiver.Receiver
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
@@ -42,7 +42,7 @@ class MessageChains internal constructor(
    */
   private fun addMessage(
     locale: Locale,
-    key: MessageKey
+    key: TranslationKey
   ) {
     // Attempts to find messages according to the locale provide
     // by the receiver(s).
@@ -60,12 +60,12 @@ class MessageChains internal constructor(
    * a [LocalUserPerformer] or [ConsolePerformer]), and adds the appropriate
    * localized message for each receiver.
    *
-   * @param key The [MessageKey] that identifies the message to be sent to the receivers.
+   * @param key The [BasicTranslationKey] that identifies the message to be sent to the receivers.
    * @return A [MessageFormatterChains] object that allows further formatting and message manipulation.
    * @since 0.1.0
    */
   fun message(
-    key: MessageKey
+    key: TranslationKey
   ): MessageFormatterChains {
     for (receiver in this.receivers) {
       if (receiver is LocalUserPerformer) {
@@ -81,23 +81,6 @@ class MessageChains internal constructor(
       error("Unsupported receiver type found when trying to search for local messages.")
     }
     return MessageFormatterChains(this.receivers, this.messages)
-  }
-
-  /**
-   * Adds a message for the receivers in the chain, based on the
-   * provided [EnumMessageKey].
-   *
-   * This method is similar to the other `message` method but is specifically
-   * designed to handle messages that are represented by an enum type.
-   *
-   * @param key The [EnumMessageKey] that identifies the message to be sent to the receivers.
-   * @return A [MessageFormatterChains] object that allows further formatting and message manipulation.
-   * @since 0.1.0
-   */
-  fun message(
-    key: EnumMessageKey
-  ): MessageFormatterChains {
-    return this.message(key.messageKey)
   }
 
   /**

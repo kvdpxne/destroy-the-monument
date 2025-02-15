@@ -6,7 +6,7 @@ import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.translation.formatter.Formatter
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 
 /**
  * @since 0.1.0
@@ -48,7 +48,7 @@ internal fun attemptObtainArena(
 
   // Obiekt areny znaleziony na podstawie unikatowej nazwy areny.
   return ArenaService.findArenaByNameOrNull(name)
-    ?: receiver.throwMessage(EnumMessageKey.ARENA_NO_FOUND) {
+    ?: receiver.throwMessage(EnumTranslationKey.ARENA_NO_FOUND) {
       this@throwMessage.format(
         Formatter.begin(1)
           .with("ARENA_NAME", name)

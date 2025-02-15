@@ -5,7 +5,7 @@ import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.shared.world.WorldLoaderHelper
 import me.kvdpxne.dtm.translation.formatter.Formatter
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 import org.bukkit.World
 
 /**
@@ -46,7 +46,7 @@ fun attemptObtainWorld(
 
   //
   val world: World = WorldLoaderHelper.getWorld(name)
-    ?: receiver.throwMessage(EnumMessageKey.NONEXISTENT_WORLD) {
+    ?: receiver.throwMessage(EnumTranslationKey.NONEXISTENT_WORLD) {
       this@throwMessage.format(
         Formatter.begin(1)
           .with("WORLD_NAME", name)

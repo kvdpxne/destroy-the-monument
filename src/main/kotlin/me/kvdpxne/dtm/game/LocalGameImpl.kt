@@ -31,8 +31,8 @@ import me.kvdpxne.dtm.team.TeammateImpl
 import me.kvdpxne.dtm.translation.chains.MessageFormatterChains
 import me.kvdpxne.dtm.translation.TranslationService
 import me.kvdpxne.dtm.translation.formatter.Formatter
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
-import me.kvdpxne.dtm.translation.message.MessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
+import me.kvdpxne.dtm.translation.BasicTranslationKey
 import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -110,6 +110,15 @@ class LocalGameImpl(
 
   override val randomTeam: LocalTeam
     get() = this._teams.values.random()
+
+  override val criterionTeam: LocalTeam
+    get() {
+      if (this.isTeamsSameSize) {
+        return this.randomTeam
+      }
+
+      return this.smallestTeam
+    }
 
   override val votingRegistry: ArenaVotingRegistry?
     get() = this._votingRegistry
@@ -238,7 +247,7 @@ class LocalGameImpl(
       votingRegistry.removeArenas()
     }
 
-    this.prepareMessage(EnumMessageKey.GAME_VOTING_START)
+    this.prepareMessage(EnumTranslationKey.GAME_VOTING_START)
       .withoutFormat()
       .useChat()
       .send()
@@ -249,7 +258,7 @@ class LocalGameImpl(
       }
     }
 
-    this.prepareMessage(EnumMessageKey.GAME_VOTING_HINT)
+    this.prepareMessage(EnumTranslationKey.GAME_VOTING_HINT)
       .withoutFormat()
       .useChat()
       .send()
@@ -261,7 +270,7 @@ class LocalGameImpl(
         continue
       }
 
-      this.prepareMessage(EnumMessageKey.GAME_VOTING_CHOICES_ARENA)
+      this.prepareMessage(EnumTranslationKey.GAME_VOTING_CHOICES_ARENA)
         .format(
           formatter
             .with("INDEX", index.toString())
@@ -852,7 +861,7 @@ class LocalGameImpl(
     this.sendMessages(messages())
   }
 
-  override fun prepareMessage(key: MessageKey): MessageFormatterChains {
+  override fun prepareMessage(key: BasicTranslationKey): MessageFormatterChains {
     return TranslationService.chains()
       .receivers(this._hostages.values.map { it.performer })
       .message(key)

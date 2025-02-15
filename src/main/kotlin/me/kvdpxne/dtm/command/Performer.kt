@@ -4,7 +4,8 @@ import me.kvdpxne.dtm.shared.Communicative
 import me.kvdpxne.dtm.translation.chains.MessageFormatterChains
 import me.kvdpxne.dtm.translation.communitation.TranslatableCommunicative
 import me.kvdpxne.dtm.translation.TranslationService
-import me.kvdpxne.dtm.translation.message.MessageKey
+import me.kvdpxne.dtm.translation.BasicTranslationKey
+import me.kvdpxne.dtm.translation.TranslationKey
 import me.kvdpxne.dtm.translation.receiver.Receiver
 
 interface Performer : Receiver, Communicative, TranslatableCommunicative {
@@ -19,7 +20,7 @@ interface Performer : Receiver, Communicative, TranslatableCommunicative {
    * @since 0.1.0
    */
   override fun prepareMessage(
-    key: MessageKey
+    key: TranslationKey
   ): MessageFormatterChains {
     return TranslationService.chains()
       .receiver(this)

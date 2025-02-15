@@ -133,4 +133,8 @@ class LocalUserPerformerImpl(
       }
     }
   }
+
+  override fun close() {
+    this.player?.closeInventory()
+  }
 }

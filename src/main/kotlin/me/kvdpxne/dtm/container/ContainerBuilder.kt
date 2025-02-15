@@ -6,39 +6,42 @@ import me.kvdpxne.dtm.shared.Buildable
 /**
  * @since 0.1.0
  */
-interface ContainerBuilder<T, U : ContainerOpener<T>> : Buildable<Container<T, U>> {
+interface ContainerBuilder<T : ContainerOpener<*>> : Buildable<Container<T>> {
 
   companion object {
 
-    fun <T, U : ContainerOpener<T>> begin(): ContainerBuilder<T, U> {
+    fun <U : ContainerOpener<*>> begin(): ContainerBuilder<U> {
       return BasicContainerBuilder()
     }
   }
 
+  /**
+   * @since 0.1.0
+   */
   fun owner(
     owner: UUID
-  ): ContainerBuilder<T, U>
+  ): ContainerBuilder<T>
 
   /**
    * @since 0.1.0
    */
   fun type(
     type: ContainerType
-  ): ContainerBuilder<T, U>
+  ): ContainerBuilder<T>
 
   /**
    * @since 0.1.0
    */
   fun size(
     size: Int
-  ): ContainerBuilder<T, U>
+  ): ContainerBuilder<T>
 
   /**
    * @since 0.1.0
    */
   fun displayName(
     displayName: String
-  ): ContainerBuilder<T, U>
+  ): ContainerBuilder<T>
 
   /**
    * @since 0.1.0
@@ -47,5 +50,5 @@ interface ContainerBuilder<T, U : ContainerOpener<T>> : Buildable<Container<T, U
     index: Byte,
     item: Any,
     handler: SlotHandler<T>? = null
-  ): ContainerBuilder<T, U>
+  ): ContainerBuilder<T>
 }

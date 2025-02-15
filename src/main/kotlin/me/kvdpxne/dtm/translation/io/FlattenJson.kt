@@ -6,7 +6,8 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonPrimitive
 import me.kvdpxne.dtm.translation.message.Message
-import me.kvdpxne.dtm.translation.message.MessageKey
+import me.kvdpxne.dtm.translation.BasicTranslationKey
+import me.kvdpxne.dtm.translation.TranslationKey
 import me.kvdpxne.dtm.translation.message.MultipleMessages
 import me.kvdpxne.dtm.translation.message.SingleMessage
 
@@ -95,7 +96,7 @@ internal object FlattenJson {
 
   /**
    * Recursively flattens a [JsonObject], converting nested elements into a flat map
-   * of [MessageKey] and [Message]. This function appends hierarchical keys using
+   * of [BasicTranslationKey] and [Message]. This function appends hierarchical keys using
    * `previousKey` to ensure uniqueness across nested structures.
    *
    * @param json The JSON object to flatten.
@@ -107,15 +108,15 @@ internal object FlattenJson {
   private fun flattenJsonObject(
     json: JsonObject,
     previousKey: String = "",
-    map: MutableMap<MessageKey, Message<*>>
-  ): Map<MessageKey, Message<*>> {
+    map: MutableMap<TranslationKey, Message<*>>
+  ): Map<TranslationKey, Message<*>> {
     for ((key: String, element: JsonElement) in json) {
       val newKey: String = toKey(key, previousKey)
 
       when (element) {
         is JsonObject -> map.putAll(flattenJsonObject(element, newKey, map))
-        is JsonPrimitive -> map[MessageKey.of(newKey)] = toSingleMessage(element)
-        is JsonArray -> map[MessageKey.of(newKey)] = toMultipleMessages(element)
+        is JsonPrimitive -> map[BasicTranslationKey.of(newKey)] = toSingleMessage(element)
+        is JsonArray -> map[BasicTranslationKey.of(newKey)] = toMultipleMessages(element)
       }
     }
 
@@ -123,7 +124,7 @@ internal object FlattenJson {
   }
 
   /**
-   * Flattens the root JSON element into a map of [MessageKey] and [Message].
+   * Flattens the root JSON element into a map of [BasicTranslationKey] and [Message].
    * Supports only JSON objects as the root element; other types will result in an exception.
    *
    * @param root The root JSON element to flatten.
@@ -133,8 +134,8 @@ internal object FlattenJson {
    */
   internal fun flatten(
     root: JsonElement
-  ): Map<MessageKey, Message<*>> {
-    val map: MutableMap<MessageKey, Message<*>> = hashMapOf()
+  ): Map<TranslationKey, Message<*>> {
+    val map: MutableMap<TranslationKey, Message<*>> = hashMapOf()
 
     when (root) {
       is JsonObject -> flattenJsonObject(root, "", map)

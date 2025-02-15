@@ -7,9 +7,8 @@ import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.team.TeamColors
 import me.kvdpxne.dtm.team.TeamImpl
 import me.kvdpxne.dtm.team.TeamService
-import me.kvdpxne.dtm.translation.TranslationService
 import me.kvdpxne.dtm.translation.formatter.Formatter
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 
 /**
  * @since 0.1.0
@@ -38,7 +37,7 @@ fun createTeamCreateCommand(): Command<Performer> {
 
       TeamService.createTeam(team)
 
-      performer.prepareMessage(EnumMessageKey.COMMAND_TEAM_CREATE)
+      performer.prepareMessage(EnumTranslationKey.COMMAND_TEAM_CREATE)
         .format(
           Formatter.begin(1)
             .with("TEAM_NAME", team.name)

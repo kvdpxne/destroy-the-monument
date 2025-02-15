@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.containers
 
-import me.kvdpxne.dtm.container.BukkitContainer
+import me.kvdpxne.dtm.container.Container
 import me.kvdpxne.dtm.container.ContainerBuilder
 import me.kvdpxne.dtm.container.ContainerTypes
 import me.kvdpxne.dtm.container.Rows
@@ -13,23 +13,22 @@ import me.kvdpxne.dtm.shared.item.ItemBuilder
 import me.kvdpxne.dtm.shared.item.displayName
 import me.kvdpxne.dtm.shared.item.toBuilder
 import me.kvdpxne.dtm.translation.formatter.Formatter
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 import me.kvdpxne.dtm.user.LocalUser
 import me.kvdpxne.dtm.user.LocalUserPerformer
-import org.bukkit.entity.Player
 
 fun createProfessionsContainer(
   user: LocalUser
-): BukkitContainer {
+): Container<LocalUserPerformer> {
   // Creates an empty (for now) container with basic parameters and a
   // display name translated into the language of the user who will open
   // the container.
-  val containerBuilder: ContainerBuilder<Player, LocalUserPerformer> =
-    ContainerBuilder.begin<Player, LocalUserPerformer>()
+  val containerBuilder: ContainerBuilder<LocalUserPerformer> =
+    ContainerBuilder.begin<LocalUserPerformer>()
       .owner(user.identifier)
       .type(ContainerTypes.GENERIC_9X2)
       .size(Rows.TWO)
-      .displayName(user.locale, EnumMessageKey.GUI_SELECT_PROFESSION)
+      .displayName(user.locale, EnumTranslationKey.GUI_SELECT_PROFESSION)
 
   //
   val itemBuilder: ItemBuilder = ItemBuilder.begin("STAINED_CLAY")
@@ -37,19 +36,19 @@ fun createProfessionsContainer(
   // An item reprising the currently selected profession.
   val selected: Any = itemBuilder.copy()
     .generation(5)
-    .displayName(user.locale, EnumMessageKey.PROFESSION_STATE_SELECTED)
+    .displayName(user.locale, EnumTranslationKey.PROFESSION_STATE_SELECTED)
     .raw()
 
   // An item that reprises an unavailable profession.
   val unavailable: Any = itemBuilder.copy()
     .generation(14)
-    .displayName(user.locale, EnumMessageKey.PROFESSION_STATE_UNAVAILABLE)
+    .displayName(user.locale, EnumTranslationKey.PROFESSION_STATE_UNAVAILABLE)
     .raw()
 
   // An item that reprises an available profession.
   val available: Any = itemBuilder.copy()
     .generation(4)
-    .displayName(user.locale, EnumMessageKey.PROFESSION_STATE_AVAILABLE)
+    .displayName(user.locale, EnumTranslationKey.PROFESSION_STATE_AVAILABLE)
     .raw()
 
   var index: Byte = 0
@@ -77,9 +76,9 @@ fun createProfessionsContainer(
         .name("&e&l$translatedName")
         .clearAttributes()
         .raw()
-    ) { _: Player ->
+    ) { _: LocalUserPerformer ->
       if (!profession.enabled) {
-        user.prepareMessage(EnumMessageKey.PROFESSION_SELECT_UNAVAILABLE)
+        user.prepareMessage(EnumTranslationKey.PROFESSION_SELECT_UNAVAILABLE)
           .format(
             Formatter.begin(1)
               .with(Placeholders.PROFESSION_NAME, translatedName)
@@ -90,7 +89,7 @@ fun createProfessionsContainer(
       }
 
       if (user.currentProfession == profession) {
-        user.prepareMessage(EnumMessageKey.PROFESSION_SELECT_SELECTED)
+        user.prepareMessage(EnumTranslationKey.PROFESSION_SELECT_SELECTED)
           .format(
             Formatter.begin(2)
               .with(Placeholders.CURRENT_PROFESSION_NAME, user.currentProfession.translateName(user.locale))
@@ -110,7 +109,7 @@ fun createProfessionsContainer(
       //
       user.performer.player?.closeInventory()
 
-      user.prepareMessage(EnumMessageKey.PROFESSION_SELECT_SUCCESS)
+      user.prepareMessage(EnumTranslationKey.PROFESSION_SELECT_SUCCESS)
         .format(
           Formatter.begin(1)
             .with(Placeholders.PROFESSION_NAME, translatedName)
@@ -122,7 +121,7 @@ fun createProfessionsContainer(
       user.teammate?.addProfession(copiedProfession)
         ?: return@slot
 
-      user.prepareMessage(EnumMessageKey.PROFESSION_CHANGE_AFTER_DEATH)
+      user.prepareMessage(EnumTranslationKey.PROFESSION_CHANGE_AFTER_DEATH)
         .withoutFormat()
         .useChat()
         .send()

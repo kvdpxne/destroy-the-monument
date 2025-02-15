@@ -18,6 +18,7 @@ interface Copyable<T> {
    *
    * The returned copy should ideally be a deep copy, meaning any references to
    * mutable objects within the original should not be shared with the copy.
+   *
    * This ensures that modifications to the copy do not affect the original
    * object and vice versa.
    *

@@ -8,7 +8,7 @@ import me.kvdpxne.dtm.shared.material.hasInventory
 import me.kvdpxne.dtm.shared.material.isMonument
 import me.kvdpxne.dtm.shared.player.localUser
 import me.kvdpxne.dtm.translation.TranslationService
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.Material
 import org.bukkit.event.EventHandler
@@ -65,7 +65,7 @@ object BlockPlaceListener : Listener {
       event.cancel()
       TranslationService.chains()
         .receiver(user.performer)
-        .message(EnumMessageKey.ARENA_MAP_BLOCK_PLACING_LIMIT)
+        .message(EnumTranslationKey.ARENA_MAP_BLOCK_PLACING_LIMIT)
         .withoutFormat()
         .useChat()
 
@@ -84,7 +84,7 @@ object BlockPlaceListener : Listener {
 
         TranslationService.chains()
           .receiver(user.performer)
-          .message(EnumMessageKey.ARENA_MAP_BLOCK_PLACING_SPAWN)
+          .message(EnumTranslationKey.ARENA_MAP_BLOCK_PLACING_SPAWN)
           .withoutFormat()
           .useChat()
 

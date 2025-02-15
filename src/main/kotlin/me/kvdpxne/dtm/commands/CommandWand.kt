@@ -3,8 +3,7 @@ package me.kvdpxne.dtm.commands
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.shared.item.ItemsClipboard
-import me.kvdpxne.dtm.translation.TranslationService
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
 /**
@@ -17,7 +16,7 @@ fun createWandCommand(): Command<LocalUserPerformer> {
     .handler { performer, _ ->
       performer.player?.inventory?.addItem(ItemsClipboard.ITEM_WAND)
 
-      performer.prepareMessage(EnumMessageKey.COMMAND_WAND)
+      performer.prepareMessage(EnumTranslationKey.COMMAND_WAND)
         .withoutFormat()
         .useChat()
         .send()

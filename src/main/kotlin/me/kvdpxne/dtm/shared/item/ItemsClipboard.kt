@@ -12,6 +12,9 @@ import org.bukkit.inventory.ItemStack
  */
 object ItemsClipboard {
 
+  /**
+   * @since 0.1.0
+   */
   val AIR_ITEM: ItemStack by lazy {
     ItemStack(Material.AIR)
   }

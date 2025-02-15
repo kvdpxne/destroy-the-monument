@@ -10,7 +10,7 @@ import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.GameService
 import me.kvdpxne.dtm.team.Team
 import me.kvdpxne.dtm.translation.formatter.Formatter
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 
 /**
  * @since 0.1.0
@@ -41,7 +41,7 @@ fun createArenaAddCommand(): Command<Performer> {
       //
       GameManager.addArenaToGame(game, arena)
 
-      performer.prepareMessage(EnumMessageKey.COMMAND_ARENA_ADD)
+      performer.prepareMessage(EnumTranslationKey.COMMAND_ARENA_ADD)
         .format(
           Formatter.begin(2)
             .with("ARENA_NAME", arena.name)

@@ -4,7 +4,7 @@ import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.position.BlockPosition
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 import me.kvdpxne.dtm.user.LocalUserPerformer
 
 /**
@@ -35,7 +35,7 @@ fun attemptObtainSelectedBlockPosition(
   receiver: LocalUserPerformer
 ): BlockPosition {
   return receiver.user.cache.selectedMonumentPosition
-    ?: receiver.throwMessage(EnumMessageKey.ARENA_MAP_BLOCK_NO_SELECT) {
+    ?: receiver.throwMessage(EnumTranslationKey.ARENA_MAP_BLOCK_NO_SELECT) {
       this@throwMessage.withoutFormat()
     }
 }

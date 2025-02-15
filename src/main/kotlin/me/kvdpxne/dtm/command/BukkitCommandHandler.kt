@@ -4,8 +4,9 @@ import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.shared.player.localUser
 import me.kvdpxne.dtm.translation.message.MessageHolderException
 import me.kvdpxne.dtm.translation.TranslationService
+import me.kvdpxne.dtm.translation.chains.message
 import me.kvdpxne.dtm.translation.formatter.Formatter
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 import me.kvdpxne.dtm.translation.message.Message
 import me.kvdpxne.dtm.translation.message.MultipleMessages
 import me.kvdpxne.dtm.translation.message.SingleMessage
@@ -76,7 +77,7 @@ internal class BukkitCommandHandler internal constructor(
       if (!testPermissionSilent(commandSender)) {
         TranslationService.chains()
           .receiver(commandSender.asPerformer())
-          .message(EnumMessageKey.COMMAND_INSUFFICIENT_PRIVILEGES)
+          .message(EnumTranslationKey.COMMAND_INSUFFICIENT_PRIVILEGES)
           .format(
             Formatter.begin(1)
               .with("PRIVILEGE_NAME", this.permission)
@@ -96,7 +97,7 @@ internal class BukkitCommandHandler internal constructor(
       if (commandSender !is Player) {
         TranslationService.chains()
           .receiver(commandSender.asPerformer())
-          .message(EnumMessageKey.COMMAND_IN_GAME)
+          .message(EnumTranslationKey.COMMAND_IN_GAME)
           .withoutFormat()
           .useChat()
           .send()

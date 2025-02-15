@@ -9,7 +9,7 @@ import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.game.Game
 import me.kvdpxne.dtm.team.Team
 import me.kvdpxne.dtm.translation.formatter.Formatter
-import me.kvdpxne.dtm.translation.message.EnumMessageKey
+import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 
 /**
  * @since 0.1.0
@@ -37,7 +37,7 @@ fun createArenaRemoveCommand(): Command<Performer> {
 
       ArenaService.deleteArenaByIdentifier(arena.identifier)
 
-      performer.prepareMessage(EnumMessageKey.COMMAND_ARENA_REMOVE)
+      performer.prepareMessage(EnumTranslationKey.COMMAND_ARENA_REMOVE)
         .format(
           Formatter.begin(2)
             .with("ARENA_NAME", arena.name)

@@ -1,5 +1,6 @@
 package me.kvdpxne.dtm.translation.message
 
+import me.kvdpxne.dtm.translation.Translation
 import me.kvdpxne.dtm.translation.formatter.Formatter
 
 /**
@@ -12,7 +13,7 @@ import me.kvdpxne.dtm.translation.formatter.Formatter
  * @see SingleMessage
  * @since 0.1.0
  */
-interface Message<T> {
+interface Message<T> : Translation {
 
   /**
    * The content of the message, which could be a single element or an array

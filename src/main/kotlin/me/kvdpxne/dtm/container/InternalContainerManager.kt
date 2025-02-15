@@ -13,27 +13,27 @@ internal object InternalContainerManager {
   /**
    * @since 0.1.0
    */
-  private val _containers: ConcurrentMap<UUID, Container<*, *>> =
+  private val _containers: ConcurrentMap<UUID, Container<*>> =
     ConcurrentHashMap()
 
   fun hasContainer(uuid: UUID) = _containers.containsKey(uuid)
 
   fun <T : Player> findContainerByIdentifierOrNull(
     identifier: UUID
-  ): Container<T, ContainerOpener<T>>? {
-    return _containers[identifier] as Container<T, ContainerOpener<T>>?
+  ): Container<ContainerOpener<T>>? {
+    return _containers[identifier] as Container<ContainerOpener<T>>?
   }
 
   fun <T : Player> findContainerByIdentifier(
     identifier: UUID
-  ): Container<T, ContainerOpener<T>> {
+  ): Container<ContainerOpener<T>> {
     return checkNotNull(findContainerByIdentifierOrNull(identifier)) {
       ""
     }
   }
 
   fun addContainer(
-    container: Container<*, *>
+    container: Container<*>
   ) {
     _containers[container.owner] = container
   }
