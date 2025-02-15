@@ -15,6 +15,13 @@ interface RepositoryUserWallet {
   /**
    * @since 0.1.0
    */
+  suspend fun containsUserWalletByIdentifier(
+    identifier: UUID
+  ): Boolean
+
+  /**
+   * @since 0.1.0
+   */
   suspend fun insertUserWallet(
     userWallet: RawUserWallet
   ): Int

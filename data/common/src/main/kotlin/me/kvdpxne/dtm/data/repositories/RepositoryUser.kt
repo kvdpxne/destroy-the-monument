@@ -39,12 +39,12 @@ interface RepositoryUser {
    */
   suspend fun insertUsers(
     users: Iterable<RawUser>
-  )
+  ): Int
 
   /**
    * @since 0.1.0
    */
-  suspend fun insertUser(user: RawUser)
+  suspend fun insertUser(user: RawUser): Int
 
   /**
    * @since 0.1.0
@@ -54,12 +54,17 @@ interface RepositoryUser {
   /**
    * @since 0.1.0
    */
-  suspend fun updateUser(user: RawUser)
+  suspend fun updateUser(user: RawUser): Int
 
   /**
    * @since 0.1.0
    */
   suspend fun deleteUser(user: RawUser): Boolean
+
+  /**
+   * @since 0.1.0
+   */
+  suspend fun deleteUserByIdentifier(identifier: UUID): Boolean
 
   /**
    * @since 0.1.0

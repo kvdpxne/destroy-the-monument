@@ -1,8 +1,10 @@
 package me.kvdpxne.dtm.data.raw
 
+import java.util.UUID
+
 class RawMonumentPosition(
   // @formatter:off
-  val identifier: ByteArray,
+  val identifier: UUID,
   val team      : RawTeam,
   val x         : Int,
   val y         : Int,

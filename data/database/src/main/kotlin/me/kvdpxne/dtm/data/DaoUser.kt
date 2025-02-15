@@ -3,7 +3,6 @@ package me.kvdpxne.dtm.data
 import java.util.Locale
 import java.util.UUID
 import me.kvdpxne.dtm.data.raw.RawUser
-import me.kvdpxne.dtm.data.extensions.UPDATE_LIMIT
 import me.kvdpxne.dtm.data.repositories.RepositoryUser
 import me.kvdpxne.dtm.data.sources.DatabasesConfiguration
 import me.kvdpxne.dtm.data.tables.TableUser
@@ -14,8 +13,9 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteAll
-import org.jetbrains.exposed.sql.innerJoin
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.lowerCase
 import org.jetbrains.exposed.sql.selectAll
@@ -137,6 +137,8 @@ object DaoUser : RepositoryUser {
     builder: UpdateBuilder<Int>
   ) {
     builder[TableUser.identifier] = user.identifier
+    builder[TableUser.statisticsIdentifier] = user.statistics.identifier
+    builder[TableUser.walletIdentifier] = user.wallet.identifier
 
     this.fillUpdateStatement(user, builder)
   }
@@ -212,20 +214,22 @@ object DaoUser : RepositoryUser {
     }
   }
 
-  override suspend fun insertUsers(users: Iterable<RawUser>) {
+  override suspend fun insertUsers(
+    users: Iterable<RawUser>
+  ): Int {
     TODO("Not yet implemented")
   }
 
   override suspend fun insertUser(
     user: RawUser
-  ) {
+  ): Int {
     DaoUserStatistics.insertUserStatistics(user.statistics)
-    me.kvdpxne.dtm.data.DaoUserWallet.insertUserWallet(user.wallet)
+    DaoUserWallet.insertUserWallet(user.wallet)
 
-    concurrentTransaction {
+    return concurrentTransaction {
       TableUser.insert {
         this@DaoUser.fillInsertStatement(user, it)
-      }
+      }.insertedCount
     }
   }
 
@@ -235,28 +239,55 @@ object DaoUser : RepositoryUser {
 
   override suspend fun updateUser(
     user: RawUser
-  ) {
+  ): Int {
     DaoUserStatistics.updateUserStatistics(user.statistics)
     DaoUserWallet.updateUserWallet(user.wallet)
 
-    concurrentTransaction {
+    return concurrentTransaction {
       TableUser.update(
-        this@DaoUser.where(user),
-        UPDATE_LIMIT
+        // Searches for a user according to his unique identifier
+        this@DaoUser.where(user)
       ) { statement: UpdateStatement ->
         this@DaoUser.fillUpdateStatement(user, statement)
       }
     }
   }
 
-  override suspend fun deleteUser(user: RawUser): Boolean {
-    TODO("Not yet implemented")
+  override suspend fun deleteUser(
+    user: RawUser
+  ): Boolean {
+    // Zwraca wynik, który określa jak wiele wierszy zostało usuniętych.
+    val result: Int = concurrentTransaction {
+      TableUser.deleteWhere {
+        this.identifier eq user.identifier
+      }
+    }
+
+    if (0 != result) {
+      DaoUserStatistics.deleteUserStatisticsByIdentifier(user.statistics.identifier)
+      DaoUserWallet.deleteUserWalletByIdentifier(user.wallet.identifier)
+    }
+
+    return 0 != result
+  }
+
+  override suspend fun deleteUserByIdentifier(
+    identifier: UUID
+  ): Boolean {
+    return this.findUserByIdentifierOrNull(identifier)?.let {
+      this.deleteUser(it)
+    } ?: false
   }
 
   override suspend fun deleteUsers(): Int {
-    return concurrentTransaction {
+    val result: Int = concurrentTransaction {
       TableUser.deleteAll()
     }
+
+    DaoUserStatistics.deleteUserStatistics()
+    DaoUserWallet.deleteUserWallets()
+
+    return result
   }
 
   override suspend fun countUsers(): Long {

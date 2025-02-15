@@ -224,7 +224,7 @@ class TestDaoUserStatistics {
     assertEquals(
       USER_STATISTICS,
       runBlocking {
-        DaoUserStatistics.findUserStatisticsByIdentifier(
+        DaoUserStatistics.findUserStatisticsByIdentifierOrNull(
           USER_STATISTICS.identifier
         )
       }
@@ -236,7 +236,7 @@ class TestDaoUserStatistics {
   fun find_non_existent_user_statistics_by_identifier() {
     assertNull(
       runBlocking {
-        DaoUserStatistics.findUserStatisticsByIdentifier(
+        DaoUserStatistics.findUserStatisticsByIdentifierOrNull(
           UniqueUuid.v4(USER_STATISTICS.identifier)
         )
       }
@@ -269,7 +269,7 @@ class TestDaoUserStatistics {
     assertEquals(
       updated,
       runBlocking {
-        DaoUserStatistics.findUserStatisticsByIdentifier(
+        DaoUserStatistics.findUserStatisticsByIdentifierOrNull(
           updated.identifier
         )
       }
@@ -314,7 +314,7 @@ class TestDaoUserStatistics {
 
     assertNull(
       runBlocking {
-        DaoUserStatistics.findUserStatisticsByIdentifier(
+        DaoUserStatistics.findUserStatisticsByIdentifierOrNull(
           USER_STATISTICS.identifier
         )
       }

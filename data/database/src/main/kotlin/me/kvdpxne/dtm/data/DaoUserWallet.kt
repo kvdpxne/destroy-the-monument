@@ -1,14 +1,11 @@
 package me.kvdpxne.dtm.data
 
 import java.util.UUID
-import me.kvdpxne.dtm.data.extensions.LIMIT_TO_DELETE
-import me.kvdpxne.dtm.data.extensions.UPDATE_LIMIT
 import me.kvdpxne.dtm.data.raw.RawUserWallet
 import me.kvdpxne.dtm.data.repositories.RepositoryUserWallet
 import me.kvdpxne.dtm.data.sources.DatabasesConfiguration
 import me.kvdpxne.dtm.data.tables.TableUserWallet
 import me.kvdpxne.dtm.data.transactions.concurrentTransaction
-import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder
@@ -100,25 +97,34 @@ object DaoUserWallet : RepositoryUserWallet {
     }
   }
 
+  override suspend fun containsUserWalletByIdentifier(
+    identifier: UUID
+  ): Boolean {
+    return concurrentTransaction {
+      0L != TableUserWallet
+        .select(TableUserWallet.identifier)
+        .where {
+          TableUserWallet.identifier eq identifier
+        }
+        .count()
+    }
+  }
+
   override suspend fun insertUserWallet(
     userWallet: RawUserWallet
   ): Int {
-    try {
-      return concurrentTransaction {
-        TableUserWallet.insert { builder: UpdateBuilder<*> ->
-          builder[this.identifier] = userWallet.identifier
-          this@DaoUserWallet.fillUserWalletStatement(
-            userWallet,
-            builder
-          )
-        }.insertedCount
-      }
-    } catch (ex: ExposedSQLException) {
-      if (true != ex.cause?.message?.contains("duplicate key value", true)) {
-        throw ex
-      }
+    if (this.containsUserWalletByIdentifier(userWallet.identifier)) {
+      return Fsfsfsf.ALREADY_EXISTS
+    }
 
-      throw ex
+    return concurrentTransaction {
+      TableUserWallet.insert { builder: UpdateBuilder<*> ->
+        builder[this.identifier] = userWallet.identifier
+        this@DaoUserWallet.fillUserWalletStatement(
+          userWallet,
+          builder
+        )
+      }.insertedCount
     }
   }
 

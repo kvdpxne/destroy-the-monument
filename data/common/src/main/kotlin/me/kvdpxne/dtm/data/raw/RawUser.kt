@@ -1,11 +1,12 @@
 package me.kvdpxne.dtm.data.raw
 
 import java.util.UUID
+import org.jetbrains.annotations.VisibleForTesting
 
 /**
  * @since 0.1.0
  */
-data class RawUser /* VISIBLE TEST-ONLY */ constructor(
+data class RawUser @VisibleForTesting constructor(
   // @formatter:off
   val identifier : UUID,
   val statistics : RawUserStatistics,

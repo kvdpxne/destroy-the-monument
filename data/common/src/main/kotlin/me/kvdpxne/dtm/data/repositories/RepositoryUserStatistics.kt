@@ -11,7 +11,7 @@ interface RepositoryUserStatistics {
   /**
    * @since 0.1.0
    */
-  suspend fun findUserStatisticsByIdentifier(
+  suspend fun findUserStatisticsByIdentifierOrNull(
     identifier: UUID
   ): RawUserStatistics?
 

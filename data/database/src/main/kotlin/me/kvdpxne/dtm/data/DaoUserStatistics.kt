@@ -2,14 +2,9 @@ package me.kvdpxne.dtm.data
 
 import java.util.UUID
 import me.kvdpxne.dtm.data.raw.RawUserStatistics
-import me.kvdpxne.dtm.data.transactions.concurrentTransaction
-import me.kvdpxne.dtm.data.extensions.LIMIT_TO_DELETE
-import me.kvdpxne.dtm.data.extensions.UPDATE_LIMIT
 import me.kvdpxne.dtm.data.repositories.RepositoryUserStatistics
-import me.kvdpxne.dtm.data.shared.Problem
 import me.kvdpxne.dtm.data.tables.TableUserStatistics
-import me.kvdpxne.dtm.data.tables.TableUserStatistics.assists
-import org.jetbrains.exposed.exceptions.ExposedSQLException
+import me.kvdpxne.dtm.data.transactions.concurrentTransaction
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder
@@ -18,7 +13,6 @@ import org.jetbrains.exposed.sql.deleteAll
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.statements.InsertStatement
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.update
 
@@ -101,7 +95,7 @@ object DaoUserStatistics : RepositoryUserStatistics {
     )
   }
 
-  override suspend fun findUserStatisticsByIdentifier(
+  override suspend fun findUserStatisticsByIdentifierOrNull(
     identifier: UUID
   ): RawUserStatistics? {
     return concurrentTransaction {

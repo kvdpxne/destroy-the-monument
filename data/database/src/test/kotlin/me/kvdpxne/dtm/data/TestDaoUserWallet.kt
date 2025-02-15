@@ -47,11 +47,12 @@ class TestDaoUserWallet {
   @Order(1)
   @Test
   fun insert_duplicated_user_wallet() {
-    assertThrows<ExposedSQLException> {
+    assertEquals(
+      Fsfsfsf.ALREADY_EXISTS,
       runBlocking {
         DaoUserWallet.insertUserWallet(USER_WALLET)
       }
-    }
+    )
   }
 
   @Order(2)
