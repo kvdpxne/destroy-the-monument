@@ -1,5 +1,8 @@
 package me.kvdpxne.dtm.data.raw
 
-class RawArenaSettings(
+/**
+ * @since 0.1.0
+ */
+data class RawArenaSettings(
   val identifier: String
 )

@@ -4,6 +4,9 @@ version = "0.1.0"
 dependencies {
   testImplementation(kotlin("test"))
 
+  api(project(":api"))
+  api(project(":common"))
+
   shadow(project(":api"))
   implementation(project(":api"))
   api(project(":api"))

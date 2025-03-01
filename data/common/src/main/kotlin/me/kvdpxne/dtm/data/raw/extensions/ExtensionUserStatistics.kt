@@ -1,7 +1,60 @@
 package me.kvdpxne.dtm.data.raw.extensions
 
+import java.util.UUID
 import me.kvdpxne.dtm.data.raw.RawUserStatistics
 import me.kvdpxne.dtm.user.statistics.UserStatistics
+
+fun RawUserStatistics.Companion.of(
+  // @formatter:off
+  identifier        : UUID,
+  kills             : Int,
+  assists           : Int,
+  deaths            : Int,
+  destroyedMonuments: Int,
+  playedGames       : Int,
+  gamesWon          : Int,
+  gamesLost         : Int
+  // @formatter:on
+): RawUserStatistics {
+  require(0 <= kills) {
+    "The number of kills cannot be negative."
+  }
+
+  require(0 <= assists) {
+    "The number of assists cannot be negative."
+  }
+
+  require(0 <= deaths) {
+    "The number of deaths cannot be negative."
+  }
+
+  require(0 <= destroyedMonuments) {
+    "The number of destroyed monuments cannot be negative."
+  }
+
+  require(0 <= playedGames) {
+    "The number of played games cannot be negative."
+  }
+
+  require(0 <= gamesWon) {
+    "The number of games won cannot be negative."
+  }
+
+  require(0 <= gamesLost) {
+    "The number of games lost cannot be negative."
+  }
+
+  return RawUserStatistics(
+    identifier,
+    kills,
+    assists,
+    deaths,
+    destroyedMonuments,
+    playedGames,
+    gamesWon,
+    gamesLost
+  )
+}
 
 /**
  * Extension function for mapping a [UserStatistics] object to a
@@ -16,34 +69,6 @@ import me.kvdpxne.dtm.user.statistics.UserStatistics
  */
 @Synchronized
 fun UserStatistics.toRawUserStatistics(): RawUserStatistics {
-  require(0 <= this.kills) {
-    "The number of kills cannot be negative."
-  }
-
-  require(0 <= this.assists) {
-    "The number of assists cannot be negative."
-  }
-
-  require(0 <= this.deaths) {
-    "The number of deaths cannot be negative."
-  }
-
-  require(0 <= this.destroyedMonuments) {
-    "The number of destroyed monuments cannot be negative."
-  }
-
-  require(0 <= this.playedGames) {
-    "The number of played games cannot be negative."
-  }
-
-  require(0 <= this.gamesWon) {
-    "The number of games won cannot be negative."
-  }
-
-  require(0 <= this.gamesLost) {
-    "The number of games lost cannot be negative."
-  }
-
   return RawUserStatistics(
     this.identifier,
     this.kills,

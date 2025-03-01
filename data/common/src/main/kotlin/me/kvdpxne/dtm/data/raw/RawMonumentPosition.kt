@@ -2,7 +2,10 @@ package me.kvdpxne.dtm.data.raw
 
 import java.util.UUID
 
-class RawMonumentPosition(
+/**
+ * @since 0.1.0
+ */
+data class RawMonumentPosition(
   // @formatter:off
   val identifier: UUID,
   val team      : RawTeam,
@@ -10,4 +13,10 @@ class RawMonumentPosition(
   val y         : Int,
   val z         : Int
   // @formatter:on
-)
+) {
+
+  /**
+   * @since 0.1.0
+   */
+  companion object
+}

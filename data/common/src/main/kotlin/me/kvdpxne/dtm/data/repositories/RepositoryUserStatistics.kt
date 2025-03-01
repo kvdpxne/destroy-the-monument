@@ -18,15 +18,22 @@ interface RepositoryUserStatistics {
   /**
    * @since 0.1.0
    */
+  suspend fun containsUserStatisticsByIdentifier(
+    identifier: UUID
+  ): Boolean
+
+  /**
+   * @since 0.1.0
+   */
   suspend fun insertUserStatistics(
-    userStatistics: RawUserStatistics
+    userStatistics: RawUserStatistics?
   ): Int
 
   /**
    * @since 0.1.0
    */
   suspend fun updateUserStatistics(
-    userStatistics: RawUserStatistics
+    userStatistics: RawUserStatistics?
   ): Int
 
   /**
@@ -39,7 +46,7 @@ interface RepositoryUserStatistics {
   /**
    * @since 0.1.0
    */
-  suspend fun deleteUserStatistics(): Int
+  suspend fun truncateUserStatistics(): Int
 
   /**
    * @since 0.1.0

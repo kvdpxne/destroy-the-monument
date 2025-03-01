@@ -3,6 +3,9 @@ package me.kvdpxne.dtm.data.repositories
 import java.util.UUID
 import me.kvdpxne.dtm.data.raw.RawUserWallet
 
+/**
+ * @since 0.1.0
+ */
 interface RepositoryUserWallet {
 
   /**
@@ -23,14 +26,14 @@ interface RepositoryUserWallet {
    * @since 0.1.0
    */
   suspend fun insertUserWallet(
-    userWallet: RawUserWallet
+    userWallet: RawUserWallet?
   ): Int
 
   /**
    * @since 0.1.0
    */
   suspend fun updateUserWallet(
-    userWallet: RawUserWallet
+    userWallet: RawUserWallet?
   ): Int
 
   /**
@@ -43,7 +46,7 @@ interface RepositoryUserWallet {
   /**
    * @since 0.1.0
    */
-  suspend fun deleteUserWallets(): Int
+  suspend fun truncateUserWallets(): Int
 
   /**
    * @since 0.1.0

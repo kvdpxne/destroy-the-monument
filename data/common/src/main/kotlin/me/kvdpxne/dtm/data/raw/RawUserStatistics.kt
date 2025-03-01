@@ -15,7 +15,7 @@ import org.jetbrains.annotations.VisibleForTesting
  *
  * @since 0.1.0
  */
-data class RawUserStatistics @VisibleForTesting constructor(
+data class RawUserStatistics(
   // @formatter:off
   val identifier        : UUID,
   val kills             : Int,
@@ -26,4 +26,10 @@ data class RawUserStatistics @VisibleForTesting constructor(
   val gamesWon          : Int,
   val gamesLost         : Int
   // @formatter:on
-)
+) {
+
+  /**
+   * @since 0.1.0
+   */
+  companion object
+}

@@ -3,6 +3,9 @@ package me.kvdpxne.dtm.data.repositories
 import java.util.UUID
 import me.kvdpxne.dtm.data.raw.RawTeam
 
+/**
+ * @since 0.1.0
+ */
 interface RepositoryTeam {
 
   /**
@@ -32,22 +35,42 @@ interface RepositoryTeam {
   /**
    * @since 0.1.0
    */
-  suspend fun insertTeam(team: RawTeam): Int
+  suspend fun containsTeamByIdentifier(
+    identifier: UUID
+  ): Boolean
 
   /**
    * @since 0.1.0
    */
-  suspend fun updateTeam(team: RawTeam): Int
+  suspend fun containsTeamByName(
+    name: String
+  ): Boolean
 
   /**
    * @since 0.1.0
    */
-  suspend fun deleteTeamByIdentifier(identifier: UUID): Int
+  suspend fun insertTeam(
+    team: RawTeam?
+  ): Int
 
   /**
    * @since 0.1.0
    */
-  suspend fun deleteTeams(): Int
+  suspend fun updateTeam(
+    team: RawTeam?
+  ): Int
+
+  /**
+   * @since 0.1.0
+   */
+  suspend fun deleteTeamByIdentifier(
+    identifier: UUID
+  ): Int
+
+  /**
+   * @since 0.1.0
+   */
+  suspend fun truncateTeams(): Int
 
   /**
    * @since 0.1.0

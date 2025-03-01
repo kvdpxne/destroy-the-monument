@@ -17,7 +17,7 @@ object VariableGuidelines {
    */
   const val MAX_DISPLAY_NAME_LENGTH = 24
 
-  const val MIN_MULTIPLIER = 0.01F
+  const val MIN_MULTIPLIER: Float = 0.00F
 
-  const val MAX_MULTIPLIER = 10000.0F
+  const val MAX_MULTIPLIER: Float = 10000.00F
 }

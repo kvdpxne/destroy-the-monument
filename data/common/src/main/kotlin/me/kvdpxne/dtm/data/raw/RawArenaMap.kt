@@ -1,8 +1,19 @@
 package me.kvdpxne.dtm.data.raw
 
-class RawArenaMap(
+import java.util.UUID
+
+/**
+ * @since 0.1.0
+ */
+data class RawArenaMap(
   // @formatter:off
-  val identifier: String,
+  val identifier: UUID,
   val name      : String
   // @formatter:on
-)
+) {
+
+  /**
+   * @since 0.1.0
+   */
+  companion object
+}

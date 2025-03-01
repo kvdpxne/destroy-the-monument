@@ -3,6 +3,9 @@ package me.kvdpxne.dtm.data.repositories
 import java.util.UUID
 import me.kvdpxne.dtm.data.raw.RawUser
 
+/**
+ * @since 0.1.0
+ */
 interface RepositoryUser {
 
   /**
@@ -37,6 +40,20 @@ interface RepositoryUser {
   /**
    * @since 0.1.0
    */
+  suspend fun containsUserByIdentifier(
+    identifier: UUID
+  ): Boolean
+
+  /**
+   * @since 0.1.0
+   */
+  suspend fun containsUserByName(
+    name: String
+  ): Boolean
+
+  /**
+   * @since 0.1.0
+   */
   suspend fun insertUsers(
     users: Iterable<RawUser>
   ): Int
@@ -44,32 +61,42 @@ interface RepositoryUser {
   /**
    * @since 0.1.0
    */
-  suspend fun insertUser(user: RawUser): Int
+  suspend fun insertUser(
+    user: RawUser?
+  ): Int
 
   /**
    * @since 0.1.0
    */
-  suspend fun updateUsers(users: Iterable<RawUser>): Int
+  suspend fun updateUsers(
+    users: Iterable<RawUser>
+  ): Int
 
   /**
    * @since 0.1.0
    */
-  suspend fun updateUser(user: RawUser): Int
+  suspend fun updateUser(
+    user: RawUser?
+  ): Int
 
   /**
    * @since 0.1.0
    */
-  suspend fun deleteUser(user: RawUser): Boolean
+  suspend fun deleteUser(
+    user: RawUser
+  ): Boolean
 
   /**
    * @since 0.1.0
    */
-  suspend fun deleteUserByIdentifier(identifier: UUID): Boolean
+  suspend fun deleteUserByIdentifier(
+    identifier: UUID
+  ): Boolean
 
   /**
    * @since 0.1.0
    */
-  suspend fun deleteUsers(): Int
+  suspend fun truncateUsers(): Int
 
   /**
    * @since 0.1.0

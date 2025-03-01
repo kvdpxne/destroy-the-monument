@@ -9,19 +9,19 @@ object SingletonArenaService : ArenaService {
     TODO("Not yet implemented")
   }
 
-  override fun findArenaByIdentifierOrNull(identifier: CharSequence?): Arena {
+  override fun findArenaByIdentifierOrNull(identifier: CharSequence): Arena? {
     TODO("Not yet implemented")
   }
 
-  override fun findArenaByIdentifier(identifier: CharSequence?): Arena {
+  override fun findArenaByIdentifier(identifier: CharSequence): Arena {
     TODO("Not yet implemented")
   }
 
-  override fun findArenaByNameOrNull(name: CharSequence?): Arena {
+  override fun findArenaByNameOrNull(name: CharSequence): Arena? {
     TODO("Not yet implemented")
   }
 
-  override fun findArenaByName(name: CharSequence?): Arena {
+  override fun findArenaByName(name: CharSequence): Arena {
     TODO("Not yet implemented")
   }
 

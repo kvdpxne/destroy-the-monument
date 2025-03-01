@@ -1,3 +1,7 @@
+import com.adarshr.gradle.testlogger.TestLoggerExtension
+import com.adarshr.gradle.testlogger.TestLoggerPlugin
+import com.adarshr.gradle.testlogger.theme.ThemeType
+import org.gradle.model.internal.core.ModelNodes.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -31,6 +35,12 @@ subprojects {
     plugin("org.jetbrains.dokka")
     plugin("com.gradleup.shadow")
   }
+
+//  plugins.withType<TestLoggerPlugin> {
+//    configure<TestLoggerExtension> {
+//      theme = ThemeType.STANDARD
+//    }
+//  }
 
   // The version of java used throughout the project.
   val targetJavaVersion = 8

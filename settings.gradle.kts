@@ -47,6 +47,7 @@ arrayOf(
   "api",
   "commands:api",
   "commands:content",
+  "common",
   "configurations",
   "core",
   "data:common",

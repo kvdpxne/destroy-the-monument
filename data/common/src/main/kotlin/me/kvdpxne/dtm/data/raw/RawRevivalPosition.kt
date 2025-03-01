@@ -2,7 +2,10 @@ package me.kvdpxne.dtm.data.raw
 
 import java.util.UUID
 
-class RawRevivalPosition(
+/**
+ * @since 0.1.0
+ */
+data class RawRevivalPosition(
   // @formatter:off
   val identifier: UUID,
   val team      : RawTeam,
@@ -12,4 +15,10 @@ class RawRevivalPosition(
   val pitch     : Float,
   val yaw       : Float
   // @formatter:on
-)
+) {
+
+  /**
+   * @since 0.1.0
+   */
+  companion object
+}

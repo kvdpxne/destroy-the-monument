@@ -24,7 +24,7 @@ import org.jetbrains.annotations.VisibleForTesting
  * @param multiplier A multiplier applied to various calculations involving the wallet.
  * @since 0.1.0
  */
-data class RawUserWallet @VisibleForTesting constructor(
+data class RawUserWallet(
   // @formatter:off
   val identifier: UUID,
   val coins     : Long,

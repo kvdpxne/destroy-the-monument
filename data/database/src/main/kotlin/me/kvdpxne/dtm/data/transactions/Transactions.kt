@@ -24,11 +24,14 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
  */
 suspend fun <T> concurrentTransaction(
   database: Database? = DatabasesConfiguration.main,
+  readOnly: Boolean = false,
   body: suspend Transaction.() -> T
 ): T {
   requireNotNull(database) {
     "Database cannot be null for concurrent transaction."
   }
 
-  return newSuspendedTransaction(Dispatchers.IO, database, statement = body)
+  return newSuspendedTransaction(
+    Dispatchers.IO, database, readOnly = readOnly, statement = body
+  )
 }

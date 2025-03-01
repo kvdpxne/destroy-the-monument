@@ -7,13 +7,7 @@ import org.jetbrains.exposed.sql.IntegerColumnType
 import org.jetbrains.exposed.sql.LongColumnType
 import org.jetbrains.exposed.sql.Table
 
-const val PREFIX_PRIMARY_KEY = "pk"
-
 const val PREFIX_CHECK = "chk"
-
-val LIMIT_TO_DELETE: Int? = 1
-
-val UPDATE_LIMIT: Int? = 1
 
 internal fun generateCustomCheckPrefix(
   type: String,

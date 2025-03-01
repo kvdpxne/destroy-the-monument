@@ -20,13 +20,28 @@ object TableTeam : Table(En.TEAM) {
   /**
    * @since 0.1.0
    */
-  val name: Column<String> = this.varchar(Efn.NAME, 16)
+  val name: Column<String> = this.varchar(Efn.NAME, 24)
     .uniqueIndex()
 
   /**
    * @since 0.1.0
    */
-  val displayName: Column<String?> = this.varchar(Efn.DISPLAY_NAME, 24)
+  val colorOfArmor: Column<String> = this.varchar(Efn.COLOR_OF_ARMOR, 7)
+
+  /**
+   * @since 0.1.0
+   */
+  val colorOfProfession: Column<String> = this.varchar(Efn.COLOR_OF_PROFESSION, 7)
+
+  /**
+   * @since 0.1.0
+   */
+  val colorOnChat: Column<String> = this.varchar(Efn.COLOR_ON_CHAT, 7)
+
+  /**
+   * @since 0.1.0
+   */
+  val colorOnPlayerList: Column<String?> = this.varchar(Efn.COLOR_ON_PLAYER_LIST, 7)
     .nullable()
 
   /**

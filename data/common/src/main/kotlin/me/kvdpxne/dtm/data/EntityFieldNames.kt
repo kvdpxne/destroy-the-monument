@@ -7,6 +7,11 @@ object EntityFieldNames {
 
   const val DISPLAY_NAME = "display_name"
 
+  const val COLOR_OF_ARMOR = "color_of_armor"
+  const val COLOR_OF_PROFESSION = "color_of_profession"
+  const val COLOR_ON_PLAYER_LIST = "color_on_player_list"
+  const val COLOR_ON_CHAT = "color_on_chat"
+
   // User
   const val LOCALE = "locale"
   const val PROFESSION_NAME = "profession"
@@ -43,3 +48,10 @@ object EntityFieldNames {
   const val PITCH = "pitch"
   const val YAW = "yaw"
 }
+
+/**
+ * Type alias for `EntityFieldNames`, providing a shorter, more concise name.
+ *
+ * @since 0.1.0
+ */
+typealias Efn = EntityFieldNames

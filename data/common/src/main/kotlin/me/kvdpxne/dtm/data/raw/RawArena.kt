@@ -1,5 +1,7 @@
 package me.kvdpxne.dtm.data.raw
 
+import java.util.UUID
+
 /**
  * @param identifier
  * @param map
@@ -10,13 +12,19 @@ package me.kvdpxne.dtm.data.raw
  *
  * @since 0.1.0
  */
-class RawArena(
+data class RawArena(
   // @formatter:off
-  val identifier       : String,
+  val identifier       : UUID,
   val map              : RawArenaMap,
   val settings         : RawArenaSettings,
   val monumentPositions: Collection<RawMonumentPosition>,
   val revivalPositions : Collection<RawRevivalPosition>,
   val name             : String
   // @formatter:on
-)
+) {
+
+  /**
+   * @since 0.1.0
+   */
+  companion object
+}
