@@ -1,5 +1,12 @@
 dependencies {
+//  project(":data-common").let {
+//    api(it)
+//    testFixturesImplementation(it)
+//  }
+
   implementation(project(":api"))
+  testImplementation(testFixtures(project(":data-common")))
+//  testFixturesImplementation(project(":data-common"))
 
   implementation(libraries.exposed.core)
   implementation(libraries.exposed.jdbc)
@@ -15,6 +22,8 @@ dependencies {
       libraries.hikaricp.v4
     }
   )
+
+  implementation("org.jetbrains.exposed:exposed-migration:0.59.0")
 
   runtimeOnly(libraries.postgresql)
   runtimeOnly(libraries.sqlite)

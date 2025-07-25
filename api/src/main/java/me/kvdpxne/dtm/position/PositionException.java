@@ -1,15 +1,56 @@
 package me.kvdpxne.dtm.position;
 
-import me.kvdpxne.dtm.CodecException;
+import me.kvdpxne.dtm.RootException;
 
-public class PositionException extends CodecException {
+/**
+ * @author Łukasz Pietrzak (kvdpxne)
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+public class PositionException
+  extends
+  RootException {
+
+  /**
+   * @since 0.1.0
+   */
   private static final long serialVersionUID = -1170148774646828859L;
 
-  public PositionException(String message, String code) {
-    super(message, code);
+  /**
+   * @since 0.1.0
+   */
+  protected PositionException(
+    final String message,
+    final Throwable cause,
+    final boolean enableSuppression,
+    final boolean writableStackTrace
+  ) {
+    super(message, cause, enableSuppression, writableStackTrace);
   }
 
-  public PositionException(String message, Throwable cause, String code) {
-    super(message, cause, code);
+  /**
+   * @since 0.1.0
+   */
+  public PositionException(
+    final String message,
+    final Throwable cause
+  ) {
+    super(message, cause);
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  public PositionException(
+    final String message
+  ) {
+    super(message);
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  public PositionException() {
+    super("");
   }
 }

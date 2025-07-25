@@ -4,19 +4,20 @@ import java.util.UUID;
 import me.kvdpxne.boujee.locale.LocaleSource;
 import me.kvdpxne.boujee.locale.LocaleSourceProvider;
 import me.kvdpxne.boujee.receiver.Receiver;
-import me.kvdpxne.dtm.DisplayableNameable;
-import me.kvdpxne.dtm.Identifiable;
+import me.kvdpxne.dtm.capabilities.Nameable;
+import me.kvdpxne.dtm.capabilities.Persistable;
+import me.kvdpxne.dtm.capabilities.Rebuildable;
 import me.kvdpxne.dtm.profession.Profession;
 import me.kvdpxne.dtm.user.statistics.UserStatistics;
 import me.kvdpxne.dtm.wallet.Wallet;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public interface User
   extends
-  Identifiable<UUID>,
+  Persistable<UUID>,
   Receiver,
-  DisplayableNameable,
+  Rebuildable<User, UserBuilder>,
+  Nameable,
   LocalUserProvider {
 
   /**
@@ -36,13 +37,6 @@ public interface User
   /**
    * @since 0.1.0
    */
-  @Nullable
-  @Override
-  String getDisplayName();
-
-  /**
-   * @since 0.1.0
-   */
   @NotNull
   UserStatistics getStatistics();
 
@@ -56,7 +50,13 @@ public interface User
    * @since 0.1.0
    */
   @NotNull
-  Profession getCurrentProfession();
+  String getProfessionName();
+
+  /**
+   * @since 0.1.0
+   */
+  @NotNull
+  Profession getProfession();
 
   /**
    * @since 0.1.0

@@ -1,20 +1,20 @@
 package me.kvdpxne.dtm.arena;
 
 import java.util.UUID;
-import me.kvdpxne.dtm.Buildable;
+import me.kvdpxne.dtm.capabilities.Buildable;
 import org.jetbrains.annotations.NotNull;
 
 public interface ArenaBuilder
   extends
   Buildable<Arena> {
 
-  ArenaBuilder withIdentifier(final UUID identifier);
+  ArenaBuilder withIdentifier(UUID identifier);
 
   ArenaBuilder withRandomIdentifier();
 
-  ArenaBuilder withName(final String name);
+  ArenaBuilder withName(String name);
 
-  ArenaBuilder withDisplayName(final String displayName);
+  ArenaBuilder withDisplayName(String displayName);
 
   @Override
   @NotNull

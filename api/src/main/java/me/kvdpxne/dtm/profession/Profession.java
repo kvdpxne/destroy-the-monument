@@ -1,8 +1,8 @@
 package me.kvdpxne.dtm.profession;
 
-import me.kvdpxne.dtm.Copyable;
+import me.kvdpxne.dtm.capabilities.Copyable;
 import me.kvdpxne.dtm.DisplayableNameable;
-import me.kvdpxne.dtm.Identifiable;
+import me.kvdpxne.dtm.capabilities.Identifiable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

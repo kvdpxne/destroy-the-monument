@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.profession.ability;
 
 import me.kvdpxne.dtm.event.Cancellable;
-import me.kvdpxne.dtm.Copyable;
+import me.kvdpxne.dtm.capabilities.Copyable;
 import me.kvdpxne.dtm.DisplayableNameable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

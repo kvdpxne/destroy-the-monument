@@ -3,6 +3,7 @@ package me.kvdpxne.dtm.position.diemension
 import java.lang.ref.Reference
 import java.util.UUID
 import me.kvdpxne.dtm.position.diemesion.Dimension
+import org.jetbrains.annotations.Range
 
 open class BasicDimension protected constructor(
   // @formatter:off
@@ -33,8 +34,12 @@ open class BasicDimension protected constructor(
     return this.name
   }
 
-  override fun getWorldOrNull(): Any? {
+  override fun getWorld(): Any {
     throw NotImplementedError()
+  }
+
+  override fun getType(): @Range(from = 0, to = 127) Byte {
+    TODO("Not yet implemented")
   }
 
   override fun sameWorld(
@@ -52,7 +57,7 @@ open class BasicDimension protected constructor(
   override fun sameWorld(
     world: Any
   ): Boolean {
-    val lazedWorld: Any? = this.worldOrNull
+    val lazedWorld: Any? = this.world
     if (null != lazedWorld) {
       return lazedWorld == world
     }
@@ -64,7 +69,7 @@ open class BasicDimension protected constructor(
   }
 
   override fun sameWorld(dimension: Dimension): Boolean {
-    val lazedWorld: Any? = dimension.worldOrNull
+    val lazedWorld: Any? = dimension.world
     if (null != lazedWorld) {
       return this.sameWorld(lazedWorld)
     }

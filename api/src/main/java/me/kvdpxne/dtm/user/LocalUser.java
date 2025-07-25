@@ -4,6 +4,7 @@ import java.util.UUID;
 import me.kvdpxne.boujee.TranslationKeyProvider;
 import me.kvdpxne.boujee.locale.LocaleSource;
 import me.kvdpxne.boujee.locale.LocaleSourceProvider;
+import me.kvdpxne.dtm.capabilities.Identifiable;
 import me.kvdpxne.dtm.profession.Profession;
 import me.kvdpxne.dtm.translation.Communicable;
 import me.kvdpxne.dtm.user.cache.UserCache;
@@ -19,6 +20,7 @@ import org.jetbrains.annotations.Nullable;
 public interface LocalUser
   extends
   Communicable,
+  Identifiable<UUID>,
   User {
 
   /**
@@ -39,13 +41,6 @@ public interface LocalUser
    * @since 0.1.0
    */
   @Override
-  @Nullable
-  String getDisplayName();
-
-  /**
-   * @since 0.1.0
-   */
-  @Override
   @NotNull
   UserStatistics getStatistics();
 
@@ -61,12 +56,12 @@ public interface LocalUser
    */
   @Override
   @NotNull
-  Profession getCurrentProfession();
+  Profession getProfession();
 
   /**
    * @since 0.1.0
    */
-  void setCurrentProfession(
+  void setProfession(
     final @NotNull Profession profession
   );
 

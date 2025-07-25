@@ -1,41 +1,45 @@
 package me.kvdpxne.dtm.data.raw
 
 import java.util.UUID
-import org.jetbrains.annotations.VisibleForTesting
+import me.kvdpxne.dtm.data.shared.Raw
+import me.kvdpxne.dtm.shared.StylishToStringBuilder
+import me.kvdpxne.dtm.util.StylishToStringProvider
 
 /**
- * Represents a raw user wallet, serving as an intermediate representation
- * between core logic and the database.
+ * @property identifier
+ * @property coins
+ * @property multiplier
+ * @property infinite
+ * @property locked
  *
- * **Important:** The `identifier` field is expected to be a UUID without
- * hyphens. While UUIDs are typically represented with hyphens, using a plain
- * string format allows for greater flexibility when working with various
- * databases that may not have native UUID support (e.g., SQLite).
- *
- * **Note:** Due to the nature of this class as a raw data representation, it is not recommended to rely on
- * `hashCode()` or `equals()` for comparison purposes. These methods are not overridden and may produce
- * unexpected results.
- *
- * **Note:** This class is intended for internal use and should not be directly exposed to external components.
- * It is not recommended to use `hashCode()` or `equals()` on instances of this class.
- *
- * @param identifier A unique identifier for the user wallet, represented as a string without hyphens.
- * @param coins The current number of coins in the user's wallet.
- * @param multiplier A multiplier applied to various calculations involving the wallet.
+ * @author Łukasz Pietrzak (kvdpxne)
  * @since 0.1.0
  */
 data class RawUserWallet(
-  // @formatter:off
   val identifier: UUID,
-  val coins     : Long,
+  val coins: Long,
   val multiplier: Float,
-  val infinite  : Boolean,
-  val locked    : Boolean
-  // @formatter:on
-) {
+  val infinite: Boolean,
+  val locked: Boolean,
+) : Raw, StylishToStringProvider {
 
   /**
    * @since 0.1.0
    */
-  companion object
+  override fun toStylishString(): StylishToStringBuilder {
+    return StylishToStringBuilder
+      .begin("RawUserWallet")
+      .add("identifier", this.identifier)
+      .add("coins", this.coins)
+      .add("multiplier", this.multiplier)
+      .add("infinite", this.infinite)
+      .add("locked", this.locked)
+  }
+
+  /**
+   * @since 0.1.0
+   */
+  override fun toString(): String {
+    return this.toStylishString().packed()
+  }
 }

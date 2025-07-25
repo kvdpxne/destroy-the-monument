@@ -1,8 +1,10 @@
 package me.kvdpxne.dtm.wallet
 
 import java.util.UUID
+import me.kvdpxne.dtm.StylishToStringBuilder
 import me.kvdpxne.dtm.state.BasicMutableIdentifiable
 import me.kvdpxne.dtm.shared.language.toSingleLines
+import me.kvdpxne.dtm.util.StylishToString
 
 /**
  * @param initialCoins
@@ -76,7 +78,7 @@ class BasicWallet(
     require(0 <= coins) {
       """
         The passed number of coins "$coins" to be set in the wallet
-        represented by the identifier "${this.identifier}" must be greater
+        represented by the identifier "${this.getIdentifier()}" must be greater
         than or equal to 0.
       """.toSingleLines()
     }
@@ -106,7 +108,7 @@ class BasicWallet(
     require(0.0F <= multiplier) {
       """
         The passed multiplier "$multiplier" to be set in the wallet
-        represented by the identifier "${this.identifier}" must be greater
+        represented by the identifier "${this.getIdentifier()}" must be greater
         than 0.0F.
       """.toSingleLines()
     }
@@ -165,7 +167,7 @@ class BasicWallet(
     require(0 < coins) {
       """
         The passed number of coins "$coins" to be added to the wallet
-        represented by the identifier "${this.identifier}" must be greater
+        represented by the identifier "${this.getIdentifier()}" must be greater
         than 0.
       """.toSingleLines()
     }
@@ -205,7 +207,7 @@ class BasicWallet(
         """
           The multiplication product of the passed number of coins to add
           "$curCoins" by the wallet multiplier "${this.multiplier}" represented
-          by the identifier "${this.identifier}" overflows the primitive long
+          by the identifier "${this.getIdentifier()}" overflows the primitive long
           type in unsigned numbers.
         """.toSingleLines()
       )
@@ -230,7 +232,7 @@ class BasicWallet(
     require(0 < coins) {
       """
         The passed number of coins "$coins" to subtract from the wallet
-        represented by the identifier "${this.identifier}" must be greater
+        represented by the identifier "${this.getIdentifier()}" must be greater
         than 0.
       """.toSingleLines()
     }
@@ -268,8 +270,18 @@ class BasicWallet(
       this.coins,
       this.multiplier,
       this.wasModified(),
-      this.identifier
+      this.getIdentifier()
     )
+  }
+
+  override fun toStylishString(): StylishToString {
+    return StylishToStringBuilder().begin(Wallet::class.java.name)
+      .add("identifier", this.identifier)
+      .add("coins", this.coins)
+      .add("multiplier", this.multiplier)
+      .add("infinite", this.isInfinity)
+      .add("blocked", this.isBlocked)
+      .toStylishString()
   }
 
   override fun equals(other: Any?): Boolean {
@@ -292,5 +304,9 @@ class BasicWallet(
     result = 31 * result + isInfinity.hashCode()
     result = 31 * result + isBlocked.hashCode()
     return result
+  }
+
+  override fun toString(): String {
+    return this.toStylishString().packed()
   }
 }

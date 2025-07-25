@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.statistics
 
 import java.io.Serializable
-import me.kvdpxne.dtm.Identifiable
+import me.kvdpxne.dtm.capabilities.Identifiable
 import me.kvdpxne.dtm.InternalIdentifiable
 
 open class BasicIdentifiableStatistics<T : Serializable>(
@@ -40,6 +40,6 @@ open class BasicIdentifiableStatistics<T : Serializable>(
   }
 
   override fun getIdentifier(): T {
-    return this.identifiable.identifier
+    return this.identifiable.getIdentifier()
   }
 }

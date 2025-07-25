@@ -6,8 +6,9 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-  id("java")
-  id("maven-publish")
+  java
+  `java-test-fixtures`
+  `maven-publish`
 
   libraries.plugins.run {
     alias(adarshr.testLogger).apply(false)
@@ -27,13 +28,17 @@ allprojects {
 subprojects {
 
   apply {
-    plugin("java")
-    plugin("maven-publish")
-
-    plugin("com.adarshr.test-logger")
-    plugin("org.jetbrains.kotlin.jvm")
-    plugin("org.jetbrains.dokka")
-    plugin("com.gradleup.shadow")
+    sequenceOf(
+      "java",
+      "java-test-fixtures",
+      "maven-publish",
+      "com.adarshr.test-logger",
+      "com.gradleup.shadow",
+      "org.jetbrains.kotlin.jvm",
+      "org.jetbrains.dokka"
+    ).forEach {
+      plugin(it)
+    }
   }
 
 //  plugins.withType<TestLoggerPlugin> {

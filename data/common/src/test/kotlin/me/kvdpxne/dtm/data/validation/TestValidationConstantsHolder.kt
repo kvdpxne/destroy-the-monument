@@ -10,7 +10,7 @@ class TestValidationConstantsHolder {
 
   @Test
   fun `correctness of color notation in hex format`() {
-    val regex = REGEX_COLOR_HEX_NOTATION
+    val regex = Colori
 
     // Correct cases
     assertTrue(regex.matches("#abc"))

@@ -11,6 +11,7 @@ val REGEX_SINGLE_LINE: Regex by lazy {
  * @since 0.1.0
  */
 fun String.toSingleLines(): String {
+  this.uppercase()
   return this.trimIndent().replace(
     REGEX_SINGLE_LINE,
     "$1"

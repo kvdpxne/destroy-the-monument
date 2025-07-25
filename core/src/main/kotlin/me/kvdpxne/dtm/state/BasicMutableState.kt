@@ -1,5 +1,7 @@
 package me.kvdpxne.dtm.state
 
+import me.kvdpxne.dtm.capabilities.state.MutableState
+
 /**
  * @since 0.1.0
  */

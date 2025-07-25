@@ -1,6 +1,7 @@
 package me.kvdpxne.dtm
 
 import java.io.Serializable
+import me.kvdpxne.dtm.capabilities.Identifiable
 
 /**
  * @since 0.1.0
@@ -20,7 +21,7 @@ open class BasicIdentifiable<T : Serializable>(
    * @since 0.1.0
    */
   override fun getIdentifier(): T {
-    return this.identifiable.identifier
+    return this.identifiable.getIdentifier()
   }
 
   /**
@@ -37,7 +38,7 @@ open class BasicIdentifiable<T : Serializable>(
       return false
     }
 
-    if (this.identifier != other.identifier) {
+    if (this.getIdentifier() != other.getIdentifier()) {
       return false
     }
 
@@ -48,6 +49,6 @@ open class BasicIdentifiable<T : Serializable>(
    * @since 0.1.0
    */
   override fun hashCode(): Int {
-    return this.identifier.hashCode()
+    return this.getIdentifier().hashCode()
   }
 }

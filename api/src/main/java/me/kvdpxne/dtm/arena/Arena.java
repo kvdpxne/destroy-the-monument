@@ -3,10 +3,10 @@ package me.kvdpxne.dtm.arena;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.UUID;
-import me.kvdpxne.dtm.DisplayableNameable;
-import me.kvdpxne.dtm.Identifiable;
+import me.kvdpxne.dtm.capabilities.Identifiable;
+import me.kvdpxne.dtm.capabilities.Nameable;
 import me.kvdpxne.dtm.arena.map.ArenaMap;
-import me.kvdpxne.dtm.arena.settings.ArenaSettings;
+import me.kvdpxne.dtm.data.validation.rules.PositioningRules;
 import me.kvdpxne.dtm.position.BlockPosition;
 import me.kvdpxne.dtm.position.monument.MonumentPosition;
 import me.kvdpxne.dtm.position.revival.RevivalPosition;
@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Unmodifiable;
 public interface Arena
   extends
   Identifiable<UUID>,
-  DisplayableNameable,
+  Nameable,
   Serializable {
 
   /**
@@ -35,13 +35,6 @@ public interface Arena
   @Override
   @NotNull
   String getName();
-
-  /**
-   * @since 0.1.0
-   */
-  @Override
-  @Nullable
-  String getDisplayName();
 
   /**
    * @since 0.1.0
@@ -65,14 +58,8 @@ public interface Arena
    * @since 0.1.0
    */
   @NotNull
-  ArenaSettings getSettings();
-
-  /**
-   * @since 0.1.0
-   */
-  @NotNull
   RevivalPosition getRevivalPositionByTeam(
-    final @NotNull Team team
+    @NotNull Team team
   );
 
   /**
@@ -81,7 +68,7 @@ public interface Arena
   @Unmodifiable
   @NotNull
   Collection<MonumentPosition> getMonumentPositionsByTeam(
-    final @NotNull Team team
+    @NotNull Team team
   );
 
   /**
@@ -89,7 +76,7 @@ public interface Arena
    */
   @Nullable
   MonumentPosition getMonumentPositionByPositionOrNull(
-    final @NotNull BlockPosition position
+    @NotNull BlockPosition position
   );
 
   /**
@@ -97,9 +84,9 @@ public interface Arena
    */
   @Nullable
   MonumentPosition getMonumentPositionByPositionOrNull(
-    final int x,
-    final int y,
-    final int z
+    @Range(from = PositioningRules.MIN_XZ, to = PositioningRules.MAX_XZ) int x,
+    int z,
+    int y
   );
 
   /**

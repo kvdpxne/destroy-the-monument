@@ -1,9 +1,8 @@
 package me.kvdpxne.dtm.position.revival;
 
 import java.util.UUID;
-import me.kvdpxne.dtm.Identifiable;
+import me.kvdpxne.dtm.capabilities.Identifiable;
 import me.kvdpxne.dtm.position.EntityPosition;
-import me.kvdpxne.dtm.position.PositionMultidimensionalException;
 import me.kvdpxne.dtm.position.diemesion.Dimension;
 import me.kvdpxne.dtm.team.Team;
 import me.kvdpxne.dtm.team.Teamable;
@@ -25,35 +24,18 @@ public interface RevivalPosition
   UUID getIdentifier();
 
   /**
-   * @throws PositionMultidimensionalException
-   * @since 0.1.0
-   */
-  @Override
-  @NotNull
-  UUID getWorldIdentifier();
-
-  /**
-   * @throws PositionMultidimensionalException
-   * @since 0.1.0
-   */
-  @Override
-  @NotNull
-  String getWorldName();
-
-  /**
-   * @throws PositionMultidimensionalException
-   * @since 0.1.0
-   */
-  @Override
-  @Nullable
-  Object getWorldOrNull();
-
-  /**
    * @since 0.1.0
    */
   @Override
   @NotNull
   Team getTeam();
+
+  /**
+   * @since 0.1.0
+   */
+  @Override
+  @Nullable
+  Dimension getDimensionOrNull();
 
   /**
    * @since 0.1.0
@@ -91,41 +73,19 @@ public interface RevivalPosition
    * @since 0.1.0
    */
   @Override
-  boolean isNear(final double x, final double y, final double z, final double radius);
+  boolean isMultidimensional();
 
   /**
    * @since 0.1.0
    */
   @Override
-  boolean isNear(final EntityPosition position, final double radius);
+  boolean isNear(double x, double y, double z, double radius);
 
   /**
-   * @throws PositionMultidimensionalException
    * @since 0.1.0
    */
   @Override
-  boolean sameWorld(final @NotNull UUID worldIdentifier);
-
-  /**
-   * @throws PositionMultidimensionalException
-   * @since 0.1.0
-   */
-  @Override
-  boolean sameWorld(final @NotNull String worldName);
-
-  /**
-   * @throws PositionMultidimensionalException
-   * @since 0.1.0
-   */
-  @Override
-  boolean sameWorld(final @NotNull Object world);
-
-  /**
-   * @throws PositionMultidimensionalException
-   * @since 0.1.0
-   */
-  @Override
-  boolean sameWorld(final @NotNull Dimension dimension);
+  boolean isNear(EntityPosition position, double radius);
 
   /**
    * @since 0.1.0

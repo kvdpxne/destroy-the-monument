@@ -20,6 +20,7 @@ sqlite = "3.49.1.0"
 thrivi = "13199ef603"
 adarshr-testLogger = "4.0.0"
 jetbrains-annotations = "26.0.2"
+junit-jupiter = "6.0.0-M2"
 
 [plugins]
 adarshr-testLogger = { id = "com.adarshr.test-logger", version.ref = "adarshr-testLogger" }
@@ -30,11 +31,14 @@ shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
 
 [libraries]
 
-jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrains-annotations" }
-hikaricp-v4 = { module = "com.zaxxer:HikariCP", version.ref = "hikaricp-v4"}
-hikaricp-v6 = { module = "com.zaxxer:HikariCP", version.ref = "hikaricp-v6"}
+junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit-jupiter" }
+junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit-jupiter" }
 
-f4b6a3-uuid-creator = { module = "com.github.f4b6a3:uuid-creator", version.ref = "f4b6a3-uuid-creator" }
+jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrains-annotations" }
+hikaricp-v4 = { module = "com.zaxxer:HikariCP", version.ref = "hikaricp-v4" }
+hikaricp-v6 = { module = "com.zaxxer:HikariCP", version.ref = "hikaricp-v6" }
+
+f4b6a3-uuid-creator = { module = "com.github.f4b6a3:uuid-creator", version.ref = "uuid-creator" }
 dico-common = { module = "com.github.kvdpxne.dico:common", version.ref = "dico" }
 dico-core = { module = "com.github.kvdpxne.dico:core", version.ref = "dico" }
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
@@ -52,5 +56,6 @@ sqlite = { module = "org.xerial:sqlite-jdbc", version.ref = "sqlite" }
 thrivi = { module = "com.github.kvdpxne:thrivi", version.ref = "thrivi" }
 
 [bundles]
+junit-jupiter = ["junit-jupiter-engine", "junit-jupiter-params"]
 disco = ["dico-common", "dico-core"]
 exposed = ["exposed-core", "exposed-jdbc"]

@@ -13,10 +13,9 @@ import me.kvdpxne.dtm.wallet.Wallet
 open class BasicLocalUser(
   // @formatter:off
   name                : String,
-  displayName         : String?,
-  statistics          : UserStatistics,
-  wallet              : Wallet,
-  currentProfession   : Profession,
+  statistics          : UserStatistics?,
+  wallet              : Wallet?,
+  professionName      : String,
   localeSource        : LocaleSource,
   initialModifiedState: Boolean,
   identifier          : UUID
@@ -24,10 +23,9 @@ open class BasicLocalUser(
 ) :
   BasicUser(
     name,
-    displayName,
     statistics,
     wallet,
-    currentProfession,
+    professionName,
     localeSource,
     initialModifiedState,
     identifier
@@ -37,12 +35,12 @@ open class BasicLocalUser(
   /**
    * @since 0.1.0
    */
-  private val cacheDelegate: UserCache by lazy {
+  private val cache: UserCache by lazy {
     BasicUserCache()
   }
 
   override fun getCache(): UserCache {
-    return this.cacheDelegate
+    return this.cache
   }
 
   override fun getContractor(): UserContractor {
@@ -65,8 +63,8 @@ open class BasicLocalUser(
     this.contractor.action(keyProvider)
   }
 
-  override fun setCurrentProfession(profession: Profession) {
-    TODO("Not yet implemented")
+  override fun setProfession(profession: Profession) {
+    this.profession = profession
   }
 
   override fun getLocalUser(): LocalUser {

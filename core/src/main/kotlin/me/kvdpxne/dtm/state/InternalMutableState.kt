@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.state
 
-import me.kvdpxne.dtm.shared.StylishToStringBuilder
+import me.kvdpxne.dtm.capabilities.state.MutableState
 
 /**
  * A thread-safe mutable state implementation used internally to manage a

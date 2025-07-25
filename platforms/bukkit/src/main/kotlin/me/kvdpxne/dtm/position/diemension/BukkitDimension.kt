@@ -47,7 +47,7 @@ open class BukkitDimension(
     return@lazy null
   }
 
-  override fun getWorldOrNull(): World? {
+  override fun getWorld(): World? {
     return this.lazyWorld
   }
 }

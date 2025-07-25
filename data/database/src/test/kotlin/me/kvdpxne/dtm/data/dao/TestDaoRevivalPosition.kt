@@ -6,58 +6,62 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
 import me.kvdpxne.dtm.data.ResponseCodes
-import me.kvdpxne.dtm.data.raw.RawRevivalPosition
-import me.kvdpxne.dtm.data.raw.RawTeam
-import me.kvdpxne.dtm.data.util.UniqueUuid
 import me.kvdpxne.dtm.data.validation.INVALID_REVIVAL_POSITION_PITCH
 import me.kvdpxne.dtm.data.validation.INVALID_REVIVAL_POSITION_YAW
+import me.kvdpxne.dtm.raw.factories.makeRawRevivalPosition
+import me.kvdpxne.dtm.shared.uniqueUuid
 import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestMethodOrder
 
+/**
+ * @since 0.1.0
+ */
+private val REVIVAL_POSITION = makeRawRevivalPosition()
+
+/**
+ * @since 0.1.0
+ */
 @Order(1)
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TestDaoRevivalPosition {
 
-  companion object {
+  /**
+   * @since 0.1.0
+   */
+  @AfterAll
+  fun `cleanup battlefield after battle`() {
+    runBlocking {
+      RevivalPositionDao.truncateRevivalPositions()
+      TeamDao.truncateTeams()
+    }
+  }
 
-    // Creating an unacceptable object via the constructor is always possible
-    // but should be used only for testing.
-    internal val REVIVAL_POSITION = RawRevivalPosition(
-      // @formatter:off
-      identifier = UniqueUuid.v4(),
-      team       = RawTeam(
-        identifier        = UniqueUuid.v4(),
-        name              = "red",
-        colorOfArmor      = "#cd0a00",
-        colorOfProfession = "&4",
-        colorOnChat       = "&c",
-        colorOnPlayerList = "&c"
-      ),
-      x          = 60.0,
-      y          = 120.0,
-      z          = 60.0,
-      pitch      = 90F,
-      yaw        = 90F
-      // @formatter:on
-    )
+  /**
+   * @since 0.1.0
+   */
+  @BeforeAll
+  fun `prepare battlefield`() {
+    this.`cleanup battlefield after battle`()
+    println(REVIVAL_POSITION.toStylishString().listed(2))
   }
 
   @Order(0)
   @Test
   fun `insert revival position`() {
     runBlocking {
-      DaoTeam.insertTeam(REVIVAL_POSITION.team)
+      TeamDao.insertTeam(REVIVAL_POSITION.team)
     }
 
     assertEquals(
       1,
       runBlocking {
-        DaoRevivalPosition.insertRevivalPosition(REVIVAL_POSITION)
+        RevivalPositionDao.insertRevivalPosition(REVIVAL_POSITION)
       }
     )
   }
@@ -68,7 +72,7 @@ class TestDaoRevivalPosition {
     assertEquals(
       ResponseCodes.DUPLICATED,
       runBlocking {
-        DaoRevivalPosition.insertRevivalPosition(REVIVAL_POSITION)
+        RevivalPositionDao.insertRevivalPosition(REVIVAL_POSITION)
       }
     )
   }
@@ -77,16 +81,16 @@ class TestDaoRevivalPosition {
   @Test
   fun `insert revival position with invalid team reference`() {
     val invalid = REVIVAL_POSITION.copy(
-      identifier = UniqueUuid.v4(REVIVAL_POSITION.identifier),
+      identifier = uniqueUuid(REVIVAL_POSITION.identifier),
       team = REVIVAL_POSITION.team.copy(
-        identifier = UniqueUuid.v4(REVIVAL_POSITION.team.identifier),
+        identifier = uniqueUuid(REVIVAL_POSITION.team.identifier),
       )
     )
 
     assertEquals(
       ResponseCodes.NO_REFERENCE,
       runBlocking {
-        DaoRevivalPosition.insertRevivalPosition(invalid)
+        RevivalPositionDao.insertRevivalPosition(invalid)
       }
     )
   }
@@ -101,7 +105,7 @@ class TestDaoRevivalPosition {
     assertEquals(
       INVALID_REVIVAL_POSITION_PITCH,
       runBlocking {
-        DaoRevivalPosition.insertRevivalPosition(tooMuch)
+        RevivalPositionDao.insertRevivalPosition(tooMuch)
       }
     )
 
@@ -112,7 +116,7 @@ class TestDaoRevivalPosition {
     assertEquals(
       INVALID_REVIVAL_POSITION_PITCH,
       runBlocking {
-        DaoRevivalPosition.insertRevivalPosition(tooLittle)
+        RevivalPositionDao.insertRevivalPosition(tooLittle)
       }
     )
   }
@@ -127,7 +131,7 @@ class TestDaoRevivalPosition {
     assertEquals(
       INVALID_REVIVAL_POSITION_YAW,
       runBlocking {
-        DaoRevivalPosition.insertRevivalPosition(tooMuch)
+        RevivalPositionDao.insertRevivalPosition(tooMuch)
       }
     )
 
@@ -138,7 +142,7 @@ class TestDaoRevivalPosition {
     assertEquals(
       INVALID_REVIVAL_POSITION_YAW,
       runBlocking {
-        DaoRevivalPosition.insertRevivalPosition(tooLittle)
+        RevivalPositionDao.insertRevivalPosition(tooLittle)
       }
     )
   }
@@ -149,7 +153,7 @@ class TestDaoRevivalPosition {
     assertEquals(
       REVIVAL_POSITION,
       runBlocking {
-        DaoRevivalPosition.findRevivalPositionByIdentifierOrNull(
+        RevivalPositionDao.findRevivalPositionByIdentifierOrNull(
           REVIVAL_POSITION.identifier
         )
       }
@@ -161,8 +165,8 @@ class TestDaoRevivalPosition {
   fun `find non existent revival position by identifier`() {
     assertNull(
       runBlocking {
-        DaoRevivalPosition.findRevivalPositionByIdentifierOrNull(
-          UniqueUuid.v4(REVIVAL_POSITION.identifier)
+        RevivalPositionDao.findRevivalPositionByIdentifierOrNull(
+          uniqueUuid(REVIVAL_POSITION.identifier)
         )
       }
     )
@@ -173,7 +177,7 @@ class TestDaoRevivalPosition {
   fun `contains revival position by identifier`() {
     assertTrue(
       runBlocking {
-        DaoRevivalPosition.containsRevivalPositionByIdentifier(
+        RevivalPositionDao.containsRevivalPositionByIdentifier(
           REVIVAL_POSITION.identifier
         )
       }
@@ -185,8 +189,8 @@ class TestDaoRevivalPosition {
   fun `contains non existent revival position by identifier`() {
     assertFalse(
       runBlocking {
-        DaoRevivalPosition.containsRevivalPositionByIdentifier(
-          UniqueUuid.v4(REVIVAL_POSITION.identifier)
+        RevivalPositionDao.containsRevivalPositionByIdentifier(
+          uniqueUuid(REVIVAL_POSITION.identifier)
         )
       }
     )
@@ -208,14 +212,14 @@ class TestDaoRevivalPosition {
     assertEquals(
       1,
       runBlocking {
-        DaoRevivalPosition.updateRevivalPosition(updated)
+        RevivalPositionDao.updateRevivalPosition(updated)
       }
     )
 
     assertEquals(
       updated,
       runBlocking {
-        DaoRevivalPosition.findRevivalPositionByIdentifierOrNull(
+        RevivalPositionDao.findRevivalPositionByIdentifierOrNull(
           updated.identifier
         )
       }
@@ -227,7 +231,7 @@ class TestDaoRevivalPosition {
   fun `update non existent revival position`() {
     val updated = REVIVAL_POSITION.copy(
       // @formatter:off
-      identifier = UniqueUuid.v4(REVIVAL_POSITION.identifier),
+      identifier = uniqueUuid(REVIVAL_POSITION.identifier),
       x          = 990.0,
       y          = 63.25,
       z          = -275.5,
@@ -239,7 +243,7 @@ class TestDaoRevivalPosition {
     assertEquals(
       ResponseCodes.NO_RECORD,
       runBlocking {
-        DaoRevivalPosition.updateRevivalPosition(updated)
+        RevivalPositionDao.updateRevivalPosition(updated)
       }
     )
   }
@@ -249,14 +253,14 @@ class TestDaoRevivalPosition {
   fun `update revival position with invalid team reference`() {
     val invalid = REVIVAL_POSITION.copy(
       team = REVIVAL_POSITION.team.copy(
-        identifier = UniqueUuid.v4(REVIVAL_POSITION.team.identifier),
+        identifier = uniqueUuid(REVIVAL_POSITION.team.identifier),
       )
     )
 
     assertEquals(
       ResponseCodes.NO_REFERENCE,
       runBlocking {
-        DaoRevivalPosition.updateRevivalPosition(invalid)
+        RevivalPositionDao.updateRevivalPosition(invalid)
       }
     )
   }
@@ -271,7 +275,7 @@ class TestDaoRevivalPosition {
     assertEquals(
       INVALID_REVIVAL_POSITION_PITCH,
       runBlocking {
-        DaoRevivalPosition.updateRevivalPosition(tooMuch)
+        RevivalPositionDao.updateRevivalPosition(tooMuch)
       }
     )
 
@@ -282,7 +286,7 @@ class TestDaoRevivalPosition {
     assertEquals(
       INVALID_REVIVAL_POSITION_PITCH,
       runBlocking {
-        DaoRevivalPosition.updateRevivalPosition(tooLittle)
+        RevivalPositionDao.updateRevivalPosition(tooLittle)
       }
     )
   }
@@ -297,7 +301,7 @@ class TestDaoRevivalPosition {
     assertEquals(
       INVALID_REVIVAL_POSITION_YAW,
       runBlocking {
-        DaoRevivalPosition.updateRevivalPosition(tooMuch)
+        RevivalPositionDao.updateRevivalPosition(tooMuch)
       }
     )
 
@@ -308,7 +312,7 @@ class TestDaoRevivalPosition {
     assertEquals(
       INVALID_REVIVAL_POSITION_YAW,
       runBlocking {
-        DaoRevivalPosition.updateRevivalPosition(tooLittle)
+        RevivalPositionDao.updateRevivalPosition(tooLittle)
       }
     )
   }
@@ -319,7 +323,7 @@ class TestDaoRevivalPosition {
     assertEquals(
       1,
       runBlocking {
-        DaoRevivalPosition.countRevivalPositions()
+        RevivalPositionDao.countRevivalPositions()
       }
     )
   }
@@ -330,7 +334,7 @@ class TestDaoRevivalPosition {
     assertEquals(
       1,
       runBlocking {
-        DaoRevivalPosition.deleteRevivalPositionByIdentifier(
+        RevivalPositionDao.deleteRevivalPositionByIdentifier(
           REVIVAL_POSITION.identifier
         )
       }
@@ -338,7 +342,7 @@ class TestDaoRevivalPosition {
 
     assertNull(
       runBlocking {
-        DaoRevivalPosition.findRevivalPositionByIdentifierOrNull(
+        RevivalPositionDao.findRevivalPositionByIdentifierOrNull(
           REVIVAL_POSITION.identifier
         )
       }
@@ -351,8 +355,8 @@ class TestDaoRevivalPosition {
     assertEquals(
       0,
       runBlocking {
-        DaoRevivalPosition.deleteRevivalPositionByIdentifier(
-          UniqueUuid.v4(REVIVAL_POSITION.identifier)
+        RevivalPositionDao.deleteRevivalPositionByIdentifier(
+          uniqueUuid(REVIVAL_POSITION.identifier)
         )
       }
     )
@@ -364,19 +368,8 @@ class TestDaoRevivalPosition {
     assertEquals(
       0,
       runBlocking {
-        DaoRevivalPosition.truncateRevivalPositions()
+        RevivalPositionDao.truncateRevivalPositions()
       }
     )
-  }
-
-  @AfterAll
-  fun `delete revival positions after all`() {
-    try {
-      runBlocking {
-        DaoRevivalPosition.truncateRevivalPositions()
-        DaoTeam.truncateTeams()
-      }
-    } catch (_: Throwable) {
-    }
   }
 }

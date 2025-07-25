@@ -1,8 +1,8 @@
 package me.kvdpxne.dtm.statistics;
 
 import java.io.Serializable;
-import me.kvdpxne.dtm.Copyable;
-import me.kvdpxne.dtm.state.State;
+import me.kvdpxne.dtm.capabilities.Copyable;
+import me.kvdpxne.dtm.capabilities.state.State;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 

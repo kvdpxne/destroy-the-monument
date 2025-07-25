@@ -7,6 +7,8 @@ dependencies {
   api(project(":api"))
   api(project(":common"))
 
+  api(libraries.notchity)
+
   shadow(project(":api"))
   implementation(project(":api"))
   api(project(":api"))
@@ -16,4 +18,8 @@ dependencies {
 
   implementation(libraries.f4b6a3.uuid.creator)
   implementation(libraries.bundles.exposed)
+
+  testImplementation(testFixtures(project(":data-common")))
+  // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-params
+  testImplementation("org.junit.jupiter:junit-jupiter-params:6.0.0-M2")
 }

@@ -3,7 +3,6 @@ package me.kvdpxne.dtm.arena
 import java.util.UUID
 import me.kvdpxne.dtm.BasicIdentifiable
 import me.kvdpxne.dtm.arena.map.ArenaMap
-import me.kvdpxne.dtm.arena.settings.ArenaSettings
 import me.kvdpxne.dtm.position.BlockPosition
 import me.kvdpxne.dtm.position.monument.MonumentPosition
 import me.kvdpxne.dtm.position.revival.RevivalPosition
@@ -30,10 +29,6 @@ class BasicArena(
     TODO("Not yet implemented")
   }
 
-  override fun getDisplayName(): String? {
-    TODO("Not yet implemented")
-  }
-
   override fun getRevivalPositions(): MutableCollection<RevivalPosition> {
     TODO("Not yet implemented")
   }
@@ -43,10 +38,6 @@ class BasicArena(
   }
 
   override fun getMap(): ArenaMap {
-    TODO("Not yet implemented")
-  }
-
-  override fun getSettings(): ArenaSettings {
     TODO("Not yet implemented")
   }
 

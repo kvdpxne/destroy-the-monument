@@ -5,36 +5,77 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
+import me.kvdpxne.dtm.data.EntityFieldNames
 import me.kvdpxne.dtm.data.ResponseCodes
 import me.kvdpxne.dtm.data.raw.RawUserWallet
-import me.kvdpxne.dtm.data.util.UniqueUuid
-import me.kvdpxne.dtm.data.validation.INVALID_USER_WALLET_COINS
-import me.kvdpxne.dtm.data.validation.INVALID_USER_WALLET_MULTIPLIER
+import me.kvdpxne.dtm.data.validation.BasicValidationResult
+import me.kvdpxne.dtm.data.validation.BasicValidationResultBuilder
+import me.kvdpxne.dtm.data.validation.ValidationResult
+import me.kvdpxne.dtm.data.validation.codes.WalletCodes
+import me.kvdpxne.dtm.raw.factories.makeRawUserWallet
+import me.kvdpxne.dtm.shared.randomFloat
+import me.kvdpxne.dtm.shared.randomLong
+import me.kvdpxne.dtm.shared.randomPositiveLong
+import me.kvdpxne.dtm.shared.uniqueUuid
+import me.kvdpxne.dtm.validation.extensions.addUndescribedError
 import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestMethodOrder
 
+/**
+ * Shared test fixture: Preconfigured [RawUserWallet] instance for test operations.
+ *
+ * @since 0.1.0
+ */
+private val USER_WALLET: RawUserWallet = makeRawUserWallet()
+
+/**
+ * @since 0.1.0
+ */
+private val EXPECTED_USER_WALLET: Pair<RawUserWallet, ValidationResult.Success> by lazy {
+  Pair(USER_WALLET, BasicValidationResult.Success)
+}
+
+/**
+ * Comprehensive test suite for [UserWalletDao] operations, including insertion, retrieval,
+ * update, deletion, and validation of user wallet entities. Tests enforce constraints:
+ * - `coins` must be ≥ 0
+ * - `multiplier` must be in [0.00, 10000.00]
+ *
+ * Lifecycle: Uses `PER_CLASS` test instance to share state across ordered test methods.
+ *
+ * @since 0.1.0
+ */
 @Order(0)
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TestDaoUserWallet {
 
-  companion object {
+  /**
+   * Clears the user wallet table after all tests complete.
+   *
+   * @since 0.1.0
+   */
+  @AfterAll
+  fun `clean up battlefield after battle`() {
+    runBlocking {
+      UserWalletDao.truncateUserWallets()
+    }
+  }
 
-    // Creating an unacceptable object via the constructor is always possible
-    // but should be used only for testing.
-    internal val USER_WALLET = RawUserWallet(
-      // @formatter:off
-      identifier = UniqueUuid.v4(),
-      coins      = 0,
-      multiplier = 1.0F,
-      infinite   = false,
-      locked     = false
-      // @formatter:on
-    )
+  /**
+   * Clears the user wallet table before test execution. Logs warning if cleanup results in row deletions.
+   *
+   * @since 0.1.0
+   */
+  @BeforeAll
+  fun `prepare battlefield`() {
+    this.`clean up battlefield after battle`()
+    println(USER_WALLET.toStylishString().listed(2))
   }
 
   @Order(0)
@@ -42,8 +83,8 @@ class TestDaoUserWallet {
   fun `insert user wallet`() {
     runBlocking {
       assertEquals(
-        1,
-        DaoUserWallet.insertUserWallet(USER_WALLET)
+        EXPECTED_USER_WALLET,
+        UserWalletDao.insertUserWallet(USER_WALLET)
       )
     }
   }
@@ -52,9 +93,9 @@ class TestDaoUserWallet {
   @Test
   fun `insert duplicated user wallet`() {
     assertEquals(
-      ResponseCodes.DUPLICATED,
+      EXPECTED_USER_WALLET,
       runBlocking {
-        DaoUserWallet.insertUserWallet(USER_WALLET)
+        UserWalletDao.insertUserWallet(USER_WALLET)
       }
     )
   }
@@ -63,28 +104,55 @@ class TestDaoUserWallet {
   @Test
   fun `insert user wallet with invalid coins`() {
     val invalid = USER_WALLET.copy(
-      coins = -74 // Coins must be greater than or equal to 0.
+      // The number represents coins must be greater than or equal to 0.
+      coins = randomLong(Long.MIN_VALUE, -1)
     )
 
-    assertEquals(
-      INVALID_USER_WALLET_COINS,
-      runBlocking {
-        DaoUserWallet.insertUserWallet(invalid)
-      }
+    val (_, actual) = runBlocking {
+      UserWalletDao.insertUserWallet(invalid)
+    }
+
+    val expected = BasicValidationResultBuilder()
+      .addUndescribedError(EntityFieldNames.COINS, WalletCodes.INVALID_COINS)
+      .build()
+
+    assertTrue(
+      expected === actual
     )
   }
 
   @Order(3)
   @Test
   fun `insert user wallet with invalid multiplier`() {
-    val invalid = USER_WALLET.copy(
-      multiplier = 0.007F // Multiplier must be between 0.00F and 10000.00F
+    val tooSmall = USER_WALLET.copy(
+      // The number represents the multiplier must be between 0.00 and 10000.00.
+      multiplier = randomFloat(0.001F, 0.009F)
+    )
+
+    val expected = BasicValidationResultBuilder()
+      .addUndescribedError(EntityFieldNames.MULTIPLIER, WalletCodes.INVALID_MULTIPLIER)
+      .build()
+
+    assertEquals(
+      expected,
+      runBlocking {
+        UserWalletDao
+          .insertUserWallet(tooSmall)
+          .second
+      }
+    )
+
+    val tooLarge = USER_WALLET.copy(
+      // The number represents the multiplier must be between 0.00 and 10000.00.
+      multiplier = randomFloat(10000.01F)
     )
 
     assertEquals(
-      INVALID_USER_WALLET_MULTIPLIER,
+      expected,
       runBlocking {
-        DaoUserWallet.insertUserWallet(invalid)
+        UserWalletDao
+          .insertUserWallet(tooLarge)
+          .second
       }
     )
   }
@@ -95,7 +163,7 @@ class TestDaoUserWallet {
     assertEquals(
       USER_WALLET,
       runBlocking {
-        DaoUserWallet.findUserWallerByIdentifierOrNull(
+        UserWalletDao.findUserWallerByIdentifierOrNull(
           USER_WALLET.identifier
         )
       }
@@ -107,8 +175,8 @@ class TestDaoUserWallet {
   fun `find non existent user wallet by identifier`() {
     assertNull(
       runBlocking {
-        DaoUserWallet.findUserWallerByIdentifierOrNull(
-          UniqueUuid.v4(USER_WALLET.identifier)
+        UserWalletDao.findUserWallerByIdentifierOrNull(
+          uniqueUuid(USER_WALLET.identifier)
         )
       }
     )
@@ -119,7 +187,7 @@ class TestDaoUserWallet {
   fun `contains user wallet by identifier`() {
     assertTrue(
       runBlocking {
-        DaoUserWallet.containsUserWalletByIdentifier(
+        UserWalletDao.containsUserWalletByIdentifier(
           USER_WALLET.identifier
         )
       }
@@ -131,8 +199,8 @@ class TestDaoUserWallet {
   fun `contains non existent user wallet by identifier`() {
     assertFalse(
       runBlocking {
-        DaoUserWallet.containsUserWalletByIdentifier(
-          UniqueUuid.v4(USER_WALLET.identifier)
+        UserWalletDao.containsUserWalletByIdentifier(
+          uniqueUuid(USER_WALLET.identifier)
         )
       }
     )
@@ -142,21 +210,21 @@ class TestDaoUserWallet {
   @Test
   fun `update user wallet`() {
     val updated = USER_WALLET.copy(
-      coins      = 1410,
-      multiplier = 1.1F
+      coins = randomPositiveLong(),
+      multiplier = randomFloat(0.01F, 10000.00F)
     )
 
     assertEquals(
       1,
       runBlocking {
-        DaoUserWallet.updateUserWallet(updated)
+        UserWalletDao.updateUserWallet(updated)
       }
     )
 
     assertEquals(
       updated,
       runBlocking {
-        DaoUserWallet.findUserWallerByIdentifierOrNull(
+        UserWalletDao.findUserWallerByIdentifierOrNull(
           updated.identifier
         )
       }
@@ -167,17 +235,15 @@ class TestDaoUserWallet {
   @Test
   fun `update non existent user wallet`() {
     val updated = USER_WALLET.copy(
-      // @formatter:off
-      identifier = UniqueUuid.v4(USER_WALLET.identifier),
-      coins      = 1410,
-      multiplier = 1.1F
-      // @formatter:on
+      identifier = uniqueUuid(USER_WALLET.identifier),
+      coins = randomPositiveLong(),
+      multiplier = randomFloat(0.01F, 10000.00F)
     )
 
     assertEquals(
       ResponseCodes.NO_RECORD,
       runBlocking {
-        DaoUserWallet.updateUserWallet(updated)
+        UserWalletDao.updateUserWallet(updated)
       }
     )
   }
@@ -192,7 +258,7 @@ class TestDaoUserWallet {
     assertEquals(
       INVALID_USER_WALLET_COINS,
       runBlocking {
-        DaoUserWallet.updateUserWallet(invalid)
+        UserWalletDao.updateUserWallet(invalid)
       }
     )
   }
@@ -207,7 +273,7 @@ class TestDaoUserWallet {
     assertEquals(
       INVALID_USER_WALLET_MULTIPLIER,
       runBlocking {
-        DaoUserWallet.updateUserWallet(invalid)
+        UserWalletDao.updateUserWallet(invalid)
       }
     )
   }
@@ -218,7 +284,7 @@ class TestDaoUserWallet {
     assertEquals(
       1,
       runBlocking {
-        DaoUserWallet.countUserWallets()
+        UserWalletDao.countUserWallets()
       }
     )
   }
@@ -229,7 +295,7 @@ class TestDaoUserWallet {
     assertEquals(
       1,
       runBlocking {
-        DaoUserWallet.deleteUserWalletByIdentifier(
+        UserWalletDao.deleteUserWalletByIdentifier(
           USER_WALLET.identifier
         )
       }
@@ -237,7 +303,7 @@ class TestDaoUserWallet {
 
     assertNull(
       runBlocking {
-        DaoUserWallet.findUserWallerByIdentifierOrNull(
+        UserWalletDao.findUserWallerByIdentifierOrNull(
           USER_WALLET.identifier
         )
       }
@@ -250,8 +316,8 @@ class TestDaoUserWallet {
     assertEquals(
       0,
       runBlocking {
-        DaoUserWallet.deleteUserWalletByIdentifier(
-          UniqueUuid.v4(USER_WALLET.identifier)
+        UserWalletDao.deleteUserWalletByIdentifier(
+          uniqueUuid(USER_WALLET.identifier)
         )
       }
     )
@@ -263,18 +329,8 @@ class TestDaoUserWallet {
     assertEquals(
       0,
       runBlocking {
-        DaoUserWallet.truncateUserWallets()
+        UserWalletDao.truncateUserWallets()
       }
     )
-  }
-
-  @AfterAll
-  fun `delete user wallets after all`() {
-    try {
-      runBlocking {
-        DaoUserWallet.truncateUserWallets()
-      }
-    } catch (_: Throwable) {
-    }
   }
 }

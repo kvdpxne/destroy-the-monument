@@ -2,9 +2,11 @@ package me.kvdpxne.dtm.wallet;
 
 import java.io.Serializable;
 import java.util.UUID;
-import me.kvdpxne.dtm.Copyable;
-import me.kvdpxne.dtm.Identifiable;
-import me.kvdpxne.dtm.state.State;
+import me.kvdpxne.dtm.capabilities.Copyable;
+import me.kvdpxne.dtm.capabilities.Identifiable;
+import me.kvdpxne.dtm.util.StylishToString;
+import me.kvdpxne.dtm.util.StylishToStringProvider;
+import me.kvdpxne.dtm.capabilities.state.State;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
@@ -25,6 +27,7 @@ public interface Wallet
   Copyable<Wallet>,
   Identifiable<UUID>,
   State,
+  StylishToStringProvider,
   Serializable {
 
   /**
@@ -184,4 +187,11 @@ public interface Wallet
   @Override
   @NotNull
   Wallet copy();
+
+  /**
+   * @since 0.1.0
+   */
+  @Override
+  @NotNull
+  StylishToString toStylishString();
 }

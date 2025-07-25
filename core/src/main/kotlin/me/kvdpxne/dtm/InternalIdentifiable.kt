@@ -1,6 +1,7 @@
 package me.kvdpxne.dtm
 
 import java.io.Serializable
+import me.kvdpxne.dtm.capabilities.Identifiable
 
 class InternalIdentifiable<T : Serializable> internal constructor(
   private val identifier: T

@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.position.monument
 
 import java.util.UUID
-import me.kvdpxne.dtm.Identifiable
+import me.kvdpxne.dtm.capabilities.Identifiable
 import me.kvdpxne.dtm.InternalIdentifiable
 import me.kvdpxne.dtm.position.BasicBlockPosition
 import me.kvdpxne.dtm.team.Team
@@ -45,7 +45,7 @@ class BasicMonumentPosition(
   private var destroyed: Boolean = false
 
   override fun getIdentifier(): UUID {
-    return this.identifiable.identifier
+    return this.identifiable.getIdentifier()
   }
 
   override fun getTeam(): Team {

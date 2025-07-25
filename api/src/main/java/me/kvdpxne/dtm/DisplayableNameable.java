@@ -1,5 +1,6 @@
 package me.kvdpxne.dtm;
 
+import me.kvdpxne.dtm.capabilities.Nameable;
 import org.jetbrains.annotations.Nullable;
 
 /**

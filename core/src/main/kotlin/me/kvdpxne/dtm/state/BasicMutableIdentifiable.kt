@@ -2,6 +2,7 @@ package me.kvdpxne.dtm.state
 
 import java.io.Serializable
 import me.kvdpxne.dtm.BasicIdentifiable
+import me.kvdpxne.dtm.capabilities.state.MutableState
 
 open class BasicMutableIdentifiable<T : Serializable>(
   // @formatter:off

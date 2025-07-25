@@ -32,6 +32,8 @@ suspend fun <T> concurrentTransaction(
   }
 
   return newSuspendedTransaction(
-    Dispatchers.IO, database, readOnly = readOnly, statement = body
+    Dispatchers.IO, database, readOnly = readOnly, statement = {
+      body()
+    }
   )
 }

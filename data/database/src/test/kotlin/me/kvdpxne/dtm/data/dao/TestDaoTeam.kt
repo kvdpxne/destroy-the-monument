@@ -8,38 +8,51 @@ import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
 import me.kvdpxne.dtm.data.ResponseCodes
 import me.kvdpxne.dtm.data.raw.RawTeam
-import me.kvdpxne.dtm.data.util.UniqueUuid
 import me.kvdpxne.dtm.data.validation.INVALID_TEAM_COLOR_OF_ARMOR
 import me.kvdpxne.dtm.data.validation.INVALID_TEAM_COLOR_OF_PROFESSION
 import me.kvdpxne.dtm.data.validation.INVALID_TEAM_COLOR_ON_CHAT
 import me.kvdpxne.dtm.data.validation.INVALID_TEAM_COLOR_ON_PLAYER_LIST
 import me.kvdpxne.dtm.data.validation.INVALID_TEAM_NAME
+import me.kvdpxne.dtm.raw.factories.makeRawTeam
+import me.kvdpxne.dtm.shared.uniqueUuid
 import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestMethodOrder
 
+/**
+ * @since 0.1.0
+ */
+private val TEAM: RawTeam = makeRawTeam()
+
+/**
+ * @since 0.1.0
+ */
 @Order(0)
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TestDaoTeam {
 
-  companion object {
+  /**
+   * @since 0.1.0
+   */
+  @AfterAll
+  fun `cleanup battlefield after battle`() {
+    runBlocking {
+      TeamDao.truncateTeams()
+    }
+  }
 
-    // Creating an unacceptable object via the constructor is always possible
-    // but should be used only for testing.
-    internal val TEAM = RawTeam(
-      // @formatter:off
-      identifier        = UniqueUuid.v4(),
-      name              = "black",
-      colorOfArmor      = "#000000",
-      colorOfProfession = "&8",
-      colorOnChat       = "&7",
-      colorOnPlayerList = "&7"
-      // @formatter:on
-    )
+  /**
+   * @since 0.1.0
+   */
+  @BeforeAll
+  fun `prepare battlefield`() {
+    this.`cleanup battlefield after battle`()
+    println(TEAM.toStylishString().listed(2))
   }
 
   @Order(0)
@@ -48,7 +61,7 @@ class TestDaoTeam {
     assertEquals(
       1,
       runBlocking {
-        DaoTeam.insertTeam(TEAM)
+        TeamDao.insertTeam(TEAM)
       }
     )
   }
@@ -59,7 +72,7 @@ class TestDaoTeam {
     assertEquals(
       ResponseCodes.DUPLICATED,
       runBlocking {
-        DaoTeam.insertTeam(TEAM)
+        TeamDao.insertTeam(TEAM)
       }
     )
   }
@@ -75,7 +88,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_NAME,
       runBlocking {
-        DaoTeam.insertTeam(tooLong)
+        TeamDao.insertTeam(tooLong)
       }
     )
 
@@ -87,7 +100,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_NAME,
       runBlocking {
-        DaoTeam.insertTeam(tooShort)
+        TeamDao.insertTeam(tooShort)
       }
     )
 
@@ -100,7 +113,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_NAME,
       runBlocking {
-        DaoTeam.insertTeam(illegalCharacters)
+        TeamDao.insertTeam(illegalCharacters)
       }
     )
   }
@@ -115,7 +128,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_OF_ARMOR,
       runBlocking {
-        DaoTeam.insertTeam(obfuscated)
+        TeamDao.insertTeam(obfuscated)
       }
     )
 
@@ -126,7 +139,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_OF_ARMOR,
       runBlocking {
-        DaoTeam.insertTeam(many)
+        TeamDao.insertTeam(many)
       }
     )
 
@@ -137,7 +150,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_OF_ARMOR,
       runBlocking {
-        DaoTeam.insertTeam(invalid)
+        TeamDao.insertTeam(invalid)
       }
     )
 
@@ -148,7 +161,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_OF_ARMOR,
       runBlocking {
-        DaoTeam.insertTeam(hexTooLongNotation)
+        TeamDao.insertTeam(hexTooLongNotation)
       }
     )
 
@@ -159,7 +172,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_OF_ARMOR,
       runBlocking {
-        DaoTeam.insertTeam(hexTooShortNotation)
+        TeamDao.insertTeam(hexTooShortNotation)
       }
     )
   }
@@ -174,7 +187,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_OF_PROFESSION,
       runBlocking {
-        DaoTeam.insertTeam(obfuscated)
+        TeamDao.insertTeam(obfuscated)
       }
     )
 
@@ -185,7 +198,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_OF_PROFESSION,
       runBlocking {
-        DaoTeam.insertTeam(many)
+        TeamDao.insertTeam(many)
       }
     )
 
@@ -196,7 +209,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_OF_PROFESSION,
       runBlocking {
-        DaoTeam.insertTeam(invalid)
+        TeamDao.insertTeam(invalid)
       }
     )
 
@@ -207,7 +220,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_OF_PROFESSION,
       runBlocking {
-        DaoTeam.insertTeam(hexTooLong)
+        TeamDao.insertTeam(hexTooLong)
       }
     )
 
@@ -218,7 +231,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_OF_PROFESSION,
       runBlocking {
-        DaoTeam.insertTeam(hexTooShort)
+        TeamDao.insertTeam(hexTooShort)
       }
     )
   }
@@ -233,7 +246,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_ON_CHAT,
       runBlocking {
-        DaoTeam.insertTeam(obfuscated)
+        TeamDao.insertTeam(obfuscated)
       }
     )
 
@@ -244,7 +257,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_ON_CHAT,
       runBlocking {
-        DaoTeam.insertTeam(many)
+        TeamDao.insertTeam(many)
       }
     )
 
@@ -255,7 +268,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_ON_CHAT,
       runBlocking {
-        DaoTeam.insertTeam(invalid)
+        TeamDao.insertTeam(invalid)
       }
     )
 
@@ -266,7 +279,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_ON_CHAT,
       runBlocking {
-        DaoTeam.insertTeam(hexTooLong)
+        TeamDao.insertTeam(hexTooLong)
       }
     )
 
@@ -277,7 +290,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_ON_CHAT,
       runBlocking {
-        DaoTeam.insertTeam(hexTooShort)
+        TeamDao.insertTeam(hexTooShort)
       }
     )
   }
@@ -292,7 +305,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_ON_PLAYER_LIST,
       runBlocking {
-        DaoTeam.insertTeam(obfuscated)
+        TeamDao.insertTeam(obfuscated)
       }
     )
 
@@ -303,7 +316,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_ON_PLAYER_LIST,
       runBlocking {
-        DaoTeam.insertTeam(many)
+        TeamDao.insertTeam(many)
       }
     )
 
@@ -314,7 +327,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_ON_PLAYER_LIST,
       runBlocking {
-        DaoTeam.insertTeam(invalid)
+        TeamDao.insertTeam(invalid)
       }
     )
 
@@ -325,7 +338,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_ON_PLAYER_LIST,
       runBlocking {
-        DaoTeam.insertTeam(hexTooLong)
+        TeamDao.insertTeam(hexTooLong)
       }
     )
 
@@ -336,7 +349,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_ON_PLAYER_LIST,
       runBlocking {
-        DaoTeam.insertTeam(hexTooShort)
+        TeamDao.insertTeam(hexTooShort)
       }
     )
   }
@@ -347,7 +360,7 @@ class TestDaoTeam {
     assertEquals(
       TEAM,
       runBlocking {
-        DaoTeam.findTeamByIdentifierOrNull(
+        TeamDao.findTeamByIdentifierOrNull(
           TEAM.identifier
         )
       }
@@ -359,8 +372,8 @@ class TestDaoTeam {
   fun `find non existent team by identifier`() {
     assertNull(
       runBlocking {
-        DaoTeam.findTeamByIdentifierOrNull(
-          UniqueUuid.v4(TEAM.identifier)
+        TeamDao.findTeamByIdentifierOrNull(
+          uniqueUuid(TEAM.identifier)
         )
       }
     )
@@ -372,7 +385,7 @@ class TestDaoTeam {
     assertEquals(
       TEAM,
       runBlocking {
-        DaoTeam.findTeamByNameOrNull(
+        TeamDao.findTeamByNameOrNull(
           TEAM.name
         )
       }
@@ -381,7 +394,7 @@ class TestDaoTeam {
     assertEquals(
       TEAM,
       runBlocking {
-        DaoTeam.findTeamByNameOrNull(
+        TeamDao.findTeamByNameOrNull(
           TEAM.name.uppercase()
         )
       }
@@ -390,7 +403,7 @@ class TestDaoTeam {
     assertEquals(
       TEAM,
       runBlocking {
-        DaoTeam.findTeamByNameOrNull(
+        TeamDao.findTeamByNameOrNull(
           TEAM.name.lowercase()
         )
       }
@@ -402,7 +415,7 @@ class TestDaoTeam {
   fun `find non existent team by name`() {
     assertNull(
       runBlocking {
-        DaoTeam.findTeamByNameOrNull(
+        TeamDao.findTeamByNameOrNull(
           Random.nextInt(1_000, 1_000_000).toString()
         )
       }
@@ -414,7 +427,7 @@ class TestDaoTeam {
   fun `contains team by identifier`() {
     assertTrue(
       runBlocking {
-        DaoTeam.containsTeamByIdentifier(TEAM.identifier)
+        TeamDao.containsTeamByIdentifier(TEAM.identifier)
       }
     )
   }
@@ -424,8 +437,8 @@ class TestDaoTeam {
   fun `contains non existent team by identifier`() {
     assertFalse(
       runBlocking {
-        DaoTeam.containsTeamByIdentifier(
-          UniqueUuid.v4(TEAM.identifier)
+        TeamDao.containsTeamByIdentifier(
+          uniqueUuid(TEAM.identifier)
         )
       }
     )
@@ -436,7 +449,7 @@ class TestDaoTeam {
   fun `contains team by name`() {
     assertTrue(
       runBlocking {
-        DaoTeam.containsTeamByName(
+        TeamDao.containsTeamByName(
           TEAM.name
         )
       }
@@ -444,7 +457,7 @@ class TestDaoTeam {
 
     assertTrue(
       runBlocking {
-        DaoTeam.containsTeamByName(
+        TeamDao.containsTeamByName(
           TEAM.name.uppercase()
         )
       }
@@ -452,7 +465,7 @@ class TestDaoTeam {
 
     assertTrue(
       runBlocking {
-        DaoTeam.containsTeamByName(
+        TeamDao.containsTeamByName(
           TEAM.name.lowercase()
         )
       }
@@ -464,7 +477,7 @@ class TestDaoTeam {
   fun `contains non existent team by name`() {
     assertFalse(
       runBlocking {
-        DaoTeam.containsTeamByName(
+        TeamDao.containsTeamByName(
           Random.nextInt(1_000, 1_000_000).toString()
         )
       }
@@ -487,14 +500,14 @@ class TestDaoTeam {
     assertEquals(
       1,
       runBlocking {
-        DaoTeam.updateTeam(updated)
+        TeamDao.updateTeam(updated)
       }
     )
 
     assertEquals(
       updated,
       runBlocking {
-        DaoTeam.findTeamByIdentifierOrNull(
+        TeamDao.findTeamByIdentifierOrNull(
           updated.identifier
         )
       }
@@ -506,7 +519,7 @@ class TestDaoTeam {
   fun `update non existent team`() {
     val updated = TEAM.copy(
       // @formatter:off
-      identifier        = UniqueUuid.v4(TEAM.identifier),
+      identifier        = uniqueUuid(TEAM.identifier),
       name              = "white",
       colorOfArmor      = "#fff",
       colorOfProfession = "&f",
@@ -518,7 +531,7 @@ class TestDaoTeam {
     assertEquals(
       ResponseCodes.NO_RECORD,
       runBlocking {
-        DaoTeam.updateTeam(updated)
+        TeamDao.updateTeam(updated)
       }
     )
   }
@@ -534,7 +547,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_NAME,
       runBlocking {
-        DaoTeam.updateTeam(tooLong)
+        TeamDao.updateTeam(tooLong)
       }
     )
 
@@ -546,7 +559,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_NAME,
       runBlocking {
-        DaoTeam.updateTeam(tooShort)
+        TeamDao.updateTeam(tooShort)
       }
     )
 
@@ -559,7 +572,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_NAME,
       runBlocking {
-        DaoTeam.updateTeam(illegalCharacters)
+        TeamDao.updateTeam(illegalCharacters)
       }
     )
   }
@@ -574,7 +587,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_OF_ARMOR,
       runBlocking {
-        DaoTeam.updateTeam(obfuscated)
+        TeamDao.updateTeam(obfuscated)
       }
     )
 
@@ -585,7 +598,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_OF_ARMOR,
       runBlocking {
-        DaoTeam.updateTeam(many)
+        TeamDao.updateTeam(many)
       }
     )
 
@@ -596,7 +609,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_OF_ARMOR,
       runBlocking {
-        DaoTeam.updateTeam(invalid)
+        TeamDao.updateTeam(invalid)
       }
     )
 
@@ -607,7 +620,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_OF_ARMOR,
       runBlocking {
-        DaoTeam.updateTeam(hexTooLongNotation)
+        TeamDao.updateTeam(hexTooLongNotation)
       }
     )
 
@@ -618,7 +631,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_OF_ARMOR,
       runBlocking {
-        DaoTeam.updateTeam(hexTooShortNotation)
+        TeamDao.updateTeam(hexTooShortNotation)
       }
     )
   }
@@ -633,7 +646,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_OF_PROFESSION,
       runBlocking {
-        DaoTeam.updateTeam(obfuscated)
+        TeamDao.updateTeam(obfuscated)
       }
     )
 
@@ -644,7 +657,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_OF_PROFESSION,
       runBlocking {
-        DaoTeam.updateTeam(many)
+        TeamDao.updateTeam(many)
       }
     )
 
@@ -655,7 +668,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_OF_PROFESSION,
       runBlocking {
-        DaoTeam.updateTeam(invalid)
+        TeamDao.updateTeam(invalid)
       }
     )
 
@@ -666,7 +679,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_OF_PROFESSION,
       runBlocking {
-        DaoTeam.updateTeam(hexTooLong)
+        TeamDao.updateTeam(hexTooLong)
       }
     )
 
@@ -677,7 +690,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_OF_PROFESSION,
       runBlocking {
-        DaoTeam.updateTeam(hexTooShort)
+        TeamDao.updateTeam(hexTooShort)
       }
     )
   }
@@ -692,7 +705,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_ON_CHAT,
       runBlocking {
-        DaoTeam.updateTeam(obfuscated)
+        TeamDao.updateTeam(obfuscated)
       }
     )
 
@@ -703,7 +716,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_ON_CHAT,
       runBlocking {
-        DaoTeam.updateTeam(many)
+        TeamDao.updateTeam(many)
       }
     )
 
@@ -714,7 +727,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_ON_CHAT,
       runBlocking {
-        DaoTeam.updateTeam(invalid)
+        TeamDao.updateTeam(invalid)
       }
     )
 
@@ -725,7 +738,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_ON_CHAT,
       runBlocking {
-        DaoTeam.updateTeam(hexTooLong)
+        TeamDao.updateTeam(hexTooLong)
       }
     )
 
@@ -736,7 +749,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_ON_CHAT,
       runBlocking {
-        DaoTeam.updateTeam(hexTooShort)
+        TeamDao.updateTeam(hexTooShort)
       }
     )
   }
@@ -751,7 +764,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_ON_PLAYER_LIST,
       runBlocking {
-        DaoTeam.updateTeam(obfuscated)
+        TeamDao.updateTeam(obfuscated)
       }
     )
 
@@ -762,7 +775,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_ON_PLAYER_LIST,
       runBlocking {
-        DaoTeam.updateTeam(many)
+        TeamDao.updateTeam(many)
       }
     )
 
@@ -773,7 +786,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_ON_PLAYER_LIST,
       runBlocking {
-        DaoTeam.updateTeam(invalid)
+        TeamDao.updateTeam(invalid)
       }
     )
 
@@ -784,7 +797,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_ON_PLAYER_LIST,
       runBlocking {
-        DaoTeam.updateTeam(hexTooLong)
+        TeamDao.updateTeam(hexTooLong)
       }
     )
 
@@ -795,7 +808,7 @@ class TestDaoTeam {
     assertEquals(
       INVALID_TEAM_COLOR_ON_PLAYER_LIST,
       runBlocking {
-        DaoTeam.updateTeam(hexTooShort)
+        TeamDao.updateTeam(hexTooShort)
       }
     )
   }
@@ -806,7 +819,7 @@ class TestDaoTeam {
     assertEquals(
       1,
       runBlocking {
-        DaoTeam.countTeams()
+        TeamDao.countTeams()
       }
     )
   }
@@ -817,7 +830,7 @@ class TestDaoTeam {
     assertEquals(
       1,
       runBlocking {
-        DaoTeam.deleteTeamByIdentifier(
+        TeamDao.deleteTeamByIdentifier(
           TEAM.identifier
         )
       }
@@ -825,7 +838,7 @@ class TestDaoTeam {
 
     assertNull(
       runBlocking {
-        DaoTeam.findTeamByIdentifierOrNull(
+        TeamDao.findTeamByIdentifierOrNull(
           TEAM.identifier
         )
       }
@@ -838,8 +851,8 @@ class TestDaoTeam {
     assertEquals(
       0,
       runBlocking {
-        DaoTeam.deleteTeamByIdentifier(
-          UniqueUuid.v4(TEAM.identifier)
+        TeamDao.deleteTeamByIdentifier(
+          uniqueUuid(TEAM.identifier)
         )
       }
     )
@@ -851,18 +864,8 @@ class TestDaoTeam {
     assertEquals(
       0,
       runBlocking {
-        DaoTeam.truncateTeams()
+        TeamDao.truncateTeams()
       }
     )
-  }
-
-  @AfterAll
-  fun `delete teams after all`() {
-    try {
-      runBlocking {
-        DaoTeam.truncateTeams()
-      }
-    } catch (_ : Throwable) {
-    }
   }
 }

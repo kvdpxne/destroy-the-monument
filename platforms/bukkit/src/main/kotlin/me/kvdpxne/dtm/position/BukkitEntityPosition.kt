@@ -47,8 +47,8 @@ class BukkitEntityPosition(
     return this.lazyDimension.worldName
   }
 
-  override fun getWorldOrNull(): Any? {
-    return this.lazyDimension.worldOrNull
+  override fun getWorld(): Any? {
+    return this.lazyDimension.world
   }
 
   override fun sameWorld(worldIdentifier: UUID): Boolean {

@@ -9,36 +9,59 @@ import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
 import me.kvdpxne.dtm.data.ResponseCodes
 import me.kvdpxne.dtm.data.raw.RawUser
-import me.kvdpxne.dtm.data.util.UniqueUuid
 import me.kvdpxne.dtm.data.validation.INVALID_USER_DISPLAY_NAME
 import me.kvdpxne.dtm.data.validation.INVALID_USER_NAME
+import me.kvdpxne.dtm.raw.factories.makeRawUser
+import me.kvdpxne.dtm.shared.randomPositiveInt
+import me.kvdpxne.dtm.shared.randomPositiveLong
+import me.kvdpxne.dtm.shared.uniqueUuid
 import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestMethodOrder
 
+/**
+ * @since 0.1.0
+ */
+private val USER = makeRawUser()
+
+private val USER_STATISTICS = USER.statistics
+
+private val USER_WALLET = USER.wallet
+
+/**
+ * @since 0.1.0
+ */
 @Order(1)
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TestDaoUser {
 
-  companion object {
+  /**
+   * @since 0.1.0
+   */
+  @AfterAll
+  fun `clean up battlefield after battle`() {
+    try {
+      runBlocking {
+        UserDao.truncateUsers()
+        UserStatisticsDao.truncateUserStatistics()
+        UserWalletDao.truncateUserWallets()
+      }
+    } catch (_: Throwable) {
+    }
+  }
 
-    // Creating an unacceptable object via the constructor is always possible
-    // but should be used only for testing.
-    internal val USER = RawUser(
-      // @formatter:off
-      identifier  = UniqueUuid.v4(),
-      statistics  = TestDaoUserStatistics.USER_STATISTICS,
-      wallet      = TestDaoUserWallet.USER_WALLET,
-      name        = "kvd_currants",
-      displayName = "Currants",
-      profession  = "dtm_scout",
-      locale      = "pl_pl"
-      // @formatter:on
-    )
+  /**
+   * @since 0.1.0
+   */
+  @BeforeAll
+  fun `prepare battlefield`() {
+    this.`clean up battlefield after battle`()
+    println(USER.toStylishString().listed(2))
   }
 
   @Order(0)
@@ -47,7 +70,7 @@ class TestDaoUser {
     assertEquals(
       1,
       runBlocking {
-        DaoUser.insertUser(USER)
+        UserDao.insertUser(USER)
       }
     )
   }
@@ -58,7 +81,7 @@ class TestDaoUser {
     assertEquals(
       ResponseCodes.DUPLICATED,
       runBlocking {
-        DaoUser.insertUser(USER)
+        UserDao.insertUser(USER)
       }
     )
   }
@@ -73,7 +96,7 @@ class TestDaoUser {
     assertEquals(
       INVALID_USER_NAME,
       runBlocking {
-        DaoUser.insertUser(tooLong)
+        UserDao.insertUser(tooLong)
       }
     )
 
@@ -84,7 +107,7 @@ class TestDaoUser {
     assertEquals(
       INVALID_USER_NAME,
       runBlocking {
-        DaoUser.insertUser(tooShort)
+        UserDao.insertUser(tooShort)
       }
     )
 
@@ -95,7 +118,7 @@ class TestDaoUser {
     assertEquals(
       INVALID_USER_NAME,
       runBlocking {
-        DaoUser.insertUser(illegalCharacters)
+        UserDao.insertUser(illegalCharacters)
       }
     )
   }
@@ -110,7 +133,7 @@ class TestDaoUser {
     assertEquals(
       INVALID_USER_DISPLAY_NAME,
       runBlocking {
-        DaoUser.insertUser(tooLong)
+        UserDao.insertUser(tooLong)
       }
     )
 
@@ -121,7 +144,7 @@ class TestDaoUser {
     assertEquals(
       INVALID_USER_DISPLAY_NAME,
       runBlocking {
-        DaoUser.insertUser(tooShort)
+        UserDao.insertUser(tooShort)
       }
     )
 
@@ -132,7 +155,7 @@ class TestDaoUser {
     assertEquals(
       INVALID_USER_DISPLAY_NAME,
       runBlocking {
-        DaoUser.insertUser(illegalCharacters)
+        UserDao.insertUser(illegalCharacters)
       }
     )
   }
@@ -149,7 +172,7 @@ class TestDaoUser {
     assertEquals(
       USER,
       runBlocking {
-        DaoUser.findUserByIdentifierOrNull(
+        UserDao.findUserByIdentifierOrNull(
           USER.identifier
         )
       }
@@ -161,8 +184,8 @@ class TestDaoUser {
   fun `find non existent user by identifier`() {
     assertNull(
       runBlocking {
-        DaoUser.findUserByIdentifierOrNull(
-          UniqueUuid.v4(USER.identifier)
+        UserDao.findUserByIdentifierOrNull(
+          uniqueUuid(USER.identifier)
         )
       }
     )
@@ -174,7 +197,7 @@ class TestDaoUser {
     assertEquals(
       USER,
       runBlocking {
-        DaoUser.findUserByNameOrNull(
+        UserDao.findUserByNameOrNull(
           USER.name
         )
       }
@@ -183,7 +206,7 @@ class TestDaoUser {
     assertEquals(
       USER,
       runBlocking {
-        DaoUser.findUserByNameOrNull(
+        UserDao.findUserByNameOrNull(
           USER.name.uppercase()
         )
       }
@@ -192,7 +215,7 @@ class TestDaoUser {
     assertEquals(
       USER,
       runBlocking {
-        DaoUser.findUserByNameOrNull(
+        UserDao.findUserByNameOrNull(
           USER.name.lowercase()
         )
       }
@@ -204,7 +227,7 @@ class TestDaoUser {
   fun `find non existent user by name`() {
     assertNull(
       runBlocking {
-        DaoUser.findUserByNameOrNull(
+        UserDao.findUserByNameOrNull(
           Random.nextInt(1_000, 1_000_000).toString()
         )
       }
@@ -216,7 +239,7 @@ class TestDaoUser {
   fun `contains user by identifier`() {
     assertTrue(
       runBlocking {
-        DaoUser.containsUserByIdentifier(
+        UserDao.containsUserByIdentifier(
           USER.identifier
         )
       }
@@ -228,8 +251,8 @@ class TestDaoUser {
   fun `contains non existent user by identifier`() {
     assertFalse(
       runBlocking {
-        DaoUser.containsUserByIdentifier(
-          UniqueUuid.v4(USER.identifier)
+        UserDao.containsUserByIdentifier(
+          uniqueUuid(USER.identifier)
         )
       }
     )
@@ -240,7 +263,7 @@ class TestDaoUser {
   fun `contains user by name`() {
     assertTrue(
       runBlocking {
-        DaoUser.containsUserByName(
+        UserDao.containsUserByName(
           USER.name
         )
       }
@@ -248,7 +271,7 @@ class TestDaoUser {
 
     assertTrue(
       runBlocking {
-        DaoUser.containsUserByName(
+        UserDao.containsUserByName(
           USER.name.uppercase()
         )
       }
@@ -256,7 +279,7 @@ class TestDaoUser {
 
     assertTrue(
       runBlocking {
-        DaoUser.containsUserByName(
+        UserDao.containsUserByName(
           USER.name.lowercase()
         )
       }
@@ -268,36 +291,28 @@ class TestDaoUser {
   fun `contains non existent user by name`() {
     assertFalse(
       runBlocking {
-        DaoUser.containsUserByName(
+        UserDao.containsUserByName(
           Random.nextInt(1_000, 1_000_000).toString()
         )
       }
     )
   }
 
-  /**
-   * @since 0.1.0
-   */
   private fun updatedUser(
     identifier: UUID
   ): RawUser {
     return RawUser(
       // @formatter:off
       identifier  = identifier,
-      statistics  = USER.statistics.let {
-        it.copy(
-          kills   = 2 * it.kills,
-          assists = 2 * it.assists,
-          deaths  = 2 * it.deaths
-        )
-      },
-      wallet      = USER.wallet.let {
-        it.copy(
-          coins = 2 * it.coins
-        )
-      },
+      statistics  = USER.statistics.copy(
+        kills   = randomPositiveInt(),
+        assists = randomPositiveInt(),
+        deaths  = randomPositiveInt()
+      ),
+      wallet      = USER.wallet.copy(
+        coins = randomPositiveLong()
+      ),
       name        = USER.name,
-      displayName = null,
       profession  = "dtm_archer",
       locale      = "en_us"
       // @formatter:on
@@ -312,14 +327,14 @@ class TestDaoUser {
     assertEquals(
       1,
       runBlocking {
-        DaoUser.updateUser(updated)
+        UserDao.updateUser(updated)
       }
     )
 
     assertEquals(
       updated,
       runBlocking {
-        DaoUser.findUserByIdentifierOrNull(
+        UserDao.findUserByIdentifierOrNull(
           updated.identifier
         )
       }
@@ -330,13 +345,13 @@ class TestDaoUser {
   @Test
   fun `update non existent user`() {
     val updated = this.updatedUser(
-      UniqueUuid.v4(USER.identifier)
+      uniqueUuid(USER.identifier)
     )
 
     assertEquals(
       ResponseCodes.NO_RECORD,
       runBlocking {
-        DaoUser.updateUser(updated)
+        UserDao.updateUser(updated)
       }
     )
   }
@@ -351,7 +366,7 @@ class TestDaoUser {
     assertEquals(
       INVALID_USER_NAME,
       runBlocking {
-        DaoUser.updateUser(tooLong)
+        UserDao.updateUser(tooLong)
       }
     )
 
@@ -362,7 +377,7 @@ class TestDaoUser {
     assertEquals(
       INVALID_USER_NAME,
       runBlocking {
-        DaoUser.updateUser(tooShort)
+        UserDao.updateUser(tooShort)
       }
     )
 
@@ -373,7 +388,7 @@ class TestDaoUser {
     assertEquals(
       INVALID_USER_NAME,
       runBlocking {
-        DaoUser.updateUser(illegalCharacters)
+        UserDao.updateUser(illegalCharacters)
       }
     )
   }
@@ -388,7 +403,7 @@ class TestDaoUser {
     assertEquals(
       INVALID_USER_DISPLAY_NAME,
       runBlocking {
-        DaoUser.updateUser(tooLong)
+        UserDao.updateUser(tooLong)
       }
     )
 
@@ -399,7 +414,7 @@ class TestDaoUser {
     assertEquals(
       INVALID_USER_DISPLAY_NAME,
       runBlocking {
-        DaoUser.updateUser(tooShort)
+        UserDao.updateUser(tooShort)
       }
     )
 
@@ -410,7 +425,7 @@ class TestDaoUser {
     assertEquals(
       INVALID_USER_DISPLAY_NAME,
       runBlocking {
-        DaoUser.updateUser(illegalCharacters)
+        UserDao.updateUser(illegalCharacters)
       }
     )
   }
@@ -427,7 +442,7 @@ class TestDaoUser {
     assertEquals(
       1,
       runBlocking {
-        DaoUser.countUsers()
+        UserDao.countUsers()
       }
     )
   }
@@ -438,7 +453,7 @@ class TestDaoUser {
     assertEquals(
       true,
       runBlocking {
-        DaoUser.deleteUserByIdentifier(
+        UserDao.deleteUserByIdentifier(
           USER.identifier
         )
       }
@@ -446,7 +461,7 @@ class TestDaoUser {
 
     assertNull(
       runBlocking {
-        DaoUser.findUserByIdentifierOrNull(
+        UserDao.findUserByIdentifierOrNull(
           USER.identifier
         )
       }
@@ -459,8 +474,8 @@ class TestDaoUser {
     assertEquals(
       false,
       runBlocking {
-        DaoUser.deleteUserByIdentifier(
-          UniqueUuid.v4(USER.identifier)
+        UserDao.deleteUserByIdentifier(
+          uniqueUuid(USER.identifier)
         )
       }
     )
@@ -472,7 +487,7 @@ class TestDaoUser {
     assertEquals(
       0,
       runBlocking {
-        DaoUser.truncateUsers()
+        UserDao.truncateUsers()
       }
     )
   }
@@ -481,7 +496,7 @@ class TestDaoUser {
   fun `delete users after all`() {
     try {
       runBlocking {
-        DaoUser.truncateUsers()
+        UserDao.truncateUsers()
       }
     } catch (_: Throwable) {
     }

@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.position.revival
 
 import java.util.UUID
-import me.kvdpxne.dtm.Identifiable
+import me.kvdpxne.dtm.capabilities.Identifiable
 import me.kvdpxne.dtm.InternalIdentifiable
 import me.kvdpxne.dtm.position.BasicEntityPosition
 import me.kvdpxne.dtm.team.Team
@@ -43,7 +43,7 @@ class BasicRevivalPosition(
   }
 
   override fun getIdentifier(): UUID {
-    return this.identifiable.identifier
+    return this.identifiable.getIdentifier()
   }
 
   override fun getTeam(): Team {

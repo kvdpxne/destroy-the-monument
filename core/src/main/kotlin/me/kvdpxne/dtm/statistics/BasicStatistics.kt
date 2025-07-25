@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.statistics
 
 import me.kvdpxne.dtm.shared.language.toSingleLines
-import me.kvdpxne.dtm.state.MutableState
+import me.kvdpxne.dtm.capabilities.state.MutableState
 
 /**
  * @since 0.1.0

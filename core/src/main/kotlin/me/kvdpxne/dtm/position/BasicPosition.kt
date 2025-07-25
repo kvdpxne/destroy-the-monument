@@ -26,7 +26,7 @@ abstract class BasicPosition protected constructor() :
     TODO("Not yet implemented")
   }
 
-  override fun getWorldOrNull(): Any? {
+  override fun getWorld(): Any? {
     TODO("Not yet implemented")
   }
 

@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.arena.voting;
 
 import java.util.Collection;
-import me.kvdpxne.dtm.Identifiable;
+import me.kvdpxne.dtm.capabilities.Identifiable;
 import me.kvdpxne.dtm.arena.Arena;
 import me.kvdpxne.dtm.user.LocalUser;
 import me.kvdpxne.dtm.user.LocalUserProvider;

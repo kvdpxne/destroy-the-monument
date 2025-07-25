@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.shared
 
-import me.kvdpxne.dtm.Buildable
+import me.kvdpxne.dtm.capabilities.Buildable
 
 /**
  * A utility class for building customizable, stylish `toString`

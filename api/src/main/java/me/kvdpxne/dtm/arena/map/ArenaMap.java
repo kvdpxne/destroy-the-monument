@@ -1,8 +1,8 @@
 package me.kvdpxne.dtm.arena.map;
 
 import java.util.UUID;
-import me.kvdpxne.dtm.Identifiable;
-import me.kvdpxne.dtm.Nameable;
+import me.kvdpxne.dtm.capabilities.Identifiable;
+import me.kvdpxne.dtm.capabilities.Nameable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -6,54 +6,60 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
 import me.kvdpxne.dtm.data.ResponseCodes
-import me.kvdpxne.dtm.data.raw.RawMonumentPosition
-import me.kvdpxne.dtm.data.raw.RawTeam
-import me.kvdpxne.dtm.data.util.UniqueUuid
+import me.kvdpxne.dtm.raw.factories.makeRawMonumentPosition
+import me.kvdpxne.dtm.shared.uniqueUuid
 import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestMethodOrder
 
+/**
+ * @since 0.1.0
+ */
+private val MONUMENT_POSITION = makeRawMonumentPosition()
+
+/**
+ * @since 0.1.0
+ */
 @Order(1)
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TestDaoMonumentPosition {
 
-  companion object {
+  /**
+   * @since 0.1.0
+   */
+  @AfterAll
+  fun `cleanup battlefield after battle`() {
+    runBlocking {
+      MonumentPositionDao.truncateMonumentPositions()
+      TeamDao.truncateTeams()
+    }
+  }
 
-    // Creating an unacceptable object via the constructor is always possible
-    // but should be used only for testing.
-    internal val MONUMENT_POSITION = RawMonumentPosition(
-      // @formatter:off
-      identifier = UniqueUuid.v4(),
-      team       = RawTeam(
-        identifier        = UniqueUuid.v4(),
-        name              = "blue",
-        colorOfArmor      = "#000acd",
-        colorOfProfession = "&2",
-        colorOnChat       = "&9",
-        colorOnPlayerList = "&9"
-      ),
-      x          = 60,
-      y          = 120,
-      z          = 60
-      // @formatter:on
-    )
+  /**
+   * @since 0.1.0
+   */
+  @BeforeAll
+  fun `prepare battlefield`() {
+    this.`cleanup battlefield after battle`()
+    println(MONUMENT_POSITION.toStylishString().listed(2))
   }
 
   @Order(0)
   @Test
   fun `insert monument position`() {
     runBlocking {
-      DaoTeam.insertTeam(MONUMENT_POSITION.team)
+      TeamDao.insertTeam(MONUMENT_POSITION.team)
     }
 
     assertEquals(
       1,
       runBlocking {
-        DaoMonumentPosition.insertMonumentPosition(MONUMENT_POSITION)
+        MonumentPositionDao.insertMonumentPosition(MONUMENT_POSITION)
       }
     )
   }
@@ -64,7 +70,7 @@ class TestDaoMonumentPosition {
     assertEquals(
       ResponseCodes.DUPLICATED,
       runBlocking {
-        DaoMonumentPosition.insertMonumentPosition(MONUMENT_POSITION)
+        MonumentPositionDao.insertMonumentPosition(MONUMENT_POSITION)
       }
     )
   }
@@ -73,16 +79,16 @@ class TestDaoMonumentPosition {
   @Test
   fun `insert monument position with invalid team reference`() {
     val invalid = MONUMENT_POSITION.copy(
-      identifier = UniqueUuid.v4(MONUMENT_POSITION.identifier),
+      identifier = uniqueUuid(MONUMENT_POSITION.identifier),
       team = MONUMENT_POSITION.team.copy(
-        identifier = UniqueUuid.v4(MONUMENT_POSITION.team.identifier),
+        identifier = uniqueUuid(MONUMENT_POSITION.team.identifier),
       )
     )
 
     assertEquals(
       ResponseCodes.NO_REFERENCE,
       runBlocking {
-        DaoMonumentPosition.insertMonumentPosition(invalid)
+        MonumentPositionDao.insertMonumentPosition(invalid)
       }
     )
   }
@@ -93,7 +99,7 @@ class TestDaoMonumentPosition {
     assertEquals(
       MONUMENT_POSITION,
       runBlocking {
-        DaoMonumentPosition.findMonumentPositionByIdentifierOrNull(
+        MonumentPositionDao.findMonumentPositionByIdentifierOrNull(
           MONUMENT_POSITION.identifier
         )
       }
@@ -105,8 +111,8 @@ class TestDaoMonumentPosition {
   fun `find non existent monument position by identifier`() {
     assertNull(
       runBlocking {
-        DaoMonumentPosition.findMonumentPositionByIdentifierOrNull(
-          UniqueUuid.v4(MONUMENT_POSITION.identifier)
+        MonumentPositionDao.findMonumentPositionByIdentifierOrNull(
+          uniqueUuid(MONUMENT_POSITION.identifier)
         )
       }
     )
@@ -117,7 +123,7 @@ class TestDaoMonumentPosition {
   fun `contains monument position by identifier`() {
     assertTrue(
       runBlocking {
-        DaoMonumentPosition.containsMonumentPositionByIdentifier(
+        MonumentPositionDao.containsMonumentPositionByIdentifier(
           MONUMENT_POSITION.identifier
         )
       }
@@ -129,8 +135,8 @@ class TestDaoMonumentPosition {
   fun `contains non existent monument position by identifier`() {
     assertFalse(
       runBlocking {
-        DaoMonumentPosition.containsMonumentPositionByIdentifier(
-          UniqueUuid.v4(MONUMENT_POSITION.identifier)
+        MonumentPositionDao.containsMonumentPositionByIdentifier(
+          uniqueUuid(MONUMENT_POSITION.identifier)
         )
       }
     )
@@ -150,14 +156,14 @@ class TestDaoMonumentPosition {
     assertEquals(
       1,
       runBlocking {
-        DaoMonumentPosition.updateMonumentPosition(updated)
+        MonumentPositionDao.updateMonumentPosition(updated)
       }
     )
 
     assertEquals(
       updated,
       runBlocking {
-        DaoMonumentPosition.findMonumentPositionByIdentifierOrNull(
+        MonumentPositionDao.findMonumentPositionByIdentifierOrNull(
           updated.identifier
         )
       }
@@ -169,7 +175,7 @@ class TestDaoMonumentPosition {
   fun `update non existent monument position`() {
     val updated = MONUMENT_POSITION.copy(
       // @formatter:off
-      identifier = UniqueUuid.v4(MONUMENT_POSITION.identifier),
+      identifier = uniqueUuid(MONUMENT_POSITION.identifier),
       x          = 1000,
       y          = 20,
       z          = -500
@@ -179,7 +185,7 @@ class TestDaoMonumentPosition {
     assertEquals(
       ResponseCodes.NO_RECORD,
       runBlocking {
-        DaoMonumentPosition.updateMonumentPosition(updated)
+        MonumentPositionDao.updateMonumentPosition(updated)
       }
     )
   }
@@ -189,14 +195,14 @@ class TestDaoMonumentPosition {
   fun `update monument position with invalid team reference`() {
     val invalid = MONUMENT_POSITION.copy(
       team = MONUMENT_POSITION.team.copy(
-        identifier = UniqueUuid.v4(MONUMENT_POSITION.team.identifier),
+        identifier = uniqueUuid(MONUMENT_POSITION.team.identifier),
       )
     )
 
     assertEquals(
       ResponseCodes.NO_REFERENCE,
       runBlocking {
-        DaoMonumentPosition.updateMonumentPosition(invalid)
+        MonumentPositionDao.updateMonumentPosition(invalid)
       }
     )
   }
@@ -207,7 +213,7 @@ class TestDaoMonumentPosition {
     assertEquals(
       1,
       runBlocking {
-        DaoMonumentPosition.countMonumentPositions()
+        MonumentPositionDao.countMonumentPositions()
       }
     )
   }
@@ -218,7 +224,7 @@ class TestDaoMonumentPosition {
     assertEquals(
       1,
       runBlocking {
-        DaoMonumentPosition.deleteMonumentPositionByIdentifier(
+        MonumentPositionDao.deleteMonumentPositionByIdentifier(
           MONUMENT_POSITION.identifier
         )
       }
@@ -226,7 +232,7 @@ class TestDaoMonumentPosition {
 
     assertNull(
       runBlocking {
-        DaoMonumentPosition.findMonumentPositionByIdentifierOrNull(
+        MonumentPositionDao.findMonumentPositionByIdentifierOrNull(
           MONUMENT_POSITION.identifier
         )
       }
@@ -239,8 +245,8 @@ class TestDaoMonumentPosition {
     assertEquals(
       0,
       runBlocking {
-        DaoMonumentPosition.deleteMonumentPositionByIdentifier(
-          UniqueUuid.v4(MONUMENT_POSITION.identifier)
+        MonumentPositionDao.deleteMonumentPositionByIdentifier(
+          uniqueUuid(MONUMENT_POSITION.identifier)
         )
       }
     )
@@ -252,19 +258,8 @@ class TestDaoMonumentPosition {
     assertEquals(
       0,
       runBlocking {
-        DaoMonumentPosition.truncateMonumentPositions()
+        MonumentPositionDao.truncateMonumentPositions()
       }
     )
-  }
-
-  @AfterAll
-  fun `delete monument positions after all`() {
-    try {
-      runBlocking {
-        DaoMonumentPosition.truncateMonumentPositions()
-        DaoTeam.truncateTeams()
-      }
-    } catch (_: Throwable) {
-    }
   }
 }

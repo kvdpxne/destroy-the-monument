@@ -24,6 +24,11 @@ object EntityNames {
   const val ARENA_MAP: String = "arena_map"
 
   /**
+   * @since 0.1.0
+   */
+  const val ARENA_MAP_RULES: String = "arena_map_rules"
+
+  /**
    * Represents the entity name for monument positions within an arena.
    *
    * @since 0.1.0

@@ -5,8 +5,6 @@ object EntityFieldNames {
   const val IDENTIFIER = "identifier"
   const val NAME = "name"
 
-  const val DISPLAY_NAME = "display_name"
-
   const val COLOR_OF_ARMOR = "color_of_armor"
   const val COLOR_OF_PROFESSION = "color_of_profession"
   const val COLOR_ON_PLAYER_LIST = "color_on_player_list"
@@ -25,6 +23,8 @@ object EntityFieldNames {
   const val GAME_IDENTIFIER = "game_${this.IDENTIFIER}"
   const val ARENA_IDENTIFIER = "arena_${this.IDENTIFIER}"
   const val ARENA_MAP_IDENTIFIER = "arena_map_${this.IDENTIFIER}"
+
+  const val ARENA_MAP_RULES_IDENTIFIER = "arena_map_rules_${this.IDENTIFIER}"
 
   // User statistics
   const val KILLS = "kills"
