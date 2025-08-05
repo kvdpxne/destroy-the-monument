@@ -1,6 +1,7 @@
 package me.kvdpxne.dtm.profession
 
 import me.kvdpxne.dtm.DestroyTheMonument
+import me.kvdpxne.dtm.profession.tasks.ExperienceBarCountdownTask
 import me.kvdpxne.dtm.shared.task.cancelTask
 import me.kvdpxne.dtm.shared.player.fillExperienceBar
 import me.kvdpxne.dtm.shared.player.resetExperienceBar
@@ -32,8 +33,11 @@ class Ability(
   /**
    * @since 0.1.0
    */
-  var taskIdentifier = -1
-    private set
+  var countdownTaskId = -1
+    internal set
+
+  var flickeringTaskId = -1
+    internal set
 
   /**
    * @since 0.1.0
@@ -53,12 +57,13 @@ class Ability(
    * @since 0.1.0
    */
   fun cancelCooldown() {
-    if (0 > this.taskIdentifier) {
-      return
+    if (0 < this.countdownTaskId) {
+      cancelTask(this.countdownTaskId)
     }
 
-    //
-    cancelTask(this.taskIdentifier)
+    if (0 < this.flickeringTaskId) {
+      cancelTask(this.flickeringTaskId)
+    }
   }
 
   /**
@@ -71,6 +76,9 @@ class Ability(
     if (null == player) {
       return
     }
+
+    //
+    this.cancelCooldown()
 
     //
     this.isReady = false
@@ -86,7 +94,7 @@ class Ability(
       this.delay
     }
 
-    this.taskIdentifier = AbilityCooldownTaskTimer(
+    this.countdownTaskId = ExperienceBarCountdownTask(
       this,
       remainingSeconds,
       player

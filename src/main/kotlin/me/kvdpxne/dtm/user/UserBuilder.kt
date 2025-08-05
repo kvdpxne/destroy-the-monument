@@ -6,6 +6,8 @@ import me.kvdpxne.dtm.profession.ProfessionManager
 import me.kvdpxne.dtm.shared.Buildable
 import me.kvdpxne.dtm.shared.PlayerUuid
 import me.kvdpxne.dtm.translation.TranslationService
+import me.kvdpxne.dtm.user.statistics.UserStatistics
+import me.kvdpxne.dtm.user.statistics.UserStatisticsImpl
 import me.kvdpxne.dtm.wallet.Wallet
 import me.kvdpxne.dtm.wallet.WalletImpl
 import org.bukkit.entity.Player

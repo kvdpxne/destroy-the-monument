@@ -5,7 +5,7 @@ import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.Performer
 import me.kvdpxne.dtm.position.BlockPosition
 import me.kvdpxne.dtm.translation.message.EnumTranslationKey
-import me.kvdpxne.dtm.user.LocalUserPerformer
+import me.kvdpxne.dtm.user.performer.LocalUserPerformer
 
 /**
  * @since 0.1.0

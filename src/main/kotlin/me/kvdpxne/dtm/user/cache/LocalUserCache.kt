@@ -1,10 +1,10 @@
-package me.kvdpxne.dtm.user
+package me.kvdpxne.dtm.user.cache
 
 import me.kvdpxne.dtm.position.BlockPosition
 import me.kvdpxne.dtm.position.EntityPosition
 
 /**
- * A cache for storing temporary, user-specific data for a [LocalUser]. This
+ * A cache for storing temporary, user-specific data for a [me.kvdpxne.dtm.user.LocalUser]. This
  * interface provides properties  to manage the user's selected monument
  * position and teleportation history, enabling efficient access to
  * frequently modified data that doesn't require persistence.

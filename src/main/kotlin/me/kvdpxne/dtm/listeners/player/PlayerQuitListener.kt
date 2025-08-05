@@ -1,7 +1,7 @@
 package me.kvdpxne.dtm.listeners.player
 
 import me.kvdpxne.dtm.game.LocalGame
-import me.kvdpxne.dtm.shared.player.localUser
+import me.kvdpxne.dtm.shared.player.localUserOrNull
 import me.kvdpxne.dtm.shared.text.toSingleLines
 import me.kvdpxne.dtm.user.LocalUser
 import me.kvdpxne.dtm.user.LocalUserManager
@@ -35,7 +35,7 @@ object PlayerQuitListener : Listener {
   fun handlePlayerQuit(
     event: PlayerQuitEvent
   ) {
-    val user: LocalUser = event.player.localUser
+    val user: LocalUser = event.player.localUserOrNull ?: return
     UserService.updateUser(user)
 
     val game: LocalGame? = user.game

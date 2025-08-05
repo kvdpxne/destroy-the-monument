@@ -4,7 +4,7 @@ import me.kvdpxne.dtm.data.repositories.UserStatisticsRepository
 import me.kvdpxne.dtm.data.sources.DatabasesConfiguration
 import me.kvdpxne.dtm.data.tables.UserStatisticsTable
 import me.kvdpxne.dtm.data.transactions.concurrentTransaction
-import me.kvdpxne.dtm.user.UserStatistics
+import me.kvdpxne.dtm.user.statistics.UserStatistics
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.statements.InsertStatement
 import org.jetbrains.exposed.sql.statements.UpdateBuilder

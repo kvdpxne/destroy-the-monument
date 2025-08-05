@@ -1,15 +1,14 @@
 package me.kvdpxne.dtm.professions
 
-import me.kvdpxne.dtm.gui.slotBoots
-import me.kvdpxne.dtm.gui.slotChestplate
-import me.kvdpxne.dtm.gui.slotHelmet
-import me.kvdpxne.dtm.gui.slotItem
-import me.kvdpxne.dtm.gui.slotLeggings
+import me.kvdpxne.dtm.profession.slotBoots
+import me.kvdpxne.dtm.profession.slotChestplate
+import me.kvdpxne.dtm.profession.slotHelmet
+import me.kvdpxne.dtm.profession.slotItem
+import me.kvdpxne.dtm.profession.slotLeggings
 import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionBuilder
 import me.kvdpxne.dtm.shared.item.ItemsClipboard.ITEM_TOOL_AXE
 import me.kvdpxne.dtm.shared.item.ItemsClipboard.ITEM_TOOL_PICKAXE
-import me.kvdpxne.dtm.shared.item.toBuilder
 import me.kvdpxne.dtm.shared.material.toBuilder
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment

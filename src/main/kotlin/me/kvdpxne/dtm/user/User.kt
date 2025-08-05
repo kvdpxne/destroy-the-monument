@@ -7,6 +7,7 @@ import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.shared.Identifiable
 import me.kvdpxne.dtm.shared.Nameable
 import me.kvdpxne.dtm.shared.PlayerUuid
+import me.kvdpxne.dtm.user.statistics.UserStatistics
 import me.kvdpxne.dtm.wallet.Wallet
 
 /**
@@ -18,11 +19,11 @@ import me.kvdpxne.dtm.wallet.Wallet
  *
  * @since 0.1.0
  */
-interface User : Identifiable<PlayerUuid>, Nameable, MutableState {
+interface User : Identifiable<PlayerUuid>, Nameable, MutableState, LocalUserProvider {
 
   /**
    * Holds the user's performance and engagement metrics, represented by
-   * [UserStatistics].
+   * [me.kvdpxne.dtm.user.statistics.UserStatistics].
    *
    * These statistics may track achievements, scores, or other relevant data.
    *
@@ -59,15 +60,4 @@ interface User : Identifiable<PlayerUuid>, Nameable, MutableState {
    *
    */
   fun updateLocale(locale: Locale)
-
-  /**
-   * Converts the current user instance into a [LocalUser], representing a more
-   * specific type of user with additional, localized functionalities or
-   * properties.
-   *
-   * @return An instance of [LocalUser], representing the user in a localized
-   *         context.
-   * @since 0.1.0
-   */
-  fun asLocalUser(): LocalUser
 }

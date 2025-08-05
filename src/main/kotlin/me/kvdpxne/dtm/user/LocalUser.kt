@@ -7,6 +7,8 @@ import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.translation.chains.MessageFormatterChains
 import me.kvdpxne.dtm.translation.message.EnumTranslationKey
+import me.kvdpxne.dtm.user.cache.LocalUserCache
+import me.kvdpxne.dtm.user.performer.LocalUserPerformer
 
 /**
  * Extends the [User] interface, representing a user with additional localized
@@ -30,7 +32,7 @@ interface LocalUser : User, Communicative {
    * Represents an object responsible for performing actions on behalf of this
    * user.
    *
-   * The [LocalUserPerformer] may handle complex actions or behavior that the
+   * The [me.kvdpxne.dtm.user.performer.LocalUserPerformer] may handle complex actions or behavior that the
    * user can initiate.
    *
    * @since 0.1.0

@@ -1,4 +1,4 @@
-package me.kvdpxne.dtm.user
+package me.kvdpxne.dtm.user.cache
 
 import me.kvdpxne.dtm.position.BlockPosition
 import me.kvdpxne.dtm.position.EntityPosition

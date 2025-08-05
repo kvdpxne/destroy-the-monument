@@ -10,7 +10,7 @@ import me.kvdpxne.dtm.position.monument.MonumentPosition
 import me.kvdpxne.dtm.team.Team
 import me.kvdpxne.dtm.translation.formatter.Formatter
 import me.kvdpxne.dtm.translation.message.EnumTranslationKey
-import me.kvdpxne.dtm.user.LocalUserPerformer
+import me.kvdpxne.dtm.user.performer.LocalUserPerformer
 
 /**
  * @since 0.1.0

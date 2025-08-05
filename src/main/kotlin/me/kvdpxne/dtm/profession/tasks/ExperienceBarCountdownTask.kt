@@ -1,6 +1,9 @@
-package me.kvdpxne.dtm.profession
+package me.kvdpxne.dtm.profession.tasks
 
+import me.kvdpxne.dtm.DestroyTheMonument
+import me.kvdpxne.dtm.profession.Ability
 import me.kvdpxne.dtm.shared.player.fillExperienceBar
+import me.kvdpxne.dtm.shared.player.isSurvivalOrAdventure
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
 
@@ -11,7 +14,7 @@ import org.bukkit.scheduler.BukkitRunnable
  *
  * @since 0.1.0
  */
-class AbilityCooldownTaskTimer(
+class ExperienceBarCountdownTask(
   // @formatter:off
   private val ability         : Ability,
   private var remainingSeconds: Int,
@@ -22,14 +25,16 @@ class AbilityCooldownTaskTimer(
   /**
    * @since 0.1.0
    */
-  private val part = 1.0F / (this.remainingSeconds + 1)
+  private val part: Float = 1.0F / (this.remainingSeconds + 1)
 
   /**
    * @since 0.1.0
    */
   override fun run() {
-    this.target.level = this.remainingSeconds
-    this.target.exp += this.part
+    if (this.target.gameMode.isSurvivalOrAdventure) {
+      this.target.level = this.remainingSeconds
+      this.target.exp += this.part
+    }
 
     if (0 >= this.remainingSeconds) {
       this.cancel()
@@ -40,6 +45,14 @@ class AbilityCooldownTaskTimer(
         if (!it.isActivatable) {
           it.whenReady(this.target)
         }
+
+        it.countdownTaskId = ExperienceBarFlickeringTask(this.target)
+          .runTaskTimerAsynchronously(
+            DestroyTheMonument.instance,
+            20L,
+            15L
+          )
+          .taskId
       }
 
       this.target.fillExperienceBar()

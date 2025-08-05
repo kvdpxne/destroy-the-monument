@@ -1,4 +1,4 @@
-package me.kvdpxne.dtm.user
+package me.kvdpxne.dtm.user.performer
 
 import java.util.Locale
 import me.kvdpxne.dtm.command.Performer
@@ -11,6 +11,7 @@ import me.kvdpxne.dtm.shared.PlayerProvider
 import me.kvdpxne.dtm.shared.PlayerUuid
 import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.team.Teammate
+import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.entity.Player
 
 /**

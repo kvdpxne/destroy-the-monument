@@ -3,7 +3,7 @@ package me.kvdpxne.dtm.listeners.player
 import me.kvdpxne.dtm.containers.createGamesContainer
 import me.kvdpxne.dtm.containers.createProfessionsContainer
 import me.kvdpxne.dtm.containers.createTeamsContainer
-import me.kvdpxne.dtm.guis.createArenaSelectionGui
+import me.kvdpxne.dtm.containers.createVotingContainer
 import me.kvdpxne.dtm.shared.block.isMonument
 import me.kvdpxne.dtm.shared.event.cancel
 import me.kvdpxne.dtm.shared.event.isRightClick
@@ -107,7 +107,7 @@ object PlayerInteractListener : Listener {
         val game = user.game
 
         event.cancel()
-        createArenaSelectionGui(game!!, user).open(player)
+        createVotingContainer(user, game!!).open(user.performer)
         player.updateInventory()
         return
       }

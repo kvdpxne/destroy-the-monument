@@ -1,6 +1,8 @@
-package me.kvdpxne.dtm.game
+package me.kvdpxne.dtm.game.tasks
 
 import me.kvdpxne.dtm.configuration.GeneralConfiguration
+import me.kvdpxne.dtm.game.LocalGame
+import me.kvdpxne.dtm.scoreboard.ScoreboardManager
 import me.kvdpxne.dtm.scoreboard.Scoreboards
 import me.kvdpxne.dtm.shared.debug.Debug
 import me.kvdpxne.dtm.shared.player.localUser
@@ -79,7 +81,7 @@ internal class GameCountdownTask internal constructor(
   ) {
     this.game.prepareMessage(key)
       .format(
-        Formatter.begin(1)
+        Formatter.Companion.begin(1)
           .with("REMAINING_TIME", this.remainingSeconds)
       )
       .useChat()

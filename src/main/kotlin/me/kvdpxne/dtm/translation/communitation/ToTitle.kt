@@ -8,7 +8,7 @@ import me.kvdpxne.dtm.translation.message.Message
 import me.kvdpxne.dtm.translation.message.MultipleMessages
 import me.kvdpxne.dtm.translation.message.SingleMessage
 import me.kvdpxne.dtm.translation.receiver.Receiver
-import me.kvdpxne.dtm.user.LocalUserPerformer
+import me.kvdpxne.dtm.user.performer.LocalUserPerformer
 
 open class ToTitle internal constructor(
   // @formatter:off

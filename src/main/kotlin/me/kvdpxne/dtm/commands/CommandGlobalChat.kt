@@ -8,7 +8,7 @@ import me.kvdpxne.dtm.command.ParameterValidators
 import me.kvdpxne.dtm.configuration.GeneralConfiguration
 import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.translation.message.EnumTranslationKey
-import me.kvdpxne.dtm.user.LocalUserPerformer
+import me.kvdpxne.dtm.user.performer.LocalUserPerformer
 
 /**
  * @since 0.1.0

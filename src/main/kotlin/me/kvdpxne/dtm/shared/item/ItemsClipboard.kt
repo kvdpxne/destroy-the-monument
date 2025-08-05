@@ -48,19 +48,6 @@ object ItemsClipboard {
     .name("&e&lWybierz drużyne")
     .build()
 
-  val ITEM_TEAM_SELECT_RANDOM = Material.OBSIDIAN.toBuilder()
-    .name("&6Wybierz losową drużyne")
-    .lore(
-      "&7Zostaniesz dodany do drużyny,",
-      "&7w której jest mniej graczy.",
-      "",
-      "&7Jeżeli wszystkie drużyny mają",
-      "&7taką samą liczbę graczy to",
-      "&7zostaniesz dodany do losowej",
-      "&7drużyny."
-    )
-    .build()
-
 
   val ITEM_PROFESSION_SELECT = Material.IRON_AXE.toBuilder()
     .name("&e&lWybierz profesje")

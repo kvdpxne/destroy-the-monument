@@ -1,4 +1,4 @@
-package me.kvdpxne.dtm.user
+package me.kvdpxne.dtm.user.statistics
 
 import me.kvdpxne.dtm.data.state.MutableState
 import me.kvdpxne.dtm.shared.Identifiable

@@ -4,7 +4,7 @@ import java.io.File
 import java.lang.reflect.Field
 import java.lang.reflect.Method
 import me.kvdpxne.dtm.shared.reflection.Reflection
-import me.kvdpxne.notchity.VersionCreator
+import me.kvdpxne.notchity.MinecraftVersionCreator
 import org.bukkit.Bukkit
 import org.bukkit.World
 import org.bukkit.World.Environment
@@ -17,7 +17,7 @@ object WorldLoaderHelper {
     world.fullTime = 6000L
 
     // org.bukkit.craftbukkit.v1_7_R4.CraftWorld
-    if (VersionCreator.getBukkitVersion().isOlderThanOrEqual(10710)) {
+    if (MinecraftVersionCreator.getMinecraftVersion().isOlderThanOrEqual(10710)) {
       val craftWorldClass: Class<*> = Reflection.getCraftBukkitClass("CraftWorld")
       val craftWorld: Any = craftWorldClass.cast(world)
       val getHandleField: Method = craftWorldClass.getMethod("getHandle")

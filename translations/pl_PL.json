@@ -1,57 +1,22 @@
 {
-  "profession": {
-    "archer": "Łucznik",
-    "assassin": "Asasyn",
-    "defender": "Obrońca",
-    "engineer": "Technik",
-    "knight": "Rycerz",
-    "medic": "Medyk",
-    "pyro": "Pyro",
-    "scout": "Zwiadowca",
-    "specialist": "Specjalista",
-
-    "state": {
-      "available": "&6&lDostępna",
-      "selected": "&a&lWybrana",
-      "unavailable": "&c&lNiedostępna"
-    },
-
-    "select": {
-      "selected": [
-        "&7Przepraszamy ale nie możesz zmienić swojej profesji (&6{CURRENT_PROFESSION_NAME}&7) na",
-        "&7na profesje o nazwie &6{PROFESSION_NAME} &7ponieważ jest",
-        "&7ona aktualnie twoją wybraną profesją."
-      ],
-      "success": "&7Profesja o nazwie &6{PROFESSION_NAME} &7została &apomyślnie &7ustawiona jako domyślna.",
-      "unavailable": "&7Przepraszamy ale profesja o nazwie &6{PROFESSION_NAME} &7jest aktualnie &cniedostępna&7."
-    },
-
-    "change": {
-      "after": {
-        "death": "&7Profesja, która wybrałeś zostanie zmieniona po twojej śmierci."
-      }
-    }
-  },
-
-
   "arena": {
     "map": {
       "block": {
         "breaking": {
-          "spawn": "&cNie możesz niszczyć bloków na spawnie.",
           "monument": {
             "self": "&cNie możesz zniszczyć monumentu swojej drużyny."
-          }
-        },
-        "placing": {
-          "limit": "&cOsiągnąłeś możliwy limit budowania na tej mapie.",
-          "spawn": "&cNie możesz stawiać bloków na spawnie."
+          },
+          "spawn": "&cNie możesz niszczyć bloków na spawnie."
         },
         "no": {
           "select": [
             "&7Nie zaznaczono żadnego bloku monumentu.",
             "&7Użyj &6/dtm wand &7aby móc zaznaczyć blok monumentu."
           ]
+        },
+        "placing": {
+          "limit": "&cOsiągnąłeś możliwy limit budowania na tej mapie.",
+          "spawn": "&cNie możesz stawiać bloków na spawnie."
         },
         "select": "&7Zaznaczony blok został dodany do tymczasowej pamięci użytkownika."
       },
@@ -81,21 +46,58 @@
       "found": "&7Arena o nazwie &6{ARENA_NAME} &7nie istnieje."
     }
   },
-  "must": {
-    "in": {
-      "game": "&7Nie jesteś w grze."
+  "container": {
+    "games": {
+      "item": {
+        "name": "&7> &fPoczekalnia {INDEX} &7- &6{MEMBER_COUNT}/{MEMBER_LIMIT}",
+        "lore": [
+          "&7Dołącz do poczekalni, gry aby móc",
+          "&7wchodzić w interakcje z grą.",
+          "",
+          "&7Aktualna mapa: &6{CURRENT_ARENA}",
+          "&7Uid: &6{GAME_UID}"
+        ]
+      },
+      "title": "Wybierz poczekalnie gry"
     },
-    "have": {
-      "ability": "&7Twoja profesja nie posiada umiejętności specjalnej."
+    "professions": {
+      "title": "Wybierz swoją profesje"
+    },
+    "teams": {
+      "item": {
+        "basic": {
+          "name": "&l{TEAM_NAME} &8| &6{TEAM_SIZE}&7/&6{TEAM_SIZE_LIMIT}",
+          "lore": [
+            "&7Zostaniesz dodany bezpośrednio do",
+            "&7drużyny &l{TEAM_NAME}&7."
+          ]
+        },
+        "empty": {
+          "name": "&c&lBrak przypisany drużyn do gry",
+          "lore": [
+            "&7Nie możesz wybrać drużyny w tej",
+            "&7poczekalni gry, ponieważ",
+            "&7administrator nie przypisał do tej gry",
+            "&7żadnej drużyny."
+          ]
+        },
+        "random": {
+          "name": "&6Wybierz losową drużynę",
+          "lore": [
+            "&7Zostaniesz dodany do drużyny,",
+            "&7w której jest mniej graczy.",
+            "",
+            "&7Jeżeli wszystkie drużyny mają",
+            "&7taką samą liczbę graczy to",
+            "&7zostaniesz dodany do losowej",
+            "&7drużyny."
+          ]
+        }
+      },
+      "title": "Wybierz drużynę"
     }
   },
   "command": {
-    "in": {
-      "game": "Ta komenda może być użyta tylko w grze."
-    },
-    "insufficient": {
-      "privileges": "&cNie posiadasz wystarczających uprawnień &8(&f{PRIVILEGE_NAME}&8) &caby wykonać tą komendę."
-    },
     "ability": {
       "deplete": "&7Twoja umiejętność została anulowana.",
       "renew": "&7Twoja umiejętność została odnowiona."
@@ -104,10 +106,9 @@
       "add": "&7Arena o nazwie &6{ARENA_NAME} &7została dodana do puli aren w grze o nazwie &6{GAME_NAME}&7.",
       "create": "&7Utworzono nową arenę o nazwie &6{ARENA_NAME}&7.",
       "list": {
-        "title": "&7Lista wszystkich dostępnych aren:",
-        "format": "&7{ARENA_NAME}"
+        "format": "&7{ARENA_NAME}",
+        "title": "&7Lista wszystkich dostępnych aren:"
       },
-      "remove": "&7Arena o nazwie &6{ARENA_NAME} &7została usunięta.",
       "map": {
         "monument": {
           "add": "&7Dodano nowy blok monumentu dla drużyny {TEAM_NAME} &7na arenie o nazwie &6{ARENA_NAME}&7.",
@@ -117,42 +118,47 @@
           "set": "&7Ustawiono punkt odrodzenia dla drużyny {TEAM_NAME} &7na arenie o nazwie &6{ARENA_NAME}&7."
         },
         "set": "&7Przypisano mapę o nazwię &6{WORLD_NAME} &7do areny o nazwię &6{ARENA_NAME}&7."
-      }
+      },
+      "remove": "&7Arena o nazwie &6{ARENA_NAME} &7została usunięta."
     },
     "coins": {
       "add": {
-        "self": "&7Do twojego portfela zostały dodane monety o wartości &6{VALUE}&7.",
-        "others": "&7Do portfela użytkownika &6{USER_NAME} &7zostały dodane monety o wartości &6{VALUE}&7."
+        "others": "&7Do portfela użytkownika &6{USER_NAME} &7zostały dodane monety o wartości &6{VALUE}&7.",
+        "self": "&7Do twojego portfela zostały dodane monety o wartości &6{VALUE}&7."
       },
       "multiplier": {
         "set": {
-          "self": "&7Twój mnożnik monet został zmieniony z &6{OLD_VALUE} &7na &6{NEW_VALUE}&7.",
-          "others": "&7Mnożnik monet użytkownika &6{USER_NAME} &7został zmieniony z &6{OLD_VALUE} &7na &6{NEW_VALUE}&7."
+          "others": "&7Mnożnik monet użytkownika &6{USER_NAME} &7został zmieniony z &6{OLD_VALUE} &7na &6{NEW_VALUE}&7.",
+          "self": "&7Twój mnożnik monet został zmieniony z &6{OLD_VALUE} &7na &6{NEW_VALUE}&7."
         },
         "show": {
-          "self": "&7Twój mnożnik: &6{VALUE}&7.",
-          "others": "&7Mnożnik użytkownika &6{USER_NAME}&7: &6{VALUE}&7."
+          "others": "&7Mnożnik użytkownika &6{USER_NAME}&7: &6{VALUE}&7.",
+          "self": "&7Twój mnożnik: &6{VALUE}&7."
         }
       },
       "set": {
-        "self": "&7Zmieniono wartość portfela z &6{OLD_VALUE} &7na &6{NEW_VALUE}&7.",
-        "others": "&7Zmieniono wartość portfela z &6{OLD_VALUE} &7na &6{NEW_VALUE} &7dla użytkownika &6{USER_NAME}&7."
+        "others": "&7Zmieniono wartość portfela z &6{OLD_VALUE} &7na &6{NEW_VALUE} &7dla użytkownika &6{USER_NAME}&7.",
+        "self": "&7Zmieniono wartość portfela z &6{OLD_VALUE} &7na &6{NEW_VALUE}&7."
       },
       "show": {
-        "self": "&7Twoje monety: &6{VALUE}&7.",
-        "others": "&7Monety użytkownika &6{USER_NAME}&7: &6{VALUE}&7."
+        "others": "&7Monety użytkownika &6{USER_NAME}&7: &6{VALUE}&7.",
+        "self": "&7Twoje monety: &6{VALUE}&7."
       },
       "subtract": {
-        "self": "&7Z twojego portfela zostały odjęte monety o wartości &6{VALUE}&7.",
-        "others": "&7Z portfela użytkownika &6{USER_NAME} &7zostały odjęte monety o wartości &6{VALUE}&7."
+        "others": "&7Z portfela użytkownika &6{USER_NAME} &7zostały odjęte monety o wartości &6{VALUE}&7.",
+        "self": "&7Z twojego portfela zostały odjęte monety o wartości &6{VALUE}&7."
       }
     },
     "game": {
       "create": "&7Utworzono nową gre o nazwie &6{GAME_NAME}&7.",
       "remove": "&7Gra o nazwie &6{GAME_NAME} &7została usunięta."
     },
-    "start": "&7Pomyślnie wymuszono start gry o nazwię &6{GAME_NAME}&7.",
-    "stop": "&7Pomyślnie wymuszono zatrzymanie gry o nazwię &6{GAME_NAME}&7.",
+    "in": {
+      "game": "Ta komenda może być użyta tylko w grze."
+    },
+    "insufficient": {
+      "privileges": "&cNie posiadasz wystarczających uprawnień &8(&f{PRIVILEGE_NAME}&8) &caby wykonać tą komendę."
+    },
     "position": [
       "&7Twoja obecna pozycja to:",
       "&7Świat: &6{WORLD_NAME}",
@@ -162,62 +168,126 @@
       "&7Pitch: &6{PITCH}",
       "&7Yaw: &6{YAW}"
     ],
+    "start": "&7Pomyślnie wymuszono start gry o nazwię &6{GAME_NAME}&7.",
+    "stop": "&7Pomyślnie wymuszono zatrzymanie gry o nazwię &6{GAME_NAME}&7.",
     "team": {
       "add": "&7Drużyna o nazwie &6{TEAM_NAME} &7została dodana do gry o nazwie &6{GAME_NAME}&7.",
       "create": "&7Utworzono nową drużynę o nazwie &6{TEAM_NAME}&7.",
       "remove": "&7Drużyna o nazwie &6{TEAM_NAME} &7została usunięta z gry o nazwie &6{GAME_NAME}&7."
     },
     "teleport": {
-      "to": "&7Zostałeś przeniesiony na świat o nazwie &6{WORLD_NAME}&7.",
-      "back": "&7Zostałeś przeniesiony na świat, na którym byłeś wcześniej."
+      "back": "&7Zostałeś przeniesiony na świat, na którym byłeś wcześniej.",
+      "to": "&7Zostałeś przeniesiony na świat o nazwie &6{WORLD_NAME}&7."
     },
     "wand": "&7Do twojego ekwipunku został dodany magiczny patyk."
   },
   "game": {
-    "no": {
-      "found": "&7Gra o nazwie &6{GAME_NAME} &7nie istnieje."
+    "lobby": {
+      "join": "&fDołączyłeś do poczekalni gry &a{INDEX}&f."
     },
     "end": [
       "&7Gra została zakończona.",
       "&7Za &6{REMAINING_TIME} &7sekund zostaniesz przeniesiony do poczekalni."
     ],
+    "no": {
+      "found": "&7Gra o nazwie &6{GAME_NAME} &7nie istnieje."
+    },
     "starting": {
       "countdown": {
-        "standard": "&7Pozostało &6{REMAINING_TIME} &7sekund do startu gry.",
-        "faster": "&7Gra wystartuje za &6{REMAINING_TIME} &7sekund.",
-        "finish": "&7Gra właśnie wystartowała, powodzenia &6:)",
         "cancelled": [
           "&7Odliczanie do wystartowania gry zostało anulowane.",
           "&7Powód: &cNiewystarczająca liczba graczy."
-        ]
+        ],
+        "faster": "&7Gra wystartuje za &6{REMAINING_TIME} &7sekund.",
+        "finish": "&7Gra właśnie wystartowała, powodzenia &6:)",
+        "standard": "&7Pozostało &6{REMAINING_TIME} &7sekund do startu gry."
       }
     },
     "voting": {
-      "hint": "&7Zagłosuj na mapę wpisując komendę &e/vote [mapa]",
-      "start": "&6Głosowanie rozpoczęte!",
+      "cast": "&aPomyślnie oddano głos na mapę.",
       "choices": {
         "arena": "&e&l{INDEX}. &7{ARENA_NAME}"
       },
-      "cast": "&aPomyślnie oddano głos na mapę."
+      "hint": "&7Zagłosuj na mapę wpisując komendę &e/vote [mapa]",
+      "start": "&6Głosowanie rozpoczęte!"
     }
   },
-  "gui": {
-    "select": {
-      "game": "Wybierz grę",
-      "profession": "Wybierz swoją profesje",
-      "team": "Wybierz drużynę"
-    },
-    "arena": [
-      "",
-      "&7Ilość monumentów: &6{MONUMENT_COUNT}",
-      "&7Odległość między drużynami: &e{ARENA_SIZE}",
-      "",
-      "&7&lZagłosuj na swoją ulubioną mapę!"
-    ]
-  },
   "team": {
-    "no": {
-      "found": "&7Drużyna o nazwie &6{TEAM_NAME} &7nie istnieje."
+    "relocate": {
+      "failed": "&fNie możesz dołączyć do drużyny, w której już jesteś.",
+      "broadcast": "&fGracz &6{USER_NAME} &fzmienił swoją drużynę na drużynę &l{TEAM_NAME}&f.",
+      "self": "&fZmieniłeś swoją drużynę na drużynę &l{TEAM_NAME}&f."
+    },
+    "join": {
+      "failed": [
+        "&fNie możesz dołączyć do drużyny &l{TEAM_NAME}&f.",
+        "&fPrawdopodobnie jest to spowodowane przez błąd, który nie powinien",
+        "&fnigdy wystąpić."
+      ],
+      "broadcast": "&fGracz &6{USER_NAME} &fdołączył do drużyny &l{TEAM_NAME}&f.",
+      "self": "&fDołączyłeś do drużyny &l{TEAM_NAME}&f."
+    },
+    "blue": {
+      "nominative": "Niebiescy",
+      "genitive": "Niebieskich"
+    },
+    "red": {
+      "nominative": "Czerwoni",
+      "genitive": "Czerwonych"
+    }
+  },
+  "item": {
+    "leave": {
+      "game": {
+        "name": "&c&lOpuść poczekalnie gry",
+        "lore": [
+          "&7Kliknij, aby opuścić poczekalnie gry,",
+          "&7do której, jesteś aktualnie przypisany."
+        ]
+      },
+      "team": {
+        "name": "&c&lOpuść drużynę",
+        "lore": [
+          "&7Kliknij, aby opuścić drużynę, do której",
+          "&7jesteś aktualnie przypisany."
+        ]
+      }
+    }
+  },
+  "profession": {
+    "state": {
+      "available": "&6&lDostępna",
+      "selected": "&a&lWybrana",
+      "unavailable": "&c&lNiedostępna"
+    },
+    "select": {
+      "selected": [
+        "&7Przepraszamy ale nie możesz zmienić swojej profesji (&6{CURRENT_PROFESSION_NAME}&7) na",
+        "&7na profesje o nazwie &6{PROFESSION_NAME} &7ponieważ jest",
+        "&7ona aktualnie twoją wybraną profesją."
+      ],
+      "success": "&7Profesja o nazwie &6{PROFESSION_NAME} &7została &apomyślnie &7ustawiona jako domyślna.",
+      "unavailable": "&7Przepraszamy ale profesja o nazwie &6{PROFESSION_NAME} &7jest aktualnie &cniedostępna&7."
+    },
+    "archer": "Łucznik",
+    "assassin": "Asasyn",
+    "defender": "Obrońca",
+    "engineer": "Technik",
+    "knight": "Rycerz",
+    "medic": "Medyk",
+    "pyro": "Pyro",
+    "scout": "Zwiadowca",
+    "specialist": "Specjalista"
+  },
+  "scoreboard": {
+
+  },
+  "must": {
+    "have": {
+      "ability": "&7Twoja profesja nie posiada umiejętności specjalnej."
+    },
+    "in": {
+      "game": "&7Nie jesteś w grze."
     }
   },
   "nonexistent": {

@@ -12,7 +12,7 @@ import me.kvdpxne.dtm.shared.player.localUser
 import me.kvdpxne.dtm.shared.player.resetExperienceBar
 import me.kvdpxne.dtm.team.Teammate
 import me.kvdpxne.dtm.user.LocalUser
-import me.kvdpxne.notchity.VersionCreator
+import me.kvdpxne.notchity.MinecraftVersionCreator
 import org.bukkit.entity.Player
 
 /**
@@ -26,7 +26,7 @@ object PacketPlayInBlockDigListener : PacketAdapter(
   override fun onPacketReceiving(event: PacketEvent) {
     val packet: PacketContainer = event.packet
 
-    if (VersionCreator.getBukkitVersion().isOlderThanOrEqual(10710)) {
+    if (MinecraftVersionCreator.getMinecraftVersion().isOlderThanOrEqual(1_007_010)) {
       val type: Int = packet.integers.readSafely(4)
         ?: return
 

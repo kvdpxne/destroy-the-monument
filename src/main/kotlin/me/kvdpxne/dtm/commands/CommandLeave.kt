@@ -7,7 +7,7 @@ import me.kvdpxne.dtm.shared.player.equipItemsOfGameSelection
 import me.kvdpxne.dtm.shared.player.moveToLobby
 import me.kvdpxne.dtm.shared.player.reset
 import me.kvdpxne.dtm.translation.message.EnumTranslationKey
-import me.kvdpxne.dtm.user.LocalUserPerformer
+import me.kvdpxne.dtm.user.performer.LocalUserPerformer
 
 /**
  * @since 0.1.0

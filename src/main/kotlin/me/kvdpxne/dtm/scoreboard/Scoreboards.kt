@@ -17,36 +17,6 @@ object Scoreboards {
 
   fun fsf(
     player: Player,
-    signed: Int,
-    online: Int,
-    coins: Long
-  ) {
-    FastBoard(player).let {
-      it.updateTitle(FORMATTED_TITLE)
-      it.updateLines(
-        listOf(
-          "&7Start gry: &e&l00:30",
-          "",
-          "&7Max: &6&lbez limitu",
-          "&7Min: &6&l2",
-          "",
-          "&7Zapisani: &6&l${signed}",
-          "&7Online: &6&l${online}",
-          "",
-          "&eOczekiwanie na",
-          "&eminimalną liczbę",
-          "&egraczy.",
-          "",
-          "",
-          "&7Monety:",
-          "&6&l$coins"
-        ).colorize
-      )
-    }
-  }
-
-  fun fsf(
-    player: Player,
     time: Int,
     fsf: Collection<Arena>,
     signed: Int,
@@ -70,7 +40,7 @@ object Scoreboards {
       )
 
       for ((index: Int, arena: Arena) in fsf.withIndex()) {
-        it.updateLine(9 + index, "&7$index. &e${arena.name}".colorize)
+        it.updateLine(9 + index, "&7${index + 1}. &e${arena.name}".colorize)
       }
 
       it.updateLine(13, "&7Monety:".colorize)
@@ -78,7 +48,6 @@ object Scoreboards {
     }
   }
 }
-
 
 fun createServerScoreboard(): Scoreboard {
   return Bukkit.getScoreboardManager().newScoreboard

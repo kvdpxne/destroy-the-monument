@@ -7,6 +7,8 @@ import me.kvdpxne.dtm.shared.Identifiable
 import me.kvdpxne.dtm.shared.Nameable
 import me.kvdpxne.dtm.shared.TeamUuid
 import me.kvdpxne.dtm.team.Team
+import org.jetbrains.annotations.Range
+import org.jetbrains.annotations.UnmodifiableView
 
 /**
  * Represents a game session within the plugin, defining the key components and
@@ -16,44 +18,35 @@ import me.kvdpxne.dtm.team.Team
  *
  * @since 0.1.0
  */
-interface Game<T : Team> : Identifiable<GameUuid>, Nameable {
+interface Game<T : Team> : Identifiable<GameUuid>, Nameable, LocalGameProvider {
 
   /**
    * The collection of teams participating in the game.
    *
    * @since 0.1.0
    */
-  val teams: Collection<T>
+  val teams: @UnmodifiableView Collection<T>
 
   /**
    * The collection of arenas available in the game.
    *
    * @since 0.1.0
    */
-  val arenas: Collection<Arena>
+  val arenas: @UnmodifiableView Collection<Arena>
 
   /**
    * The number of teams in the game.
    *
    * @since 0.1.0
    */
-  val numberOfTeams: Int
+  val numberOfTeams: @Range(from = 0L, to = Int.MAX_VALUE.toLong()) Int
 
   /**
    * The number of arenas in the game.
    *
    * @since 0.1.0
    */
-  val numberOfArenas: Int
-
-  /**
-   * Indicates if the game is local. Default value is `false`.
-   *
-   * @return `true` if the game is local; `false` otherwise.
-   * @since 0.1.0
-   */
-  val isLocal: Boolean
-    get() = false
+  val numberOfArenas: @Range(from = 0L, to = Int.MAX_VALUE.toLong()) Int
 
   /**
    * Checks if a specified team is part of the game.
@@ -90,12 +83,4 @@ interface Game<T : Team> : Identifiable<GameUuid>, Nameable {
    * @since 0.1.0
    */
   fun findArenaByIdentifier(identifier: ArenaUuid): Arena?
-
-  /**
-   * Converts the current game instance to a [LocalGame].
-   *
-   * @return A [LocalGame] representation of this game.
-   * @since 0.1.0
-   */
-  fun toLocalGame(): LocalGame
 }

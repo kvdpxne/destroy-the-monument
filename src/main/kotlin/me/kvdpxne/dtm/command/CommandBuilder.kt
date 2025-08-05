@@ -72,8 +72,15 @@ class CommandBuilder<T : Performer> private constructor(
 
   fun children(vararg child: Command<*>): CommandBuilder<T> {
     child.forEach {
+      @Suppress("UNCHECKED_CAST")
       this.children += it as Command<Performer>
     }
+    return this
+  }
+
+  fun children(child: Collection<Command<*>>): CommandBuilder<T> {
+    @Suppress("UNCHECKED_CAST")
+    this.children.addAll(child as Collection<Command<Performer>>)
     return this
   }
 

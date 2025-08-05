@@ -10,12 +10,13 @@ import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.profession.ProfessionManager
 import me.kvdpxne.dtm.profession.translateName
 import me.kvdpxne.dtm.shared.item.ItemBuilder
+import me.kvdpxne.dtm.shared.item.Items
 import me.kvdpxne.dtm.shared.item.displayName
 import me.kvdpxne.dtm.shared.item.toBuilder
 import me.kvdpxne.dtm.translation.formatter.Formatter
 import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 import me.kvdpxne.dtm.user.LocalUser
-import me.kvdpxne.dtm.user.LocalUserPerformer
+import me.kvdpxne.dtm.user.performer.LocalUserPerformer
 
 fun createProfessionsContainer(
   user: LocalUser
@@ -28,10 +29,9 @@ fun createProfessionsContainer(
       .owner(user.identifier)
       .type(ContainerTypes.GENERIC_9X2)
       .size(Rows.TWO)
-      .displayName(user.locale, EnumTranslationKey.GUI_SELECT_PROFESSION)
+      .displayName(user.locale, EnumTranslationKey.CONTAINER_PROFESSIONS_TITLE)
 
-  //
-  val itemBuilder: ItemBuilder = ItemBuilder.begin("STAINED_CLAY")
+  val itemBuilder: ItemBuilder = Items.stainedClayItem
 
   // An item reprising the currently selected profession.
   val selected: Any = itemBuilder.copy()

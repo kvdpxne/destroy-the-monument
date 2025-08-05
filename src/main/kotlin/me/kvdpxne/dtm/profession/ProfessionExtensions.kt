@@ -3,11 +3,12 @@ package me.kvdpxne.dtm.profession
 import java.util.Locale
 import me.kvdpxne.dtm.translation.TranslationService
 import me.kvdpxne.dtm.translation.BasicTranslationKey
+import me.kvdpxne.dtm.translation.TranslationKey
 
 /**
  * @since 0.1.0
  */
-val Profession.translatableMessageKey: BasicTranslationKey
+val Profession.translatableMessageKey: TranslationKey
   get() = BasicTranslationKey.of("PROFESSION_${this.name}")
 
 

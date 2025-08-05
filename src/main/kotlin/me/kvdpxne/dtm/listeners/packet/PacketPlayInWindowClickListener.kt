@@ -11,7 +11,7 @@ import me.kvdpxne.dtm.container.InternalContainerManager
 import me.kvdpxne.dtm.container.SlotHandler
 import me.kvdpxne.dtm.container.SlotTypes
 import me.kvdpxne.dtm.shared.player.localUser
-import me.kvdpxne.dtm.user.LocalUserPerformer
+import me.kvdpxne.dtm.user.performer.LocalUserPerformer
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 

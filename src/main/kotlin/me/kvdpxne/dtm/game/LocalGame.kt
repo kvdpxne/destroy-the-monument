@@ -26,7 +26,7 @@ interface LocalGame : Game<LocalTeam>, Communicative, TranslatableCommunicative 
    *
    * @since 0.1.0
    */
-  val hostages: List<LocalUser>
+  val hostages: Collection<LocalUser>
 
   /**
    * The smallest team in the game.
@@ -140,13 +140,6 @@ interface LocalGame : Game<LocalTeam>, Communicative, TranslatableCommunicative 
    * @since 0.1.0
    */
   val isTeamsSameSize: Boolean
-
-  /**
-   * An identifier for the timer task associated with the game.
-   *
-   * @since 0.1.0
-   */
-  var timerTaskIdentifier: Int
 
   /**
    * Sets the game state as initialized.

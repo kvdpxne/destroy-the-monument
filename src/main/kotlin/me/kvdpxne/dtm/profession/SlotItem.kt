@@ -1,6 +1,5 @@
-package me.kvdpxne.dtm.gui
+package me.kvdpxne.dtm.profession
 
-import me.kvdpxne.dtm.shared.item.toBuilder
 import me.kvdpxne.dtm.shared.material.toBuilder
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack

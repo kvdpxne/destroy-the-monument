@@ -26,6 +26,17 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause
 import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
 
+/**
+ * Resets the player's stats and status to default values.
+ *
+ * This includes clearing inventory, removing potion effects, restoring health
+ * and hunger, resetting experience, and restoring default movement and game
+ * mode settings.
+ *
+ * Useful for respawning or starting a new game session.
+ *
+ * @since 0.1.0
+ */
 fun Player.reset() {
   this.inventory.also {
     it.clear()
@@ -66,6 +77,11 @@ fun Player.reset() {
 }
 
 /**
+ * Moves the player to the specified location using a teleport.
+ * The cause of teleportation can be customized, but defaults to PLUGIN.
+ *
+ * @param location The destination to which the player will be moved.
+ * @param cause The reason for the teleport, used for logging and event handling.
  * @since 0.1.0
  */
 fun Player.moveTo(
@@ -76,6 +92,11 @@ fun Player.moveTo(
 }
 
 /**
+ * Moves the player to the lobby world's spawn point.
+ *
+ * If the lobby world is not available, it attempts to use the first available
+ * world. Throws an error if no world is loaded.
+ *
  * @since 0.1.0
  */
 fun Player.moveToLobby() {
@@ -132,7 +153,7 @@ fun Player.equipItemsOfTeamSelection() {
   this.setItem(8, ItemsClipboard.ITEM_GAME_LEAVE)
 }
 
-fun Player.equipItemsOf() {
+fun Player.addItemToLeaveTeam() {
   this.setItem(8, ItemsClipboard.ITEM_TEAM_LEAVE)
 }
 
@@ -285,6 +306,12 @@ fun Player.sendM(
 
   this.sendPacket(packetPlayOutTitle)
 }
+
+/**
+ * @since 0.1.0
+ */
+val Player.localUserOrNull: LocalUser?
+  get() = LocalUserManager.findUserByIdentifierOrNull(this.uniqueId)
 
 /**
  * Retrieves the [LocalUser] associated with this [Player].

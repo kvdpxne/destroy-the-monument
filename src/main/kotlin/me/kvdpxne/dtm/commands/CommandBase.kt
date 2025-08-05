@@ -1,5 +1,6 @@
 package me.kvdpxne.dtm.commands
 
+import me.kvdpxne.dtm.Constants
 import me.kvdpxne.dtm.command.Command
 import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.command.Performer
@@ -28,22 +29,29 @@ fun createBaseCommand(): Command<Performer> {
   return CommandBuilder.begin<Performer>("dtm")
     .hub()
     .children(
-      createAbilityCommand(),
-      createArenaCommand(),
-      createCoinsCommand(),
-      createDebugCommand(),
-      createGameCommand(),
-      createHelpCommand(),
-      createJoinCommand(),
-      createKitCommand(),
-      createLeaveCommand(),
-      createPositionCommand(),
-      createTeamCommand(),
-      createTeleportCommand(),
-      createTeleportBackCommand(),
-      createUserCommand(),
-      createVersionCommand(),
-      createWandCommand()
+      arrayListOf(
+        createArenaCommand(),
+        createCoinsCommand(),
+        createDebugCommand(),
+        createGameCommand(),
+        createHelpCommand(),
+        createJoinCommand(),
+        createKitCommand(),
+        createLeaveCommand(),
+        createPositionCommand(),
+        createTeamCommand(),
+        createTeleportCommand(),
+        createTeleportBackCommand(),
+        createUserCommand(),
+        createVersionCommand(),
+        createWandCommand()
+      ).let { list: ArrayList<Command<*>> ->
+        @Suppress("KotlinConstantConditions")
+        if (Constants.IS_DEVELOPMENT) {
+          list += createTestCommand()
+        }
+        list
+      }
     )
     .build()
 }

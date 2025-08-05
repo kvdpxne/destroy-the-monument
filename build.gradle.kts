@@ -38,6 +38,8 @@ dependencies {
     shadow(libraries.spigot.legacy)
   }
 
+  implementation("org.jetbrains:annotations:26.0.2")
+
   implementation(libraries.bundles.exposed)
   implementation(libraries.kotlinx.serialization.json)
   implementation(libraries.kotlinx.serialization.kaml)
@@ -50,7 +52,7 @@ dependencies {
   implementation(libraries.notchity)
 
   shadow(libraries.protocollib.current)
-  shadow(libraries.protocollib.legacy)
+//  shadow(libraries.protocollib.legacy)
 
   testImplementation(kotlin("test"))
 }

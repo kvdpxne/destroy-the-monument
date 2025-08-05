@@ -1,5 +1,6 @@
 package me.kvdpxne.dtm.game
 
+import java.util.Collections
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 import me.kvdpxne.dtm.arena.Arena
@@ -9,13 +10,20 @@ import me.kvdpxne.dtm.shared.GameUuid
 import me.kvdpxne.dtm.shared.debug.Debug
 import me.kvdpxne.dtm.team.Team
 import me.kvdpxne.dtm.user.LocalUser
+import org.jetbrains.annotations.UnmodifiableView
 
 /**
+ * Manages all active games in the system.
+ * Handles game creation, lookup, and cleanup operations.
+ *
  * @since 0.1.0
  */
 object GameManager {
 
   /**
+   * Internal storage for games using their unique identifiers.
+   * Initialized on first access with capacity based on configuration.
+   *
    * @since 0.1.0
    */
   private val gamesByIdentifierDelegate: Lazy<ConcurrentMap<GameUuid, Game<Team>>> = lazy {
@@ -23,6 +31,9 @@ object GameManager {
   }
 
   /**
+   * Internal storage for games using their names (case-insensitive).
+   * Initialized on first access with capacity based on configuration.
+   *
    * @since 0.1.0
    */
   private val gamesByNameDelegate: Lazy<ConcurrentMap<String, Game<Team>>> = lazy {
@@ -30,11 +41,15 @@ object GameManager {
   }
 
   /**
+   * Direct access to games by unique identifier.
+   *
    * @since 0.1.0
    */
   private val gamesByIdentifier: ConcurrentMap<GameUuid, Game<Team>> by this.gamesByIdentifierDelegate
 
   /**
+   * Direct access to games by name (lowercase for case-insensitive matching).
+   *
    * @since 0.1.0
    */
   private val gamesByName: ConcurrentMap<String, Game<Team>> by this.gamesByNameDelegate
@@ -49,18 +64,25 @@ object GameManager {
   }
 
   /**
+   * Provides read-only access to all active games.
+   * Returns empty collection if manager isn't initialized.
+   *
+   * @return Unmodifiable collection of all games
    * @since 0.1.0
    */
-  val games: List<Game<Team>>
+  val games: @UnmodifiableView Collection<Game<Team>>
     get() {
       if (this.gamesByIdentifierDelegate.isInitialized()) {
-        return this.gamesByIdentifier.values.toList()
+        return Collections.unmodifiableCollection(this.gamesByIdentifier.values)
       }
-
-      return emptyList()
+      return Collections.emptyList()
     }
 
   /**
+   * Gets the current number of active games.
+   * Returns 0 if manager isn't initialized.
+   *
+   * @return Number of active games
    * @since 0.1.0
    */
   val size: Int
@@ -73,6 +95,9 @@ object GameManager {
     }
 
   /**
+   * Checks if the game manager is ready for use.
+   *
+   * @return true if both game storage systems are initialized
    * @since 0.1.0
    */
   val initialized: Boolean
@@ -80,8 +105,10 @@ object GameManager {
       && this.gamesByNameDelegate.isInitialized()
 
   /**
-   * @param identifier
+   * Finds a game by its unique identifier without throwing errors.
    *
+   * @param identifier Unique game ID to search for
+   * @return Game if found, null otherwise
    * @since 0.1.0
    */
   fun findGameByIdentifierOrNull(
@@ -95,10 +122,11 @@ object GameManager {
   }
 
   /**
-   * Tries to find a [Game] by [Game.identifier].
+   * Finds a game by its unique identifier.
    *
-   * @param identifier
-   * @throws GameNotFoundException
+   * @param identifier Unique game ID to search for
+   * @return Game if found
+   * @throws GameNotFoundException if game doesn't exist
    * @since 0.1.0
    */
   fun findGameByIdentifier(
@@ -109,6 +137,10 @@ object GameManager {
   }
 
   /**
+   * Finds a game by its name (case-insensitive) without throwing errors.
+   *
+   * @param name Game name to search for
+   * @return Game if found, null otherwise
    * @since 0.1.0
    */
   fun findGameByNameOrNull(
@@ -122,6 +154,11 @@ object GameManager {
   }
 
   /**
+   * Finds a game by its name (case-insensitive).
+   *
+   * @param name Game name to search for
+   * @return Game if found
+   * @throws GameNotFoundException if game doesn't exist
    * @since 0.1.0
    */
   fun findGameByName(
@@ -132,6 +169,10 @@ object GameManager {
   }
 
   /**
+   * Finds all games using a specific arena.
+   *
+   * @param identifier Arena ID to search for
+   * @return Collection of games using this arena (may be empty)
    * @since 0.1.0
    */
   fun findGameByArena(
@@ -155,7 +196,11 @@ object GameManager {
   }
 
   /**
+   * Finds which game a player is currently participating in.
    *
+   * @param user Player to search for
+   * @return Game if user is playing, null otherwise
+   * @since 0.1.0
    */
   fun findByUser(
     user: LocalUser
@@ -172,6 +217,13 @@ object GameManager {
     } as LocalGame?
   }
 
+  /**
+   * Adds an arena to an existing game.
+   *
+   * @param game Game to modify
+   * @param arena Arena to add
+   * @since 0.1.0
+   */
   fun addArenaToGame(
     game: Game<Team>,
     arena: Arena
@@ -188,6 +240,9 @@ object GameManager {
   }
 
   /**
+   * Clears all active games from memory.
+   * Does nothing if manager isn't initialized.
+   *
    * @since 0.1.0
    */
   fun removeGames() {

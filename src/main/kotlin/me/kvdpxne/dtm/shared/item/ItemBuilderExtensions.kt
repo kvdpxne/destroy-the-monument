@@ -6,6 +6,7 @@ import me.kvdpxne.dtm.translation.formatter.Formatter
 import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 import me.kvdpxne.dtm.translation.message.Message
 import me.kvdpxne.dtm.translation.BasicTranslationKey
+import me.kvdpxne.dtm.translation.TranslationKey
 import me.kvdpxne.dtm.translation.message.MultipleMessages
 import me.kvdpxne.dtm.translation.message.SingleMessage
 
@@ -17,7 +18,7 @@ import me.kvdpxne.dtm.translation.message.SingleMessage
  */
 fun ItemBuilder.displayName(
   locale: Locale,
-  key: BasicTranslationKey,
+  key: TranslationKey,
   formatter: (() -> Formatter)? = null
 ): ItemBuilder {
   var message: Message<*> = TranslationService
@@ -40,7 +41,7 @@ fun ItemBuilder.displayName(
  */
 fun ItemBuilder.lore(
   locale: Locale,
-  key: BasicTranslationKey,
+  key: TranslationKey,
   formatter: (() -> Formatter)? = null
 ): ItemBuilder {
   var message: Message<*> =
@@ -57,7 +58,7 @@ fun ItemBuilder.lore(
   }
 
   @Suppress("UNCHECKED_CAST")
-  return this.lore(*message.content as Array<String>)
+  return this.lore(*(message.content as Collection<String>).toTypedArray())
 }
 
 

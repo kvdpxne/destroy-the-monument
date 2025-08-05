@@ -13,7 +13,7 @@ import me.kvdpxne.dtm.translation.locale.Locales
 import me.kvdpxne.dtm.translation.TranslationService
 import me.kvdpxne.dtm.user.User
 import me.kvdpxne.dtm.user.UserImpl
-import me.kvdpxne.dtm.user.UserStatisticsImpl
+import me.kvdpxne.dtm.user.statistics.UserStatisticsImpl
 import me.kvdpxne.dtm.wallet.WalletImpl
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Op

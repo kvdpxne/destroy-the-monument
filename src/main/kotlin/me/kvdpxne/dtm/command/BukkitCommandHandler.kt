@@ -10,7 +10,7 @@ import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 import me.kvdpxne.dtm.translation.message.Message
 import me.kvdpxne.dtm.translation.message.MultipleMessages
 import me.kvdpxne.dtm.translation.message.SingleMessage
-import me.kvdpxne.dtm.user.LocalUserPerformer
+import me.kvdpxne.dtm.user.performer.LocalUserPerformer
 import org.bukkit.command.CommandSender
 import org.bukkit.command.defaults.BukkitCommand
 import org.bukkit.entity.Player

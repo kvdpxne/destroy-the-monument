@@ -1,7 +1,8 @@
-package me.kvdpxne.dtm.game
+package me.kvdpxne.dtm.game.tasks
 
 import fr.mrmicky.fastboard.FastBoard
 import kotlin.time.Duration.Companion.seconds
+import me.kvdpxne.dtm.game.LocalGame
 import me.kvdpxne.dtm.scoreboard.updateScoreboardTime
 import me.kvdpxne.dtm.shared.task.runSynchronousTask
 import org.bukkit.scheduler.BukkitRunnable

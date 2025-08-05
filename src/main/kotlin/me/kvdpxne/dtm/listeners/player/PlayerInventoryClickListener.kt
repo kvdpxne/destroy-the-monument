@@ -4,7 +4,6 @@ import me.kvdpxne.dtm.arena.Arena
 import me.kvdpxne.dtm.arena.ArenaManager
 import me.kvdpxne.dtm.game.GameManager
 import me.kvdpxne.dtm.game.LocalGame
-import me.kvdpxne.dtm.gui.GuiHolder
 import me.kvdpxne.dtm.shared.event.cancel
 import me.kvdpxne.dtm.shared.world.WorldsHolder
 import org.bukkit.GameMode
@@ -31,16 +30,16 @@ object PlayerInventoryClickListener : Listener {
       return
     }
 
-    if (InventoryType.CHEST == event.inventory.type) {
-      val holder: InventoryHolder = event.inventory.holder
-      if (holder !is GuiHolder) {
-        return
-      }
-
-      event.cancel()
-      holder.handleAction(event)
-      return
-    }
+//    if (InventoryType.CHEST == event.inventory.type) {
+//      val holder: InventoryHolder = event.inventory.holder
+//      if (holder !is GuiHolder) {
+//        return
+//      }
+//
+//      event.cancel()
+//      holder.handleAction(event)
+//      return
+//    }
 
     val world: World = event.whoClicked.world
     val lobbyWorld: World? = WorldsHolder.lobbyWorld

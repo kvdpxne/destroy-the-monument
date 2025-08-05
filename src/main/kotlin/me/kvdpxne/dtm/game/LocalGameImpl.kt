@@ -8,6 +8,8 @@ import me.kvdpxne.dtm.arena.voting.ArenaVoting
 import me.kvdpxne.dtm.arena.voting.ArenaVotingRegistry
 import me.kvdpxne.dtm.arena.voting.ArenaVotingRegistryImpl
 import me.kvdpxne.dtm.configuration.GeneralConfiguration
+import me.kvdpxne.dtm.game.tasks.GameCountdownTask
+import me.kvdpxne.dtm.game.tasks.LocalGameTimerTask
 import me.kvdpxne.dtm.scoreboard.Scoreboards
 import me.kvdpxne.dtm.scoreboard.createServerScoreboard
 import me.kvdpxne.dtm.scoreboard.createServerTeam
@@ -33,6 +35,7 @@ import me.kvdpxne.dtm.translation.TranslationService
 import me.kvdpxne.dtm.translation.formatter.Formatter
 import me.kvdpxne.dtm.translation.message.EnumTranslationKey
 import me.kvdpxne.dtm.translation.BasicTranslationKey
+import me.kvdpxne.dtm.translation.TranslationKey
 import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -97,7 +100,7 @@ class LocalGameImpl(
   /**
    * @since 0.1.0
    */
-  override var timerTaskIdentifier: Int = -1
+  var timerTaskIdentifier: Int = -1
 
   override val hostages: List<LocalUser>
     get() = this._hostages.values.toList()
@@ -494,6 +497,8 @@ class LocalGameImpl(
       Scoreboards.fsf(
         hostage.performer.player!!,
         this.numberOfHostagesEnrolled,
+        this._votingRegistry?.arenas?.map { it.arena } ?: emptyList(),
+        this.numberOfHostagesEnrolled,
         this.numberOfHostages,
         hostage.wallet.coins
       )
@@ -552,6 +557,8 @@ class LocalGameImpl(
     for (hostage: LocalUser in this._hostages.values) {
       Scoreboards.fsf(
         hostage.performer.player!!,
+        this.numberOfHostagesEnrolled,
+        this._votingRegistry?.arenas?.map { it.arena } ?: emptyList(),
         this.numberOfHostagesEnrolled,
         this.numberOfHostages,
         hostage.wallet.coins
@@ -861,7 +868,7 @@ class LocalGameImpl(
     this.sendMessages(messages())
   }
 
-  override fun prepareMessage(key: BasicTranslationKey): MessageFormatterChains {
+  override fun prepareMessage(key: TranslationKey): MessageFormatterChains {
     return TranslationService.chains()
       .receivers(this._hostages.values.map { it.performer })
       .message(key)

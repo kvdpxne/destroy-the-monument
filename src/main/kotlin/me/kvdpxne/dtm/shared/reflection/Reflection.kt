@@ -99,6 +99,14 @@ object Reflection {
     throw IllegalStateException("")
   }
 
+  /**
+   * @param clazz
+   * @param methodName
+   * @param returnType
+   * @param parameterTypes
+   *
+   * @since 0.1.0
+   */
   fun getMethod(
     clazz: Class<*>,
     methodName: String,
@@ -132,6 +140,9 @@ object Reflection {
       val methodInvoker: MethodInvoker = object : MethodInvoker {
 
         override fun invoke(target: Any?, vararg parameters: Any): Any? {
+          if (parameters.isEmpty()) {
+            return method.invoke(target)
+          }
           return method.invoke(target, *parameters)
         }
       }

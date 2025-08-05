@@ -9,7 +9,7 @@ import me.kvdpxne.dtm.translation.TranslationKey
 import me.kvdpxne.dtm.translation.TranslationService
 import me.kvdpxne.dtm.translation.message.Message
 import me.kvdpxne.dtm.translation.receiver.Receiver
-import me.kvdpxne.dtm.user.LocalUserPerformer
+import me.kvdpxne.dtm.user.performer.LocalUserPerformer
 
 /**
  * A class representing a chain of messages to be sent to multiple receivers.

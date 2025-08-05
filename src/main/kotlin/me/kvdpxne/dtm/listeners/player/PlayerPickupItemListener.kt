@@ -45,7 +45,7 @@ object PlayerPickupItemListener : Listener {
     }
 
     val arena: Arena? = ArenaManager.findArenaByWorldIdentifierOrNull(world.uid)
-    if (world != arena?.map?.world) {
+    if (world == arena?.map?.world) {
       return
     }
 

@@ -1,14 +1,16 @@
 package me.kvdpxne.dtm.command
 
+import java.util.Collections
+
 object CommandManager : Iterable<Command<Performer>> {
 
   private val _commands: MutableMap<String, Command<Performer>> = mutableMapOf()
 
-  val commands: List<Command<Performer>>
-    get() = this._commands.values.toList()
+  val commands: Collection<Command<Performer>>
+    get() = Collections.unmodifiableCollection(this._commands.values)
 
-  val names: List<String>
-    get() = this._commands.keys.toList()
+  val names: Collection<String>
+    get() = Collections.unmodifiableCollection(this._commands.keys)
 
   val size: Int
     get() = this._commands.size

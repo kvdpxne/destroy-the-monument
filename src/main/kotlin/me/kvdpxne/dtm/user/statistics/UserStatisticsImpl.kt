@@ -1,4 +1,4 @@
-package me.kvdpxne.dtm.user
+package me.kvdpxne.dtm.user.statistics
 
 import java.util.UUID
 import me.kvdpxne.dtm.shared.StylishToStringBuilder

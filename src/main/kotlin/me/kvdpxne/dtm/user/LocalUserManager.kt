@@ -1,11 +1,13 @@
 package me.kvdpxne.dtm.user
 
+import java.util.Collections
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 import me.kvdpxne.dtm.configuration.AdvancedConfiguration
 import me.kvdpxne.dtm.shared.PlayerUuid
 import me.kvdpxne.dtm.shared.debug.Debug
 import me.kvdpxne.dtm.shared.text.toSingleLines
+import org.jetbrains.annotations.UnmodifiableView
 
 /**
  * Singleton object managing [LocalUser] instances.
@@ -51,13 +53,12 @@ object LocalUserManager {
    *
    * @since 0.1.0
    */
-  val users: List<User>
+  val users: @UnmodifiableView Collection<User>
     get() {
       if (this.usersByIdentifierDelegate.isInitialized()) {
-        return this.usersByIdentifier.values.toList()
+        return Collections.unmodifiableCollection(this.usersByIdentifier.values)
       }
-
-      return emptyList()
+      return Collections.emptyList()
     }
 
   /**
@@ -167,7 +168,7 @@ object LocalUserManager {
   fun addUser(
     user: User
   ) {
-    val localUser: LocalUser = user.asLocalUser()
+    val localUser: LocalUser = user.toLocalUser()
 
     this.usersByIdentifier[localUser.identifier] = localUser
     this.usersByName[localUser.name] = localUser

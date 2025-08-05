@@ -22,17 +22,6 @@ object EntityDamageByEntityListener : Listener {
   /**
    * @since 0.1.0
    */
-  fun getDamage(
-    event: EntityDamageEvent
-  ): Double {
-    return Reflection
-      .getMethod(EntityDamageEvent::class.java, "getDamage", PrimitiveTypes.DOUBLE)
-      .invoke(event) as Double
-  }
-
-  /**
-   * @since 0.1.0
-   */
   @EventHandler
   fun handleEntityDamage(
     event: EntityDamageByEntityEvent
@@ -66,6 +55,6 @@ object EntityDamageByEntityListener : Listener {
     }
 
     val damageOwner: DamageOwner = DamageManager.computeDamageOwnerIfAbsent(victim.uniqueId)
-    damageOwner.addDamage(attacker.uniqueId, getDamage(event))
+    damageOwner.addDamage(attacker.uniqueId, event.getDamage(EntityDamageEvent.DamageModifier.BASE))
   }
 }

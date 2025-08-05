@@ -51,4 +51,12 @@ interface ContainerBuilder<T : ContainerOpener<*>> : Buildable<Container<T>> {
     item: Any,
     handler: SlotHandler<T>? = null
   ): ContainerBuilder<T>
+
+  /**
+   * @since 0.1.0
+   */
+  fun centerSlot(
+    item: Any,
+    handler: SlotHandler<T>? = null
+  ): ContainerBuilder<T>
 }

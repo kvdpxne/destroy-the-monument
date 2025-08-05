@@ -7,6 +7,7 @@ import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.shared.PlayerUuid
 import me.kvdpxne.dtm.shared.StylishToStringBuilder
 import me.kvdpxne.dtm.shared.debug.Debug
+import me.kvdpxne.dtm.user.statistics.UserStatistics
 import me.kvdpxne.dtm.wallet.Wallet
 
 /**
@@ -50,7 +51,7 @@ open class UserImpl internal constructor(
     }
   }
 
-  override fun asLocalUser(): LocalUser {
+  override fun toLocalUser(): LocalUser {
     return LocalUserImpl(
       this.name,
       this.displayName,

@@ -65,6 +65,17 @@ open class BasicContainerBuilder<T : ContainerOpener<*>> :
     return this
   }
 
+  override fun centerSlot(
+    item: Any,
+    handler: SlotHandler<T>?
+  ): ContainerBuilder<T> {
+    val currentSize: Byte = checkNotNull(this.size) {
+      "The container size must be defined before adding slots."
+    }
+
+    return this.slot((currentSize / 2).toByte(), item, handler)
+  }
+
   override fun build(): Container<T> {
     return BasicContainer(
       this.owner!!,

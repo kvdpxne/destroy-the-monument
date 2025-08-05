@@ -1,7 +1,6 @@
 package me.kvdpxne.dtm.profession
 
 import java.util.UUID
-import me.kvdpxne.dtm.gui.SlotItem
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect

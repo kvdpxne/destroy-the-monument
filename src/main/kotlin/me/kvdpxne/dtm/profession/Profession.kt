@@ -1,7 +1,6 @@
 package me.kvdpxne.dtm.profession
 
 import java.util.UUID
-import me.kvdpxne.dtm.gui.SlotItem
 import me.kvdpxne.dtm.shared.item.hasDurability
 import me.kvdpxne.dtm.shared.item.isLeatherArmor
 import me.kvdpxne.dtm.shared.task.runSynchronousDelayedTask

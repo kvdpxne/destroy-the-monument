@@ -8,6 +8,11 @@ import me.kvdpxne.dtm.profession.Profession
 import me.kvdpxne.dtm.shared.PlayerUuid
 import me.kvdpxne.dtm.team.LocalTeam
 import me.kvdpxne.dtm.team.Teammate
+import me.kvdpxne.dtm.user.cache.LocalUserCache
+import me.kvdpxne.dtm.user.cache.LocalUserCacheImpl
+import me.kvdpxne.dtm.user.performer.LocalUserPerformer
+import me.kvdpxne.dtm.user.performer.LocalUserPerformerImpl
+import me.kvdpxne.dtm.user.statistics.UserStatistics
 import me.kvdpxne.dtm.wallet.Wallet
 
 /**
@@ -93,7 +98,7 @@ class LocalUserImpl(
     this.markAsModified()
   }
 
-  override fun asLocalUser(): LocalUser {
+  override fun toLocalUser(): LocalUser {
     return this
   }
 

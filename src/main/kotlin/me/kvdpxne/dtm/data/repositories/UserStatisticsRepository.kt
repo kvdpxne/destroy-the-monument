@@ -1,6 +1,6 @@
 package me.kvdpxne.dtm.data.repositories
 
-import me.kvdpxne.dtm.user.UserStatistics
+import me.kvdpxne.dtm.user.statistics.UserStatistics
 
 /**
  * Repository interface for managing user statistics data operations.

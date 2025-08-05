@@ -6,7 +6,7 @@ import me.kvdpxne.dtm.command.Parameters
 import me.kvdpxne.dtm.shared.world.toEntityPosition
 import me.kvdpxne.dtm.translation.formatter.Formatter
 import me.kvdpxne.dtm.translation.message.EnumTranslationKey
-import me.kvdpxne.dtm.user.LocalUserPerformer
+import me.kvdpxne.dtm.user.performer.LocalUserPerformer
 import org.bukkit.World
 
 /**

@@ -53,7 +53,7 @@ object BlockBreakListener : Listener {
 
       //
       teammate.currentProfession.ability?.let {
-        cancelTask(it.taskIdentifier)
+        cancelTask(it.countdownTaskId)
       }
 
       val player = teammate.user.performer.player!!

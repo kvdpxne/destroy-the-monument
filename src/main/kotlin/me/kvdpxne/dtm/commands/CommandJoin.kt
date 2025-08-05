@@ -5,7 +5,7 @@ import me.kvdpxne.dtm.command.CommandBuilder
 import me.kvdpxne.dtm.containers.createGamesContainer
 import me.kvdpxne.dtm.containers.createTeamsContainer
 import me.kvdpxne.dtm.game.LocalGame
-import me.kvdpxne.dtm.user.LocalUserPerformer
+import me.kvdpxne.dtm.user.performer.LocalUserPerformer
 
 /**
  * @since 0.1.0

@@ -1,4 +1,4 @@
-package me.kvdpxne.dtm.user
+package me.kvdpxne.dtm.user.performer
 
 import java.lang.ref.Reference
 import java.lang.ref.WeakReference
@@ -6,16 +6,17 @@ import java.util.Locale
 import me.kvdpxne.dtm.shared.PlayerUuid
 import me.kvdpxne.dtm.shared.player.sendPacket
 import me.kvdpxne.dtm.shared.text.colorize
+import me.kvdpxne.dtm.user.LocalUser
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
 /**
  * Implementation of [LocalUserPerformer] that represents a player performer
- * associated with a specific [LocalUser]. It lazily resolves and stores the
+ * associated with a specific [me.kvdpxne.dtm.user.LocalUser]. It lazily resolves and stores the
  * player instance associated with the given identifier using a weak reference.
  *
  * @param identifier The unique identifier of the player.
- * @param user The associated [LocalUser] object.
+ * @param user The associated [me.kvdpxne.dtm.user.LocalUser] object.
  *
  * @since 0.1.0
  */

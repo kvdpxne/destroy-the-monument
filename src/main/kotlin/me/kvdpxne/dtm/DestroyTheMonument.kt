@@ -243,7 +243,7 @@ class DestroyTheMonument : JavaPlugin() {
     ConfigurationManager.loadConfigurations(directoryPath)
 
     // Registers all the defined translation keys.
-    TranslationKeyRegistry.registerTranslationKeys()
+//    TranslationKeyRegistry.registerTranslationKeys()
 
     // Loads all translations and assigns them to translation keys.
     TranslationService.loadTranslations()
